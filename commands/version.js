@@ -5,6 +5,7 @@ const semver = require('semver');
 const fs = require('fs');
 const { resolvePath, readAssetsJson } = require('../utils');
 const v = require('../validators');
+const { schemas } = require('@asset-pipe/common');
 
 async function command(subcommands, args) {
     console.log('');
@@ -39,6 +40,21 @@ async function command(subcommands, args) {
         process.exit();
     }
     readAssetsSpinner.succeed();
+
+    const result = schemas.assets(assets);
+
+    if (result.error) {
+        inputValidationSpinner.fail(`Invalid 'assets.json' file`);
+
+        console.log('==========');
+
+        for (const { message } of result.error) {
+            console.error(message);
+        }
+        console.log('==========');
+
+        process.exit();
+    }
 
     const versionSpinner = ora('Updating assets.json version field').start();
     try {

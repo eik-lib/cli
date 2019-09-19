@@ -12,7 +12,7 @@ const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 const { join } = require('path');
 const { readAssetsJson, sendCommand } = require('../../utils');
-const v = require('../../validators');
+const { schemas } = require('@asset-pipe/common');
 
 async function publishBundle(args) {
     console.log('');
@@ -21,6 +21,7 @@ async function publishBundle(args) {
 
     const { dryRun = false } = args;
     let path = '';
+    let assetsJson = {};
     let server = '';
     let organisation = '';
     let name = '';
@@ -32,7 +33,8 @@ async function publishBundle(args) {
     // load assets.json
     const loadAssetsFileSpinner = ora('Loading assets.json').start();
     try {
-        ({ server, organisation, name, version, inputs } = readAssetsJson());
+        assetsJson = readAssetsJson();
+        ({ server, organisation, name, version, inputs } = assetsJson);
     } catch (err) {
         loadAssetsFileSpinner.fail(
             'Unable to load assets.json. Run "asset-pipe init" to generate'
@@ -49,34 +51,18 @@ async function publishBundle(args) {
     // validate
     const inputValidationSpinner = ora('Validating input').start();
 
-    if (v.version.validate(version).error) {
-        inputValidationSpinner.fail(`Invalid 'semver' range given`);
-        process.exit();
-    }
+    const result = schemas.assets(assetsJson);
 
-    if (v.organisation.validate(organisation).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'organisation' field specified in assets.json`
-        );
-        process.exit();
-    }
+    if (result.error) {
+        inputValidationSpinner.fail(`Invalid 'assets.json' file`);
 
-    if (v.server.validate(server).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'server' field specified in assets.json`
-        );
-        process.exit();
-    }
+        console.log('==========');
 
-    if (v.name.validate(name).error) {
-        inputValidationSpinner.fail(`Invalid 'name' specified`);
-        process.exit();
-    }
+        for (const { message } of result.error) {
+            console.error(message);
+        }
+        console.log('==========');
 
-    if (v.inputs.validate(inputs).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'inputs' object specified. Valid key are "js" and "css"`
-        );
         process.exit();
     }
 

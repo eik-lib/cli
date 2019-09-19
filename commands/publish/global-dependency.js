@@ -16,6 +16,7 @@ const { writeFileSync } = require('fs');
 const { join, dirname } = require('path');
 const { readAssetsJson, sendCommand } = require('../../utils');
 const v = require('../../validators');
+const { schemas } = require('@asset-pipe/common');
 
 async function publishGlobalDependency(subcommands, args) {
     console.log('');
@@ -25,6 +26,7 @@ async function publishGlobalDependency(subcommands, args) {
     const [type, name, version] = subcommands;
     const { dryRun = false, force = false } = args;
     let { replace = [] } = args;
+    let assetsJson = {};
     let path = '';
     let server = '';
     let organisation = '';
@@ -37,7 +39,8 @@ async function publishGlobalDependency(subcommands, args) {
     // load assets.json
     const loadAssetsFileSpinner = ora('Loading assets.json').start();
     try {
-        ({ server, organisation } = readAssetsJson());
+        assetsJson = readAssetsJson();
+        ({ server, organisation } = assetsJson);
     } catch (err) {
         loadAssetsFileSpinner.fail(
             'Unable to load assets.json. Run "asset-pipe init" to generate'
@@ -54,22 +57,23 @@ async function publishGlobalDependency(subcommands, args) {
     // validate subcommands
     const inputValidationSpinner = ora('Validating input').start();
 
+    const result = schemas.assets(assetsJson);
+
+    if (result.error) {
+        inputValidationSpinner.fail(`Invalid 'assets.json' file`);
+
+        console.log('==========');
+
+        for (const { message } of result.error) {
+            console.error(message);
+        }
+        console.log('==========');
+
+        process.exit();
+    }
+
     if (v.version.validate(version).error) {
         inputValidationSpinner.fail(`Invalid 'semver' range given`);
-        process.exit();
-    }
-
-    if (v.organisation.validate(organisation).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'organisation' field specified in assets.json`
-        );
-        process.exit();
-    }
-
-    if (v.server.validate(server).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'server' field specified in assets.json`
-        );
         process.exit();
     }
 

@@ -3,6 +3,7 @@
 const ora = require('ora');
 const { readAssetsJson, sendCommand } = require('../utils');
 const v = require('../validators');
+const { schemas } = require('@asset-pipe/common');
 
 async function command(subcommands, args) {
     console.log('');
@@ -11,12 +12,14 @@ async function command(subcommands, args) {
 
     const [type, name, alias, version] = subcommands;
 
+    let assetsJson = {};
     let server = '';
     let organisation = '';
 
     const loadAssetsFileSpinner = ora('Loading assets.json').start();
     try {
-        ({ server, organisation } = readAssetsJson());
+        assetsJson = readAssetsJson();
+        ({ server, organisation } = assetsJson);
     } catch (err) {
         loadAssetsFileSpinner.fail(
             'Unable to load assets.json. Run "asset-pipe init" to generate'
@@ -32,27 +35,28 @@ async function command(subcommands, args) {
 
     const inputValidationSpinner = ora('Validating input').start();
 
+    const result = schemas.assets(assetsJson);
+
+    if (result.error) {
+        inputValidationSpinner.fail(`Invalid 'assets.json' file`);
+
+        console.log('==========');
+
+        for (const { message } of result.error) {
+            console.error(message);
+        }
+        console.log('==========');
+
+        process.exit();
+    }
+
     if (v.version.validate(version).error) {
         inputValidationSpinner.fail(`Invalid 'semver' range given`);
         process.exit();
     }
 
-    if (v.organisation.validate(organisation).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'organisation' field specified in assets.json`
-        );
-        process.exit();
-    }
-
     if (v.alias.validate(alias).error) {
         inputValidationSpinner.fail(`Invalid 'alias' name given`);
-        process.exit();
-    }
-
-    if (v.server.validate(server).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'server' field specified in assets.json`
-        );
         process.exit();
     }
 
