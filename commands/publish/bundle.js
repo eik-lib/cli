@@ -143,6 +143,25 @@ async function publishBundle(args) {
     }
     bundleSpinner.succeed();
 
+    // create zip archive
+    const zipSpinner = ora('Creating zip file').start();
+    try {
+        // zip up files
+        // main js file
+        // main css file
+        // ie11 js file
+        // assets.json file
+    } catch (err) {
+        zipSpinner.fail('Unable to create zip file');
+
+        console.log('==========');
+        console.error(err);
+        console.log('==========');
+
+        process.exit();
+    }
+    zipSpinner.succeed();
+
     if (dryRun) {
         console.log('Dry run');
         console.log('index.js', file);
