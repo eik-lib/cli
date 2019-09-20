@@ -13,6 +13,7 @@ const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 const { join } = require('path');
 const { readAssetsJson, sendCommand } = require('../../utils');
 const { schemas } = require('@asset-pipe/common');
+const tar = require('tar');
 
 async function publishBundle(args) {
     console.log('');
@@ -28,7 +29,8 @@ async function publishBundle(args) {
     let version = '';
     let inputs = {};
     let importMap = {};
-    let file = '';
+    let file = `index.js`;
+    let zipFile = '';
 
     // load assets.json
     const loadAssetsFileSpinner = ora('Loading assets.json').start();
@@ -124,12 +126,10 @@ async function publishBundle(args) {
             input: join(process.cwd(), inputs.js),
         };
 
-        file = join(path, `index.js`);
-
         const bundled = await rollup.rollup(options);
         await bundled.write({
             format: 'esm',
-            file,
+            file: join(path, file),
             sourcemap: true,
         });
     } catch (err) {
@@ -146,11 +146,23 @@ async function publishBundle(args) {
     // create zip archive
     const zipSpinner = ora('Creating zip file').start();
     try {
+        zipFile = join(path, `archive.tgz`);
         // zip up files
         // main js file
         // main css file
         // ie11 js file
         // assets.json file
+
+        console.log(path, zipFile);
+
+        await tar.c(
+            {
+                gzip: true,
+                file: zipFile,
+                cwd: path,
+            },
+            [file, `${file}.map` /* add css and ie11 here */]
+        );
     } catch (err) {
         zipSpinner.fail('Unable to create zip file');
 
@@ -164,6 +176,7 @@ async function publishBundle(args) {
 
     if (dryRun) {
         console.log('Dry run');
+        console.log('archive.tgz', zipFile);
         console.log('index.js', file);
         console.log('index.js.map', `${file}.map`);
         process.exit();
