@@ -14,6 +14,8 @@ const { join } = require('path');
 const { readAssetsJson, sendCommand } = require('../../utils');
 const { schemas } = require('@asset-pipe/common');
 const tar = require('tar');
+const babel = require('rollup-plugin-babel');
+const copy = require('copy');
 
 async function publishBundle(args) {
     console.log('');
@@ -100,11 +102,33 @@ async function publishBundle(args) {
         console.error(err);
         console.log('==========');
 
-        process.exit();
+        // process.exit();
     }
     loadImportMapSpinner.succeed();
 
-    // create bundle
+    // create main bundle
+    const assetsJsonCopySpinner = ora('Copying assets.json').start();
+    try {
+        const src = join(process.cwd(), 'assets.json');
+        const dest = path;
+        await new Promise((resolve, reject) => {
+            copy(src, dest, err => {
+                if (err) return reject(err);
+                resolve();
+            });
+        });
+    } catch (err) {
+        assetsJsonCopySpinner.fail('Unable to copy assets.json file');
+
+        console.log('==========');
+        console.error(err);
+        console.log('==========');
+
+        process.exit();
+    }
+    assetsJsonCopySpinner.succeed();
+
+    // create main bundle
     const bundleSpinner = ora('Creating bundle file').start();
     try {
         const options = {
@@ -129,7 +153,7 @@ async function publishBundle(args) {
         const bundled = await rollup.rollup(options);
         await bundled.write({
             format: 'esm',
-            file: join(path, file),
+            file: join(path, 'main', file),
             sourcemap: true,
         });
     } catch (err) {
@@ -142,6 +166,64 @@ async function publishBundle(args) {
         process.exit();
     }
     bundleSpinner.succeed();
+
+    // create ie11 fallback bundle
+    const ie11FallbackBundle = ora('Creating fallback bundle file').start();
+    try {
+        const options = {
+            onwarn: (warning, warn) => {
+                // Supress logging
+            },
+            plugins: [
+                resolve(),
+                commonjs({
+                    // include: /node_modules/,
+                }),
+                babel({
+                    presets: [
+                        [
+                            join(
+                                __dirname,
+                                `../../node_modules/@babel/preset-env`
+                            ),
+                            {
+                                useBuiltIns: 'usage',
+                                corejs: 3,
+                                // browsers: 'ie11',
+                                targets: {
+                                    ie: '11',
+                                },
+                            },
+                        ],
+                    ],
+                    babelrc: false,
+                }),
+                rollupReplace({
+                    'process.env.NODE_ENV': JSON.stringify('production'),
+                }),
+                terser(),
+            ],
+            input: join(process.cwd(), inputs.js),
+        };
+        const bundled = await rollup.rollup(options);
+        await bundled.write({
+            format: 'iife',
+            file: join(path, 'ie11', file),
+            sourcemap: true,
+        });
+
+        console.log();
+        console.log('the path is:', path);
+    } catch (err) {
+        ie11FallbackBundle.fail('Unable to create bundle file');
+
+        console.log('==========');
+        console.error(err);
+        console.log('==========');
+
+        process.exit();
+    }
+    ie11FallbackBundle.succeed();
 
     // create zip archive
     const zipSpinner = ora('Creating zip file').start();
@@ -161,7 +243,13 @@ async function publishBundle(args) {
                 file: zipFile,
                 cwd: path,
             },
-            [file, `${file}.map` /* add css and ie11 here */]
+            [
+                `main/${file}`,
+                `main/${file}.map`,
+                `ie11/${file}`,
+                `ie11/${file}.map`,
+                `assets.json`,
+            ]
         );
     } catch (err) {
         zipSpinner.fail('Unable to create zip file');
