@@ -16,10 +16,14 @@ const { schemas } = require('@asset-pipe/common');
 const tar = require('tar');
 const babel = require('rollup-plugin-babel');
 const copy = require('copy');
+const autoprefixer = require('autoprefixer');
+const postcss = require('postcss');
+const fs = require('fs');
+const cssnano = require('cssnano');
 
 async function publishBundle(args) {
     console.log('');
-    console.log('✨', 'Asset Pipe Publish Global Dependency', '✨');
+    console.log('✨', 'Asset Pipe Publish Bundle', '✨');
     console.log('');
 
     const { dryRun = false } = args;
@@ -31,7 +35,8 @@ async function publishBundle(args) {
     let version = '';
     let inputs = {};
     let importMap = {};
-    let file = `index.js`;
+    let jsFile = `index.js`;
+    let cssFile = `index.css`;
     let zipFile = '';
 
     // load assets.json
@@ -128,7 +133,7 @@ async function publishBundle(args) {
     }
     assetsJsonCopySpinner.succeed();
 
-    // create main bundle
+    // create main js bundle
     const bundleSpinner = ora('Creating bundle file').start();
     try {
         const options = {
@@ -153,7 +158,7 @@ async function publishBundle(args) {
         const bundled = await rollup.rollup(options);
         await bundled.write({
             format: 'esm',
-            file: join(path, 'main', file),
+            file: join(path, 'main', jsFile),
             sourcemap: true,
         });
     } catch (err) {
@@ -167,7 +172,7 @@ async function publishBundle(args) {
     }
     bundleSpinner.succeed();
 
-    // create ie11 fallback bundle
+    // create ie11 js fallback bundle
     const ie11FallbackBundle = ora('Creating fallback bundle file').start();
     try {
         const options = {
@@ -208,12 +213,9 @@ async function publishBundle(args) {
         const bundled = await rollup.rollup(options);
         await bundled.write({
             format: 'iife',
-            file: join(path, 'ie11', file),
+            file: join(path, 'ie11', jsFile),
             sourcemap: true,
         });
-
-        console.log();
-        console.log('the path is:', path);
     } catch (err) {
         ie11FallbackBundle.fail('Unable to create bundle file');
 
@@ -225,16 +227,42 @@ async function publishBundle(args) {
     }
     ie11FallbackBundle.succeed();
 
+    // create main css bundle
+    const cssBundle = ora('Creating css bundle file').start();
+    try {
+        if (inputs.css) {
+            const input = join(process.cwd(), inputs.css);
+            const precss = fs.readFileSync(input, 'utf8');
+            const processor = postcss(autoprefixer());
+
+            processor.use(cssnano());
+
+            const result = await processor.process(precss, {
+                from: inputs.css.replace(/(.*\/)*/, ''),
+                to: cssFile,
+                map: { inline: false },
+            });
+            fs.writeFileSync(join(path, 'main', cssFile), result.css);
+            fs.writeFileSync(join(path, 'main', `${cssFile}.map`), result.map);
+        } else {
+            cssBundle.text =
+                'Creating css bundle file - CSS assets not specified';
+        }
+    } catch (err) {
+        cssBundle.fail('Unable to create css bundle file');
+
+        console.log('==========');
+        console.error(err);
+        console.log('==========');
+
+        process.exit();
+    }
+    cssBundle.succeed();
+
     // create zip archive
     const zipSpinner = ora('Creating zip file').start();
     try {
         zipFile = join(path, `archive.tgz`);
-        // zip up files
-        // main js file
-        // main css file
-        // ie11 js file
-        // assets.json file
-
         console.log(path, zipFile);
 
         await tar.c(
@@ -244,10 +272,12 @@ async function publishBundle(args) {
                 cwd: path,
             },
             [
-                `main/${file}`,
-                `main/${file}.map`,
-                `ie11/${file}`,
-                `ie11/${file}.map`,
+                `main/${jsFile}`,
+                `main/${jsFile}.map`,
+                `ie11/${jsFile}`,
+                `ie11/${jsFile}.map`,
+                `main/${cssFile}`,
+                `main/${cssFile}.map`,
                 `assets.json`,
             ]
         );
@@ -263,10 +293,33 @@ async function publishBundle(args) {
     zipSpinner.succeed();
 
     if (dryRun) {
-        console.log('Dry run');
-        console.log('archive.tgz', zipFile);
-        console.log('index.js', file);
-        console.log('index.js.map', `${file}.map`);
+        console.log('====================');
+        console.log('Dry Run Output');
+        console.log('====================');
+        console.log('Zipped Archive For Uploading');
+        console.log(zipFile);
+        console.log();
+        console.log('Main JavaScript Bundle File');
+        console.log(`${path}/main/${jsFile}`);
+        console.log();
+        console.log('Main JavaScript Bundle Source Map File');
+        console.log(`${path}/main/${jsFile}.map`);
+        console.log();
+        console.log('ie11 Fallback JavaScript Bundle File');
+        console.log(`${path}/ie11/${jsFile}`);
+        console.log();
+        console.log('ie11 Fallback JavaScript Bundle Source Map File');
+        console.log(`${path}/ie11/${jsFile}.map`);
+        console.log();
+        console.log('Main CSS Bundle File');
+        console.log(`${path}/main/${cssFile}`);
+        console.log();
+        console.log('Main CSS Bundle Source Map File');
+        console.log(`${path}/main/${cssFile}.map`);
+        console.log();
+        console.log('Assets Meta File');
+        console.log(`${path}/assets.json`);
+        console.log('====================');
         process.exit();
     }
 
@@ -278,7 +331,7 @@ async function publishBundle(args) {
             host: server,
             pathname: `/${organisation}/js/${name}/${version}`,
             // data: JSON.stringify({}),
-            file,
+            file: jsFile,
         });
     } catch (err) {
         uploadSpinner.fail('Unable to upload bundle file');
