@@ -1,6 +1,7 @@
 'use strict';
 
 const tempDir = require('temp-dir');
+const tar = require('tar');
 const ora = require('ora');
 const mkdir = require('make-dir');
 const readPkgUp = require('read-pkg-up');
@@ -33,6 +34,7 @@ async function publishGlobalDependency(subcommands, args) {
     let installedDepBasePath = '';
     let installedDepPkgJson = {};
     let file = '';
+    let zipFile = '';
 
     replace = Array.isArray(replace) ? replace : [replace];
 
@@ -287,14 +289,46 @@ async function publishGlobalDependency(subcommands, args) {
     }
     bundleSpinner.succeed();
 
+    const zipSpinner = ora('Creating zip file').start();
+    try {
+        zipFile = join(path, `archive.tgz`);
+
+        await tar.c(
+            {
+                gzip: true,
+                file: zipFile,
+                cwd: path,
+            },
+            [`index.js`, `index.js.map`]
+        );
+    } catch (err) {
+        zipSpinner.fail('Unable to create zip file');
+
+        console.log('==========');
+        console.error(err);
+        console.log('==========');
+
+        process.exit();
+    }
+    zipSpinner.succeed();
+
     // upload
     //      handle dry run
     //      handle force flag
 
     if (dryRun) {
-        console.log('Dry run');
-        console.log('index.js', file);
-        console.log('index.js.map', `${file}.map`);
+        console.log('====================');
+        console.log('Dry Run Output');
+        console.log('====================');
+        console.log('Zipped Archive For Uploading');
+        console.log(zipFile);
+        console.log();
+        console.log('Main JavaScript Bundle File');
+        console.log(file);
+        console.log();
+        console.log('Main JavaScript Bundle Source Map File');
+        console.log(`${file}.map`);
+        console.log('====================');
         process.exit();
     }
 
@@ -303,13 +337,13 @@ async function publishGlobalDependency(subcommands, args) {
         await sendCommand({
             method: 'POST',
             host: server,
-            pathname: `/${organisation}/${type}/${name}/${version}`,
+            pathname: `/${organisation}/assets/${type}/${name}/${version}`,
             data: JSON.stringify({
                 // filename: `index.js|css`, //TODO: support setting filename via an arg
                 // subtype: 'default|esm',   //TODO: support setting subtype via an arg
                 force,
             }),
-            file,
+            file: zipFile,
         });
     } catch (err) {
         uploadSpinner.fail('Unable to complete upload to asset server');

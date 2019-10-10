@@ -263,7 +263,6 @@ async function publishBundle(args) {
     const zipSpinner = ora('Creating zip file').start();
     try {
         zipFile = join(path, `archive.tgz`);
-        console.log(path, zipFile);
 
         await tar.c(
             {
@@ -329,9 +328,8 @@ async function publishBundle(args) {
         await sendCommand({
             method: 'POST',
             host: server,
-            pathname: `/${organisation}/js/${name}/${version}`,
-            // data: JSON.stringify({}),
-            file: jsFile,
+            pathname: `/${organisation}/assets/js/${name}/${version}`,
+            file: zipFile,
         });
     } catch (err) {
         uploadSpinner.fail('Unable to upload bundle file');

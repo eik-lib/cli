@@ -19,7 +19,7 @@ async function sendCommand({
     }
 
     if (file) {
-        form.append('file', createReadStream(resolvePath(file).pathname));
+        form.append('filedata', createReadStream(resolvePath(file).pathname));
     }
 
     try {
@@ -28,9 +28,7 @@ async function sendCommand({
 
         if (!res.ok) {
             throw new Error(
-                `Server responded with a non 200 ok status code. Response: ${
-                    res.status
-                }`
+                `Server responded with a non 200 ok status code. Response: ${res.status}`
             );
         }
 
