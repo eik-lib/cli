@@ -86,16 +86,16 @@ The benefit of this is that you can alias a specific version of a dependency and
 
 Taking the previous example 1 step further, before we saw that we could globally publish a specific version of lodash, in this case `4.17.15`.
 
-We can now set an alias for this version. If we use something like `v4` as in:
+We can now set a major semver alias for this version:
 
 ```sh
-asset-pipe alias lodash 4.15.15 v4
+asset-pipe alias js lodash 4.15.15
 ```
 
 We can now change our import statement to:
 
 ```js
-import lodash from `http://<asset server url>/<organisation>/js/lodash/v4`;
+import lodash from `http://<asset server url>/<organisation>/js/lodash/4`;
 ```
 
 and everything will work as before.
@@ -106,10 +106,14 @@ When a new version of lodash comes out, we can publish it as before:
 asset-pipe publish js lodash 4.17.16
 ```
 
-And then change the alias to point to the new version like so:
+And then create a major semver alias for the new version like so:
 
 ```sh
-asset-pipe alias lodash 4.15.16 v4
+asset-pipe alias js lodash 4.15.16
 ```
 
 In this way, no client side code will need to be updated to reflect this change and it is considerably easier for multiple teams to stay in sync, using the same global shared dependency
+
+### Using import maps to map "bare imports"
+
+TBD
