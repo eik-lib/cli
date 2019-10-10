@@ -33,7 +33,8 @@ async function publishBundle(args) {
     let organisation = '';
     let name = '';
     let version = '';
-    let inputs = {};
+    let jsInput = '';
+    let cssInput = '';
     let importMap = {};
     let jsFile = `index.js`;
     let cssFile = `index.css`;
@@ -43,7 +44,14 @@ async function publishBundle(args) {
     const loadAssetsFileSpinner = ora('Loading assets.json').start();
     try {
         assetsJson = readAssetsJson();
-        ({ server, organisation, name, version, inputs } = assetsJson);
+        ({
+            server,
+            organisation,
+            name,
+            version,
+            js: { input: jsInput },
+            css: { input: cssInput },
+        } = assetsJson);
     } catch (err) {
         loadAssetsFileSpinner.fail(
             'Unable to load assets.json. Run "asset-pipe init" to generate'
@@ -152,7 +160,7 @@ async function publishBundle(args) {
                 }),
                 terser(),
             ],
-            input: join(process.cwd(), inputs.js),
+            input: join(process.cwd(), jsInput),
         };
 
         const bundled = await rollup.rollup(options);
@@ -208,7 +216,7 @@ async function publishBundle(args) {
                 }),
                 terser(),
             ],
-            input: join(process.cwd(), inputs.js),
+            input: join(process.cwd(), jsInput),
         };
         const bundled = await rollup.rollup(options);
         await bundled.write({
@@ -230,15 +238,15 @@ async function publishBundle(args) {
     // create main css bundle
     const cssBundle = ora('Creating css bundle file').start();
     try {
-        if (inputs.css) {
-            const input = join(process.cwd(), inputs.css);
+        if (cssInput) {
+            const input = join(process.cwd(), cssInput);
             const precss = fs.readFileSync(input, 'utf8');
             const processor = postcss(autoprefixer());
 
             processor.use(cssnano());
 
             const result = await processor.process(precss, {
-                from: inputs.css.replace(/(.*\/)*/, ''),
+                from: cssInput.replace(/(.*\/)*/, ''),
                 to: cssFile,
                 map: { inline: false },
             });

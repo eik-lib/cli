@@ -33,9 +33,13 @@ async function command() {
                 name: '[required]',
                 version: '1.0.0',
                 server: 'http://assets-server.svc.prod.finn.no',
-                inputs: {
-                    js: '[path to js entrypoint]',
-                    css: '[path to css entrypoint]',
+                js: {
+                    input: '[path to js entrypoint]',
+                    options: {},
+                },
+                css: {
+                    input: '[path to css entrypoint]',
+                    options: {},
                 },
             },
             null,
