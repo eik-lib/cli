@@ -76,11 +76,17 @@ async function command(subcommands, args) {
         'Requesting alias creation from asset server'
     ).start();
     try {
-        await sendCommand({
+        const messages = await sendCommand({
             host: server,
             method: 'PUT',
             pathname: `/${organisation}/alias/${type}/${name}`,
             data: { version, type, name },
+        });
+
+        sendCommandSpinner.succeed();
+
+        messages.forEach(msg => {
+            console.log(`  ==> ${JSON.stringify(msg)}`);
         });
     } catch (err) {
         sendCommandSpinner.fail('Unable to complete alias command');
@@ -91,7 +97,6 @@ async function command(subcommands, args) {
 
         process.exit();
     }
-    sendCommandSpinner.succeed();
 
     console.log('');
     console.log('✨ Done! ✨');

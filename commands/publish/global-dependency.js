@@ -334,7 +334,7 @@ async function publishGlobalDependency(subcommands, args) {
 
     const uploadSpinner = ora('Uploading bundle to asset server').start();
     try {
-        await sendCommand({
+        const messages = await sendCommand({
             method: 'POST',
             host: server,
             pathname: `/${organisation}/assets/${type}/${name}/${version}`,
@@ -345,6 +345,12 @@ async function publishGlobalDependency(subcommands, args) {
             }),
             file: zipFile,
         });
+
+        uploadSpinner.succeed();
+
+        messages.forEach(msg => {
+            console.log(`  ==> ${JSON.stringify(msg)}`);
+        });
     } catch (err) {
         uploadSpinner.fail('Unable to complete upload to asset server');
         console.log('==========');
@@ -352,7 +358,6 @@ async function publishGlobalDependency(subcommands, args) {
         console.log('==========');
         process.exit();
     }
-    uploadSpinner.succeed();
 
     console.log('');
     console.log('✨✨');

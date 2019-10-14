@@ -37,8 +37,28 @@ async function sendCommand({
             return { response };
         }
 
-        const response = await res.text();
-        return { response };
+        return new Promise((resolve, reject) => {
+            const serverMessages = [];
+            const serverErrors = [];
+
+            res.body.on('data', chunk => {
+                const result = JSON.parse(chunk.toString());
+                serverMessages.push(result);
+            });
+
+            res.body.on('error', err => {
+                serverErrors.push(err);
+            });
+
+            res.body.on('end', () => {
+                if (serverErrors.length) {
+                    return reject(
+                        serverErrors.map(err => err.message).join(' ')
+                    );
+                }
+                resolve(serverMessages);
+            });
+        });
     } catch (err) {
         throw new Error(`Unable to complete command: ${err.message}`);
     }

@@ -333,11 +333,17 @@ async function publishBundle(args) {
     // upload files
     const uploadSpinner = ora('Uploading bundle file to server').start();
     try {
-        await sendCommand({
+        const messages = await sendCommand({
             method: 'POST',
             host: server,
             pathname: `/${organisation}/assets/js/${name}/${version}`,
             file: zipFile,
+        });
+
+        uploadSpinner.succeed();
+
+        messages.forEach(msg => {
+            console.log(`  ==> ${JSON.stringify(msg)}`);
         });
     } catch (err) {
         uploadSpinner.fail('Unable to upload bundle file');
@@ -348,7 +354,6 @@ async function publishBundle(args) {
 
         process.exit();
     }
-    uploadSpinner.succeed();
 
     console.log('');
     console.log('✨✨');
