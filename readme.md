@@ -6,7 +6,7 @@
 npm install -g @asset-pipe/cli
 ```
 
-## Usage guide
+## Quickstart guide
 
 ### Step 1.
 
