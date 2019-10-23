@@ -10,7 +10,7 @@ async function command(subcommands, args) {
     console.log('✨', 'Asset Pipe Alias', '✨');
     console.log('');
 
-    const [type, name, /* alias, */ version] = subcommands;
+    const [name, alias, version] = subcommands;
 
     let assetsJson = {};
     let server = '';
@@ -55,13 +55,8 @@ async function command(subcommands, args) {
         process.exit();
     }
 
-    // if (v.alias.validate(alias).error) {
-    //     inputValidationSpinner.fail(`Invalid 'alias' name given`);
-    //     process.exit();
-    // }
-
-    if (v.type.validate(type).error) {
-        inputValidationSpinner.fail(`Invalid 'type' specified`);
+    if (v.alias.validate(alias).error) {
+        inputValidationSpinner.fail(`Invalid 'alias' name given`);
         process.exit();
     }
 
@@ -79,8 +74,8 @@ async function command(subcommands, args) {
         const messages = await sendCommand({
             host: server,
             method: 'PUT',
-            pathname: `/${organisation}/alias/${type}/${name}`,
-            data: { version, type, name },
+            pathname: `/${organisation}/pkg/${name}/${alias}`,
+            data: { version }
         });
 
         sendCommandSpinner.succeed();

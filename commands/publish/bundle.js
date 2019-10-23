@@ -50,7 +50,7 @@ async function publishBundle(args) {
             name,
             version,
             js: { input: jsInput },
-            css: { input: cssInput },
+            css: { input: cssInput }
         } = assetsJson);
     } catch (err) {
         loadAssetsFileSpinner.fail(
@@ -156,18 +156,18 @@ async function publishBundle(args) {
                 }),
                 // fetch and read import-map file from server
                 rollupReplace({
-                    'process.env.NODE_ENV': JSON.stringify('production'),
+                    'process.env.NODE_ENV': JSON.stringify('production')
                 }),
-                terser(),
+                terser()
             ],
-            input: join(process.cwd(), jsInput),
+            input: join(process.cwd(), jsInput)
         };
 
         const bundled = await rollup.rollup(options);
         await bundled.write({
             format: 'esm',
             file: join(path, 'main', jsFile),
-            sourcemap: true,
+            sourcemap: true
         });
     } catch (err) {
         bundleSpinner.fail('Unable to create bundle file');
@@ -204,25 +204,25 @@ async function publishBundle(args) {
                                 corejs: 3,
                                 // browsers: 'ie11',
                                 targets: {
-                                    ie: '11',
-                                },
-                            },
-                        ],
+                                    ie: '11'
+                                }
+                            }
+                        ]
                     ],
-                    babelrc: false,
+                    babelrc: false
                 }),
                 rollupReplace({
-                    'process.env.NODE_ENV': JSON.stringify('production'),
+                    'process.env.NODE_ENV': JSON.stringify('production')
                 }),
-                terser(),
+                terser()
             ],
-            input: join(process.cwd(), jsInput),
+            input: join(process.cwd(), jsInput)
         };
         const bundled = await rollup.rollup(options);
         await bundled.write({
             format: 'iife',
             file: join(path, 'ie11', jsFile),
-            sourcemap: true,
+            sourcemap: true
         });
     } catch (err) {
         ie11FallbackBundle.fail('Unable to create bundle file');
@@ -248,7 +248,7 @@ async function publishBundle(args) {
             const result = await processor.process(precss, {
                 from: cssInput.replace(/(.*\/)*/, ''),
                 to: cssFile,
-                map: { inline: false },
+                map: { inline: false }
             });
             fs.writeFileSync(join(path, 'main', cssFile), result.css);
             fs.writeFileSync(join(path, 'main', `${cssFile}.map`), result.map);
@@ -276,7 +276,7 @@ async function publishBundle(args) {
             {
                 gzip: true,
                 file: zipFile,
-                cwd: path,
+                cwd: path
             },
             [
                 `main/${jsFile}`,
@@ -285,7 +285,7 @@ async function publishBundle(args) {
                 `ie11/${jsFile}.map`,
                 `main/${cssFile}`,
                 `main/${cssFile}.map`,
-                `assets.json`,
+                `assets.json`
             ]
         );
     } catch (err) {
@@ -334,10 +334,10 @@ async function publishBundle(args) {
     const uploadSpinner = ora('Uploading bundle file to server').start();
     try {
         const messages = await sendCommand({
-            method: 'POST',
+            method: 'PUT',
             host: server,
-            pathname: `/${organisation}/assets/js/${name}/${version}`,
-            file: zipFile,
+            pathname: `/${organisation}/pkg/${name}/${version}`,
+            file: zipFile
         });
 
         uploadSpinner.succeed();

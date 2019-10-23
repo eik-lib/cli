@@ -24,8 +24,8 @@ async function publishGlobalDependency(subcommands, args) {
     console.log('✨', 'Asset Pipe Publish Global Dependency', '✨');
     console.log('');
 
-    const [type, name, version] = subcommands;
-    const { dryRun = false, force = false } = args;
+    const [name, version] = subcommands;
+    const { dryRun = false } = args;
     let { replace = [] } = args;
     let assetsJson = {};
     let path = '';
@@ -79,11 +79,6 @@ async function publishGlobalDependency(subcommands, args) {
         process.exit();
     }
 
-    if (v.type.validate(type).error) {
-        inputValidationSpinner.fail(`Invalid 'type' specified`);
-        process.exit();
-    }
-
     if (v.name.validate(name).error) {
         inputValidationSpinner.fail(`Invalid 'name' specified`);
         process.exit();
@@ -117,8 +112,8 @@ async function publishGlobalDependency(subcommands, args) {
             JSON.stringify({
                 name: '',
                 dependencies: {
-                    [name]: version,
-                },
+                    [name]: version
+                }
             })
         );
     } catch (err) {
@@ -159,7 +154,7 @@ async function publishGlobalDependency(subcommands, args) {
         const resolvedPath = require.resolve(name, { paths: [path] });
         installedDepBasePath = pkgDir.sync(dirname(resolvedPath));
         installedDepPkgJson = readPkgUp.sync({
-            cwd: installedDepBasePath,
+            cwd: installedDepBasePath
         }).package;
     } catch (err) {
         loadingPackageMetaSpinner.fail(
@@ -233,7 +228,7 @@ async function publishGlobalDependency(subcommands, args) {
                 // TODO: handle aliases and absolute URLs as well as specific versions
                 imports[
                     moduleName
-                ] = `${server}/${organisation}/${type}/${moduleName}/${moduleVersion}/index.js`;
+                ] = `${server}/${organisation}/pkg/${moduleName}/${moduleVersion}/index.js`;
             });
         }
 
@@ -245,13 +240,13 @@ async function publishGlobalDependency(subcommands, args) {
                 esmImportToUrl({ imports }),
                 resolve(),
                 commonjs({
-                    include: /node_modules/,
+                    include: /node_modules/
                 }),
                 rollupReplace({
-                    'process.env.NODE_ENV': JSON.stringify('production'),
+                    'process.env.NODE_ENV': JSON.stringify('production')
                 }),
-                terser(),
-            ],
+                terser()
+            ]
         };
 
         if (installedDepPkgJson.module) {
@@ -276,7 +271,7 @@ async function publishGlobalDependency(subcommands, args) {
         await bundled.write({
             format: 'esm',
             file,
-            sourcemap: true,
+            sourcemap: true
         });
     } catch (err) {
         bundleSpinner.fail('Unable to complete bundle operation');
@@ -297,7 +292,7 @@ async function publishGlobalDependency(subcommands, args) {
             {
                 gzip: true,
                 file: zipFile,
-                cwd: path,
+                cwd: path
             },
             [`index.js`, `index.js.map`]
         );
@@ -335,15 +330,10 @@ async function publishGlobalDependency(subcommands, args) {
     const uploadSpinner = ora('Uploading bundle to asset server').start();
     try {
         const messages = await sendCommand({
-            method: 'POST',
+            method: 'PUT',
             host: server,
-            pathname: `/${organisation}/assets/${type}/${name}/${version}`,
-            data: JSON.stringify({
-                // filename: `index.js|css`, //TODO: support setting filename via an arg
-                // subtype: 'default|esm',   //TODO: support setting subtype via an arg
-                force,
-            }),
-            file: zipFile,
+            pathname: `/${organisation}/pkg/${name}/${version}`,
+            file: zipFile
         });
 
         uploadSpinner.succeed();

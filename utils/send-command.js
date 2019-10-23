@@ -15,7 +15,9 @@ async function sendCommand({
     const form = new FormData();
 
     if (data) {
-        form.append('data', JSON.stringify(data));
+        for (const [key, value] of Object.entries(data)) {
+            form.append(key, value);
+        }
     }
 
     if (file) {
@@ -24,6 +26,7 @@ async function sendCommand({
 
     try {
         const url = new URL(pathname, host);
+
         const res = await fetch(url.href, { method, body: form });
 
         if (!res.ok) {
