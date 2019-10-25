@@ -18,23 +18,23 @@ class Main {
         this.args = args;
         this.pathname = resolvePath('./assets.json').pathname;
 
-        const spinner = ora('Asset Pipe CLI v1').start();
+        const spinner = ora().start();
         this.logger = {
             fatal() {},
             error(message) {
-                spinner.fail(message);
+                spinner.fail(message).start();
             },
             warn(message) {
-                spinner.warn(message);
+                spinner.warn(message).start();
             },
             info(message) {
-                spinner.succeed(message);
+                spinner.succeed(message).start();
             },
             debug(message) {
-                spinner.info(message);
+                spinner.info(message).start();
             },
             trace(message) {
-                spinner.info(message);
+                spinner.info(message).start();
             }
         };
     }
@@ -84,6 +84,26 @@ class Main {
                 alias: this.subcommands[2]
             }).run();
 
+            process.exit(0);
+        }
+
+        if (this.command === 'publish') {
+            if (!this.subcommands[0]) {
+                const Publish = commands.publish;
+                await new Publish({
+                    logger: this.logger,
+                    server: this.assets.server,
+                    org: this.assets.organisation,
+                    name: this.assets.name,
+                    version: this.assets.version,
+                    js: this.assets.js.input,
+                    css: this.assets.css.input,
+                    dryRun: this.args.dryRun
+                }).run();
+            } else {
+                const Publish = commands.publishGlobalDependency;
+                await new Publish({ logger }).run();
+            }
             process.exit(0);
         }
 

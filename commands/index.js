@@ -10,6 +10,6 @@ module.exports = {
     init,
     version,
     importMap,
-    publish,
-    alias,
+    publish: publish.publish,
+    alias
 };
