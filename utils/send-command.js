@@ -10,7 +10,7 @@ async function sendCommand({
     host,
     pathname,
     data,
-    file,
+    file
 } = {}) {
     const form = new FormData();
 

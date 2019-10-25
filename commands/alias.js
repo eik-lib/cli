@@ -1,101 +1,56 @@
 'use strict';
 
-const ora = require('ora');
-const { readAssetsJson, sendCommand } = require('../utils');
+const abslog = require('abslog');
+const { sendCommand } = require('../utils');
 const v = require('../validators');
-const { schemas } = require('@asset-pipe/common');
 
-async function command(subcommands, args) {
-    console.log('');
-    console.log('✨', 'Asset Pipe Alias', '✨');
-    console.log('');
-
-    const [name, alias, version] = subcommands;
-
-    let assetsJson = {};
-    let server = '';
-    let organisation = '';
-
-    const loadAssetsFileSpinner = ora('Loading assets.json').start();
-    try {
-        assetsJson = readAssetsJson();
-        ({ server, organisation } = assetsJson);
-    } catch (err) {
-        loadAssetsFileSpinner.fail(
-            'Unable to load assets.json. Run "asset-pipe init" to generate'
-        );
-
-        console.log('==========');
-        console.error(err);
-        console.log('==========');
-
-        process.exit();
+module.exports = class Version {
+    constructor({ logger, server, org, name, alias, version } = {}) {
+        this.log = abslog(logger);
+        this.server = server;
+        this.org = org;
+        this.name = name;
+        this.alias = alias;
+        this.version = version;
     }
-    loadAssetsFileSpinner.succeed();
 
-    const inputValidationSpinner = ora('Validating input').start();
+    async run() {
+        this.log.debug('Validating input');
 
-    const result = schemas.assets(assetsJson);
-
-    if (result.error) {
-        inputValidationSpinner.fail(`Invalid 'assets.json' file`);
-
-        console.log('==========');
-
-        for (const { message } of result.error) {
-            console.error(message);
+        if (v.version.validate(this.version).error) {
+            this.log.error(`Invalid 'semver' range given`);
+            return;
         }
-        console.log('==========');
 
-        process.exit();
+        if (v.alias.validate(this.alias).error) {
+            this.log.error(`Invalid 'alias' name given`);
+            return;
+        }
+
+        if (v.name.validate(this.name).error) {
+            this.log.error(`Invalid 'name' specified`);
+            return;
+        }
+
+        this.log.debug('Requesting alias creation from asset server');
+        try {
+            const messages = await sendCommand({
+                host: this.server,
+                method: 'PUT',
+                pathname: `/${this.org}/pkg/${this.name}/v${this.alias}`,
+                data: { version: this.version }
+            });
+
+            messages.forEach(msg => {
+                this.log.debug(`  ==> ${JSON.stringify(msg)}`);
+            });
+        } catch (err) {
+            this.log.error('Unable to complete alias command');
+            this.log.warn(err.message);
+
+            return;
+        }
+
+        this.log.info('✨ done ✨');
     }
-
-    if (v.version.validate(version).error) {
-        inputValidationSpinner.fail(`Invalid 'semver' range given`);
-        process.exit();
-    }
-
-    if (v.alias.validate(alias).error) {
-        inputValidationSpinner.fail(`Invalid 'alias' name given`);
-        process.exit();
-    }
-
-    if (v.name.validate(name).error) {
-        inputValidationSpinner.fail(`Invalid 'name' specified`);
-        process.exit();
-    }
-
-    inputValidationSpinner.succeed();
-
-    const sendCommandSpinner = ora(
-        'Requesting alias creation from asset server'
-    ).start();
-    try {
-        const messages = await sendCommand({
-            host: server,
-            method: 'PUT',
-            pathname: `/${organisation}/pkg/${name}/${alias}`,
-            data: { version }
-        });
-
-        sendCommandSpinner.succeed();
-
-        messages.forEach(msg => {
-            console.log(`  ==> ${JSON.stringify(msg)}`);
-        });
-    } catch (err) {
-        sendCommandSpinner.fail('Unable to complete alias command');
-
-        console.log('==========');
-        console.error(err);
-        console.log('==========');
-
-        process.exit();
-    }
-
-    console.log('');
-    console.log('✨ Done! ✨');
-    console.log('');
-}
-
-module.exports = command;
+};

@@ -2,9 +2,9 @@
 
 const path = require('path');
 
-function resolvePath(pathname) {
+function resolvePath(pathname, cwd = process.cwd()) {
     if (!path.isAbsolute(pathname)) {
-        pathname = path.normalize(`${process.cwd()}/${pathname}`);
+        pathname = path.normalize(`${cwd}/${pathname}`);
     }
 
     const { dir, base: file } = path.parse(pathname);
