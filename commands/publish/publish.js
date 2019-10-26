@@ -87,9 +87,7 @@ module.exports = class Publish {
             await bundled.write({
                 format: 'esm',
                 file: join(this.path, 'main/index.js'),
-                sourcemap: true,
-                compact: true,
-                minified: true
+                sourcemap: true
             });
         } catch (err) {
             this.log.error('Unable to create bundle file');
@@ -107,6 +105,7 @@ module.exports = class Publish {
                     resolve(),
                     commonjs(),
                     babel({
+                        compact: true,
                         presets: [
                             [
                                 join(
@@ -136,9 +135,7 @@ module.exports = class Publish {
             await bundled.write({
                 format: 'iife',
                 file: join(this.path, 'ie11/index.js'),
-                sourcemap: true,
-                compact: true,
-                minified: true
+                sourcemap: true
             });
         } catch (err) {
             this.log.error('Unable to create bundle file');

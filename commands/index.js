@@ -11,5 +11,6 @@ module.exports = {
     version,
     importMap,
     publish: publish.publish,
+    globalPublish: publish.publishGlobalDependency,
     alias
 };

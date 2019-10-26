@@ -101,8 +101,15 @@ class Main {
                     dryRun: this.args.dryRun
                 }).run();
             } else {
-                const Publish = commands.publishGlobalDependency;
-                await new Publish({ logger }).run();
+                const Publish = commands.globalPublish;
+                await new Publish({
+                    logger: this.logger,
+                    server: this.assets.server,
+                    org: this.assets.organisation,
+                    name: this.subcommands[0],
+                    version: this.subcommands[1],
+                    dryRun: this.args.dryRun
+                }).run();
             }
             process.exit(0);
         }
