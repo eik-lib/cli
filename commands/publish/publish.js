@@ -57,8 +57,12 @@ module.exports = class Publish {
 
         this.log.debug('Loading import map file from server');
         try {
-            const result = await fetch(this.map);
-            this.importMap = await result.json();
+            const maps = this.map.map(m => fetch(m).then(r => r.json()));
+            const results = await Promise.all(maps);
+            const dependencies = results.map(r => r.imports);
+            this.importMap = {
+                imports: Object.assign({}, ...dependencies)
+            };
         } catch (err) {
             this.log.warn('Unable to load import map file from server');
             this.log.warn(err.message);

@@ -1,6 +1,7 @@
 'use strict';
 
 const abslog = require('abslog');
+const fetch = require('node-fetch');
 const tempDir = require('temp-dir');
 const tar = require('tar');
 const mkdir = require('make-dir');
@@ -26,6 +27,7 @@ module.exports = class Publish {
         org,
         name,
         version,
+        map,
         dryRun = false
     } = {}) {
         this.log = abslog(logger);
@@ -34,6 +36,7 @@ module.exports = class Publish {
         this.org = org;
         this.name = name;
         this.version = version;
+        this.map = map;
         this.dryRun = dryRun;
         // this.replace = [];
         this.path = join(tempDir, `publish-${name}-${version}`);
@@ -81,6 +84,19 @@ module.exports = class Publish {
             this.log.error('Unable to create package json in temp directory');
             this.log.warn(err.message);
             return;
+        }
+
+        this.log.debug('Loading import map file from server');
+        try {
+            const maps = this.map.map(m => fetch(m).then(r => r.json()));
+            const results = await Promise.all(maps);
+            const dependencies = results.map(r => r.imports);
+            this.importMap = {
+                imports: Object.assign({}, ...dependencies)
+            };
+        } catch (err) {
+            this.log.warn('Unable to load import map file from server');
+            this.log.warn(err.message);
         }
 
         // // run npm install in temp dir
@@ -180,7 +196,7 @@ module.exports = class Publish {
                     // Supress logging
                 },
                 plugins: [
-                    // esmImportToUrl({ imports }),
+                    esmImportToUrl({ imports: this.imports }),
                     resolve(),
                     commonjs({ include: /node_modules/ }),
                     rollupReplace({

@@ -40,6 +40,22 @@ class Main {
     }
 
     async run() {
+        try {
+            this.assets = require(this.pathname);
+        } catch (err) {
+            this.logger.debug('No "assets.json" file found in cwd');
+        }
+
+        const validation = schemas.assets(this.assets);
+        if (this.assets && validation.error) {
+            this.logger.error(`Invalid 'assets.json' file`);
+            for (const { dataPath, message } of validation.error) {
+                this.logger.warn(`${dataPath} ${message}`);
+            }
+
+            process.exit(1);
+        }
+
         if (this.command === 'init') {
             const Init = commands.init;
             new Init({ logger: this.logger }).run();
@@ -55,25 +71,13 @@ class Main {
             process.exit(0);
         }
 
-        try {
-            this.assets = require(this.pathname);
-        } catch (err) {
-            this.logger.error('Failed to read assets.json. Does file exist?');
-            this.logger.warn(err.message);
-            process.exit(1);
-        }
-
-        const validation = schemas.assets(this.assets);
-        if (validation.error) {
-            this.logger.error(`Invalid 'assets.json' file`);
-            for (const { dataPath, message } of validation.error) {
-                this.logger.warn(`${dataPath} ${message}`);
-            }
-
-            process.exit(1);
-        }
-
         if (this.command === 'alias') {
+            if (!this.assets) {
+                this.logger.error(
+                    'Alias command requires "assets.json" file to be present in cwd'
+                );
+                process.exit(1);
+            }
             const Alias = commands.alias;
             await new Alias({
                 logger: this.logger,
@@ -87,6 +91,12 @@ class Main {
 
         if (this.command === 'publish') {
             if (!this.subcommands[0]) {
+                if (!this.assets) {
+                    this.logger.error(
+                        'publish command requires "assets.json" file to be present in cwd'
+                    );
+                    process.exit(1);
+                }
                 const Publish = commands.publish;
                 await new Publish({
                     logger: this.logger,
@@ -103,8 +113,9 @@ class Main {
                 const Publish = commands.globalPublish;
                 await new Publish({
                     logger: this.logger,
-                    server: this.assets.server,
-                    org: this.assets.organisation,
+                    server: this.args.server || this.assets.server,
+                    org: this.args.org || this.assets.organisation,
+                    map: this.args.map || this.assets['import-map'],
                     name: this.subcommands[0],
                     version: this.subcommands[1],
                     dryRun: this.args.dryRun
@@ -116,8 +127,8 @@ class Main {
             const UploadImportMap = commands.uploadImportMap;
             await new UploadImportMap({
                 logger: this.logger,
-                server: this.assets.server || this.args.server,
-                org: this.assets.organisation || this.args.org,
+                server: this.args.server || this.assets.server,
+                org: this.args.org || this.assets.organisation,
                 file: this.subcommands[2],
                 name: this.subcommands[0],
                 version: this.subcommands[1]
