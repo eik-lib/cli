@@ -56,7 +56,7 @@ module.exports = class Publish {
         this.log.debug('Loading import map file from server');
         try {
             const result = await fetch(
-                `${this.server}/import-map/${this.org}/js`
+                `${this.server}/${this.org}/map/${this.org}/js`
             );
             this.importMap = await result.json();
         } catch (err) {

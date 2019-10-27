@@ -197,7 +197,7 @@ module.exports = class Publish {
                     this.installedDepBasePath,
                     this.installedDepPkgJson.module
                 );
-            } else {
+            } else if (this.installedDepPkgJson.main) {
                 // use installedDepPkgJson.main
                 this.log.debug(
                     'Dependency format: common js modules detected, conversion to esm will occur'
@@ -206,6 +206,12 @@ module.exports = class Publish {
                     this.installedDepBasePath,
                     this.installedDepPkgJson.main
                 );
+            } else {
+                // use installedDepPkgJson.main
+                this.log.debug(
+                    'Dependency format: common js modules assumed, conversion to esm will occur'
+                );
+                options.input = join(this.installedDepBasePath, 'index.js');
             }
 
             this.file = join(this.path, `index.js`);
