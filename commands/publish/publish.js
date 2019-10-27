@@ -27,6 +27,7 @@ module.exports = class Publish {
         org,
         name,
         version,
+        map,
         js,
         css,
         dryRun = false
@@ -37,6 +38,7 @@ module.exports = class Publish {
         this.org = org;
         this.name = name;
         this.version = version;
+        this.map = map;
         this.js = js;
         this.css = css;
         this.dryRun = dryRun;
@@ -55,9 +57,7 @@ module.exports = class Publish {
 
         this.log.debug('Loading import map file from server');
         try {
-            const result = await fetch(
-                `${this.server}/${this.org}/map/${this.org}/js`
-            );
+            const result = await fetch(this.map);
             this.importMap = await result.json();
         } catch (err) {
             this.log.warn('Unable to load import map file from server');

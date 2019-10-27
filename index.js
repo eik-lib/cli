@@ -94,6 +94,7 @@ class Main {
                     org: this.assets.organisation,
                     name: this.assets.name,
                     version: this.assets.version,
+                    map: this.assets['import-map'],
                     js: this.assets.js.input,
                     css: this.assets.css.input,
                     dryRun: this.args.dryRun
