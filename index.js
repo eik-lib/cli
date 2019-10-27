@@ -83,8 +83,6 @@ class Main {
                 version: this.subcommands[1],
                 alias: this.subcommands[2]
             }).run();
-
-            process.exit(0);
         }
 
         if (this.command === 'publish') {
@@ -111,14 +109,18 @@ class Main {
                     dryRun: this.args.dryRun
                 }).run();
             }
-            process.exit(0);
         }
 
-        try {
-            const cleanCmd = this.command.replace(/[.\/]/gi, '');
-            commands[cleanCmd](this.subcommands, args);
-        } catch (err) {
-            console.error('Invalid command', err);
+        if (this.command === 'map') {
+            const UploadImportMap = commands.uploadImportMap;
+            await new UploadImportMap({
+                logger: this.logger,
+                server: this.assets.server || this.args.server,
+                org: this.assets.organisation || this.args.org,
+                file: this.subcommands[2],
+                name: this.subcommands[0],
+                version: this.subcommands[1]
+            }).run();
         }
     }
 }
@@ -127,6 +129,5 @@ if (runningAsScript) {
     const { command, subcommands, args } = parseInput();
     new Main({ command, subcommands, args })
         .run()
-        .then(() => console.log('wtf is happening?'))
         .catch(err => console.error(err));
 }

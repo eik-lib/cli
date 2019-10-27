@@ -10,7 +10,8 @@ async function sendCommand({
     host,
     pathname,
     data,
-    file
+    file,
+    map
 } = {}) {
     const form = new FormData();
 
@@ -24,10 +25,18 @@ async function sendCommand({
         form.append('filedata', createReadStream(resolvePath(file).pathname));
     }
 
+    if (map) {
+        form.append('map', createReadStream(resolvePath(map).pathname));
+    }
+
     try {
         const url = new URL(pathname, host);
 
-        const res = await fetch(url.href, { method, body: form });
+        const res = await fetch(url.href, {
+            method,
+            body: form,
+            headers: form.getHeaders()
+        });
 
         if (!res.ok) {
             throw new Error(
