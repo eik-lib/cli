@@ -13,7 +13,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@asset-pipe/common": "^4.0.0-alpha.1",
+        "@asset-pipe/common": "^4.0.0-alpha.2",
         "@babel/core": "^7.5.4",
         "@babel/preset-env": "^7.6.2",
         "@hapi/joi": "^15.1.1",
