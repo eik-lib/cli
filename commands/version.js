@@ -14,12 +14,15 @@ module.exports = class Version {
         this.level = level;
     }
 
-    run() {
+    async run() {
+        this.log.debug('Running version command');
+
+        this.log.debug('Validating input');
         if (v.semverType.validate(this.level).error) {
             this.log.error(
                 `Invalid 'semver' type. Valid types are "major", "minor" and "patch"`
             );
-            return;
+            return false;
         }
 
         this.log.debug('Reading assets.json file');
@@ -29,7 +32,7 @@ module.exports = class Version {
         } catch (err) {
             this.log.error('Failed to read assets.json. Does file exist?');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         const result = schemas.assets(this.assets);
@@ -39,7 +42,7 @@ module.exports = class Version {
                 this.log.warn(`${dataPath} ${message}`);
             }
 
-            return;
+            return false;
         }
 
         this.log.debug('Updating assets.json version field');
@@ -48,25 +51,26 @@ module.exports = class Version {
             this.assets.version = semver.inc(this.assets.version, this.level);
             this.log.debug(`"${oldVersion}" => "${this.assets.version}"`);
         } catch (err) {
-            this.log.error('Failed to update assets.version');
+            this.log.error('Failed to update "assets.version"');
             this.log.warn(err.message);
 
-            return;
+            return false;
         }
 
-        this.log.debug('Saving updated assets.json file');
+        this.log.debug('Saving updated "assets.json" file');
         try {
             fs.writeFileSync(
                 this.pathname,
                 JSON.stringify(this.assets, null, 2)
             );
         } catch (err) {
-            this.log.error('Unable to save assets.json file back to disk');
+            this.log.error('Unable to save "assets.json" file back to disk');
             this.log.warn(err.message);
 
-            return;
+            return false;
         }
 
-        this.log.info('✨ done ✨');
+        this.log.debug('Version command complete');
+        return true;
     }
 };

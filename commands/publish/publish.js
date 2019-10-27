@@ -46,13 +46,15 @@ module.exports = class Publish {
     }
 
     async run() {
+        this.log.debug('Running publish command');
+
         this.log.debug('Creating temporary directory');
         try {
             mkdir.sync(this.path);
         } catch (err) {
             this.log.error('Unable to create temp dir');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         this.log.debug('Loading import map file from server');
@@ -96,7 +98,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to create bundle file');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         this.log.debug('Creating js fallback bundle file');
@@ -144,7 +146,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to create bundle file');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         // create main css bundle
@@ -173,7 +175,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to create css bundle file');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         // create zip archive
@@ -200,31 +202,24 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to create zip file');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         if (this.dryRun) {
-            this.log.debug('Zipped Archive For Uploading:');
+            this.log.debug('Dry run files ready for upload to server:');
             this.log.debug(`  ==> ${this.zipFile}`);
-            this.log.debug('Main JavaScript Bundle File:');
             this.log.debug(`  ==> ${this.path}/main/index.js`);
-            this.log.debug('Main JavaScript Bundle Source Map File:');
             this.log.debug(`  ==> ${this.path}/main/index.js.map`);
-            this.log.debug('ie11 Fallback JavaScript Bundle File:');
             this.log.debug(`  ==> ${this.path}/ie11/index.js`);
-            this.log.debug('ie11 Fallback JavaScript Bundle Source Map File:');
             this.log.debug(`  ==> ${this.path}/ie11/index.js.map`);
-            this.log.debug('Main CSS Bundle File:');
             this.log.debug(`  ==> ${this.path}/main/index.css`);
-            this.log.debug('Main CSS Bundle Source Map File:');
             this.log.debug(`  ==> ${this.path}/main/index.css.map`);
-
-            this.log.info('✨ Done (Dry Run) ✨');
-            return;
+            this.log.debug('Publish command complete (dry run)');
+            return true;
         }
 
         // upload files
-        this.log.debug('Uploading bundle file to server');
+        this.log.debug('Uploading zip file to server');
         try {
             const messages = await sendCommand({
                 method: 'PUT',
@@ -237,11 +232,12 @@ module.exports = class Publish {
                 this.log.debug(`  ==> ${JSON.stringify(msg)}`);
             });
         } catch (err) {
-            this.log.error('Unable to upload bundle file');
+            this.log.error('Unable to upload zip file to server');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
-        this.log.info('✨ Done ✨');
+        this.log.debug('Publish command complete');
+        return true;
     }
 };

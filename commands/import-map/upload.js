@@ -28,32 +28,32 @@ module.exports = class Publish {
     }
 
     async run() {
-        this.log.debug('Validating input');
+        this.log.debug('Running import map publish command');
 
+        this.log.debug('Validating input');
         if (v.name.validate(this.name).error) {
             this.log.error(`Invalid or missing 'name' argument specified`);
-            return;
+            return false;
         }
 
         if (v.version.validate(this.version).error) {
             this.log.error(`Invalid or missing 'version' argument specified`);
-            return;
+            return false;
         }
 
         if (v.organisation.validate(this.org).error) {
             this.log.error(`Invalid or missing 'org' field specified`);
-            return;
+            return false;
         }
 
         if (v.server.validate(this.server).error) {
             this.log.error(`Invalid or missing 'server' field specified`);
-            return;
+            return false;
         }
 
         this.log.debug(
             `Uploading import map "${this.name}" "${this.version}" to asset server`
         );
-
         try {
             const messages = await sendCommand({
                 method: 'PUT',
@@ -68,9 +68,10 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to complete upload of import map to server');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
-        this.log.info(`✨ Done ✨`);
+        this.log.debug('Import map publish command complete');
+        return true;
     }
 };
