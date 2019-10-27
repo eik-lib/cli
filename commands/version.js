@@ -1,94 +1,72 @@
 'use strict';
 
-const ora = require('ora');
+const abslog = require('abslog');
 const semver = require('semver');
 const fs = require('fs');
-const { resolvePath, readAssetsJson } = require('../utils');
+const { resolvePath } = require('../utils');
 const v = require('../validators');
 const { schemas } = require('@asset-pipe/common');
 
-async function command(subcommands, args) {
-    console.log('');
-    console.log('✨', 'Asset Pipe Version', '✨');
-    console.log('');
-
-    let assets = {};
-    const [semverType] = subcommands;
-    const { pathname } = resolvePath('./assets.json');
-
-    const inputValidationSpinner = ora('Validating input').start();
-    if (v.semverType.validate(semverType).error) {
-        inputValidationSpinner.fail(
-            `Invalid 'semver' type. Valid types are "major", "minor" and "patch"`
-        );
-        process.exit();
+module.exports = class Version {
+    constructor({ logger, cwd, level } = {}) {
+        this.log = abslog(logger);
+        this.pathname = resolvePath('./assets.json', cwd).pathname;
+        this.level = level;
     }
-    inputValidationSpinner.succeed();
 
-    const readAssetsSpinner = ora('Reading assets.json file').start();
-    try {
-        assets = readAssetsJson();
-    } catch (err) {
-        readAssetsSpinner.fail(
-            'Failed to read assets.json. Does this file exist?'
-        );
-
-        console.log('==========');
-        console.error(err);
-        console.log('==========');
-
-        process.exit();
-    }
-    readAssetsSpinner.succeed();
-
-    const result = schemas.assets(assets);
-
-    if (result.error) {
-        inputValidationSpinner.fail(`Invalid 'assets.json' file`);
-
-        console.log('==========');
-
-        for (const { message } of result.error) {
-            console.error(message);
+    run() {
+        if (v.semverType.validate(this.level).error) {
+            this.log.error(
+                `Invalid 'semver' type. Valid types are "major", "minor" and "patch"`
+            );
+            return;
         }
-        console.log('==========');
 
-        process.exit();
+        this.log.debug('Reading assets.json file');
+
+        try {
+            this.assets = require(this.pathname);
+        } catch (err) {
+            this.log.error('Failed to read assets.json. Does file exist?');
+            this.log.warn(err.message);
+            return;
+        }
+
+        const result = schemas.assets(this.assets);
+        if (result.error) {
+            this.log.error(`Invalid 'assets.json' file`);
+            for (const { dataPath, message } of result.error) {
+                this.log.warn(`${dataPath} ${message}`);
+            }
+
+            return;
+        }
+
+        this.log.debug('Updating assets.json version field');
+        try {
+            const oldVersion = this.assets.version;
+            this.assets.version = semver.inc(this.assets.version, this.level);
+            this.log.debug(`"${oldVersion}" => "${this.assets.version}"`);
+        } catch (err) {
+            this.log.error('Failed to update assets.version');
+            this.log.warn(err.message);
+
+            return;
+        }
+
+        this.log.debug('Saving updated assets.json file');
+        try {
+            fs.writeFileSync(
+                this.pathname,
+                JSON.stringify(this.assets, null, 2)
+            );
+        } catch (err) {
+            this.log.error('Unable to save assets.json file back to disk');
+            this.log.warn(err.message);
+
+            return;
+        }
+
+        this.log.info('✨ done ✨');
     }
-
-    const versionSpinner = ora('Updating assets.json version field').start();
-    try {
-        assets.version = semver.inc(assets.version, semverType);
-    } catch (err) {
-        versionSpinner.fail('Failed to update assets.version');
-
-        console.log('==========');
-        console.error(err);
-        console.log('==========');
-
-        process.exit();
-    }
-    versionSpinner.succeed();
-
-    const writeSpinner = ora('Saving assets.json back to disk').start();
-    try {
-        fs.writeFileSync(pathname, JSON.stringify(assets, null, 2));
-    } catch (err) {
-        writeSpinner.fail('Unable to save assets.json file back to disk');
-
-        console.log('==========');
-        console.error(err);
-        console.log('==========');
-
-        process.exit();
-    }
-    writeSpinner.succeed();
-
-    console.log('');
-    console.log(
-        `✨ Done! assets.json version field now set to ${assets.version} ✨`
-    );
-    console.log('');
-}
-
-module.exports = command;
+};

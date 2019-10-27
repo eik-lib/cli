@@ -1,16 +1,5 @@
 'use strict';
 
-const del = require('./delete');
-const set = require('./set');
+const upload = require('./upload');
 
-async function command(subcommands, args) {
-    if (subcommands[1] === 'delete') {
-        const [type, , name] = subcommands;
-        del(type, name);
-    } else {
-        const [type, name, value] = subcommands;
-        set(type, name, value);
-    }
-}
-
-module.exports = command;
+module.exports = { upload };

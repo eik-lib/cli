@@ -9,7 +9,8 @@ const alias = require('./alias');
 module.exports = {
     init,
     version,
-    importMap,
-    publish,
-    alias,
+    uploadImportMap: importMap.upload,
+    publish: publish.publish,
+    globalPublish: publish.publishGlobalDependency,
+    alias
 };
