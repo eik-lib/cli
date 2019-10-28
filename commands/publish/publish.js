@@ -1,6 +1,7 @@
 'use strict';
 
 const abslog = require('abslog');
+const bytes = require('bytes');
 const fetch = require('node-fetch');
 const tempDir = require('temp-dir');
 const mkdir = require('make-dir');
@@ -18,6 +19,7 @@ const autoprefixer = require('autoprefixer');
 const postcss = require('postcss');
 const fs = require('fs');
 const cssnano = require('cssnano');
+const compressedSize = require('../../utils/compressed-size');
 
 module.exports = class Publish {
     constructor({
@@ -203,6 +205,31 @@ module.exports = class Publish {
             this.log.error('Unable to create zip file');
             this.log.warn(err.message);
             return false;
+        }
+
+        this.log.debug('Checking bundle file sizes');
+        try {
+            const mainIndexJSSize = compressedSize(
+                fs.readFileSync(`${this.path}/main/index.js`, 'utf8')
+            );
+            const ie11IndexJSSize = compressedSize(
+                fs.readFileSync(`${this.path}/ie11/index.js`, 'utf8')
+            );
+            const mainIndexCSSSize = compressedSize(
+                fs.readFileSync(`${this.path}/main/index.css`, 'utf8')
+            );
+            this.log.debug(
+                `  ==> Main index.js size: ${bytes(mainIndexJSSize)}`
+            );
+            this.log.debug(
+                `  ==> ie11 index.js size: ${bytes(ie11IndexJSSize)}`
+            );
+            this.log.debug(
+                `  ==> Main index.css size: ${bytes(mainIndexCSSSize)}`
+            );
+        } catch (err) {
+            this.log.debug('Failed to check bundle sizes');
+            this.log.warn(err.message);
         }
 
         if (this.dryRun) {
