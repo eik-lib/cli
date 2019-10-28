@@ -43,20 +43,22 @@ module.exports = class Publish {
     }
 
     async run() {
+        this.log.debug('Running publish command');
         // this.replace = !Array.isArray(this.replace)
         //     ? this.replace
         //     : [this.replace];
 
+        this.log.debug('Validating input');
         if (v.version.validate(this.version).error) {
             this.log.error(
                 `Invalid 'semver' range given to 'version' argument`
             );
-            return;
+            return false;
         }
 
         if (v.name.validate(this.name).error) {
             this.log.error(`Invalid 'pattern' given to 'name' argument`);
-            return;
+            return false;
         }
 
         this.log.debug('Creating temporary directory');
@@ -65,7 +67,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to create temp dir');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         // create package.json in temp dir
@@ -83,7 +85,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to create package json in temp directory');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         this.log.debug('Loading import map file from server');
@@ -108,7 +110,7 @@ module.exports = class Publish {
                 'Unable to complete npm install operation, is the supplied module version correct?'
             );
             this.log.warn(err.message);
-            return;
+            return false;
         }
         // load meta info for package
         this.log.debug(`Loading meta information for ${this.name} package`);
@@ -123,7 +125,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to load package meta information');
             this.log.warn(err.message);
-            return;
+            return false;
         }
         /*
 
@@ -241,7 +243,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to complete bundle operation');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         this.log.debug('Creating zip file');
@@ -259,7 +261,7 @@ module.exports = class Publish {
         } catch (err) {
             this.log.error('Unable to create zip file');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
         // upload
@@ -267,17 +269,15 @@ module.exports = class Publish {
         //      handle force flag
 
         if (this.dryRun) {
-            this.log.debug('Zipped Archive For Uploading:');
+            this.log.debug('Dry run files ready for upload to server');
             this.log.debug(`  ==> ${this.zipFile}`);
-            this.log.debug('Main JavaScript Bundle File:');
             this.log.debug(`  ==> ${this.file}`);
-            this.log.debug('Main JavaScript Bundle Source Map File:');
             this.log.debug(`  ==> ${this.file}.map`);
-            this.log.info('✨ Done ✨');
-            return;
+            this.log.debug('Publish command complete (dry run)');
+            return true;
         }
 
-        this.log.debug('Uploading bundle to asset server');
+        this.log.debug('Uploading zip file to server');
         try {
             const messages = await sendCommand({
                 method: 'PUT',
@@ -290,11 +290,12 @@ module.exports = class Publish {
                 this.log.debug(`  ==> ${JSON.stringify(msg)}`);
             });
         } catch (err) {
-            this.log.error('Unable to complete upload to asset server');
+            this.log.error('Unable to upload zip file to server');
             this.log.warn(err.message);
-            return;
+            return false;
         }
 
-        this.log.info('✨ Done ✨');
+        this.log.debug('Publish command complete');
+        return true;
     }
 };

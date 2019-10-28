@@ -27,33 +27,43 @@ module.exports = class Init {
         this.inputs = inputs;
     }
 
-    run() {
-        this.log.debug('checking for the existence of an assets.json file');
+    async run() {
+        this.log.debug('Running init command');
 
+        this.log.debug('checking for the existence of an assets.json file');
         try {
             const st = fs.statSync(this.pathname);
             if (st.isFile()) {
-                this.log.warn('assets.json file already exists');
-                this.log.info('✨ done ✨');
-                return;
+                this.log.warn('"assets.json" file already exists');
+                return true;
             }
         } catch (err) {}
 
-        fs.writeFileSync(
-            this.pathname,
-            JSON.stringify(
-                {
-                    organisation: this.org,
-                    name: this.name,
-                    version: this.version,
-                    server: this.server,
-                    inputs: this.inputs
-                },
-                null,
-                2
-            )
+        try {
+            fs.writeFileSync(
+                this.pathname,
+                JSON.stringify(
+                    {
+                        organisation: this.org,
+                        name: this.name,
+                        version: this.version,
+                        server: this.server,
+                        inputs: this.inputs
+                    },
+                    null,
+                    2
+                )
+            );
+        } catch (err) {
+            this.log.error('Unable to save "assets.json" file');
+            this.log.warn(err.message);
+            return false;
+        }
+        this.log.debug(
+            `assets.json file created and saved to "${this.pathname}"`
         );
-        this.log.debug('assets.json file created in current directory');
-        this.log.info('✨ done ✨');
+
+        this.log.debug('Init command complete');
+        return true;
     }
 };

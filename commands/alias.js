@@ -19,17 +19,17 @@ module.exports = class Version {
 
         if (v.version.validate(this.version).error) {
             this.log.error(`Invalid 'semver' range given`);
-            return;
+            return false;
         }
 
         if (v.alias.validate(this.alias).error) {
             this.log.error(`Invalid 'alias' name given`);
-            return;
+            return false;
         }
 
         if (v.name.validate(this.name).error) {
             this.log.error(`Invalid 'name' specified`);
-            return;
+            return false;
         }
 
         this.log.debug('Requesting alias creation from asset server');
@@ -48,9 +48,9 @@ module.exports = class Version {
             this.log.error('Unable to complete alias command');
             this.log.warn(err.message);
 
-            return;
+            return false;
         }
 
-        this.log.info('✨ done ✨');
+        return true;
     }
 };

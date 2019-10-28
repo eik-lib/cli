@@ -3,6 +3,9 @@
 'use strict';
 
 const ora = require('ora');
+const chalk = require('chalk');
+const boxen = require('boxen');
+const { join } = require('path');
 const { schemas } = require('@asset-pipe/common');
 const commands = require('./commands');
 const { parseInput, resolvePath } = require('./utils');
@@ -18,7 +21,21 @@ class Main {
         this.args = args;
         this.pathname = resolvePath('./assets.json').pathname;
 
-        const spinner = ora().start();
+        const { version } = require(join(__dirname, './package.json'));
+        const greeting = chalk.white.bold(`Asset Pipe CLI (v${version})`);
+
+        const boxenOptions = {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'round',
+            borderColor: 'green',
+            backgroundColor: '#555555'
+        };
+        const msgBox = boxen(greeting, boxenOptions);
+
+        console.log(msgBox);
+
+        const spinner = (this.spinner = ora().start());
         this.logger = {
             fatal() {},
             error(message) {
@@ -53,21 +70,32 @@ class Main {
                 this.logger.warn(`${dataPath} ${message}`);
             }
 
+            this.spinner.fail('🥺');
             process.exit(1);
         }
 
         if (this.command === 'init') {
             const Init = commands.init;
-            new Init({ logger: this.logger }).run();
+            const success = await new Init({ logger: this.logger }).run();
+            if (success) {
+                this.spinner.succeed('🤘');
+            } else {
+                this.spinner.fail('🥺');
+            }
             process.exit(0);
         }
 
         if (this.command === 'version') {
             const Version = commands.version;
-            new Version({
+            const success = await new Version({
                 logger: this.logger,
                 level: this.subcommands[0]
             }).run();
+            if (success) {
+                this.spinner.succeed('🤘');
+            } else {
+                this.spinner.fail('🥺');
+            }
             process.exit(0);
         }
 
@@ -76,10 +104,11 @@ class Main {
                 this.logger.error(
                     'Alias command requires "assets.json" file to be present in cwd'
                 );
+                this.spinner.fail('🥺');
                 process.exit(1);
             }
             const Alias = commands.alias;
-            await new Alias({
+            const success = await new Alias({
                 logger: this.logger,
                 server: this.assets.server,
                 org: this.assets.organisation,
@@ -87,6 +116,12 @@ class Main {
                 version: this.subcommands[1],
                 alias: this.subcommands[2]
             }).run();
+
+            if (success) {
+                this.spinner.succeed('🤘');
+            } else {
+                this.spinner.fail('🥺');
+            }
         }
 
         if (this.command === 'publish') {
@@ -95,10 +130,11 @@ class Main {
                     this.logger.error(
                         'publish command requires "assets.json" file to be present in cwd'
                     );
+                    this.spinner.fail('🥺');
                     process.exit(1);
                 }
                 const Publish = commands.publish;
-                await new Publish({
+                const success = await new Publish({
                     logger: this.logger,
                     server: this.assets.server,
                     org: this.assets.organisation,
@@ -109,9 +145,14 @@ class Main {
                     css: this.assets.css.input,
                     dryRun: this.args.dryRun
                 }).run();
+                if (success) {
+                    this.spinner.succeed('🤘');
+                } else {
+                    this.spinner.fail('🥺');
+                }
             } else {
                 const Publish = commands.globalPublish;
-                await new Publish({
+                const success = await new Publish({
                     logger: this.logger,
                     server: this.args.server || this.assets.server,
                     org: this.args.org || this.assets.organisation,
@@ -120,12 +161,17 @@ class Main {
                     version: this.subcommands[1],
                     dryRun: this.args.dryRun
                 }).run();
+                if (success) {
+                    this.spinner.succeed('🤘');
+                } else {
+                    this.spinner.fail('🥺');
+                }
             }
         }
 
         if (this.command === 'map') {
             const UploadImportMap = commands.uploadImportMap;
-            await new UploadImportMap({
+            const success = await new UploadImportMap({
                 logger: this.logger,
                 server: this.args.server || this.assets.server,
                 org: this.args.org || this.assets.organisation,
@@ -133,6 +179,11 @@ class Main {
                 name: this.subcommands[0],
                 version: this.subcommands[1]
             }).run();
+            if (success) {
+                this.spinner.succeed('🤘');
+            } else {
+                this.spinner.fail('🥺');
+            }
         }
     }
 }
