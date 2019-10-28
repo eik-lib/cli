@@ -61,17 +61,17 @@ You might decide that all teams across your organisation should use the same ver
 To do so you would run:
 
 ```sh
-asset-pipe publish js lodash 4.17.15
+asset-pipe publish lodash 4.17.15
 ```
 
 After running this, an esm friendly version of lodash will be available at the url:
-`http://<asset server url>/<organisation>/js/lodash/4.17.15`
+`http://<asset server url>/<organisation>/pkg/lodash/4.17.15`
 
 It's now possible for each team to reference this globally published module directly in their
 own client side code as follows:
 
 ```js
-import lodash from `http://<asset server url>/<organisation>/js/lodash/4.17.15`;
+import lodash from `http://<asset server url>/<organisation>/pkg/lodash/4.17.15`;
 ```
 
 This has the benefit that if all teams are referencing lodash in this way, the browser will cache the module the first time it encouters it and all subsequent pages will not need to download it again.
@@ -89,13 +89,13 @@ Taking the previous example 1 step further, before we saw that we could globally
 We can now set a major semver alias for this version:
 
 ```sh
-asset-pipe alias js lodash 4.15.15
+asset-pipe alias lodash 4.15.15 4
 ```
 
 We can now change our import statement to:
 
 ```js
-import lodash from `http://<asset server url>/<organisation>/js/lodash/4`;
+import lodash from `http://<asset server url>/<organisation>/pkg/lodash/4`;
 ```
 
 and everything will work as before.
@@ -103,32 +103,70 @@ and everything will work as before.
 When a new version of lodash comes out, we can publish it as before:
 
 ```sh
-asset-pipe publish js lodash 4.17.16
+asset-pipe publish lodash 4.17.16
 ```
 
 And then create a major semver alias for the new version like so:
 
 ```sh
-asset-pipe alias js lodash 4.15.16
+asset-pipe alias js lodash 4.15.16 4
 ```
 
 In this way, no client side code will need to be updated to reflect this change and it is considerably easier for multiple teams to stay in sync, using the same global shared dependency
 
 ### Using import maps to map "bare imports"
 
-TBD
+Import maps are [an emerging standard](https://github.com/WICG/import-maps) and a way to map "bare imports" such as `foo` in the import statement `import { bar, baz } from 'foo'` to modules to be loaded. In Asset Pipe, we provide a way to upload import map files and to specify them for use in bundling. Doing so allows you to specify, across an organisation, a common set of shared modules whether they be `react` or `lit-html` or whatever.
+
+Making use of import maps is as follows.
+
+1. Define an import map json file
+2. Use the asset pipe CLI to upload the import map to the server
+3. Specify the URL to your import map file(s) in your `assets.json` file
+4. Use the `publish` commands, your import maps will be used to map bare imports in your code to the URLs you have defined in your import maps
+
+#### Import maps, an example
+
+Given the following import map file `import-map.json`
+
+```json
+{
+    "imports": {
+        "lit-html": "http://localhost:4001/finn/pkg/lit-html/v1/index.js",
+        "lodash": "http://localhost:4001/finn/pkg/lodash/v4/index.js"
+    }
+}
+```
+
+The following command will upload the import map file `./import-map.json` in the current directory using the name `my-import-map` and the version `1.0.0`
+
+```sh
+asset-pipe --org finn map my-import-map 1.0.0 ./import-map.json
+```
+
+Given the following line now added to `assets.json`
+
+```json
+{
+    "import-map": ["http://localhost:4001/finn/map/my-import-map/1.0.0"]
+}
+```
+
+When we run `asset-pipe publish` any "bare imports" refering to either `lit-html` or `lodash` will be mapped to the URLs in our map.
+
+In this way, you can control which version of `react` or `lit-html` or `lodash` all the apps in your organisation are using. In combination with package `alias` URLs you have a powerful way to manage key shared dependencies for your apps in production without the need to redeploy or rebundle when a new version of a dependency is released.
 
 ## API Documentation
 
 ### Command Summary
 
-| command    | description                                                    |
-| ---------- | -------------------------------------------------------------- |
-| init       | Create an assets.json file in the current directory            |
-| version    | Helper command for bumping your apps asset version             |
-| publish    | Publish a dependency bundle or an app bundle                   |
-| alias      | Sets a major semver alias for a given dependency or app bundle |
-| import-map | Sets or deletes a "bare" import entry in an import-map file    |
+| command | description                                                    |
+| ------- | -------------------------------------------------------------- |
+| init    | Create an assets.json file in the current directory            |
+| version | Helper command for bumping your apps asset version             |
+| publish | Publish a dependency bundle or an app bundle                   |
+| alias   | Sets a major semver alias for a given dependency or app bundle |
+| map     | Sets or deletes a "bare" import entry in an import-map file    |
 
 ### Commands Overview
 
@@ -149,7 +187,8 @@ This command takes no input and creates a new `assets.json` file in the current 
     "css": {
         "input": "[path to css entrypoint]",
         "options": {}
-    }
+    },
+    "import-map": []
 }
 ```
 
@@ -165,6 +204,7 @@ You will then need to change the various fields as appropriate. If you are runni
 | server       | Address to the asset server                                         |
 | js           | Configuration for JavaScript assets                                 |
 | css          | Configuration for CSS assets                                        |
+| import-map   | Specify import maps to be used to map bare imports during bundling  |
 
 ###### organisation
 
@@ -241,28 +281,46 @@ _styles.css file inside assets folder_
 }
 ```
 
+###### import-map
+
+This field is used to configure the location of any import map files to be used when creating bundles. The field should be an array and can hold any number of url strings pointing to locations of import-map files that will be downloaded and merged together
+
+_defining a single import map file_
+
+```json
+{
+    "import-map": ["http://localhost:4001/map/my-import-map/1.0.0"]
+}
+```
+
 #### version
 
 This command updates the `version` field of an `assets.json` in the current directory based on the argument given (`major`, `minor`, `patch`).
+
+The command takes the form:
+
+```sh
+asset-pipe version major|minor|patch
+```
 
 **Examples**
 
 _Increase the version's major by 1_
 
 ```bash
-asset-pipe major
+asset-pipe version major
 ```
 
 _Increase the version's minor by 1_
 
 ```bash
-asset-pipe minor
+asset-pipe version minor
 ```
 
 _Increase the version's patch by 1_
 
 ```bash
-asset-pipe patch
+asset-pipe version patch
 ```
 
 #### publish
@@ -271,36 +329,84 @@ This command publishes to the asset server. Based on the arguments given, it wil
 
 If no arguments are given the command will the app's client side assets to the asset server based on the values in an `assets.json` file in the current directory.
 
-If the name and version of an npm package are given, the command will download the specified package from npm, create a bundle with it and then publish it to the asset server. The resulting bundle will be in esm module format, converting from common js if needed.
+The command takes the form:
 
-**Examples**
+```sh
+asset-pipe publish
+```
+
+**Example**
 
 _Publishing app assets to server_
 
 ```bash
-asset-pipe publish
+asset-pipe publish [optional arguments]
 ```
+
+If the name and version of an npm package are given, the command will download the specified package from npm, create a bundle with it and then publish it to the asset server. The resulting bundle will be in esm module format, converting from common js if needed.
+
+_Note_ The arguments `server`, `organisation` and `import-map` are taken from `assets.json` if such a file is present in the current directory. If not, you will need to specify these values with the command line flags `--server`, `--org` and `--map`.
+
+The command takes the form:
+
+```sh
+asset-pipe publish [optional arguments] <name> <version>
+```
+
+**Example**
 
 _Publishing a dependency from npm_
 
 ```bash
-asset-pipe publish js lit-html 1.1.2
+asset-pipe publish lit-html 1.1.2
+# asset-pipe publish --server http://localhost:4001 --org finn --map http://localhost:4001/finn/map/my-import-map/1.0.0 lit-html 1.1.2
 ```
 
 #### alias
 
 This command creates a semver alias for a given published bundle. Creating aliases allows for more flexible referencing of published bundles. You can update an alias to point to the latest version of a bundle without needing to update every client that makes use of your bundle.
 
+_Note_ The arguments `server` and `organisation` are taken from `assets.json` if such a file is present in the current directory. If not, you will need to specify these values with the command line flags `--server` and `--org`.
+
+The command takes the form:
+
+```sh
+asset-pipe alias [optional arguments] <name> <version> <alias>
+```
+
 _Example_
 
 Running the following command...
 
 ```bash
-asset-pipe alias js lit-html 1.1.2
+asset-pipe alias lit-html 1.1.2 1
+# asset-pipe alias --server http://localhost:4001 --org finn lit-html 1.1.2 1
 ```
 
 ...will create or update the `lit-html` alias `1` to point at `lit-html` version `1.1.2`
 
 #### import-map
 
-TBD
+This command uploads an import map json file you have created locally to the server. You must upload the file with a `name` and a `version` and the file must be of the form:
+
+```json
+{
+    "imports": {
+        "<dependency name 1>": "url to dependency",
+        "<dependency name 2>": "url to dependency"
+    }
+}
+```
+
+_Note_ The arguments `server` and `organisation` are taken from `assets.json` if such a file is present in the current directory. If not, you will need to specify these values with the command line flags `--server` and `--org`.
+
+The command takes the form:
+
+```sh
+asset-pipe map [optional arguments] <name> <version> <path to file>
+```
+
+```bash
+asset-pipe map my-import-map 1.0.0 ./import-map.json
+# asset-pipe map --server http://localhost:4001 --org finn my-import-map 1.0.0 ./import-map.json
+```

@@ -110,8 +110,8 @@ class Main {
             const Alias = commands.alias;
             const success = await new Alias({
                 logger: this.logger,
-                server: this.assets.server,
-                org: this.assets.organisation,
+                server: this.args.server || this.assets.server,
+                org: this.args.org || this.assets.organisation,
                 name: this.subcommands[0],
                 version: this.subcommands[1],
                 alias: this.subcommands[2]
