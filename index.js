@@ -3,6 +3,9 @@
 'use strict';
 
 const ora = require('ora');
+const chalk = require('chalk');
+const boxen = require('boxen');
+const { join } = require('path');
 const { schemas } = require('@asset-pipe/common');
 const commands = require('./commands');
 const { parseInput, resolvePath } = require('./utils');
@@ -17,6 +20,20 @@ class Main {
         this.subcommands = subcommands;
         this.args = args;
         this.pathname = resolvePath('./assets.json').pathname;
+
+        const { version } = require(join(__dirname, './package.json'));
+        const greeting = chalk.white.bold(`Asset Pipe CLI (v${version})`);
+
+        const boxenOptions = {
+            padding: 1,
+            margin: 1,
+            borderStyle: 'round',
+            borderColor: 'green',
+            backgroundColor: '#555555'
+        };
+        const msgBox = boxen(greeting, boxenOptions);
+
+        console.log(msgBox);
 
         const spinner = (this.spinner = ora().start());
         this.logger = {
