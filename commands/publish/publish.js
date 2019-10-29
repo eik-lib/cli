@@ -11,7 +11,8 @@ const rollupReplace = require('rollup-plugin-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
-const { join } = require('path');
+const { join, parse } = require('path');
+const { validators } = require('@asset-pipe/common');
 const { sendCommand } = require('../../utils');
 const tar = require('tar');
 const babel = require('rollup-plugin-babel');
@@ -49,6 +50,50 @@ module.exports = class Publish {
 
     async run() {
         this.log.debug('Running publish command');
+
+        this.log.debug('Validating input');
+        try {
+            parse(this.cwd);
+        } catch (err) {
+            this.log.error('Parameter "cwd" is not valid');
+            return false;
+        }
+
+        try {
+            validators.origin(this.server);
+        } catch (err) {
+            this.log.error(`Parameter "server" is not valid`);
+            return false;
+        }
+
+        try {
+            validators.org(this.org);
+            validators.name(this.name);
+            validators.version(this.version);
+        } catch (err) {
+            this.log.error(err.message);
+            return false;
+        }
+
+        if (!this.js || typeof this.js !== 'string') {
+            this.log.error('Parameter "js" is not valid');
+            return false;
+        }
+
+        if (!this.css || typeof this.css !== 'string') {
+            this.log.error('Parameter "css" is not valid');
+            return false;
+        }
+
+        if (!Array.isArray(this.map)) {
+            this.log.error('Parameter "map" is not valid');
+            return false;
+        }
+
+        if (this.dryRun && this.dryRun !== true && this.dryRun !== false) {
+            this.log.error('Parameter "dryRun" is not valid');
+            return false;
+        }
 
         this.log.debug('Creating temporary directory');
         try {
@@ -197,8 +242,7 @@ module.exports = class Publish {
                     `ie11/index.js`,
                     `ie11/index.js.map`,
                     `main/index.css`,
-                    `main/index.css.map`,
-                    `assets.json`
+                    `main/index.css.map`
                 ]
             );
         } catch (err) {

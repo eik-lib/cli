@@ -2,13 +2,14 @@
 
 const abslog = require('abslog');
 const { sendCommand } = require('../utils');
-const v = require('../validators');
+const { validators } = require('@asset-pipe/common');
 
-module.exports = class Version {
-    constructor({ logger, server, org, name, alias, version } = {}) {
+module.exports = class Alias {
+    constructor({ logger, server, org, type, name, alias, version } = {}) {
         this.log = abslog(logger);
         this.server = server;
         this.org = org;
+        this.type = type;
         this.name = name;
         this.alias = alias;
         this.version = version;
@@ -17,18 +18,21 @@ module.exports = class Version {
     async run() {
         this.log.debug('Validating input');
 
-        if (v.version.validate(this.version).error) {
-            this.log.error(`Invalid 'semver' range given`);
+        try {
+            validators.origin(this.server);
+        } catch (err) {
+            this.log.error(`Parameter "server" is not valid`);
             return false;
         }
 
-        if (v.alias.validate(this.alias).error) {
-            this.log.error(`Invalid 'alias' name given`);
-            return false;
-        }
-
-        if (v.name.validate(this.name).error) {
-            this.log.error(`Invalid 'name' specified`);
+        try {
+            validators.org(this.org);
+            validators.type(this.type);
+            validators.name(this.name);
+            validators.version(this.version);
+            validators.alias(this.alias);
+        } catch (err) {
+            this.log.error(err.message);
             return false;
         }
 
@@ -37,7 +41,7 @@ module.exports = class Version {
             const messages = await sendCommand({
                 host: this.server,
                 method: 'PUT',
-                pathname: `/${this.org}/pkg/${this.name}/v${this.alias}`,
+                pathname: `/${this.org}/${this.type}/${this.name}/v${this.alias}`,
                 data: { version: this.version }
             });
 

@@ -15,9 +15,9 @@ const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 const { execSync } = require('child_process');
 const { writeFileSync } = require('fs');
-const { join, dirname } = require('path');
+const { join, dirname, parse } = require('path');
+const { validators } = require('@asset-pipe/common');
 const { sendCommand } = require('../../utils');
-const v = require('../../validators');
 
 module.exports = class Publish {
     constructor({
@@ -38,26 +38,43 @@ module.exports = class Publish {
         this.version = version;
         this.map = map;
         this.dryRun = dryRun;
-        // this.replace = [];
         this.path = join(tempDir, `publish-${name}-${version}`);
     }
 
     async run() {
         this.log.debug('Running publish command');
-        // this.replace = !Array.isArray(this.replace)
-        //     ? this.replace
-        //     : [this.replace];
 
         this.log.debug('Validating input');
-        if (v.version.validate(this.version).error) {
-            this.log.error(
-                `Invalid 'semver' range given to 'version' argument`
-            );
+        try {
+            parse(this.cwd);
+        } catch (err) {
+            this.log.error('Parameter "cwd" is not valid');
             return false;
         }
 
-        if (v.name.validate(this.name).error) {
-            this.log.error(`Invalid 'pattern' given to 'name' argument`);
+        try {
+            validators.origin(this.server);
+        } catch (err) {
+            this.log.error(`Parameter "server" is not valid`);
+            return false;
+        }
+
+        try {
+            validators.org(this.org);
+            validators.name(this.name);
+            validators.version(this.version);
+        } catch (err) {
+            this.log.error(err.message);
+            return false;
+        }
+
+        if (!Array.isArray(this.map)) {
+            this.log.error('Parameter "map" is not valid');
+            return false;
+        }
+
+        if (this.dryRun && this.dryRun !== true && this.dryRun !== false) {
+            this.log.error('Parameter "dryRun" is not valid');
             return false;
         }
 
@@ -70,7 +87,6 @@ module.exports = class Publish {
             return false;
         }
 
-        // create package.json in temp dir
         this.log.debug('Creating package json file in temp directory');
         try {
             writeFileSync(
@@ -101,7 +117,6 @@ module.exports = class Publish {
             this.log.warn(err.message);
         }
 
-        // // run npm install in temp dir
         this.log.debug('Running npm install in temp directory');
         try {
             execSync('npm i --loglevel=silent', { cwd: this.path });
@@ -112,7 +127,7 @@ module.exports = class Publish {
             this.log.warn(err.message);
             return false;
         }
-        // load meta info for package
+
         this.log.debug(`Loading meta information for ${this.name} package`);
         try {
             const resolvedPath = require.resolve(this.name, {
@@ -127,76 +142,11 @@ module.exports = class Publish {
             this.log.warn(err.message);
             return false;
         }
-        /*
 
-        // package analysis
-        const checkPeerDependenciesSpinner = ora(
-            `Checking for peer dependencies`
-        ).start();
-        try {
-            // console.log(installedDepPkgJson);
-            // console.log(installedDepPkgJson.peerDependencies);
-
-            if (installedDepPkgJson.peerDependencies) {
-                // check that a global flag has been supplied for each
-                for (const dep of Object.keys(
-                    installedDepPkgJson.peerDependencies
-                )) {
-                    const globalPkgNames = replace.map(global => {
-                        const [moduleName] = global.split('@');
-                        return moduleName;
-                    });
-                    if (!globalPkgNames.includes(dep)) {
-                        checkPeerDependenciesSpinner.fail(
-                            `Package ${name} contains peer dependencies that must be referenced`
-                        );
-
-                        console.log('==========');
-                        console.error(
-                            `You can fix this error by performing the following 2 steps:
-1. Globally publish an appropriate version of "${dep}"
-2. Republish "${name}" using the --replace flag to replace "${dep}" imports with the version of "${dep}" published in 1..
-   Eg. --replace ${dep}@1.0.0`
-                        );
-                        console.log('==========');
-
-                        process.exit();
-                    }
-                }
-            }
-        } catch (err) {
-            checkPeerDependenciesSpinner.fail(
-                'Unable to complete check for peer dependencies'
-            );
-
-            console.log('==========');
-            console.error(err.message);
-            console.log('==========');
-
-            process.exit();
-        }
-        checkPeerDependenciesSpinner.succeed();
-*/
-        // bundle
-        //      handle peer deps flag
         this.log.debug('Creating bundle in temp directory');
         try {
-            /*
-            const imports = {};
-            if (replace.length) {
-                replace.forEach(global => {
-                    const [moduleName, moduleVersion] = global.split('@');
-                    // TODO: handle aliases and absolute URLs as well as specific versions
-                    imports[
-                        moduleName
-                    ] = `${server}/${organisation}/pkg/${moduleName}/${moduleVersion}/index.js`;
-                });
-            }
-*/
             const options = {
-                onwarn: (warning, warn) => {
-                    // Supress logging
-                },
+                onwarn: (warning, warn) => {},
                 plugins: [
                     esmImportToUrl({ imports: this.imports }),
                     resolve(),
@@ -209,14 +159,12 @@ module.exports = class Publish {
             };
 
             if (this.installedDepPkgJson.module) {
-                // use installedDepPkgJson.module
                 this.log.debug('Dependency format: esm modules detected');
                 options.input = join(
                     this.installedDepBasePath,
                     this.installedDepPkgJson.module
                 );
             } else if (this.installedDepPkgJson.main) {
-                // use installedDepPkgJson.main
                 this.log.debug(
                     'Dependency format: common js modules detected, conversion to esm will occur'
                 );
@@ -225,7 +173,6 @@ module.exports = class Publish {
                     this.installedDepPkgJson.main
                 );
             } else {
-                // use installedDepPkgJson.main
                 this.log.debug(
                     'Dependency format: common js modules assumed, conversion to esm will occur'
                 );
@@ -263,10 +210,6 @@ module.exports = class Publish {
             this.log.warn(err.message);
             return false;
         }
-
-        // upload
-        //      handle dry run
-        //      handle force flag
 
         if (this.dryRun) {
             this.log.debug('Dry run files ready for upload to server');
