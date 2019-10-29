@@ -18,7 +18,6 @@ const { writeFileSync } = require('fs');
 const { join, dirname, parse } = require('path');
 const { validators } = require('@asset-pipe/common');
 const { sendCommand } = require('../../utils');
-const v = require('../../validators');
 
 module.exports = class Publish {
     constructor({

@@ -3,7 +3,6 @@
 const abslog = require('abslog');
 const { join } = require('path');
 const { sendCommand } = require('../../utils');
-const v = require('../../validators');
 
 module.exports = class Publish {
     constructor({
