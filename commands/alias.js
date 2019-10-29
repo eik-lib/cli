@@ -1,8 +1,9 @@
 'use strict';
 
 const abslog = require('abslog');
-const { sendCommand } = require('../utils');
+const { join } = require('path');
 const { validators } = require('@asset-pipe/common');
+const { sendCommand } = require('../utils');
 
 module.exports = class Alias {
     constructor({ logger, server, org, type, name, alias, version } = {}) {
@@ -41,7 +42,12 @@ module.exports = class Alias {
             const messages = await sendCommand({
                 host: this.server,
                 method: 'PUT',
-                pathname: `/${this.org}/${this.type}/${this.name}/v${this.alias}`,
+                pathname: join(
+                    this.org,
+                    this.type,
+                    this.name,
+                    `v${this.alias}`
+                ),
                 data: { version: this.version }
             });
 

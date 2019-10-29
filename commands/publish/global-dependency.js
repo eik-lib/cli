@@ -225,7 +225,7 @@ module.exports = class Publish {
             const messages = await sendCommand({
                 method: 'PUT',
                 host: this.server,
-                pathname: `/${this.org}/pkg/${this.name}/${this.version}`,
+                pathname: join(this.org, 'pkg', this.name, this.version),
                 file: this.zipFile
             });
 

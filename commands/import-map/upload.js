@@ -73,7 +73,7 @@ module.exports = class Publish {
             const messages = await sendCommand({
                 method: 'PUT',
                 host: this.server,
-                pathname: `/${this.org}/map/${this.name}/${this.version}`,
+                pathname: join(this.org, 'map', this.name, this.version),
                 map: join(this.cwd, this.file)
             });
 
