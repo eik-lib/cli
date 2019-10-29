@@ -242,8 +242,7 @@ module.exports = class Publish {
                     `ie11/index.js`,
                     `ie11/index.js.map`,
                     `main/index.css`,
-                    `main/index.css.map`,
-                    `assets.json`
+                    `main/index.css.map`
                 ]
             );
         } catch (err) {
