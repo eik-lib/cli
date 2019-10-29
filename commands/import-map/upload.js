@@ -14,40 +14,47 @@ module.exports = class Publish {
         file,
         name,
         version
-        // dryRun = false
     } = {}) {
         this.log = abslog(logger);
         this.cwd = cwd;
         this.server = server;
         this.org = org;
-        this.file = file;
         this.name = name;
         this.version = version;
-        // this.dryRun = dryRun;
-        // this.path = join(tempDir, `map-${name}-${version}`);
+        this.file = file;
     }
 
     async run() {
         this.log.debug('Running import map publish command');
 
         this.log.debug('Validating input');
-        if (v.name.validate(this.name).error) {
-            this.log.error(`Invalid or missing 'name' argument specified`);
+        try {
+            path.parse(this.cwd);
+        } catch (err) {
+            this.log.error('Parameter "cwd" is not valid');
             return false;
         }
 
-        if (v.version.validate(this.version).error) {
-            this.log.error(`Invalid or missing 'version' argument specified`);
+        try {
+            validators.origin(this.server);
+        } catch (err) {
+            this.log.error(`Parameter "server" is not valid`);
             return false;
         }
 
-        if (v.organisation.validate(this.org).error) {
-            this.log.error(`Invalid or missing 'org' field specified`);
+        try {
+            validators.org(this.org);
+            validators.name(this.name);
+            validators.version(this.version);
+        } catch (err) {
+            this.log.error(err.message);
             return false;
         }
 
-        if (v.server.validate(this.server).error) {
-            this.log.error(`Invalid or missing 'server' field specified`);
+        try {
+            path.parse(this.file);
+        } catch (err) {
+            this.log.error('Parameter "file" is not valid');
             return false;
         }
 

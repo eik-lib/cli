@@ -4,8 +4,7 @@ const abslog = require('abslog');
 const semver = require('semver');
 const fs = require('fs');
 const { resolvePath } = require('../utils');
-const v = require('../validators');
-const { schemas } = require('@asset-pipe/common');
+const { schemas, validators } = require('@asset-pipe/common');
 
 module.exports = class Version {
     constructor({ logger, cwd, level } = {}) {
@@ -18,7 +17,9 @@ module.exports = class Version {
         this.log.debug('Running version command');
 
         this.log.debug('Validating input');
-        if (v.semverType.validate(this.level).error) {
+        try {
+            validators.semverType(this.level);
+        } catch (err) {
             this.log.error(
                 `Invalid 'semver' type. Valid types are "major", "minor" and "patch"`
             );
