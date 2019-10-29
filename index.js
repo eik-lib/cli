@@ -112,9 +112,10 @@ class Main {
                 logger: this.logger,
                 server: this.args.server || this.assets.server,
                 org: this.args.org || this.assets.organisation,
-                name: this.subcommands[0],
-                version: this.subcommands[1],
-                alias: this.subcommands[2]
+                type: this.subcommands[0],
+                name: this.subcommands[1],
+                version: this.subcommands[2],
+                alias: this.subcommands[3]
             }).run();
 
             if (success) {
