@@ -1,7 +1,9 @@
 'use strict';
 
 const abslog = require('abslog');
-const { join } = require('path');
+const { join, parse } = require('path');
+const { existsSync } = require('fs');
+const { validators } = require('@asset-pipe/common');
 const { sendCommand } = require('../../utils');
 
 module.exports = class Publish {
@@ -28,7 +30,7 @@ module.exports = class Publish {
 
         this.log.debug('Validating input');
         try {
-            path.parse(this.cwd);
+            parse(this.cwd);
         } catch (err) {
             this.log.error('Parameter "cwd" is not valid');
             return false;
@@ -51,9 +53,16 @@ module.exports = class Publish {
         }
 
         try {
-            path.parse(this.file);
+            parse(this.file);
         } catch (err) {
             this.log.error('Parameter "file" is not valid');
+            return false;
+        }
+
+        if (!existsSync(join(this.cwd, this.file))) {
+            this.log.error(
+                'Parameter "file" is not valid. File does not exist'
+            );
             return false;
         }
 
