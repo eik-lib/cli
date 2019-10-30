@@ -1,33 +1,27 @@
 'use strict';
 
 const ora = require('ora');
-const Map = require('../classes/publish/map');
+const PublishDependency = require('../classes/publish/dependency');
 const { resolvePath, logger } = require('../utils');
 
 const assetsPath = resolvePath('./assets.json').pathname;
 const assets = require(assetsPath);
 
-exports.command = 'map <name> <version> <file>';
+exports.command = 'dependency <name> <version>';
 
-exports.aliases = ['m'];
+exports.aliases = ['dep', 'd'];
 
-exports.describe = `Upload an import map file to the server under a given name and version.`;
+exports.describe = `Publish an NPM package to server by given name and version.`;
 
 exports.builder = yargs => {
     yargs
         .positional('name', {
-            describe: 'Import map name.',
+            describe: 'NPM package name.',
             type: 'string'
         })
         .positional('version', {
-            describe: 'Import map version.',
+            describe: 'Semver NPM package version.',
             type: 'string'
-        })
-        .positional('file', {
-            describe:
-                'Path to import map file on local disk relative to the current working directory.',
-            type: 'string',
-            normalize: true
         });
 
     yargs.options({
@@ -45,6 +39,18 @@ exports.builder = yargs => {
             alias: 'o',
             describe: 'Provide the organisation context for the command.',
             default: assets.organisation || ''
+        },
+        map: {
+            alias: 'm',
+            describe:
+                'Provide an array of URLs to import maps that should be used when making bundles',
+            default: assets['import-map'] || []
+        },
+        'dry-run': {
+            alias: 'd',
+            describe:
+                'Terminates the publish early (before upload) and provides information about created bundles for inspection.',
+            default: false
         }
     });
 };
@@ -52,11 +58,10 @@ exports.builder = yargs => {
 exports.handler = async function(argv) {
     const spinner = ora().start();
     let success = false;
+
     try {
-        success = await new Map({
-            logger: logger(spinner),
-            ...argv
-        }).run();
+        const options = { logger: logger(spinner), ...argv };
+        success = await new PublishDependency(options).run();
     } catch (err) {
         spinner.warn(err.message);
     }
