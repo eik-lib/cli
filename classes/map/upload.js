@@ -6,7 +6,7 @@ const { existsSync } = require('fs');
 const { validators } = require('@asset-pipe/common');
 const { sendCommand } = require('../../utils');
 
-module.exports = class Publish {
+module.exports = class MapUpload {
     constructor({
         logger,
         cwd = process.cwd(),
@@ -67,7 +67,7 @@ module.exports = class Publish {
         }
 
         this.log.debug(
-            `Uploading import map "${this.name}" "${this.version}" to asset server`
+            `Uploading import map "${this.name}" version "${this.version}" to asset server`
         );
         try {
             const messages = await sendCommand({

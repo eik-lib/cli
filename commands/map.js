@@ -1,39 +1,33 @@
 'use strict';
 
 const ora = require('ora');
-const Alias = require('../classes/alias');
+const Map = require('../classes/map/upload');
 const { resolvePath, logger } = require('../utils');
 
 const assetsPath = resolvePath('./assets.json').pathname;
 const assets = require(assetsPath);
 
-exports.command = 'alias <type> <name> <version> <alias>';
+exports.command = 'map <name> <version> <file>';
 
-exports.aliases = ['a'];
+exports.aliases = ['m'];
 
-exports.describe = `Create a semver major alias for an import map or package as identified by its name and version.`;
+exports.describe = `Upload an import map file to the server under a given name and version.`;
 
 exports.builder = yargs => {
     yargs
-        .positional('type', {
-            describe:
-                'Resource type to perform alias on. Either "pkg" for a package or "map" for an import map',
-            type: 'string'
-        })
         .positional('name', {
-            describe:
-                'Name matching either package or import map name depending on type given',
+            describe: 'Import map name.',
             type: 'string'
         })
         .positional('version', {
-            describe:
-                'Version matching either package or import map version depending on type given',
+            describe: 'Import map version.',
             type: 'string'
         })
-        .positional('alias', {
+        .positional('file', {
             describe:
-                'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
-            type: 'string'
+                'Path to import map file on local disk relative to the current working directory.',
+            type: 'string',
+            normalize: true
         });
 
     yargs.options({
@@ -58,11 +52,13 @@ exports.builder = yargs => {
 exports.handler = async function(argv) {
     const spinner = ora().start();
     let success = false;
-
     try {
-        success = await new Alias({ logger: logger(spinner), ...argv }).run();
+        success = await new Map({
+            logger: logger(spinner),
+            ...argv
+        }).run();
     } catch (err) {
-        logger.warn(err.message);
+        spinner.warn(err.message);
     }
 
     if (success) {

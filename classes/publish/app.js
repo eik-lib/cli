@@ -22,7 +22,7 @@ const fs = require('fs');
 const cssnano = require('cssnano');
 const compressedSize = require('../../utils/compressed-size');
 
-module.exports = class Publish {
+module.exports = class PublishApp {
     constructor({
         logger,
         cwd = process.cwd(),
