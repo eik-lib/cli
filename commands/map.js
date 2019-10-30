@@ -4,9 +4,6 @@ const ora = require('ora');
 const Map = require('../classes/publish/map');
 const { resolvePath, logger } = require('../utils');
 
-const assetsPath = resolvePath('./assets.json').pathname;
-const assets = require(assetsPath);
-
 exports.command = 'map <name> <version> <file>';
 
 exports.aliases = ['m'];
@@ -14,6 +11,9 @@ exports.aliases = ['m'];
 exports.describe = `Upload an import map file to the server under a given name and version.`;
 
 exports.builder = yargs => {
+    const assetsPath = resolvePath('./assets.json').pathname;
+    const assets = require(assetsPath);
+
     yargs
         .positional('name', {
             describe: 'Import map name.',

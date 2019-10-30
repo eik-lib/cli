@@ -4,9 +4,6 @@ const ora = require('ora');
 const PublishDependency = require('../classes/publish/dependency');
 const { resolvePath, logger } = require('../utils');
 
-const assetsPath = resolvePath('./assets.json').pathname;
-const assets = require(assetsPath);
-
 exports.command = 'dependency <name> <version>';
 
 exports.aliases = ['dep', 'd'];
@@ -14,6 +11,9 @@ exports.aliases = ['dep', 'd'];
 exports.describe = `Publish an NPM package to server by given name and version.`;
 
 exports.builder = yargs => {
+    const assetsPath = resolvePath('./assets.json').pathname;
+    const assets = require(assetsPath);
+
     yargs
         .positional('name', {
             describe: 'NPM package name.',
@@ -46,11 +46,12 @@ exports.builder = yargs => {
                 'Provide an array of URLs to import maps that should be used when making bundles',
             default: assets['import-map'] || []
         },
-        'dry-run': {
+        dryRun: {
             alias: 'd',
             describe:
                 'Terminates the publish early (before upload) and provides information about created bundles for inspection.',
-            default: false
+            default: false,
+            type: 'boolean'
         }
     });
 };
@@ -58,7 +59,6 @@ exports.builder = yargs => {
 exports.handler = async function(argv) {
     const spinner = ora().start();
     let success = false;
-
     try {
         const options = { logger: logger(spinner), ...argv };
         success = await new PublishDependency(options).run();

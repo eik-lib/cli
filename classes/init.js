@@ -22,10 +22,8 @@ module.exports = class Init {
         this.name = name;
         this.version = version;
         this.server = server;
-        this.inputs = {
-            js: { input: js, options: {} },
-            css: { input: css, options: {} }
-        };
+        this.js = { input: js, options: {} };
+        this.css = { input: css, options: {} };
     }
 
     async run() {
@@ -49,7 +47,8 @@ module.exports = class Init {
                         name: this.name,
                         version: this.version,
                         server: this.server,
-                        inputs: this.inputs
+                        js: this.js,
+                        css: this.css
                     },
                     null,
                     2

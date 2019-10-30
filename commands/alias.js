@@ -4,9 +4,6 @@ const ora = require('ora');
 const Alias = require('../classes/alias');
 const { resolvePath, logger } = require('../utils');
 
-const assetsPath = resolvePath('./assets.json').pathname;
-const assets = require(assetsPath);
-
 exports.command = 'alias <type> <name> <version> <alias>';
 
 exports.aliases = ['a'];
@@ -14,6 +11,9 @@ exports.aliases = ['a'];
 exports.describe = `Create a semver major alias for an import map or package as identified by its name and version.`;
 
 exports.builder = yargs => {
+    const assetsPath = resolvePath('./assets.json').pathname;
+    const assets = require(assetsPath);
+
     yargs
         .positional('type', {
             describe:

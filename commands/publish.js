@@ -4,9 +4,6 @@ const ora = require('ora');
 const PublishApp = require('../classes/publish/app');
 const { resolvePath, logger } = require('../utils');
 
-const assetsPath = resolvePath('./assets.json').pathname;
-const assets = require(assetsPath);
-
 exports.command = 'publish';
 
 exports.aliases = ['p', 'pub'];
@@ -14,6 +11,9 @@ exports.aliases = ['p', 'pub'];
 exports.describe = `Publish an apps dependencies based on local assets.json file.`;
 
 exports.builder = yargs => {
+    const assetsPath = resolvePath('./assets.json').pathname;
+    const assets = require(assetsPath);
+
     yargs.options({
         server: {
             alias: 's',
@@ -36,11 +36,12 @@ exports.builder = yargs => {
                 'Provide an array of URLs to import maps that should be used when making bundles',
             default: assets['import-map'] || []
         },
-        'dry-run': {
+        dryRun: {
             alias: 'd',
             describe:
                 'Terminates the publish early (before upload) and provides information about created bundles for inspection.',
-            default: false
+            default: false,
+            type: 'boolean'
         },
         js: {
             describe:
