@@ -1,38 +1,26 @@
 'use strict';
 
 const ora = require('ora');
-const Alias = require('../classes/alias');
+const PublishDependency = require('../classes/publish/dependency');
 const { resolvePath, logger } = require('../utils');
 
-exports.command = 'alias <type> <name> <version> <alias>';
+exports.command = 'dependency <name> <version>';
 
-exports.aliases = ['a'];
+exports.aliases = ['dep', 'd'];
 
-exports.describe = `Create a semver major alias for an import map or package as identified by its name and version.`;
+exports.describe = `Publish an NPM package to server by given name and version.`;
 
 exports.builder = yargs => {
     const assetsPath = resolvePath('./assets.json').pathname;
     const assets = require(assetsPath);
 
     yargs
-        .positional('type', {
-            describe:
-                'Resource type to perform alias on. Either "pkg" for a package or "map" for an import map',
-            type: 'string'
-        })
         .positional('name', {
-            describe:
-                'Name matching either package or import map name depending on type given',
+            describe: 'NPM package name.',
             type: 'string'
         })
         .positional('version', {
-            describe:
-                'Version matching either package or import map version depending on type given',
-            type: 'string'
-        })
-        .positional('alias', {
-            describe:
-                'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
+            describe: 'Semver NPM package version.',
             type: 'string'
         });
 
@@ -51,6 +39,19 @@ exports.builder = yargs => {
             alias: 'o',
             describe: 'Provide the organisation context for the command.',
             default: assets.organisation || ''
+        },
+        map: {
+            alias: 'm',
+            describe:
+                'Provide an array of URLs to import maps that should be used when making bundles',
+            default: assets['import-map'] || []
+        },
+        dryRun: {
+            alias: 'd',
+            describe:
+                'Terminates the publish early (before upload) and provides information about created bundles for inspection.',
+            default: false,
+            type: 'boolean'
         }
     });
 };
@@ -58,11 +59,11 @@ exports.builder = yargs => {
 exports.handler = async function(argv) {
     const spinner = ora().start();
     let success = false;
-
     try {
-        success = await new Alias({ logger: logger(spinner), ...argv }).run();
+        const options = { logger: logger(spinner), ...argv };
+        success = await new PublishDependency(options).run();
     } catch (err) {
-        logger.warn(err.message);
+        spinner.warn(err.message);
     }
 
     if (success) {

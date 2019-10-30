@@ -19,7 +19,7 @@ const { join, dirname, parse } = require('path');
 const { validators } = require('@asset-pipe/common');
 const { sendCommand } = require('../../utils');
 
-module.exports = class Publish {
+module.exports = class PublishDependency {
     constructor({
         logger,
         cwd = process.cwd(),
