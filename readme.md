@@ -47,7 +47,7 @@ asset-pipe version patch
 
 ### Publishing organisation wide global dependencies
 
-When you wish to share a version of a module used across an organisation, you can use the publish command to do so.
+When you wish to share a version of a module used across an organisation, you can use the `dependency` command to do so.
 
 This feature does the following:
 
@@ -61,7 +61,7 @@ You might decide that all teams across your organisation should use the same ver
 To do so you would run:
 
 ```sh
-asset-pipe publish lodash 4.17.15
+asset-pipe dependency lodash 4.17.15
 ```
 
 After running this, an esm friendly version of lodash will be available at the url:
@@ -100,10 +100,10 @@ import lodash from `http://<asset server url>/<organisation>/pkg/lodash/4`;
 
 and everything will work as before.
 
-When a new version of lodash comes out, we can publish it as before:
+When a new version of lodash comes out, we can create a global dependency for it as before:
 
 ```sh
-asset-pipe publish lodash 4.17.16
+asset-pipe dependency lodash 4.17.16
 ```
 
 And then create a major semver alias for the new version like so:
@@ -160,13 +160,14 @@ In this way, you can control which version of `react` or `lit-html` or `lodash` 
 
 ### Command Summary
 
-| command | description                                                    |
-| ------- | -------------------------------------------------------------- |
-| init    | Create an assets.json file in the current directory            |
-| version | Helper command for bumping your apps asset version             |
-| publish | Publish a dependency bundle or an app bundle                   |
-| alias   | Sets a major semver alias for a given dependency or app bundle |
-| map     | Sets or deletes a "bare" import entry in an import-map file    |
+| command    | description                                                     |
+| ---------- | --------------------------------------------------------------- |
+| init       | Create an assets.json file in the current directory             |
+| version    | Helper command for bumping your apps `asset.json` version field |
+| publish    | Publish an app bundle                                           |
+| dependency | Publish a dependency bundle                                     |
+| map        | Sets or deletes a "bare" import entry in an import-map file     |
+| alias      | Sets a major semver alias for a given dependency or map         |
 
 ### Commands Overview
 
@@ -295,7 +296,7 @@ _defining a single import map file_
 
 #### version
 
-This command updates the `version` field of an `assets.json` in the current directory based on the argument given (`major`, `minor`, `patch`).
+This command updates the `version` field of an `assets.json` file in the current directory based on the argument given (`major`, `minor`, `patch`).
 
 The command takes the form:
 
@@ -305,19 +306,19 @@ asset-pipe version major|minor|patch
 
 **Examples**
 
-_Increase the version's major by 1_
+_Increase the version's semver major by 1_
 
 ```bash
 asset-pipe version major
 ```
 
-_Increase the version's minor by 1_
+_Increase the version's semver minor by 1_
 
 ```bash
 asset-pipe version minor
 ```
 
-_Increase the version's patch by 1_
+_Increase the version's semver patch by 1_
 
 ```bash
 asset-pipe version patch
@@ -325,14 +326,12 @@ asset-pipe version patch
 
 #### publish
 
-This command publishes to the asset server. Based on the arguments given, it will perform 1 of 2 actions.
-
-If no arguments are given the command will the app's client side assets to the asset server based on the values in an `assets.json` file in the current directory.
+This command publishes the app's client side assets to the asset server based on the values in an `assets.json` file in the current directory.
 
 The command takes the form:
 
 ```sh
-asset-pipe publish
+asset-pipe publish [optional arguments]
 ```
 
 **Example**
@@ -340,17 +339,19 @@ asset-pipe publish
 _Publishing app assets to server_
 
 ```bash
-asset-pipe publish [optional arguments]
+asset-pipe publish
 ```
 
-If the name and version of an npm package are given, the command will download the specified package from npm, create a bundle with it and then publish it to the asset server. The resulting bundle will be in esm module format, converting from common js if needed.
+#### dependency
+
+This command will download the specified (by name and version) package from NPM, create a bundle with it and then publish it to the asset server. The resulting bundle will be in esm module format, converting from common js if needed.
 
 _Note_ The arguments `server`, `organisation` and `import-map` are taken from `assets.json` if such a file is present in the current directory. If not, you will need to specify these values with the command line flags `--server`, `--org` and `--map`.
 
 The command takes the form:
 
 ```sh
-asset-pipe publish [optional arguments] <name> <version>
+asset-pipe dependency [optional arguments] <name> <version>
 ```
 
 **Example**
@@ -358,8 +359,8 @@ asset-pipe publish [optional arguments] <name> <version>
 _Publishing a dependency from npm_
 
 ```bash
-asset-pipe publish lit-html 1.1.2
-# asset-pipe publish --server http://localhost:4001 --org finn --map http://localhost:4001/finn/map/my-import-map/1.0.0 lit-html 1.1.2
+asset-pipe dependency lit-html 1.1.2
+# asset-pipe dependency --server http://localhost:4001 --org finn --map http://localhost:4001/finn/map/my-import-map/1.0.0 lit-html 1.1.2
 ```
 
 #### alias
