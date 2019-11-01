@@ -30,7 +30,7 @@ module.exports = class PublishApp {
         org,
         name,
         version,
-        map,
+        map = [],
         js,
         css,
         dryRun = false

@@ -411,3 +411,121 @@ asset-pipe map [optional arguments] <name> <version> <path to file>
 asset-pipe map my-import-map 1.0.0 ./import-map.json
 # asset-pipe map --server http://localhost:4001 --org finn my-import-map 1.0.0 ./import-map.json
 ```
+
+## Programmatic Usage
+
+All of the commands described above can be used programmatically by importing this package. Each command and its programmatic usage is given below.
+
+### init
+
+```js
+const cli = require('@asset-pipe/cli');
+const Init = cli.init;
+
+const result = await new Init(options).run();
+```
+
+#### options
+
+| name    | description                           | type   | default         | required |
+| ------- | ------------------------------------- | ------ | --------------- | -------- |
+| logger  | log4j compliant logger object         | object | `null`          | no       |
+| cwd     | path to current working directory     | string | `process.cwd()` | no       |
+| org     | organisation name                     | string | `''`            | no       |
+| name    | app name                              | string | `''`            | no       |
+| version | app version                           | string | `'1.0.0'`       | no       |
+| server  | URL to asset server                   | string | `''`            | no       |
+| js      | path to client side script entrypoint | string | `''`            | no       |
+| css     | path to client side style entrypoint  | string | `''`            | no       |
+
+### version
+
+```js
+const cli = require('@asset-pipe/cli');
+const Version = cli.version;
+
+const result = await new Version(options).run();
+```
+
+#### options
+
+| name   | description                           | type   | default         | options                   | required |
+| ------ | ------------------------------------- | ------ | --------------- | ------------------------- | -------- |
+| logger | log4j compliant logger object         | object | `null`          |                           | no       |
+| cwd    | path to current working directory     | string | `process.cwd()` |                           | no       |
+| level  | semver level to bump version field by | string | null            | `major`, `minor`, `patch` | yes      |
+
+### publish
+
+```js
+const cli = require('@asset-pipe/cli');
+const Publish = cli.publish.app;
+
+const result = await new Publish(options).run();
+```
+
+#### options
+
+| name    | description                           | type     | default         | required |
+| ------- | ------------------------------------- | -------- | --------------- | -------- |
+| logger  | log4j compliant logger object         | object   | `null`          | no       |
+| cwd     | path to current working directory     | string   | `process.cwd()` | no       |
+| org     | organisation name                     | string   |                 | yes      |
+| name    | app name                              | string   |                 | yes      |
+| version | app version                           | string   |                 | yes      |
+| server  | URL to asset server                   | string   |                 | yes      |
+| js      | path to client side script entrypoint | string   |                 | yes      |
+| css     | path to client side style entrypoint  | string   |                 | yes      |
+| map     | array of urls of import map files     | string[] | `[]`            | no       |
+| dryRun  | exit early and print results          | boolean  | false           | no       |
+
+### dependency
+
+```js
+const cli = require('@asset-pipe/cli');
+const Dependency = cli.publish.dependency;
+
+const result = await new Dependency(options).run();
+```
+
+### map
+
+```js
+const cli = require('@asset-pipe/cli');
+const Map = cli.publish.map;
+
+const result = await new Map(options).run();
+```
+
+#### options
+
+| name    | description                            | type   | default         | required |
+| ------- | -------------------------------------- | ------ | --------------- | -------- |
+| logger  | log4j compliant logger object          | object | `null`          | no       |
+| cwd     | path to current working directory      | string | `process.cwd()` | no       |
+| org     | organisation name                      | string |                 | yes      |
+| name    | app name                               | string |                 | yes      |
+| version | app version                            | string |                 | yes      |
+| server  | URL to asset server                    | string |                 | yes      |
+| file    | path to import map file to be uploaded | string |                 | yes      |
+
+### alias
+
+```js
+const cli = require('@asset-pipe/cli');
+const Alias = cli.alias;
+
+const result = await new Alias(options).run();
+```
+
+#### options
+
+| name    | description                             | type   | default | choices      | required |
+| ------- | --------------------------------------- | ------ | ------- | ------------ | -------- |
+| logger  | log4j compliant logger object           | object | `null`  |              | no       |
+| server  | URL to asset server                     | string |         |              | yes      |
+| org     | organisation name                       | string |         |              | yes      |
+| type    | type of resource to alias               | string |         | `pkg`, `map` | yes      |
+| name    | app name                                | string |         |              | yes      |
+| version | app version                             | string |         |              | yes      |
+| alias   | major number of a semver version number | string |         |              | yes      |
