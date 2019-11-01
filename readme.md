@@ -95,7 +95,7 @@ asset-pipe alias lodash 4.15.15 4
 We can now change our import statement to:
 
 ```js
-import lodash from `http://<asset server url>/<organisation>/pkg/lodash/4`;
+import lodash from `http://<asset server url>/<organisation>/pkg/lodash/v4`;
 ```
 
 and everything will work as before.
@@ -109,7 +109,7 @@ asset-pipe dependency lodash 4.17.16
 And then create a major semver alias for the new version like so:
 
 ```sh
-asset-pipe alias js lodash 4.15.16 4
+asset-pipe alias lodash 4.15.16 4
 ```
 
 In this way, no client side code will need to be updated to reflect this change and it is considerably easier for multiple teams to stay in sync, using the same global shared dependency
@@ -160,14 +160,14 @@ In this way, you can control which version of `react` or `lit-html` or `lodash` 
 
 ### Command Summary
 
-| command    | description                                                     |
-| ---------- | --------------------------------------------------------------- |
-| init       | Create an assets.json file in the current directory             |
-| version    | Helper command for bumping your apps `asset.json` version field |
-| publish    | Publish an app bundle                                           |
-| dependency | Publish a dependency bundle                                     |
-| map        | Sets or deletes a "bare" import entry in an import-map file     |
-| alias      | Sets a major semver alias for a given dependency or map         |
+| command    | aliases | description                                                     |
+| ---------- | ------- | --------------------------------------------------------------- |
+| init       | i       | Create an assets.json file in the current directory             |
+| version    | v       | Helper command for bumping your apps `asset.json` version field |
+| publish    | p, pub  | Publish an app bundle                                           |
+| dependency | d, dep  | Publish a dependency bundle                                     |
+| map        | m       | Sets or deletes a "bare" import entry in an import-map file     |
+| alias      | a       | Sets a major semver alias for a given dependency or map         |
 
 ### Commands Overview
 
@@ -301,7 +301,7 @@ This command updates the `version` field of an `assets.json` file in the current
 The command takes the form:
 
 ```sh
-asset-pipe version major|minor|patch
+asset-pipe version major|minor|patch [optional arguments]
 ```
 
 **Examples**
@@ -386,7 +386,7 @@ asset-pipe alias lit-html 1.1.2 1
 
 ...will create or update the `lit-html` alias `1` to point at `lit-html` version `1.1.2`
 
-#### import-map
+#### map
 
 This command uploads an import map json file you have created locally to the server. You must upload the file with a `name` and a `version` and the file must be of the form:
 
@@ -479,6 +479,19 @@ const result = await new cli.publish.App(options).run();
 const cli = require('@asset-pipe/cli');
 const result = await new cli.publish.Dependency(options).run();
 ```
+
+#### options
+
+| name    | description                       | type     | default         | required |
+| ------- | --------------------------------- | -------- | --------------- | -------- |
+| logger  | log4j compliant logger object     | object   | `null`          | no       |
+| cwd     | path to current working directory | string   | `process.cwd()` | no       |
+| org     | organisation name                 | string   |                 | yes      |
+| name    | app name                          | string   |                 | yes      |
+| version | app version                       | string   |                 | yes      |
+| server  | URL to asset server               | string   |                 | yes      |
+| map     | array of urls of import map files | string[] | `[]`            | no       |
+| dryRun  | exit early and print results      | boolean  | false           | no       |
 
 ### map
 
