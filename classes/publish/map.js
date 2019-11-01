@@ -6,7 +6,7 @@ const { existsSync } = require('fs');
 const { validators } = require('@asset-pipe/common');
 const { sendCommand } = require('../../utils');
 
-module.exports = class MapUpload {
+module.exports = class PublishMap {
     constructor({
         logger,
         cwd = process.cwd(),

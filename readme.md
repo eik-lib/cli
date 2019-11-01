@@ -420,9 +420,7 @@ All of the commands described above can be used programmatically by importing th
 
 ```js
 const cli = require('@asset-pipe/cli');
-const Init = cli.init;
-
-const result = await new Init(options).run();
+const result = await new cli.Init(options).run();
 ```
 
 #### options
@@ -442,9 +440,7 @@ const result = await new Init(options).run();
 
 ```js
 const cli = require('@asset-pipe/cli');
-const Version = cli.version;
-
-const result = await new Version(options).run();
+const result = await new cli.Version(options).run();
 ```
 
 #### options
@@ -459,9 +455,7 @@ const result = await new Version(options).run();
 
 ```js
 const cli = require('@asset-pipe/cli');
-const Publish = cli.publish.app;
-
-const result = await new Publish(options).run();
+const result = await new cli.publish.App(options).run();
 ```
 
 #### options
@@ -483,18 +477,14 @@ const result = await new Publish(options).run();
 
 ```js
 const cli = require('@asset-pipe/cli');
-const Dependency = cli.publish.dependency;
-
-const result = await new Dependency(options).run();
+const result = await new cli.publish.Dependency(options).run();
 ```
 
 ### map
 
 ```js
 const cli = require('@asset-pipe/cli');
-const Map = cli.publish.map;
-
-const result = await new Map(options).run();
+const result = await new cli.publish.Map(options).run();
 ```
 
 #### options
@@ -513,9 +503,7 @@ const result = await new Map(options).run();
 
 ```js
 const cli = require('@asset-pipe/cli');
-const Alias = cli.alias;
-
-const result = await new Alias(options).run();
+const result = await new cli.Alias(options).run();
 ```
 
 #### options
