@@ -70,15 +70,11 @@ module.exports = class MapUpload {
             `Uploading import map "${this.name}" version "${this.version}" to asset server`
         );
         try {
-            const messages = await sendCommand({
+            await sendCommand({
                 method: 'PUT',
                 host: this.server,
                 pathname: join(this.org, 'map', this.name, this.version),
                 map: join(this.cwd, this.file)
-            });
-
-            messages.forEach(msg => {
-                this.log.debug(`  ==> ${JSON.stringify(msg)}`);
             });
         } catch (err) {
             this.log.error('Unable to complete upload of import map to server');

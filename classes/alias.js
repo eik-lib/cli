@@ -39,7 +39,7 @@ module.exports = class Alias {
 
         this.log.debug('Requesting alias creation from asset server');
         try {
-            const messages = await sendCommand({
+            const message = await sendCommand({
                 host: this.server,
                 method: 'PUT',
                 pathname: join(
@@ -51,9 +51,12 @@ module.exports = class Alias {
                 data: { version: this.version }
             });
 
-            messages.forEach(msg => {
-                this.log.debug(`  ==> ${JSON.stringify(msg)}`);
-            });
+            this.log.debug(
+                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`
+            );
+            for (const file of message.files) {
+                this.log.debug(`  ==> ${JSON.stringify(file)}`);
+            }
         } catch (err) {
             this.log.error('Unable to complete alias command');
             this.log.warn(err.message);

@@ -292,16 +292,19 @@ module.exports = class PublishApp {
         // upload files
         this.log.debug('Uploading zip file to server');
         try {
-            const messages = await sendCommand({
+            const message = await sendCommand({
                 method: 'PUT',
                 host: this.server,
                 pathname: join(this.org, 'pkg', this.name, this.version),
                 file: this.zipFile
             });
 
-            messages.forEach(msg => {
-                this.log.debug(`  ==> ${JSON.stringify(msg)}`);
-            });
+            this.log.debug(
+                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`
+            );
+            for (const file of message.files) {
+                this.log.debug(`  ==> ${JSON.stringify(file)}`);
+            }
         } catch (err) {
             this.log.error('Unable to upload zip file to server');
             this.log.warn(err.message);
