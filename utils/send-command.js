@@ -43,34 +43,11 @@ async function sendCommand({
                 `Server responded with a non 200 ok status code. Response: ${res.status}`
             );
         }
-
-        if (res.headers.contentType === 'application/json') {
-            const response = await res.json();
-            return { response };
+        if (res.headers.get('content-type').includes('application/json')) {
+            return res.json();
+        } else {
+            return res.text();
         }
-
-        return new Promise((resolve, reject) => {
-            const serverMessages = [];
-            const serverErrors = [];
-
-            res.body.on('data', chunk => {
-                const result = JSON.parse(chunk.toString());
-                serverMessages.push(result);
-            });
-
-            res.body.on('error', err => {
-                serverErrors.push(err);
-            });
-
-            res.body.on('end', () => {
-                if (serverErrors.length) {
-                    return reject(
-                        serverErrors.map(err => err.message).join(' ')
-                    );
-                }
-                resolve(serverMessages);
-            });
-        });
     } catch (err) {
         throw new Error(`Unable to complete command: ${err.message}`);
     }
