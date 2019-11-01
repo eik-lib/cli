@@ -449,7 +449,7 @@ const result = await new cli.Version(options).run();
 | ------ | ------------------------------------- | ------ | --------------- | ------------------------- | -------- |
 | logger | log4j compliant logger object         | object | `null`          |                           | no       |
 | cwd    | path to current working directory     | string | `process.cwd()` |                           | no       |
-| level  | semver level to bump version field by | string | null            | `major`, `minor`, `patch` | yes      |
+| level  | semver level to bump version field by | string |                 | `major`, `minor`, `patch` | yes      |
 
 ### publish
 
