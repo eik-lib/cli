@@ -44,6 +44,8 @@
         "yargs": "^13.2.4"
     },
     "devDependencies": {
-        "rollup-plugin-babel": "^4.3.3"
+        "@asset-pipe/core": "^1.0.0-alpha.1",
+        "rollup-plugin-babel": "^4.3.3",
+        "tap": "^14.9.1"
     }
 }

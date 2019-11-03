@@ -27,7 +27,7 @@ module.exports = class PublishDependency {
         org,
         name,
         version,
-        map,
+        map = [],
         dryRun = false
     } = {}) {
         this.log = abslog(logger);
