@@ -9,7 +9,7 @@ const { mockLogger } = require('./utils');
 const memSink = new sink.MEM();
 const server = new Server({ customSink: memSink, port: 4002 });
 
-test('Packages PUT', async t => {
+test('Uploading a dependency to an asset server', async t => {
     await server.start();
     const l = mockLogger();
 
@@ -25,18 +25,13 @@ test('Packages PUT', async t => {
     t.equals(result, true, 'Command should return true');
     t.match(
         l.logs.debug,
-        'Running publish command',
-        'Log output should match expectation'
-    );
-    t.match(
-        l.logs.debug,
         'Org: my-test-org, Name: lit-html, Version: 1.1.2',
-        'Log output should match expectation'
+        'Log output should show published name, version and org'
     );
     t.match(
         l.logs.debug,
         'Publish command complete',
-        'Log output should match expectation'
+        'Log output should command completion'
     );
 
     await server.stop();
