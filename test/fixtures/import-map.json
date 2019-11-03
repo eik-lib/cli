@@ -1,0 +1,5 @@
+{
+    "imports": {
+        "lit-html": "http://localhost:4002/finn/map/lit-html/1.1.2/index.js"
+    }
+}
