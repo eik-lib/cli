@@ -1,19 +1,19 @@
 'use strict';
 
-const init = require('./init');
-const version = require('./version');
-const alias = require('./alias');
-const publishMap = require('./publish/map');
-const publishApp = require('./publish/app');
-const publishDependency = require('./publish/dependency');
+const Init = require('./init');
+const Version = require('./version');
+const Alias = require('./alias');
+const PublishMap = require('./publish/map');
+const PublishApp = require('./publish/app');
+const PublishDependency = require('./publish/dependency');
 
 module.exports = {
-    init,
-    version,
-    alias,
+    Init,
+    Version,
+    Alias,
     publish: {
-        app: publishApp,
-        map: publishMap,
-        dependency: publishDependency
+        App: PublishApp,
+        Map: PublishMap,
+        Dependency: PublishDependency
     }
 };
