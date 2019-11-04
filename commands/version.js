@@ -16,19 +16,19 @@ exports.builder = yargs => {
 by major (1.0.0 -> 2.0.0), minor (1.0.0 -> 1.1.0) or patch (1.0.0 -> 1.0.1)`,
         type: 'string',
         choices: ['major', 'minor', 'patch'],
-        requiresArg: true
+        requiresArg: true,
     });
 
     yargs.options({
         cwd: {
             alias: 'c',
             describe: 'Alter current working directory.',
-            default: process.cwd()
-        }
+            default: process.cwd(),
+        },
     });
 };
 
-exports.handler = async function(argv) {
+exports.handler = async argv => {
     const spinner = ora().start();
     let success = false;
 
@@ -36,7 +36,7 @@ exports.handler = async function(argv) {
         success = await new Version({
             logger: logger(spinner),
             cwd: argv.cwd,
-            level: argv.major
+            level: argv.major,
         }).run();
     } catch (err) {
         logger.warn(err.message);

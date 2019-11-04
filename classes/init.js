@@ -13,7 +13,7 @@ module.exports = class Init {
         version = '1.0.0',
         server = '',
         js = '',
-        css = ''
+        css = '',
     } = {}) {
         this.cwd = cwd;
         this.log = abslog(logger);
@@ -36,7 +36,9 @@ module.exports = class Init {
                 this.log.warn('"assets.json" file already exists');
                 return true;
             }
-        } catch (err) {}
+        } catch (err) {
+            // noop
+        }
 
         try {
             fs.writeFileSync(
@@ -48,11 +50,11 @@ module.exports = class Init {
                         version: this.version,
                         server: this.server,
                         js: this.js,
-                        css: this.css
+                        css: this.css,
                     },
                     null,
-                    2
-                )
+                    2,
+                ),
             );
         } catch (err) {
             this.log.error('Unable to save "assets.json" file');
@@ -60,7 +62,7 @@ module.exports = class Init {
             return false;
         }
         this.log.debug(
-            `assets.json file created and saved to "${this.pathname}"`
+            `assets.json file created and saved to "${this.pathname}"`,
         );
 
         this.log.debug('Init command complete');

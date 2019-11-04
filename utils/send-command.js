@@ -45,9 +45,9 @@ async function sendCommand({
         }
         if (res.headers.get('content-type').includes('application/json')) {
             return res.json();
-        } else {
+        } 
             return res.text();
-        }
+        
     } catch (err) {
         throw new Error(`Unable to complete command: ${err.message}`);
     }

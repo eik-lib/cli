@@ -27,8 +27,8 @@ module.exports = class PublishDependency {
         org,
         name,
         version,
-        map,
-        dryRun = false
+        map = [],
+        dryRun = false,
     } = {}) {
         this.log = abslog(logger);
         this.cwd = cwd;
@@ -94,9 +94,9 @@ module.exports = class PublishDependency {
                 JSON.stringify({
                     name: '',
                     dependencies: {
-                        [this.name]: this.version
-                    }
-                })
+                        [this.name]: this.version,
+                    },
+                }),
             );
         } catch (err) {
             this.log.error('Unable to create package json in temp directory');
@@ -110,7 +110,7 @@ module.exports = class PublishDependency {
             const results = await Promise.all(maps);
             const dependencies = results.map(r => r.imports);
             this.importMap = {
-                imports: Object.assign({}, ...dependencies)
+                imports: Object.assign({}, ...dependencies),
             };
         } catch (err) {
             this.log.warn('Unable to load import map file from server');
@@ -122,7 +122,7 @@ module.exports = class PublishDependency {
             execSync('npm i --loglevel=silent', { cwd: this.path });
         } catch (err) {
             this.log.error(
-                'Unable to complete npm install operation, is the supplied module version correct?'
+                'Unable to complete npm install operation, is the supplied module version correct?',
             );
             this.log.warn(err.message);
             return false;
@@ -131,11 +131,11 @@ module.exports = class PublishDependency {
         this.log.debug(`Loading meta information for ${this.name} package`);
         try {
             const resolvedPath = require.resolve(this.name, {
-                paths: [this.path]
+                paths: [this.path],
             });
             this.installedDepBasePath = pkgDir.sync(dirname(resolvedPath));
             this.installedDepPkgJson = readPkgUp.sync({
-                cwd: this.installedDepBasePath
+                cwd: this.installedDepBasePath,
             }).package;
         } catch (err) {
             this.log.error('Unable to load package meta information');
@@ -146,35 +146,35 @@ module.exports = class PublishDependency {
         this.log.debug('Creating bundle in temp directory');
         try {
             const options = {
-                onwarn: (warning, warn) => {},
+                onwarn: () => {},
                 plugins: [
                     esmImportToUrl({ imports: this.imports }),
                     resolve(),
                     commonjs({ include: /node_modules/ }),
                     rollupReplace({
-                        'process.env.NODE_ENV': JSON.stringify('production')
+                        'process.env.NODE_ENV': JSON.stringify('production'),
                     }),
-                    terser()
-                ]
+                    terser(),
+                ],
             };
 
             if (this.installedDepPkgJson.module) {
                 this.log.debug('Dependency format: esm modules detected');
                 options.input = join(
                     this.installedDepBasePath,
-                    this.installedDepPkgJson.module
+                    this.installedDepPkgJson.module,
                 );
             } else if (this.installedDepPkgJson.main) {
                 this.log.debug(
-                    'Dependency format: common js modules detected, conversion to esm will occur'
+                    'Dependency format: common js modules detected, conversion to esm will occur',
                 );
                 options.input = join(
                     this.installedDepBasePath,
-                    this.installedDepPkgJson.main
+                    this.installedDepPkgJson.main,
                 );
             } else {
                 this.log.debug(
-                    'Dependency format: common js modules assumed, conversion to esm will occur'
+                    'Dependency format: common js modules assumed, conversion to esm will occur',
                 );
                 options.input = join(this.installedDepBasePath, 'index.js');
             }
@@ -185,7 +185,7 @@ module.exports = class PublishDependency {
             await bundled.write({
                 format: 'esm',
                 file: this.file,
-                sourcemap: true
+                sourcemap: true,
             });
         } catch (err) {
             this.log.error('Unable to complete bundle operation');
@@ -201,9 +201,9 @@ module.exports = class PublishDependency {
                 {
                     gzip: true,
                     file: this.zipFile,
-                    cwd: this.path
+                    cwd: this.path,
                 },
-                [`index.js`, `index.js.map`]
+                [`index.js`, `index.js.map`],
             );
         } catch (err) {
             this.log.error('Unable to create zip file');
@@ -226,11 +226,11 @@ module.exports = class PublishDependency {
                 method: 'PUT',
                 host: this.server,
                 pathname: join(this.org, 'pkg', this.name, this.version),
-                file: this.zipFile
+                file: this.zipFile,
             });
 
             this.log.debug(
-                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`
+                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`,
             );
             for (const file of message.files) {
                 this.log.debug(`  ==> ${JSON.stringify(file)}`);

@@ -3,7 +3,7 @@
 const yargs = require('yargs');
 
 function parseInput() {
-    const argv = yargs.argv;
+    const {argv} = yargs;
     const { _, $0, ...args } = argv;
     const [command, ...subcommands] = _;
 
