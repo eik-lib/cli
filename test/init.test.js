@@ -2,7 +2,7 @@
 
 const { test } = require('tap');
 const { join } = require('path');
-const { unlinkSync } = require('fs');
+const { unlinkSync, readFileSync } = require('fs');
 const cli = require('../');
 const { mockLogger } = require('./utils');
 
@@ -14,7 +14,9 @@ test('Initializing a new assets.json file', async t => {
         cwd: join(__dirname, 'tmp')
     }).run();
 
-    const assets = require(join(__dirname, 'tmp', 'assets.json'));
+    const assets = JSON.parse(
+        readFileSync(join(__dirname, 'tmp', 'assets.json'))
+    );
 
     t.equals(result, true, 'Command should return true');
 
@@ -39,6 +41,66 @@ test('Initializing a new assets.json file', async t => {
         assets.css.input,
         '',
         'assets.json "css.input" field should be empty'
+    );
+
+    t.match(
+        l.logs.debug,
+        'Init command complete',
+        'Log output should command completion'
+    );
+
+    unlinkSync(join(__dirname, 'tmp', 'assets.json'));
+});
+
+test('Initializing a new assets.json file passing custom values', async t => {
+    const l = mockLogger();
+
+    const result = await new cli.Init({
+        logger: l.logger,
+        cwd: join(__dirname, 'tmp'),
+        org: 'custom-org',
+        name: 'custom-name',
+        version: '0.0.1',
+        server: 'http://localhost:4001',
+        js: './assets/client.js',
+        css: './assets/styles.css'
+    }).run();
+
+    const assets = JSON.parse(
+        readFileSync(join(__dirname, 'tmp', 'assets.json'))
+    );
+
+    t.equals(result, true, 'Command should return true');
+
+    t.equals(
+        assets.name,
+        'custom-name',
+        'assets.json "name" field should not be empty'
+    );
+    t.equals(
+        assets.version,
+        '0.0.1',
+        'assets.json "version" field should not be empty'
+    );
+    t.equals(
+        assets.organisation,
+        'custom-org',
+        'assets.json "organisation" field should not be empty'
+    );
+    t.equals(
+        assets.server,
+        'http://localhost:4001',
+        'assets.json "server" field should not be empty'
+    );
+    t.equals(
+        assets.js.input,
+        './assets/client.js',
+        'assets.json "js.input" field should not be empty'
+    );
+    t.equals(
+        assets.css.input,
+        './assets/styles.css',
+        'assets.json "css.input" field should not be empty'
     );
 
     t.match(
