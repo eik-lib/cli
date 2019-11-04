@@ -33,6 +33,7 @@ if (runningAsScript) {
 
     // eslint-disable-next-line no-unused-expressions
     yargs
+        .scriptName('asset-pipe')
         .commandDir('commands')
         .demandCommand()
         .wrap(150)
