@@ -7,7 +7,7 @@ const { resolvePath } = require('../utils');
 const { schemas, validators } = require('@asset-pipe/common');
 
 module.exports = class Version {
-    constructor({ logger, cwd, level } = {}) {
+    constructor({ logger, cwd = process.cwd(), level } = {}) {
         this.log = abslog(logger);
         this.pathname = resolvePath('./assets.json', cwd).pathname;
         this.level = level;
@@ -27,9 +27,8 @@ module.exports = class Version {
         }
 
         this.log.debug('Reading assets.json file');
-
         try {
-            this.assets = require(this.pathname);
+            this.assets = JSON.parse(fs.readFileSync(this.pathname));
         } catch (err) {
             this.log.error('Failed to read assets.json. Does file exist?');
             this.log.warn(err.message);
