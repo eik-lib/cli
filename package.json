@@ -48,7 +48,7 @@
     "yargs": "^13.2.4"
   },
   "devDependencies": {
-    "@asset-pipe/core": "^1.0.0-alpha.1",
+    "@asset-pipe/core": "^1.0.0-alpha.2",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",

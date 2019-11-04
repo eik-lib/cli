@@ -11,7 +11,7 @@ async function sendCommand({
     pathname,
     data,
     file,
-    map
+    map,
 } = {}) {
     const form = new FormData();
 
@@ -35,19 +35,18 @@ async function sendCommand({
         const res = await fetch(url.href, {
             method,
             body: form,
-            headers: form.getHeaders()
+            headers: form.getHeaders(),
         });
 
         if (!res.ok) {
             throw new Error(
-                `Server responded with a non 200 ok status code. Response: ${res.status}`
+                `Server responded with a non 200 ok status code. Response: ${res.status}`,
             );
         }
         if (res.headers.get('content-type').includes('application/json')) {
-            return res.json();
-        } 
-            return res.text();
-        
+            return { message: await res.json(), status: res.status };
+        }
+        return { message: await res.text(), status: res.status };
     } catch (err) {
         throw new Error(`Unable to complete command: ${err.message}`);
     }
