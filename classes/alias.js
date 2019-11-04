@@ -51,11 +51,16 @@ module.exports = class Alias {
                 data: { version: this.version }
             });
 
-            this.log.debug(
-                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`
-            );
-            for (const file of message.files) {
-                this.log.debug(`  ==> ${JSON.stringify(file)}`);
+            if (message.org) {
+                this.log.debug(
+                    `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`
+                );
+            }
+
+            if (message.files) {
+                for (const file of message.files) {
+                    this.log.debug(`  ==> ${JSON.stringify(file)}`);
+                }
             }
         } catch (err) {
             this.log.error('Unable to complete alias command');
