@@ -1,5 +1,8 @@
 'use strict';
 
-const main = () => console.log('this is a test fixture');
+const main = () => {
+    const thing = 'this is a test fixture';
+    return thing;
+};
 
 main();

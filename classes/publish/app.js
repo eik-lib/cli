@@ -13,13 +13,13 @@ const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 const { join, parse } = require('path');
 const { validators } = require('@asset-pipe/common');
-const { sendCommand } = require('../../utils');
 const tar = require('tar');
 const babel = require('rollup-plugin-babel');
 const autoprefixer = require('autoprefixer');
 const postcss = require('postcss');
 const fs = require('fs');
 const cssnano = require('cssnano');
+const { sendCommand } = require('../../utils');
 const compressedSize = require('../../utils/compressed-size');
 
 module.exports = class PublishApp {
@@ -33,7 +33,7 @@ module.exports = class PublishApp {
         map = [],
         js,
         css,
-        dryRun = false
+        dryRun = false,
     } = {}) {
         this.log = abslog(logger);
         this.cwd = cwd;
@@ -110,7 +110,7 @@ module.exports = class PublishApp {
             const results = await Promise.all(maps);
             const dependencies = results.map(r => r.imports);
             this.importMap = {
-                imports: Object.assign({}, ...dependencies)
+                imports: Object.assign({}, ...dependencies),
             };
         } catch (err) {
             this.log.warn('Unable to load import map file from server');
@@ -121,26 +121,24 @@ module.exports = class PublishApp {
         this.log.debug('Creating main bundle file');
         try {
             const options = {
-                onwarn: (warning, warn) => {
-                    // Supress logging
-                },
+                onwarn: () => {},
                 plugins: [
                     esmImportToUrl(this.importMap),
                     resolve(),
                     commonjs(),
                     rollupReplace({
-                        'process.env.NODE_ENV': JSON.stringify('production')
+                        'process.env.NODE_ENV': JSON.stringify('production'),
                     }),
-                    terser()
+                    terser(),
                 ],
-                input: join(this.cwd, this.js)
+                input: join(this.cwd, this.js),
             };
 
             const bundled = await rollup.rollup(options);
             await bundled.write({
                 format: 'esm',
                 file: join(this.path, 'main/index.js'),
-                sourcemap: true
+                sourcemap: true,
             });
         } catch (err) {
             this.log.error('Unable to create bundle file');
@@ -151,9 +149,7 @@ module.exports = class PublishApp {
         this.log.debug('Creating js fallback bundle file');
         try {
             const options = {
-                onwarn: (warning, warn) => {
-                    // Supress logging
-                },
+                onwarn: () => {},
                 plugins: [
                     resolve(),
                     commonjs(),
@@ -163,32 +159,32 @@ module.exports = class PublishApp {
                             [
                                 join(
                                     __dirname,
-                                    `../../node_modules/@babel/preset-env`
+                                    `../../node_modules/@babel/preset-env`,
                                 ),
                                 {
                                     useBuiltIns: 'usage',
                                     corejs: 3,
                                     // browsers: 'ie11',
                                     targets: {
-                                        ie: '11'
-                                    }
-                                }
-                            ]
+                                        ie: '11',
+                                    },
+                                },
+                            ],
                         ],
-                        babelrc: false
+                        babelrc: false,
                     }),
                     rollupReplace({
-                        'process.env.NODE_ENV': JSON.stringify('production')
+                        'process.env.NODE_ENV': JSON.stringify('production'),
                     }),
-                    terser()
+                    terser(),
                 ],
-                input: join(this.cwd, this.js)
+                input: join(this.cwd, this.js),
             };
             const bundled = await rollup.rollup(options);
             await bundled.write({
                 format: 'iife',
                 file: join(this.path, 'ie11/index.js'),
-                sourcemap: true
+                sourcemap: true,
             });
         } catch (err) {
             this.log.error('Unable to create bundle file');
@@ -209,12 +205,12 @@ module.exports = class PublishApp {
                 const result = await processor.process(precss, {
                     from: this.css.replace(/(.*\/)*/, ''),
                     to: 'index.css',
-                    map: { inline: false }
+                    map: { inline: false },
                 });
                 fs.writeFileSync(join(this.path, 'main/index.css'), result.css);
                 fs.writeFileSync(
                     join(this.path, 'main/index.css.map'),
-                    result.map
+                    result.map,
                 );
             } else {
                 this.log.debug('CSS assets not specified');
@@ -234,7 +230,7 @@ module.exports = class PublishApp {
                 {
                     gzip: true,
                     file: this.zipFile,
-                    cwd: this.path
+                    cwd: this.path,
                 },
                 [
                     `main/index.js`,
@@ -242,8 +238,8 @@ module.exports = class PublishApp {
                     `ie11/index.js`,
                     `ie11/index.js.map`,
                     `main/index.css`,
-                    `main/index.css.map`
-                ]
+                    `main/index.css.map`,
+                ],
             );
         } catch (err) {
             this.log.error('Unable to create zip file');
@@ -254,22 +250,22 @@ module.exports = class PublishApp {
         this.log.debug('Checking bundle file sizes');
         try {
             const mainIndexJSSize = compressedSize(
-                fs.readFileSync(`${this.path}/main/index.js`, 'utf8')
+                fs.readFileSync(`${this.path}/main/index.js`, 'utf8'),
             );
             const ie11IndexJSSize = compressedSize(
-                fs.readFileSync(`${this.path}/ie11/index.js`, 'utf8')
+                fs.readFileSync(`${this.path}/ie11/index.js`, 'utf8'),
             );
             const mainIndexCSSSize = compressedSize(
-                fs.readFileSync(`${this.path}/main/index.css`, 'utf8')
+                fs.readFileSync(`${this.path}/main/index.css`, 'utf8'),
             );
             this.log.debug(
-                `  ==> Main index.js size: ${bytes(mainIndexJSSize)}`
+                `  ==> Main index.js size: ${bytes(mainIndexJSSize)}`,
             );
             this.log.debug(
-                `  ==> ie11 index.js size: ${bytes(ie11IndexJSSize)}`
+                `  ==> ie11 index.js size: ${bytes(ie11IndexJSSize)}`,
             );
             this.log.debug(
-                `  ==> Main index.css size: ${bytes(mainIndexCSSSize)}`
+                `  ==> Main index.css size: ${bytes(mainIndexCSSSize)}`,
             );
         } catch (err) {
             this.log.debug('Failed to check bundle sizes');
@@ -296,11 +292,11 @@ module.exports = class PublishApp {
                 method: 'PUT',
                 host: this.server,
                 pathname: join(this.org, 'pkg', this.name, this.version),
-                file: this.zipFile
+                file: this.zipFile,
             });
 
             this.log.debug(
-                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`
+                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`,
             );
             for (const file of message.files) {
                 this.log.debug(`  ==> ${JSON.stringify(file)}`);

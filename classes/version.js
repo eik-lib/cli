@@ -3,8 +3,8 @@
 const abslog = require('abslog');
 const semver = require('semver');
 const fs = require('fs');
-const { resolvePath } = require('../utils');
 const { schemas, validators } = require('@asset-pipe/common');
+const { resolvePath } = require('../utils');
 
 module.exports = class Version {
     constructor({ logger, cwd = process.cwd(), level } = {}) {
@@ -21,7 +21,7 @@ module.exports = class Version {
             validators.semverType(this.level);
         } catch (err) {
             this.log.error(
-                `Invalid 'semver' type. Valid types are "major", "minor" and "patch"`
+                `Invalid 'semver' type. Valid types are "major", "minor" and "patch"`,
             );
             return false;
         }
@@ -61,7 +61,7 @@ module.exports = class Version {
         try {
             fs.writeFileSync(
                 this.pathname,
-                JSON.stringify(this.assets, null, 2)
+                JSON.stringify(this.assets, null, 2),
             );
         } catch (err) {
             this.log.error('Unable to save "assets.json" file back to disk');

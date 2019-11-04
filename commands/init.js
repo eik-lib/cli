@@ -15,42 +15,42 @@ exports.builder = yargs => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
-            default: ''
+            default: '',
         },
         cwd: {
             alias: 'c',
             describe: 'Alter current working directory.',
-            default: process.cwd()
+            default: process.cwd(),
         },
         org: {
             alias: 'o',
             describe: 'Specify the organisation context for the command.',
-            default: ''
+            default: '',
         },
         name: {
             alias: 'n',
             describe: 'Specify the app name context for the command.',
-            default: ''
+            default: '',
         },
         version: {
             alias: 'v',
             describe: 'Specify the app version context for the command.',
-            default: '1.0.0'
+            default: '1.0.0',
         },
         js: {
             describe:
                 'Specify the path on local disk to JavaScript client side assets relative to the current working directory.',
-            default: ''
+            default: '',
         },
         css: {
             describe:
                 'Specify the path on local disk to CSS client side assets relative to the current working directory.',
-            default: ''
-        }
+            default: '',
+        },
     });
 };
 
-exports.handler = async function(argv) {
+exports.handler = async argv => {
     const spinner = ora().start();
     let success = false;
 
