@@ -6,16 +6,16 @@ const Server = require('@asset-pipe/core/services/fastify');
 const cli = require('../');
 const { mockLogger } = require('./utils');
 
-const memSink = new sink.MEM();
-const server = new Server({ customSink: memSink, port: 4004 });
-
 test('Uploading a dependency to an asset server', async t => {
+    const memSink = new sink.MEM();
+    const server = new Server({ customSink: memSink, port: 0 });
     await server.start();
+    const { port } = server.app.server.address();
     const l = mockLogger();
 
     const publishDep = new cli.publish.Dependency({
         logger: l.logger,
-        server: `http://localhost:4004`,
+        server: `http://localhost:${port}`,
         org: 'my-test-org',
         name: 'lit-html',
         version: '1.1.2'

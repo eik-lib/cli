@@ -6,17 +6,17 @@ const Server = require('@asset-pipe/core/services/fastify');
 const cli = require('../');
 const { mockLogger } = require('./utils');
 
-const memSink = new sink.MEM();
-const server = new Server({ customSink: memSink, port: 4002 });
-
 test('Uploading import map to an asset server', async t => {
+    const memSink = new sink.MEM();
+    const server = new Server({ customSink: memSink, port: 0 });
     await server.start();
+    const { port } = server.app.server.address();
     const l = mockLogger();
 
     const publishMap = new cli.publish.Map({
         logger: l.logger,
         cwd: __dirname,
-        server: `http://localhost:4002`,
+        server: `http://localhost:${port}`,
         org: 'my-test-org',
         name: 'my-map',
         version: '1.0.0',
