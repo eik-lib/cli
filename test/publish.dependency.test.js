@@ -7,7 +7,7 @@ const cli = require('../');
 const { mockLogger } = require('./utils');
 
 const memSink = new sink.MEM();
-const server = new Server({ customSink: memSink, port: 4002 });
+const server = new Server({ customSink: memSink, port: 4004 });
 
 test('Uploading a dependency to an asset server', async t => {
     await server.start();
@@ -15,7 +15,7 @@ test('Uploading a dependency to an asset server', async t => {
 
     const publishDep = new cli.publish.Dependency({
         logger: l.logger,
-        server: `http://localhost:4002`,
+        server: `http://localhost:4004`,
         org: 'my-test-org',
         name: 'lit-html',
         version: '1.1.2'

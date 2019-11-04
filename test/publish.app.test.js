@@ -7,7 +7,7 @@ const cli = require('../');
 const { mockLogger } = require('./utils');
 
 const memSink = new sink.MEM();
-const server = new Server({ customSink: memSink, port: 4002 });
+const server = new Server({ customSink: memSink, port: 4003 });
 
 test('Uploading app assets to an asset server', async t => {
     await server.start();
@@ -16,7 +16,7 @@ test('Uploading app assets to an asset server', async t => {
     const publishApp = new cli.publish.App({
         logger: l.logger,
         cwd: __dirname,
-        server: `http://localhost:4002`,
+        server: `http://localhost:4003`,
         org: 'my-test-org',
         name: 'my-app',
         version: '1.0.0',
