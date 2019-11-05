@@ -17,30 +17,31 @@ test('Versioning an assets.json file: major', async t => {
             version: '1.0.0',
             organisation: 'my-test-org',
             js: { input: '' },
-            css: { input: '' }
-        })
+            css: { input: '' },
+            debug: true,
+        }),
     );
 
     const result = await new cli.Version({
         logger: l.logger,
         cwd: join(__dirname, 'tmp'),
-        level: 'major'
+        level: 'major',
     }).run();
 
     const assets = JSON.parse(
-        readFileSync(join(__dirname, 'tmp', 'assets.json'))
+        readFileSync(join(__dirname, 'tmp', 'assets.json')),
     );
 
     t.equals(result, true, 'Command should return true');
     t.equals(
         assets.version,
         '2.0.0',
-        'Command version should have been incremented'
+        'Command version should have been incremented',
     );
     t.match(
-        l.logs.debug,
-        'Version command complete',
-        'Log output should command completion'
+        l.logs.info,
+        'Updated version field of "assets.json" file from "1.0.0" to "2.0.0',
+        'Log output should command completion',
     );
 
     unlinkSync(join(__dirname, 'tmp', 'assets.json'));
@@ -57,30 +58,30 @@ test('Versioning an assets.json file: minor', async t => {
             version: '1.0.0',
             organisation: 'my-test-org',
             js: { input: '' },
-            css: { input: '' }
-        })
+            css: { input: '' },
+        }),
     );
 
     const result = await new cli.Version({
         logger: l.logger,
         cwd: join(__dirname, 'tmp'),
-        level: 'minor'
+        level: 'minor',
     }).run();
 
     const assets = JSON.parse(
-        readFileSync(join(__dirname, 'tmp', 'assets.json'))
+        readFileSync(join(__dirname, 'tmp', 'assets.json')),
     );
 
     t.equals(result, true, 'Command should return true');
     t.equals(
         assets.version,
         '1.1.0',
-        'Command version should have been incremented'
+        'Command version should have been incremented',
     );
     t.match(
-        l.logs.debug,
-        'Version command complete',
-        'Log output should command completion'
+        l.logs.info,
+        'Updated version field of "assets.json" file from "1.0.0" to "1.1.0',
+        'Log output should command completion',
     );
 
     unlinkSync(join(__dirname, 'tmp', 'assets.json'));
@@ -97,30 +98,30 @@ test('Versioning an assets.json file: patch', async t => {
             version: '1.0.0',
             organisation: 'my-test-org',
             js: { input: '' },
-            css: { input: '' }
-        })
+            css: { input: '' },
+        }),
     );
 
     const result = await new cli.Version({
         logger: l.logger,
         cwd: join(__dirname, 'tmp'),
-        level: 'patch'
+        level: 'patch',
     }).run();
 
     const assets = JSON.parse(
-        readFileSync(join(__dirname, 'tmp', 'assets.json'))
+        readFileSync(join(__dirname, 'tmp', 'assets.json')),
     );
 
     t.equals(result, true, 'Command should return true');
     t.equals(
         assets.version,
         '1.0.1',
-        'Command version should have been incremented'
+        'Command version should have been incremented',
     );
     t.match(
-        l.logs.debug,
-        'Version command complete',
-        'Log output should command completion'
+        l.logs.info,
+        'Updated version field of "assets.json" file from "1.0.0" to "1.0.1',
+        'Log output should command completion',
     );
 
     unlinkSync(join(__dirname, 'tmp', 'assets.json'));

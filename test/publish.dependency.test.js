@@ -19,6 +19,7 @@ test('Uploading a dependency to an asset server', async t => {
         org: 'my-test-org',
         name: 'lit-html',
         version: '1.1.2',
+        debug: true,
     });
 
     const result = await publishDep.run();

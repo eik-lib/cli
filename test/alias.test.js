@@ -17,7 +17,8 @@ test('Creating a package alias on an asset server', async t => {
         server: `http://localhost:${port}`,
         org: 'my-test-org',
         name: 'lit-html',
-        version: '1.1.2'
+        version: '1.1.2',
+        debug: true,
     }).run();
 
     const result = await new cli.Alias({
@@ -27,7 +28,8 @@ test('Creating a package alias on an asset server', async t => {
         type: 'pkg',
         name: 'lit-html',
         version: '1.1.2',
-        alias: '1'
+        alias: '1',
+        debug: true,
     }).run();
 
     t.equals(result, true, 'Command should return true');
@@ -48,7 +50,8 @@ test('Creating a map alias on an asset server', async t => {
         org: 'my-test-org',
         name: 'my-map',
         version: '1.0.0',
-        file: './fixtures/import-map.json'
+        file: './fixtures/import-map.json',
+        debug: true,
     }).run();
 
     const result = await new cli.Alias({
@@ -58,7 +61,8 @@ test('Creating a map alias on an asset server', async t => {
         type: 'map',
         name: 'my-map',
         version: '1.0.0',
-        alias: '1'
+        alias: '1',
+        debug: true,
     }).run();
 
     t.equals(result, true, 'Command should return true');

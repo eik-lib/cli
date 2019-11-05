@@ -21,7 +21,8 @@ test('Uploading app assets to an asset server', async t => {
         name: 'my-app',
         version: '1.0.0',
         js: './fixtures/client.js',
-        css: './fixtures/styles.css'
+        css: './fixtures/styles.css',
+        debug: true,
     });
 
     const result = await publishApp.run();
@@ -29,12 +30,12 @@ test('Uploading app assets to an asset server', async t => {
     t.match(
         l.logs.debug,
         'Org: my-test-org, Name: my-app, Version: 1.0.0',
-        'Log output should show published name, version and org'
+        'Log output should show published name, version and org',
     );
     t.match(
         l.logs.debug,
         'Publish command complete',
-        'Log output should command completion'
+        'Log output should command completion',
     );
 
     await server.stop();

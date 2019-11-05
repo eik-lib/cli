@@ -20,7 +20,8 @@ test('Uploading import map to an asset server', async t => {
         org: 'my-test-org',
         name: 'my-map',
         version: '1.0.0',
-        file: './fixtures/import-map.json'
+        file: './fixtures/import-map.json',
+        debug: true,
     });
 
     const result = await publishMap.run();
@@ -28,12 +29,12 @@ test('Uploading import map to an asset server', async t => {
     t.match(
         l.logs.debug,
         'Uploading import map "my-map" version "1.0.0" to asset server',
-        'Log output should show published name, version and org'
+        'Log output should show published name, version and org',
     );
     t.match(
         l.logs.debug,
         'Import map publish command complete',
-        'Log output should command completion'
+        'Log output should command completion',
     );
 
     await server.stop();
