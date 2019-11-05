@@ -31,8 +31,8 @@ test('Uploading a dependency to an asset server', async t => {
         'Log output should show published name, version and org',
     );
     t.match(
-        l.logs.debug,
-        'Publish command complete',
+        l.logs.info,
+        'Published dependency package "lit-html" at version "1.1.2"',
         'Log output should command completion',
     );
 
