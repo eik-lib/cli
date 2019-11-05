@@ -216,13 +216,15 @@ module.exports = class PublishDependency {
             this.log.debug(`  ==> ${this.zipFile}`);
             this.log.debug(`  ==> ${this.file}`);
             this.log.debug(`  ==> ${this.file}.map`);
-            this.log.debug('Publish command complete (dry run)');
+            this.log.info(
+                `Published dependency package "${this.name}" at version "${this.version}" (dry run)`,
+            );
             return true;
         }
 
         this.log.debug('Uploading zip file to server');
         try {
-            const message = await sendCommand({
+            const { message } = await sendCommand({
                 method: 'PUT',
                 host: this.server,
                 pathname: join(this.org, 'pkg', this.name, this.version),
@@ -237,11 +239,37 @@ module.exports = class PublishDependency {
             }
         } catch (err) {
             this.log.error('Unable to upload zip file to server');
-            this.log.warn(err.message);
+            switch (err.statusCode) {
+                case 400:
+                    this.log.warn(
+                        'Client attempted to send an invalid URL parameter',
+                    );
+                    break;
+                case 401:
+                    this.log.warn('Client unauthorized with server');
+                    break;
+                case 409:
+                    this.log.warn(
+                        `Package with name "${this.name}" and version "${this.version}" already exists on server`,
+                    );
+                    break;
+                case 415:
+                    this.log.warn(
+                        'Client attempted to send an unsupported file format to server',
+                    );
+                    break;
+                case 502:
+                    this.log.warn('Server was unable to write file to storage');
+                    break;
+                default:
+                    this.log.warn('Server failed');
+            }
             return false;
         }
 
-        this.log.debug('Publish command complete');
+        this.log.info(
+            `Published dependency package "${this.name}" at version "${this.version}"`,
+        );
         return true;
     }
 };

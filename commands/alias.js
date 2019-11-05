@@ -53,23 +53,34 @@ exports.builder = yargs => {
             describe: 'Provide the organisation context for the command.',
             default: assets.organisation || '',
         },
+        debug: {
+            describe: 'Logs additional messages',
+            default: false,
+            type: 'boolean',
+        },
     });
 };
 
 exports.handler = async argv => {
-    const spinner = ora().start();
+    const spinner = ora().start('working...');
     let success = false;
+    const { debug } = argv;
 
     try {
-        success = await new Alias({ logger: logger(spinner), ...argv }).run();
+        success = await new Alias({
+            logger: logger(spinner, debug),
+            ...argv,
+        }).run();
     } catch (err) {
         logger.warn(err.message);
     }
 
     if (success) {
-        spinner.succeed('🤘');
+        spinner.text = '';
+        spinner.stopAndPersist();
     } else {
-        spinner.fail('🥺');
+        spinner.text = '';
+        spinner.stopAndPersist();
         process.exit(1);
     }
 };

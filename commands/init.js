@@ -47,23 +47,34 @@ exports.builder = yargs => {
                 'Specify the path on local disk to CSS client side assets relative to the current working directory.',
             default: '',
         },
+        debug: {
+            describe: 'Logs additional messages',
+            default: false,
+            type: 'boolean',
+        },
     });
 };
 
 exports.handler = async argv => {
-    const spinner = ora().start();
+    const spinner = ora().start('working...');
     let success = false;
+    const { debug } = argv;
 
     try {
-        success = await new Init({ logger: logger(spinner), ...argv }).run();
+        success = await new Init({
+            logger: logger(spinner, debug),
+            ...argv,
+        }).run();
     } catch (err) {
         logger.warn(err.message);
     }
 
     if (success) {
-        spinner.succeed('🤘');
+        spinner.text = '';
+        spinner.stopAndPersist();
     } else {
-        spinner.fail('🥺');
+        spinner.text = '';
+        spinner.stopAndPersist();
         process.exit(1);
     }
 };
