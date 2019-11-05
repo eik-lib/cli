@@ -23,10 +23,6 @@ test('Uploading a dependency to an asset server', async t => {
 
     const result = await publishDep.run();
 
-    console.log('asdasdasdASDASDADS');
-    console.log(l.logs.error);
-    console.log(l.logs.warn);
-
     t.equals(result, true, 'Command should return true');
     t.match(
         l.logs.debug,
