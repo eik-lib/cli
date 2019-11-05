@@ -32,8 +32,8 @@ test('Uploading import map to an asset server', async t => {
         'Log output should show published name, version and org',
     );
     t.match(
-        l.logs.debug,
-        'Import map publish command complete',
+        l.logs.info,
+        'Published import map "my-map" at version "1.0.0"',
         'Log output should command completion',
     );
 
