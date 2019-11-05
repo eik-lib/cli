@@ -39,21 +39,21 @@ module.exports = class Alias {
 
         this.log.debug('Requesting alias creation from asset server');
         try {
-            const message = await sendCommand({
+            const { message } = await sendCommand({
                 host: this.server,
                 method: 'PUT',
                 pathname: join(
                     this.org,
                     this.type,
                     this.name,
-                    `v${this.alias}`
+                    `v${this.alias}`,
                 ),
-                data: { version: this.version }
+                data: { version: this.version },
             });
 
             if (message.org) {
                 this.log.debug(
-                    `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`
+                    `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`,
                 );
             }
 
