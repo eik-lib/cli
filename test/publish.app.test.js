@@ -33,8 +33,8 @@ test('Uploading app assets to an asset server', async t => {
         'Log output should show published name, version and org',
     );
     t.match(
-        l.logs.debug,
-        'Publish command complete',
+        l.logs.info,
+        'Published app package "my-app" at version "1.0.0"',
         'Log output should command completion',
     );
 
