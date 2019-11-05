@@ -222,7 +222,7 @@ module.exports = class PublishDependency {
 
         this.log.debug('Uploading zip file to server');
         try {
-            const message = await sendCommand({
+            const { message } = await sendCommand({
                 method: 'PUT',
                 host: this.server,
                 pathname: join(this.org, 'pkg', this.name, this.version),
