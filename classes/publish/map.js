@@ -14,7 +14,7 @@ module.exports = class PublishMap {
         org,
         file,
         name,
-        version
+        version,
     } = {}) {
         this.log = abslog(logger);
         this.cwd = cwd;
@@ -61,24 +61,48 @@ module.exports = class PublishMap {
 
         if (!existsSync(join(this.cwd, this.file))) {
             this.log.error(
-                'Parameter "file" is not valid. File does not exist'
+                'Parameter "file" is not valid. File does not exist',
             );
             return false;
         }
 
         this.log.debug(
-            `Uploading import map "${this.name}" version "${this.version}" to asset server`
+            `Uploading import map "${this.name}" version "${this.version}" to asset server`,
         );
         try {
             await sendCommand({
                 method: 'PUT',
                 host: this.server,
                 pathname: join(this.org, 'map', this.name, this.version),
-                map: join(this.cwd, this.file)
+                map: join(this.cwd, this.file),
             });
         } catch (err) {
             this.log.error('Unable to complete upload of import map to server');
-            this.log.warn(err.message);
+            switch (err.statusCode) {
+                case 400:
+                    this.log.warn(
+                        'Client attempted to send an invalid URL parameter',
+                    );
+                    break;
+                case 401:
+                    this.log.warn('Client unauthorized with server');
+                    break;
+                case 409:
+                    this.log.warn(
+                        `Map with name "${this.name}" and version "${this.version}" already exists on server`,
+                    );
+                    break;
+                case 415:
+                    this.log.warn(
+                        'Client attempted to send an unsupported file format to server',
+                    );
+                    break;
+                case 502:
+                    this.log.warn('Server was unable to write file to storage');
+                    break;
+                default:
+                    this.log.warn('Server failed');
+            }
             return false;
         }
 

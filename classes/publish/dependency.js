@@ -237,7 +237,31 @@ module.exports = class PublishDependency {
             }
         } catch (err) {
             this.log.error('Unable to upload zip file to server');
-            this.log.warn(err.message);
+            switch (err.statusCode) {
+                case 400:
+                    this.log.warn(
+                        'Client attempted to send an invalid URL parameter',
+                    );
+                    break;
+                case 401:
+                    this.log.warn('Client unauthorized with server');
+                    break;
+                case 409:
+                    this.log.warn(
+                        `Package with name "${this.name}" and version "${this.version}" already exists on server`,
+                    );
+                    break;
+                case 415:
+                    this.log.warn(
+                        'Client attempted to send an unsupported file format to server',
+                    );
+                    break;
+                case 502:
+                    this.log.warn('Server was unable to write file to storage');
+                    break;
+                default:
+                    this.log.warn('Server failed');
+            }
             return false;
         }
 
