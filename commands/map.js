@@ -47,15 +47,22 @@ exports.builder = yargs => {
             describe: 'Provide the organisation context for the command.',
             default: assets.organisation || '',
         },
+        debug: {
+            describe: 'Logs additional messages',
+            default: false,
+            type: 'boolean',
+        },
     });
 };
 
 exports.handler = async argv => {
-    const spinner = ora().start();
+    const spinner = ora().start('working...');
     let success = false;
+    const { debug } = argv;
+
     try {
         success = await new Map({
-            logger: logger(spinner),
+            logger: logger(spinner, debug),
             ...argv,
         }).run();
     } catch (err) {
@@ -63,9 +70,11 @@ exports.handler = async argv => {
     }
 
     if (success) {
-        spinner.succeed('🤘');
+        spinner.text = '';
+        spinner.stopAndPersist();
     } else {
-        spinner.fail('🥺');
+        spinner.text = '';
+        spinner.stopAndPersist();
         process.exit(1);
     }
 };

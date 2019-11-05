@@ -216,7 +216,7 @@ module.exports = class PublishDependency {
             this.log.debug(`  ==> ${this.zipFile}`);
             this.log.debug(`  ==> ${this.file}`);
             this.log.debug(`  ==> ${this.file}.map`);
-            this.log.debug(
+            this.log.info(
                 `Published dependency package "${this.name}" at version "${this.version}" (dry run)`,
             );
             return true;

@@ -44,6 +44,11 @@ exports.builder = yargs => {
             default: false,
             type: 'boolean',
         },
+        debug: {
+            describe: 'Logs additional messages',
+            default: false,
+            type: 'boolean',
+        },
         js: {
             describe:
                 'Specify the path on local disk to JavaScript client side assets relative to the current working directory.',
@@ -66,20 +71,23 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    const spinner = ora().start();
+    const spinner = ora().start('working...');
     let success = false;
+    const { debug } = argv;
 
     try {
-        const options = { logger: logger(spinner), ...argv };
+        const options = { logger: logger(spinner, debug), ...argv };
         success = await new PublishApp(options).run();
     } catch (err) {
         spinner.warn(err.message);
     }
 
     if (success) {
-        spinner.succeed('🤘');
+        spinner.text = '';
+        spinner.stopAndPersist();
     } else {
-        spinner.fail('🥺');
+        spinner.text = '';
+        spinner.stopAndPersist();
         process.exit(1);
     }
 };

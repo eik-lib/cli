@@ -1,6 +1,6 @@
 'use strict';
 
-const logger = spinner => ({
+const logger = (spinner, debug = false) => ({
     fatal() {},
     error(message) {
         spinner.fail(message).start();
@@ -12,11 +12,11 @@ const logger = spinner => ({
         spinner.succeed(message).start();
     },
     debug(message) {
-        spinner.info(message).start();
+        if (debug) spinner.info(message).start();
     },
     trace(message) {
-        spinner.info(message).start();
-    }
+        if (debug) spinner.info(message).start();
+    },
 });
 
 module.exports = logger;

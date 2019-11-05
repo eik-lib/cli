@@ -29,12 +29,13 @@ by major (1.0.0 -> 2.0.0), minor (1.0.0 -> 1.1.0) or patch (1.0.0 -> 1.0.1)`,
 };
 
 exports.handler = async argv => {
-    const spinner = ora().start();
+    const spinner = ora().start('working...');
     let success = false;
+    const { debug } = argv;
 
     try {
         success = await new Version({
-            logger: logger(spinner),
+            logger: logger(spinner, debug),
             cwd: argv.cwd,
             level: argv.major,
         }).run();
@@ -43,9 +44,11 @@ exports.handler = async argv => {
     }
 
     if (success) {
-        spinner.succeed('🤘');
+        spinner.text = '';
+        spinner.stopAndPersist();
     } else {
-        spinner.fail('🥺');
+        spinner.text = '';
+        spinner.stopAndPersist();
         process.exit(1);
     }
 };
