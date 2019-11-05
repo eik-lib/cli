@@ -47,9 +47,8 @@ module.exports = class Version {
 
         this.log.debug('Updating assets.json version field');
         try {
-            const oldVersion = this.assets.version;
+            this.oldVersion = this.assets.version;
             this.assets.version = semver.inc(this.assets.version, this.level);
-            this.log.debug(`"${oldVersion}" => "${this.assets.version}"`);
         } catch (err) {
             this.log.error('Failed to update "assets.version"');
             this.log.warn(err.message);
@@ -70,7 +69,9 @@ module.exports = class Version {
             return false;
         }
 
-        this.log.debug('Version command complete');
+        this.log.info(
+            `Updated version field of "assets.json" file from "${this.oldVersion}" to "${this.assets.version}"`,
+        );
         return true;
     }
 };

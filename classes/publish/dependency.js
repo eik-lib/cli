@@ -216,7 +216,9 @@ module.exports = class PublishDependency {
             this.log.debug(`  ==> ${this.zipFile}`);
             this.log.debug(`  ==> ${this.file}`);
             this.log.debug(`  ==> ${this.file}.map`);
-            this.log.debug('Publish command complete (dry run)');
+            this.log.debug(
+                `Published dependency package "${this.name}" at version "${this.version}" (dry run)`,
+            );
             return true;
         }
 
@@ -265,7 +267,9 @@ module.exports = class PublishDependency {
             return false;
         }
 
-        this.log.debug('Publish command complete');
+        this.log.info(
+            `Published dependency package "${this.name}" at version "${this.version}"`,
+        );
         return true;
     }
 };

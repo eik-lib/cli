@@ -65,7 +65,9 @@ module.exports = class Init {
             `assets.json file created and saved to "${this.pathname}"`,
         );
 
-        this.log.debug('Init command complete');
+        this.log.info(
+            'Created "assets.json" file in the current working directory',
+        );
         return true;
     }
 };

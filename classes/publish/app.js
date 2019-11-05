@@ -281,7 +281,9 @@ module.exports = class PublishApp {
             this.log.debug(`  ==> ${this.path}/ie11/index.js.map`);
             this.log.debug(`  ==> ${this.path}/main/index.css`);
             this.log.debug(`  ==> ${this.path}/main/index.css.map`);
-            this.log.debug('Publish command complete (dry run)');
+            this.log.info(
+                `Published app package "${this.name}" at version "${this.version}" (dry run)`,
+            );
             return true;
         }
 
@@ -331,7 +333,9 @@ module.exports = class PublishApp {
             return false;
         }
 
-        this.log.debug('Publish command complete');
+        this.log.info(
+            `Published app package "${this.name}" at version "${this.version}"`,
+        );
         return true;
     }
 };

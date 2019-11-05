@@ -52,7 +52,6 @@ async function sendCommand({
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
-            throw new Error(`Unable to complete command: ${err.message}`);
         }
         throw err;
     }

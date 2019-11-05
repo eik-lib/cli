@@ -106,7 +106,9 @@ module.exports = class PublishMap {
             return false;
         }
 
-        this.log.debug('Import map publish command complete');
+        this.log.info(
+            `Published import map "${this.name}" at version "${this.version}"`,
+        );
         return true;
     }
 };
