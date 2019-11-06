@@ -49,7 +49,7 @@
     "rimraf": "^3.0.0"
   },
   "devDependencies": {
-    "@asset-pipe/core": "^1.0.0-alpha.2",
+    "@asset-pipe/core": "^1.0.0-alpha.3",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",
