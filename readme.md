@@ -156,6 +156,17 @@ When we run `asset-pipe publish` any "bare imports" refering to either `lit-html
 
 In this way, you can control which version of `react` or `lit-html` or `lodash` all the apps in your organisation are using. In combination with package `alias` URLs you have a powerful way to manage key shared dependencies for your apps in production without the need to redeploy or rebundle when a new version of a dependency is released.
 
+### Accessing meta information about a package
+
+It's possible to access information about a published package with the `meta` command. The command
+returns information in JSON format.
+
+#### Example
+
+```sh
+asset-pipe meta lodash 4.17.16
+```
+
 ## API Documentation
 
 ### Command Summary
@@ -168,6 +179,7 @@ In this way, you can control which version of `react` or `lit-html` or `lodash` 
 | dependency | d, dep  | Publish a dependency bundle                                     |
 | map        | m       | Sets or deletes a "bare" import entry in an import-map file     |
 | alias      | a       | Sets a major semver alias for a given dependency or map         |
+| meta       | show    | Retrieves meta information for a package                        |
 
 ### Commands Overview
 
@@ -412,6 +424,27 @@ asset-pipe map my-import-map 1.0.0 ./import-map.json
 # asset-pipe map --server http://localhost:4001 --org finn my-import-map 1.0.0 ./import-map.json
 ```
 
+#### meta
+
+This command fetches and displays meta information about a package from the server
+
+The command takes the form:
+
+```sh
+asset-pipe meta [optional arguments] <name> <version>
+```
+
+_Example_
+
+Running the following command...
+
+```bash
+asset-pipe meta lit-html 1.1.2
+# asset-pipe meta --server http://localhost:4001 --org finn lit-html 1.1.2
+```
+
+Will print meta information about the package `lit-html` version `1.1.2` in JSON format.
+
 ## Programmatic Usage
 
 All of the commands described above can be used programmatically by importing this package. Each command and its programmatic usage is given below.
@@ -530,3 +563,18 @@ const result = await new cli.Alias(options).run();
 | name    | app name                                | string |         |              | yes      |
 | version | app version                             | string |         |              | yes      |
 | alias   | major number of a semver version number | string |         |              | yes      |
+
+### meta
+
+```js
+const cli = require('@asset-pipe/cli');
+const result = await new cli.Meta(options).run();
+```
+
+| name    | description                   | type   | default | choices | required |
+| ------- | ----------------------------- | ------ | ------- | ------- | -------- |
+| logger  | log4j compliant logger object | object | `null`  |         | no       |
+| server  | URL to asset server           | string |         |         | yes      |
+| org     | organisation name             | string |         |         | yes      |
+| name    | package name                  | string |         |         | yes      |
+| version | package version               | string |         |         | yes      |
