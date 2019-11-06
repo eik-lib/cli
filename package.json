@@ -45,10 +45,11 @@
     "tar": "^4.4.11",
     "temp-dir": "^2.0.0",
     "rollup-plugin-babel": "^4.3.3",
-    "yargs": "^13.2.4"
+    "yargs": "^13.2.4",
+    "rimraf": "^3.0.0"
   },
   "devDependencies": {
-    "@asset-pipe/core": "^1.0.0-alpha.2",
+    "@asset-pipe/core": "^1.0.0-alpha.3",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.5.0",

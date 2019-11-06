@@ -14,9 +14,10 @@ const resolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 const { execSync } = require('child_process');
-const { writeFileSync } = require('fs');
+const { writeFileSync, existsSync } = require('fs');
 const { join, dirname, parse } = require('path');
 const { validators } = require('@asset-pipe/common');
+const rimraf = require('rimraf');
 const { sendCommand } = require('../../utils');
 
 module.exports = class PublishDependency {
@@ -38,7 +39,7 @@ module.exports = class PublishDependency {
         this.version = version;
         this.map = map;
         this.dryRun = dryRun;
-        this.path = join(tempDir, `publish-${name}-${version}`);
+        this.path = join(tempDir, `publish-${name}-${version}-${Date.now()}`);
     }
 
     async run() {
@@ -101,20 +102,42 @@ module.exports = class PublishDependency {
         } catch (err) {
             this.log.error('Unable to create package json in temp directory');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
         this.log.debug('Loading import map file from server');
         try {
-            const maps = this.map.map(m => fetch(m).then(r => r.json()));
+            const maps = this.map.map(m =>
+                fetch(m).then(r => {
+                    switch (true) {
+                        case r.status === 404:
+                            throw new Error(
+                                'Import map could not be found on server',
+                            );
+                        case r.status >= 400 && r.status < 500:
+                            throw new Error('Server rejected client request');
+                        case r.status >= 500:
+                            throw new Error('Server error');
+                        default:
+                            return r.json();
+                    }
+                }),
+            );
             const results = await Promise.all(maps);
             const dependencies = results.map(r => r.imports);
             this.importMap = {
                 imports: Object.assign({}, ...dependencies),
             };
         } catch (err) {
-            this.log.warn('Unable to load import map file from server');
-            this.log.warn(err.message);
+            this.log.warn(
+                `Unable to load import map file from server: ${err.message}`,
+            );
         }
 
         this.log.debug('Running npm install in temp directory');
@@ -125,6 +148,12 @@ module.exports = class PublishDependency {
                 'Unable to complete npm install operation, is the supplied module version correct?',
             );
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -140,6 +169,12 @@ module.exports = class PublishDependency {
         } catch (err) {
             this.log.error('Unable to load package meta information');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -190,6 +225,12 @@ module.exports = class PublishDependency {
         } catch (err) {
             this.log.error('Unable to complete bundle operation');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -208,6 +249,12 @@ module.exports = class PublishDependency {
         } catch (err) {
             this.log.error('Unable to create zip file');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -264,7 +311,18 @@ module.exports = class PublishDependency {
                 default:
                     this.log.warn('Server failed');
             }
+
+            this.log.debug('Cleaning up');
+            if (existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
+        }
+
+        this.log.debug('Cleaning up');
+        if (existsSync(this.path)) {
+            rimraf.sync(this.path);
         }
 
         this.log.info(
