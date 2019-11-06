@@ -7,7 +7,7 @@ const { resolvePath, logger } = require('../utils');
 
 exports.command = 'meta <name> <version>';
 
-exports.aliases = ['m', 'show'];
+exports.aliases = ['show'];
 
 exports.describe = `Retrieve meta information about a package`;
 
@@ -61,6 +61,10 @@ exports.handler = async argv => {
     }
 
     if (success) {
+        spinner.text = '';
+        spinner.stopAndPersist();
+        // eslint-disable-next-line no-console
+        console.log(success);
         spinner.text = '';
         spinner.stopAndPersist();
     } else {

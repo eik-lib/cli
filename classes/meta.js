@@ -69,13 +69,11 @@ module.exports = class Meta {
                 return false;
             }
 
-            this.log.info(await res.json());
+            return await res.json();
         } catch (err) {
             this.log.error('Unable to retrieve meta information for package');
             this.log.warn(err.message);
             return false;
         }
-
-        return true;
     }
 };
