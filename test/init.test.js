@@ -15,6 +15,11 @@ test('Initializing a new assets.json file', async t => {
         debug: true,
     }).run();
 
+    // eslint-disable-next-line no-console
+    console.log('join dir:', join(__dirname, 'tmp'));
+    // eslint-disable-next-line no-console
+    console.log('join dir and file', join(__dirname, 'tmp', 'assets.json'));
+
     const assets = JSON.parse(
         readFileSync(join(__dirname, 'tmp', 'assets.json')),
     );
