@@ -115,16 +115,17 @@ module.exports = class PublishDependency {
         try {
             const maps = this.map.map(m =>
                 fetch(m).then(r => {
-                    if (r.status === 404) {
-                        throw new Error(
-                            'Import map could not be found on server',
-                        );
-                    } else if (r.status >= 400 && r.status < 500) {
-                        throw new Error('Server rejected client request');
-                    } else if (r.status >= 500) {
-                        throw new Error('Server error');
-                    } else {
-                        return r.json();
+                    switch (true) {
+                        case r.status === 404:
+                            throw new Error(
+                                'Import map could not be found on server',
+                            );
+                        case r.status >= 400 && r.status < 500:
+                            throw new Error('Server rejected client request');
+                        case r.status >= 500:
+                            throw new Error('Server error');
+                        default:
+                            return r.json();
                     }
                 }),
             );
