@@ -19,6 +19,7 @@ const autoprefixer = require('autoprefixer');
 const postcss = require('postcss');
 const fs = require('fs');
 const cssnano = require('cssnano');
+const rimraf = require('rimraf');
 const { sendCommand } = require('../../utils');
 const compressedSize = require('../../utils/compressed-size');
 
@@ -45,7 +46,7 @@ module.exports = class PublishApp {
         this.js = js;
         this.css = css;
         this.dryRun = dryRun;
-        this.path = join(tempDir, `publish-${name}-${version}`);
+        this.path = join(tempDir, `publish-${name}-${version}-${Date.now()}`);
     }
 
     async run() {
@@ -106,7 +107,21 @@ module.exports = class PublishApp {
 
         this.log.debug('Loading import map file from server');
         try {
-            const maps = this.map.map(m => fetch(m).then(r => r.json()));
+            const maps = this.map.map(m =>
+                fetch(m).then(r => {
+                    if (r.status === 404) {
+                        throw new Error(
+                            'Import map could not be found on server',
+                        );
+                    } else if (r.status >= 400 && r.status < 500) {
+                        throw new Error('Server rejected client request');
+                    } else if (r.status >= 500) {
+                        throw new Error('Server error');
+                    } else {
+                        return r.json();
+                    }
+                }),
+            );
             const results = await Promise.all(maps);
             const dependencies = results.map(r => r.imports);
             this.importMap = {
@@ -143,6 +158,12 @@ module.exports = class PublishApp {
         } catch (err) {
             this.log.error('Unable to create bundle file');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (fs.existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -189,6 +210,12 @@ module.exports = class PublishApp {
         } catch (err) {
             this.log.error('Unable to create bundle file');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (fs.existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -218,6 +245,12 @@ module.exports = class PublishApp {
         } catch (err) {
             this.log.error('Unable to create css bundle file');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (fs.existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -244,6 +277,12 @@ module.exports = class PublishApp {
         } catch (err) {
             this.log.error('Unable to create zip file');
             this.log.warn(err.message);
+
+            this.log.debug('Cleaning up');
+            if (fs.existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
         }
 
@@ -330,7 +369,18 @@ module.exports = class PublishApp {
                 default:
                     this.log.warn('Server failed');
             }
+
+            this.log.debug('Cleaning up');
+            if (fs.existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return false;
+        }
+
+        this.log.debug('Cleaning up');
+        if (fs.existsSync(this.path)) {
+            rimraf.sync(this.path);
         }
 
         this.log.info(
