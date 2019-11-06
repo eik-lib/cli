@@ -24,9 +24,6 @@ module.exports = class Init {
         this.server = server;
         this.js = { input: js, options: {} };
         this.css = { input: css, options: {} };
-
-        // eslint-disable-next-line no-console
-        console.log('resolved path:', this.pathname);
     }
 
     async run() {
