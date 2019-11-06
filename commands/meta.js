@@ -63,6 +63,10 @@ exports.handler = async argv => {
     if (success) {
         spinner.text = '';
         spinner.stopAndPersist();
+        // eslint-disable-next-line no-console
+        console.log(success);
+        spinner.text = '';
+        spinner.stopAndPersist();
     } else {
         spinner.text = '';
         spinner.stopAndPersist();
