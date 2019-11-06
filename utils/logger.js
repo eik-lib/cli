@@ -9,7 +9,14 @@ const logger = (spinner, debug = false) => ({
         spinner.warn(message).start();
     },
     info(message) {
-        spinner.succeed(message).start();
+        if (typeof message !== 'string') {
+            spinner.text = '';
+            spinner.stopAndPersist();
+            console.log(message);
+            spinner.start();
+        } else {
+            spinner.succeed(message).start();
+        }
     },
     debug(message) {
         if (debug) spinner.info(message).start();
