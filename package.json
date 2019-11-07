@@ -31,7 +31,7 @@
     "joi-extension-semver": "^3.0.0",
     "make-dir": "^3.0.0",
     "node-fetch": "^2.6.0",
-    "ora": "^3.4.0",
+    "ora": "^4.0.2",
     "pkg-dir": "^4.2.0",
     "postcss": "^7.0.18",
     "read-pkg-up": "^6.0.0",
