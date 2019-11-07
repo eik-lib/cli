@@ -165,7 +165,7 @@ module.exports = class PublishDependency {
             this.installedDepBasePath = pkgDir.sync(dirname(resolvedPath));
             this.installedDepPkgJson = readPkgUp.sync({
                 cwd: this.installedDepBasePath,
-            }).package;
+            }).packageJson;
         } catch (err) {
             this.log.error('Unable to load package meta information');
             this.log.warn(err.message);
