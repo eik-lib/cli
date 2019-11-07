@@ -49,13 +49,13 @@
     "rimraf": "^3.0.0"
   },
   "devDependencies": {
-    "@asset-pipe/core": "^1.0.0-alpha.3",
-    "eslint": "^6.6.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "prettier": "^1.18.2",
-    "tap": "^14.9.1"
+    "@asset-pipe/core": "1.0.0-alpha.3",
+    "eslint": "6.6.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-prettier": "6.5.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-prettier": "3.1.1",
+    "prettier": "1.18.2",
+    "tap": "14.9.2"
   }
 }
