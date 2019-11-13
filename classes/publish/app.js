@@ -76,12 +76,17 @@ module.exports = class PublishApp {
             return false;
         }
 
-        if (!this.js || typeof this.js !== 'string') {
+        if (!this.js && !this.css) {
+            this.log.error('At least one of "js" or "css" must be provided');
+            return false;
+        }
+
+        if (this.js && typeof this.js !== 'string') {
             this.log.error('Parameter "js" is not valid');
             return false;
         }
 
-        if (!this.css || typeof this.css !== 'string') {
+        if (this.css && typeof this.css !== 'string') {
             this.log.error('Parameter "css" is not valid');
             return false;
         }
@@ -134,125 +139,140 @@ module.exports = class PublishApp {
         }
 
         // create main js bundle
-        this.log.debug('Creating main bundle file');
-        try {
-            const options = {
-                onwarn: () => {},
-                plugins: [
-                    esmImportToUrl(this.importMap),
-                    resolve(),
-                    commonjs(),
-                    rollupReplace({
-                        'process.env.NODE_ENV': JSON.stringify('production'),
-                    }),
-                    terser(),
-                ],
-                input: join(this.cwd, this.js),
-            };
+        if (this.js) {
+            this.log.debug('Creating main bundle file');
+            try {
+                const options = {
+                    onwarn: () => {},
+                    plugins: [
+                        esmImportToUrl(this.importMap),
+                        resolve(),
+                        commonjs(),
+                        rollupReplace({
+                            'process.env.NODE_ENV': JSON.stringify(
+                                'production',
+                            ),
+                        }),
+                        terser(),
+                    ],
+                    input: join(this.cwd, this.js),
+                };
 
-            const bundled = await rollup.rollup(options);
-            await bundled.write({
-                format: 'esm',
-                file: join(this.path, 'main/index.js'),
-                sourcemap: true,
-            });
-        } catch (err) {
-            this.log.error('Unable to create bundle file');
-            this.log.warn(err.message);
-
-            this.log.debug('Cleaning up');
-            if (fs.existsSync(this.path)) {
-                rimraf.sync(this.path);
-            }
-
-            return false;
-        }
-
-        this.log.debug('Creating js fallback bundle file');
-        try {
-            const options = {
-                onwarn: () => {},
-                plugins: [
-                    resolve(),
-                    commonjs(),
-                    babel({
-                        compact: true,
-                        presets: [
-                            [
-                                join(
-                                    __dirname,
-                                    `../../node_modules/@babel/preset-env`,
-                                ),
-                                {
-                                    useBuiltIns: 'usage',
-                                    corejs: 3,
-                                    // browsers: 'ie11',
-                                    targets: {
-                                        ie: '11',
-                                    },
-                                },
-                            ],
-                        ],
-                        babelrc: false,
-                    }),
-                    rollupReplace({
-                        'process.env.NODE_ENV': JSON.stringify('production'),
-                    }),
-                    terser(),
-                ],
-                input: join(this.cwd, this.js),
-            };
-            const bundled = await rollup.rollup(options);
-            await bundled.write({
-                format: 'iife',
-                file: join(this.path, 'ie11/index.js'),
-                sourcemap: true,
-            });
-        } catch (err) {
-            this.log.error('Unable to create bundle file');
-            this.log.warn(err.message);
-
-            this.log.debug('Cleaning up');
-            if (fs.existsSync(this.path)) {
-                rimraf.sync(this.path);
-            }
-
-            return false;
-        }
-
-        // create main css bundle
-        this.log.debug('Creating css bundle file');
-        try {
-            if (this.css) {
-                const input = join(this.cwd, this.css);
-                const precss = fs.readFileSync(input, 'utf8');
-                const processor = postcss(autoprefixer());
-
-                processor.use(cssnano());
-
-                const result = await processor.process(precss, {
-                    from: this.css.replace(/(.*\/)*/, ''),
-                    to: 'index.css',
-                    map: { inline: false },
+                const bundled = await rollup.rollup(options);
+                await bundled.write({
+                    format: 'esm',
+                    file: join(this.path, 'main/index.js'),
+                    sourcemap: true,
                 });
-                fs.writeFileSync(join(this.path, 'main/index.css'), result.css);
-                fs.writeFileSync(
-                    join(this.path, 'main/index.css.map'),
-                    result.map,
-                );
-            } else {
-                this.log.debug('CSS assets not specified');
-            }
-        } catch (err) {
-            this.log.error('Unable to create css bundle file');
-            this.log.warn(err.message);
+            } catch (err) {
+                this.log.error('Unable to create bundle file');
+                this.log.warn(err.message);
 
-            this.log.debug('Cleaning up');
-            if (fs.existsSync(this.path)) {
-                rimraf.sync(this.path);
+                this.log.debug('Cleaning up');
+                if (fs.existsSync(this.path)) {
+                    rimraf.sync(this.path);
+                }
+
+                return false;
             }
 
-            return false;
+            this.log.debug('Creating js fallback bundle file');
+            try {
+                const options = {
+                    onwarn: () => {},
+                    plugins: [
+                        resolve(),
+                        commonjs(),
+                        babel({
+                            compact: true,
+                            presets: [
+                                [
+                                    join(
+                                        __dirname,
+                                        `../../node_modules/@babel/preset-env`,
+                                    ),
+                                    {
+                                        useBuiltIns: 'usage',
+                                        corejs: 3,
+                                        // browsers: 'ie11',
+                                        targets: {
+                                            ie: '11',
+                                        },
+                                    },
+                                ],
+                            ],
+                            babelrc: false,
+                        }),
+                        rollupReplace({
+                            'process.env.NODE_ENV': JSON.stringify(
+                                'production',
+                            ),
+                        }),
+                        terser(),
+                    ],
+                    input: join(this.cwd, this.js),
+                };
+                const bundled = await rollup.rollup(options);
+                await bundled.write({
+                    format: 'iife',
+                    file: join(this.path, 'ie11/index.js'),
+                    sourcemap: true,
+                });
+            } catch (err) {
+                this.log.error('Unable to create bundle file');
+                this.log.warn(err.message);
+
+                this.log.debug('Cleaning up');
+                if (fs.existsSync(this.path)) {
+                    rimraf.sync(this.path);
+                }
+
+                return false;
+            }
+        } else {
+            this.log.debug(
+                'JavaScript entrypoint not defined, skipping JS bundles',
+            );
+        }
+
+        if (this.css) {
+            // create main css bundle
+            this.log.debug('Creating css bundle file');
+            try {
+                if (this.css) {
+                    const input = join(this.cwd, this.css);
+                    const precss = fs.readFileSync(input, 'utf8');
+                    const processor = postcss(autoprefixer());
+
+                    processor.use(cssnano());
+
+                    const result = await processor.process(precss, {
+                        from: this.css.replace(/(.*\/)*/, ''),
+                        to: 'index.css',
+                        map: { inline: false },
+                    });
+                    fs.writeFileSync(
+                        join(this.path, 'main/index.css'),
+                        result.css,
+                    );
+                    fs.writeFileSync(
+                        join(this.path, 'main/index.css.map'),
+                        result.map,
+                    );
+                } else {
+                    this.log.debug('CSS assets not specified');
+                }
+            } catch (err) {
+                this.log.error('Unable to create css bundle file');
+                this.log.warn(err.message);
+
+                this.log.debug('Cleaning up');
+                if (fs.existsSync(this.path)) {
+                    rimraf.sync(this.path);
+                }
+
+                return false;
+            }
         }
 
         // create zip archive
