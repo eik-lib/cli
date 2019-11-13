@@ -34,8 +34,11 @@
     "ora": "^4.0.2",
     "pkg-dir": "^4.2.0",
     "postcss": "^7.0.21",
+    "postcss-import": "^12.0.1",
     "read-pkg-up": "^7.0.0",
+    "rimraf": "^3.0.0",
     "rollup": "^1.26.3",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-esm-import-to-url": "^2.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -44,9 +47,7 @@
     "semver": "^6.3.0",
     "tar": "^5.0.5",
     "temp-dir": "^2.0.0",
-    "rollup-plugin-babel": "^4.3.3",
-    "yargs": "^14.2.0",
-    "rimraf": "^3.0.0"
+    "yargs": "^14.2.0"
   },
   "devDependencies": {
     "@asset-pipe/core": "1.0.0-alpha.3",

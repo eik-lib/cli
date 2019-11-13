@@ -11,6 +11,7 @@ const rollupReplace = require('rollup-plugin-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
+const atImport = require('postcss-import');
 const { join, parse } = require('path');
 const { validators } = require('@asset-pipe/common');
 const tar = require('tar');
@@ -246,6 +247,7 @@ module.exports = class PublishApp {
                     const precss = fs.readFileSync(input, 'utf8');
                     const processor = postcss(autoprefixer());
 
+                    processor.use(atImport());
                     processor.use(cssnano());
 
                     const result = await processor.process(precss, {
