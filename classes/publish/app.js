@@ -104,6 +104,8 @@ module.exports = class PublishApp {
         this.log.debug('Creating temporary directory');
         try {
             mkdir.sync(this.path);
+            mkdir.sync(join(this.path, 'main'));
+            mkdir.sync(join(this.path, 'ie11'));
         } catch (err) {
             this.log.error('Unable to create temp dir');
             this.log.warn(err.message);
@@ -231,7 +233,7 @@ module.exports = class PublishApp {
             }
         } else {
             this.log.debug(
-                'JavaScript entrypoint not defined, skipping JS bundles',
+                'JavaScript entrypoint not defined, skipping JS bundling',
             );
         }
 
@@ -273,10 +275,26 @@ module.exports = class PublishApp {
 
                 return false;
             }
+        } else {
+            this.log.debug('CSS entrypoint not defined, skipping CSS bundling');
         }
 
         // create zip archive
         this.log.debug('Creating zip file');
+
+        const filesToZip = [];
+        if (this.js) {
+            filesToZip.push(
+                `main/index.js`,
+                `main/index.js.map`,
+                `ie11/index.js`,
+                `ie11/index.js.map`,
+            );
+        }
+        if (this.css) {
+            filesToZip.push(`main/index.css`, `main/index.css.map`);
+        }
+
         try {
             this.zipFile = join(this.path, `archive.tgz`);
 
@@ -286,14 +304,7 @@ module.exports = class PublishApp {
                     file: this.zipFile,
                     cwd: this.path,
                 },
-                [
-                    `main/index.js`,
-                    `main/index.js.map`,
-                    `ie11/index.js`,
-                    `ie11/index.js.map`,
-                    `main/index.css`,
-                    `main/index.css.map`,
-                ],
+                filesToZip,
             );
         } catch (err) {
             this.log.error('Unable to create zip file');
@@ -309,24 +320,28 @@ module.exports = class PublishApp {
 
         this.log.debug('Checking bundle file sizes');
         try {
-            const mainIndexJSSize = compressedSize(
-                fs.readFileSync(`${this.path}/main/index.js`, 'utf8'),
-            );
-            const ie11IndexJSSize = compressedSize(
-                fs.readFileSync(`${this.path}/ie11/index.js`, 'utf8'),
-            );
-            const mainIndexCSSSize = compressedSize(
-                fs.readFileSync(`${this.path}/main/index.css`, 'utf8'),
-            );
-            this.log.debug(
-                `  ==> Main index.js size: ${bytes(mainIndexJSSize)}`,
-            );
-            this.log.debug(
-                `  ==> ie11 index.js size: ${bytes(ie11IndexJSSize)}`,
-            );
-            this.log.debug(
-                `  ==> Main index.css size: ${bytes(mainIndexCSSSize)}`,
-            );
+            if (this.js) {
+                const mainIndexJSSize = compressedSize(
+                    fs.readFileSync(`${this.path}/main/index.js`, 'utf8'),
+                );
+                this.log.debug(
+                    `  ==> Main index.js size: ${bytes(mainIndexJSSize)}`,
+                );
+                const ie11IndexJSSize = compressedSize(
+                    fs.readFileSync(`${this.path}/ie11/index.js`, 'utf8'),
+                );
+                this.log.debug(
+                    `  ==> ie11 index.js size: ${bytes(ie11IndexJSSize)}`,
+                );
+            }
+            if (this.css) {
+                const mainIndexCSSSize = compressedSize(
+                    fs.readFileSync(`${this.path}/main/index.css`, 'utf8'),
+                );
+                this.log.debug(
+                    `  ==> Main index.css size: ${bytes(mainIndexCSSSize)}`,
+                );
+            }
         } catch (err) {
             this.log.debug('Failed to check bundle sizes');
             this.log.warn(err.message);
@@ -335,12 +350,16 @@ module.exports = class PublishApp {
         if (this.dryRun) {
             this.log.debug('Dry run files ready for upload to server:');
             this.log.debug(`  ==> ${this.zipFile}`);
-            this.log.debug(`  ==> ${this.path}/main/index.js`);
-            this.log.debug(`  ==> ${this.path}/main/index.js.map`);
-            this.log.debug(`  ==> ${this.path}/ie11/index.js`);
-            this.log.debug(`  ==> ${this.path}/ie11/index.js.map`);
-            this.log.debug(`  ==> ${this.path}/main/index.css`);
-            this.log.debug(`  ==> ${this.path}/main/index.css.map`);
+            if (this.js) {
+                this.log.debug(`  ==> ${this.path}/main/index.js`);
+                this.log.debug(`  ==> ${this.path}/main/index.js.map`);
+                this.log.debug(`  ==> ${this.path}/ie11/index.js`);
+                this.log.debug(`  ==> ${this.path}/ie11/index.js.map`);
+            }
+            if (this.css) {
+                this.log.debug(`  ==> ${this.path}/main/index.css`);
+                this.log.debug(`  ==> ${this.path}/main/index.css.map`);
+            }
             this.log.info(
                 `Published app package "${this.name}" at version "${this.version}" (dry run)`,
             );
