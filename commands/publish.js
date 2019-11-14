@@ -52,12 +52,12 @@ exports.builder = yargs => {
         js: {
             describe:
                 'Specify the path on local disk to JavaScript client side assets relative to the current working directory.',
-            default: assets.js.input,
+            default: assets.js && assets.js.input,
         },
         css: {
             describe:
                 'Specify the path on local disk to CSS client side assets relative to the current working directory.',
-            default: assets.css.input,
+            default: assets.css && assets.css.input,
         },
         name: {
             describe: 'Specify the app name.',
