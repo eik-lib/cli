@@ -22,7 +22,7 @@ async function sendCommand({
     }
 
     if (file) {
-        form.append('filedata', createReadStream(resolvePath(file).pathname));
+        form.append('package', createReadStream(resolvePath(file).pathname));
     }
 
     if (map) {
