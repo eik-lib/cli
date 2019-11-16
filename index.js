@@ -17,7 +17,7 @@ if (runningAsScript) {
     const { version } = JSON.parse(
         readFileSync(join(__dirname, './package.json')),
     );
-    const greeting = chalk.white.bold(`Asset Pipe CLI (v${version})`);
+    const greeting = chalk.white.bold(`Eik CLI (v${version})`);
 
     const boxenOptions = {
         padding: 1,
