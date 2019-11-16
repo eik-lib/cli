@@ -3,7 +3,7 @@
 const abslog = require('abslog');
 const semver = require('semver');
 const fs = require('fs');
-const { schemas, validators } = require('@asset-pipe/common');
+const { schemas, validators } = require('@eik/common');
 const { resolvePath } = require('../utils');
 
 module.exports = class Version {
