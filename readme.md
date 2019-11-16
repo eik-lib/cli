@@ -1,4 +1,4 @@
-# Asset Pipe V3 CLI
+# Eik V3 CLI
 
 ## Installation
 
@@ -116,12 +116,12 @@ In this way, no client side code will need to be updated to reflect this change 
 
 ### Using import maps to map "bare imports"
 
-Import maps are [an emerging standard](https://github.com/WICG/import-maps) and a way to map "bare imports" such as `foo` in the import statement `import { bar, baz } from 'foo'` to modules to be loaded. In Asset Pipe, we provide a way to upload import map files and to specify them for use in bundling. Doing so allows you to specify, across an organisation, a common set of shared modules whether they be `react` or `lit-html` or whatever.
+Import maps are [an emerging standard](https://github.com/WICG/import-maps) and a way to map "bare imports" such as `foo` in the import statement `import { bar, baz } from 'foo'` to modules to be loaded. With Eik, we provide a way to upload import map files and to specify them for use in bundling. Doing so allows you to specify, across an organisation, a common set of shared modules whether they be `react` or `lit-html` or whatever.
 
 Making use of import maps is as follows.
 
 1. Define an import map json file
-2. Use the asset pipe CLI to upload the import map to the server
+2. Use the Eik CLI to upload the import map to the server
 3. Specify the URL to your import map file(s) in your `assets.json` file
 4. Use the `publish` commands, your import maps will be used to map bare imports in your code to the URLs you have defined in your import maps
 
