@@ -2,7 +2,7 @@
 
 const abslog = require('abslog');
 const { join } = require('path');
-const { validators } = require('@asset-pipe/common');
+const { validators } = require('@eik/common');
 const { sendCommand } = require('../utils');
 
 module.exports = class Alias {

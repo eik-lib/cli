@@ -3,7 +3,7 @@
 const abslog = require('abslog');
 const { join, parse } = require('path');
 const { existsSync } = require('fs');
-const { validators } = require('@asset-pipe/common');
+const { validators } = require('@eik/common');
 const { sendCommand } = require('../../utils');
 
 module.exports = class PublishMap {

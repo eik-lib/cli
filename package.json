@@ -1,10 +1,10 @@
 {
-  "name": "@asset-pipe/cli",
+  "name": "@eik/cli",
   "version": "1.0.0-alpha.2",
   "description": "Cli tool for publishing assets",
   "main": "index.js",
   "bin": {
-    "asset-pipe": "index.js"
+    "eik": "index.js"
   },
   "scripts": {
     "test": "tap --timeout 60 test/*.test.js",
@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@asset-pipe/common": "^4.0.0-alpha.4",
+    "@eik/common": "^1.0.0-alpha.1",
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "@hapi/joi": "^16.1.7",
@@ -50,7 +50,7 @@
     "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "@asset-pipe/core": "1.0.0-alpha.4",
+    "@eik/core": "1.0.0-alpha.5",
     "eslint": "6.6.0",
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-config-prettier": "6.5.0",

@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-npm install -g @asset-pipe/cli
+npm install -g @eik/cli
 ```
 
 ## Quickstart guide
@@ -13,7 +13,7 @@ npm install -g @asset-pipe/cli
 Generate an assets.json file in the current directory
 
 ```sh
-asset-pipe init
+eik init
 ```
 
 Fill in the generated `assets.json` file with the necessary details.
@@ -30,7 +30,7 @@ Eg. if you have a `scripts.js` file in an assets directory, the `js.input` value
 Run publish to publish your assets to the server
 
 ```sh
-asset-pipe publish
+eik publish
 ```
 
 For subsequent publishes, you will need to version your `asset.json` file before publishing again
@@ -40,7 +40,7 @@ new previously unpublished `version`. You should adhere to `semver` using a vers
 Eg. To bump the version from `1.0.0` to `1.0.1` you can use the version patch command like so:
 
 ```sh
-asset-pipe version patch
+eik version patch
 ```
 
 ## Additional tasks
@@ -61,7 +61,7 @@ You might decide that all teams across your organisation should use the same ver
 To do so you would run:
 
 ```sh
-asset-pipe dependency lodash 4.17.15
+eik dependency lodash 4.17.15
 ```
 
 After running this, an esm friendly version of lodash will be available at the url:
@@ -89,7 +89,7 @@ Taking the previous example 1 step further, before we saw that we could globally
 We can now set a major semver alias for this version:
 
 ```sh
-asset-pipe alias lodash 4.15.15 4
+eik alias lodash 4.15.15 4
 ```
 
 We can now change our import statement to:
@@ -103,13 +103,13 @@ and everything will work as before.
 When a new version of lodash comes out, we can create a global dependency for it as before:
 
 ```sh
-asset-pipe dependency lodash 4.17.16
+eik dependency lodash 4.17.16
 ```
 
 And then create a major semver alias for the new version like so:
 
 ```sh
-asset-pipe alias lodash 4.15.16 4
+eik alias lodash 4.15.16 4
 ```
 
 In this way, no client side code will need to be updated to reflect this change and it is considerably easier for multiple teams to stay in sync, using the same global shared dependency
@@ -141,7 +141,7 @@ Given the following import map file `import-map.json`
 The following command will upload the import map file `./import-map.json` in the current directory using the name `my-import-map` and the version `1.0.0`
 
 ```sh
-asset-pipe --org finn map my-import-map 1.0.0 ./import-map.json
+eik --org finn map my-import-map 1.0.0 ./import-map.json
 ```
 
 Given the following line now added to `assets.json`
@@ -152,7 +152,7 @@ Given the following line now added to `assets.json`
 }
 ```
 
-When we run `asset-pipe publish` any "bare imports" refering to either `lit-html` or `lodash` will be mapped to the URLs in our map.
+When we run `eik publish` any "bare imports" refering to either `lit-html` or `lodash` will be mapped to the URLs in our map.
 
 In this way, you can control which version of `react` or `lit-html` or `lodash` all the apps in your organisation are using. In combination with package `alias` URLs you have a powerful way to manage key shared dependencies for your apps in production without the need to redeploy or rebundle when a new version of a dependency is released.
 
@@ -164,7 +164,7 @@ returns information in JSON format.
 #### Example
 
 ```sh
-asset-pipe meta lodash 4.17.16
+eik meta lodash 4.17.16
 ```
 
 ## API Documentation
@@ -246,7 +246,7 @@ Names may contain any letters or numbers as well as the `-` and `_` characters.
 
 All asset uploads are unique by organisation, name and version. It is not possible to republish the same app with the same version in the same organisation. In order to publish a new version of an asset, the version number must first be incremented. When publishing an asset from npm, the version of the package comes from the packages `package.json` version field. When publishing assets for your own app, the version comes from the version specified in `assets.json`. In both cases, versions comply with semver.
 
-The `version` property in `assets.json` starts at `1.0.0` by convention and should be incremented as you see fit either manually or by using the `asset-pipe version major|minor|patch` command.
+The `version` property in `assets.json` starts at `1.0.0` by convention and should be incremented as you see fit either manually or by using the `eik version major|minor|patch` command.
 
 Either way, when you attempt to republish a package with the same version, publishing will fail and you will need to update the version field before trying again.
 
@@ -313,7 +313,7 @@ This command updates the `version` field of an `assets.json` file in the current
 The command takes the form:
 
 ```sh
-asset-pipe version major|minor|patch [optional arguments]
+eik version major|minor|patch [optional arguments]
 ```
 
 **Examples**
@@ -321,19 +321,19 @@ asset-pipe version major|minor|patch [optional arguments]
 _Increase the version's semver major by 1_
 
 ```bash
-asset-pipe version major
+eik version major
 ```
 
 _Increase the version's semver minor by 1_
 
 ```bash
-asset-pipe version minor
+eik version minor
 ```
 
 _Increase the version's semver patch by 1_
 
 ```bash
-asset-pipe version patch
+eik version patch
 ```
 
 #### publish
@@ -343,7 +343,7 @@ This command publishes the app's client side assets to the asset server based on
 The command takes the form:
 
 ```sh
-asset-pipe publish [optional arguments]
+eik publish [optional arguments]
 ```
 
 **Example**
@@ -351,7 +351,7 @@ asset-pipe publish [optional arguments]
 _Publishing app assets to server_
 
 ```bash
-asset-pipe publish
+eik publish
 ```
 
 #### dependency
@@ -363,7 +363,7 @@ _Note_ The arguments `server`, `organisation` and `import-map` are taken from `a
 The command takes the form:
 
 ```sh
-asset-pipe dependency [optional arguments] <name> <version>
+eik dependency [optional arguments] <name> <version>
 ```
 
 **Example**
@@ -371,8 +371,8 @@ asset-pipe dependency [optional arguments] <name> <version>
 _Publishing a dependency from npm_
 
 ```bash
-asset-pipe dependency lit-html 1.1.2
-# asset-pipe dependency --server http://localhost:4001 --org finn --map http://localhost:4001/finn/map/my-import-map/1.0.0 lit-html 1.1.2
+eik dependency lit-html 1.1.2
+# eik dependency --server http://localhost:4001 --org finn --map http://localhost:4001/finn/map/my-import-map/1.0.0 lit-html 1.1.2
 ```
 
 #### alias
@@ -384,7 +384,7 @@ _Note_ The arguments `server` and `organisation` are taken from `assets.json` if
 The command takes the form:
 
 ```sh
-asset-pipe alias [optional arguments] <name> <version> <alias>
+eik alias [optional arguments] <name> <version> <alias>
 ```
 
 _Example_
@@ -392,8 +392,8 @@ _Example_
 Running the following command...
 
 ```bash
-asset-pipe alias lit-html 1.1.2 1
-# asset-pipe alias --server http://localhost:4001 --org finn lit-html 1.1.2 1
+eik alias lit-html 1.1.2 1
+# eik alias --server http://localhost:4001 --org finn lit-html 1.1.2 1
 ```
 
 ...will create or update the `lit-html` alias `1` to point at `lit-html` version `1.1.2`
@@ -416,12 +416,12 @@ _Note_ The arguments `server` and `organisation` are taken from `assets.json` if
 The command takes the form:
 
 ```sh
-asset-pipe map [optional arguments] <name> <version> <path to file>
+eik map [optional arguments] <name> <version> <path to file>
 ```
 
 ```bash
-asset-pipe map my-import-map 1.0.0 ./import-map.json
-# asset-pipe map --server http://localhost:4001 --org finn my-import-map 1.0.0 ./import-map.json
+eik map my-import-map 1.0.0 ./import-map.json
+# eik map --server http://localhost:4001 --org finn my-import-map 1.0.0 ./import-map.json
 ```
 
 #### meta
@@ -431,7 +431,7 @@ This command fetches and displays meta information about a package from the serv
 The command takes the form:
 
 ```sh
-asset-pipe meta [optional arguments] <name> <version>
+eik meta [optional arguments] <name> <version>
 ```
 
 _Example_
@@ -439,8 +439,8 @@ _Example_
 Running the following command...
 
 ```bash
-asset-pipe meta lit-html 1.1.2
-# asset-pipe meta --server http://localhost:4001 --org finn lit-html 1.1.2
+eik meta lit-html 1.1.2
+# eik meta --server http://localhost:4001 --org finn lit-html 1.1.2
 ```
 
 Will print meta information about the package `lit-html` version `1.1.2` in JSON format.
@@ -452,7 +452,7 @@ All of the commands described above can be used programmatically by importing th
 ### init
 
 ```js
-const cli = require('@asset-pipe/cli');
+const cli = require('@eik/cli');
 const result = await new cli.Init(options).run();
 ```
 
@@ -472,7 +472,7 @@ const result = await new cli.Init(options).run();
 ### version
 
 ```js
-const cli = require('@asset-pipe/cli');
+const cli = require('@eik/cli');
 const result = await new cli.Version(options).run();
 ```
 
@@ -487,7 +487,7 @@ const result = await new cli.Version(options).run();
 ### publish
 
 ```js
-const cli = require('@asset-pipe/cli');
+const cli = require('@eik/cli');
 const result = await new cli.publish.App(options).run();
 ```
 
@@ -509,7 +509,7 @@ const result = await new cli.publish.App(options).run();
 ### dependency
 
 ```js
-const cli = require('@asset-pipe/cli');
+const cli = require('@eik/cli');
 const result = await new cli.publish.Dependency(options).run();
 ```
 
@@ -529,7 +529,7 @@ const result = await new cli.publish.Dependency(options).run();
 ### map
 
 ```js
-const cli = require('@asset-pipe/cli');
+const cli = require('@eik/cli');
 const result = await new cli.publish.Map(options).run();
 ```
 
@@ -548,7 +548,7 @@ const result = await new cli.publish.Map(options).run();
 ### alias
 
 ```js
-const cli = require('@asset-pipe/cli');
+const cli = require('@eik/cli');
 const result = await new cli.Alias(options).run();
 ```
 
@@ -567,7 +567,7 @@ const result = await new cli.Alias(options).run();
 ### meta
 
 ```js
-const cli = require('@asset-pipe/cli');
+const cli = require('@eik/cli');
 const result = await new cli.Meta(options).run();
 ```
 

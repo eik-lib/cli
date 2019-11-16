@@ -1,8 +1,8 @@
 'use strict';
 
 const { test } = require('tap');
-const { sink } = require('@asset-pipe/core');
-const Server = require('@asset-pipe/core/services/fastify');
+const { sink } = require('@eik/core');
+const Server = require('@eik/core/services/fastify');
 const cli = require('../');
 const { mockLogger } = require('./utils');
 

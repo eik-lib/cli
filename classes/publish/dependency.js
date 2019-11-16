@@ -16,7 +16,7 @@ const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 const { execSync } = require('child_process');
 const { writeFileSync, existsSync } = require('fs');
 const { join, dirname, parse } = require('path');
-const { validators } = require('@asset-pipe/common');
+const { validators } = require('@eik/common');
 const rimraf = require('rimraf');
 const { sendCommand } = require('../../utils');
 
