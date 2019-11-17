@@ -2,14 +2,13 @@
 
 const { test } = require('tap');
 const { sink } = require('@eik/core');
-const Server = require('@eik/core/services/fastify');
 const cli = require('../');
-const { mockLogger } = require('./utils');
+const { mockLogger, MockFastifyService } = require('./utils');
 
 test('Creating a package alias on an asset server', async t => {
     const l = mockLogger();
     const memSink = new sink.MEM();
-    const server = new Server({ customSink: memSink, port: 0 });
+    const server = new MockFastifyService({ customSink: memSink, port: 0 });
     await server.start();
     const { port } = server.app.server.address();
 
@@ -40,7 +39,7 @@ test('Creating a package alias on an asset server', async t => {
 test('Creating a map alias on an asset server', async t => {
     const l = mockLogger();
     const memSink = new sink.MEM();
-    const server = new Server({ customSink: memSink, port: 0 });
+    const server = new MockFastifyService({ customSink: memSink, port: 0 });
     await server.start();
     const { port } = server.app.server.address();
 
