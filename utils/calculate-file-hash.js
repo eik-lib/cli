@@ -11,6 +11,6 @@ module.exports = path =>
 
         pipeline(file, hash, error => {
             if (error) return reject(error);
-            return resolve(hash.digest('base64'));
+            return resolve(`sha512-${hash.digest('base64')}`);
         });
     });

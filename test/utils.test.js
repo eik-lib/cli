@@ -12,7 +12,7 @@ test('calculate file hash', async t => {
     );
     t.equal(
         hash,
-        '7y37q0qk5mDqzHrGvJAR9J8kPX+orJhuO+KrCTKw11ZKRI/5udUuKt2Zb/thH5H39OQYrvnHTLbZS9ShG/lGCg==',
+        'sha512-7y37q0qk5mDqzHrGvJAR9J8kPX+orJhuO+KrCTKw11ZKRI/5udUuKt2Zb/thH5H39OQYrvnHTLbZS9ShG/lGCg==',
         'returned hash should match',
     );
 });
@@ -39,7 +39,11 @@ test('calculate files hash', async t => {
     hasher.update(fileHash2);
     hasher.update(fileHash3);
 
-    t.equal(hash, hasher.digest('base64'), 'returned hash should match');
+    t.equal(
+        hash,
+        `sha512-${hasher.digest('base64')}`,
+        'returned hash should match',
+    );
 });
 
 test('compare hashes - true', async t => {
@@ -251,6 +255,8 @@ test('fetch remote hash for a given version', async t => {
     const server = fastify();
     server.get('/finn/pkg/foo/1.0.0', async () => {
         return {
+            integrity:
+                'sha512-36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==',
             files: [
                 {
                     integrity:
@@ -264,11 +270,11 @@ test('fetch remote hash for a given version', async t => {
         };
     });
     const address = await server.listen();
-    const result = await u.fetchRemoteHash(address, 'finn', 'foo', '1.0.0');
+    const result = await u.fetchPackageMeta(address, 'finn', 'foo', '1.0.0');
 
     t.equal(
-        result,
-        '36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==',
+        result.integrity,
+        'sha512-36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==',
         'should return correct hash',
     );
     await server.close();

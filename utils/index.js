@@ -9,7 +9,7 @@ const calculateFileHash = require('./calculate-file-hash');
 const calculateFilesHash = require('./calculate-files-hash');
 const compareHashes = require('./compare-hashes');
 const fetchLatestVersion = require('./fetch-latest-version');
-const fetchRemoteHash = require('./fetch-remote-hash');
+const fetchPackageMeta = require('./fetch-package-meta');
 const incrementSemverVersion = require('./increment-semver-version');
 
 module.exports = {
@@ -22,6 +22,6 @@ module.exports = {
     calculateFilesHash,
     compareHashes,
     fetchLatestVersion,
-    fetchRemoteHash,
+    fetchPackageMeta,
     incrementSemverVersion,
 };
