@@ -2,12 +2,15 @@
 
 const crypto = require('crypto');
 const fs = require('fs');
+const { pipeline } = require('stream');
 
 module.exports = path =>
     new Promise((resolve, reject) => {
         const hash = crypto.createHash('sha512');
-        const rs = fs.createReadStream(path);
-        rs.on('error', reject);
-        rs.on('data', chunk => hash.update(chunk));
-        rs.on('end', () => resolve(hash.digest('base64')));
+        const file = fs.createReadStream(path);
+
+        pipeline(file, hash, error => {
+            if (error) return reject(error);
+            return resolve(hash.digest('base64'));
+        });
     });
