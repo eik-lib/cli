@@ -11,6 +11,7 @@ const compareHashes = require('./compare-hashes');
 const fetchLatestVersion = require('./fetch-latest-version');
 const fetchPackageMeta = require('./fetch-package-meta');
 const incrementSemverVersion = require('./increment-semver-version');
+const writeMetaFile = require('./write-meta-file');
 
 module.exports = {
     resolvePath,
@@ -24,4 +25,5 @@ module.exports = {
     fetchLatestVersion,
     fetchPackageMeta,
     incrementSemverVersion,
+    writeMetaFile,
 };

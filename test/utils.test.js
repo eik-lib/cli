@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const crypto = require('crypto');
 const { join } = require('path');
 const { test } = require('tap');
@@ -278,4 +279,14 @@ test('fetch remote hash for a given version', async t => {
         'should return correct hash',
     );
     await server.close();
+});
+
+test('write meta file', async t => {
+    const path = join(__dirname, 'tmp', '.eikrc');
+    await u.writeMetaFile({ path, version: '1.0.0', integrity: [] });
+    const eikrc = fs.readFileSync(path);
+    const { version, integrity } = JSON.parse(eikrc);
+
+    t.equal(version, '1.0.0', 'Version should be 1.0.0');
+    t.same(integrity, [], 'Integrity should be an array');
 });
