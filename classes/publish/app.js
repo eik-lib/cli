@@ -21,8 +21,16 @@ const postcss = require('postcss');
 const fs = require('fs');
 const cssnano = require('cssnano');
 const rimraf = require('rimraf');
-const { sendCommand } = require('../../utils');
-const compressedSize = require('../../utils/compressed-size');
+const {
+    compressedSize,
+    sendCommand,
+    compareHashes,
+    fetchLatestVersion,
+    fetchPackageMeta,
+    calculateLocalHash,
+    incrementSemverVersion,
+    writeMetaFile,
+} = require('../../utils');
 
 module.exports = class PublishApp {
     constructor({
@@ -31,7 +39,8 @@ module.exports = class PublishApp {
         server,
         org,
         name,
-        version,
+        major,
+        level = 'patch',
         map = [],
         js,
         css,
@@ -42,12 +51,13 @@ module.exports = class PublishApp {
         this.server = server;
         this.org = org;
         this.name = name;
-        this.version = version;
+        this.major = major;
+        this.level = level;
         this.map = map;
         this.js = js;
         this.css = css;
         this.dryRun = dryRun;
-        this.path = join(tempDir, `publish-${name}-${version}-${Date.now()}`);
+        this.path = join(tempDir, `publish-${name}-${major}-${Date.now()}`);
     }
 
     async run() {
@@ -71,7 +81,7 @@ module.exports = class PublishApp {
         try {
             validators.org(this.org);
             validators.name(this.name);
-            validators.version(this.version);
+            // validators.version(this.version);
         } catch (err) {
             this.log.error(err.message);
             return false;
@@ -362,9 +372,84 @@ module.exports = class PublishApp {
                 this.log.debug(`  ==> ${this.path}/main/index.css`);
                 this.log.debug(`  ==> ${this.path}/main/index.css.map`);
             }
-            this.log.info(
-                `Published app package "${this.name}" at version "${this.version}" (dry run)`,
+            this.log.info(`Published app package "${this.name}" (dry run)`);
+            return true;
+        }
+
+        this.log.debug(
+            'Calculating latest version for package. Fetching previous version information from server.',
+        );
+        let version;
+        try {
+            version = await fetchLatestVersion(
+                this.server,
+                this.org,
+                this.name,
+                this.major,
             );
+
+            if (!version) {
+                version = [`${this.major || '1'}`, '0', '0'].join('.');
+            } else {
+                version = incrementSemverVersion(version, this.level);
+            }
+        } catch (err) {
+            this.log.error('Unable to calculate latest version for package');
+            this.log.warn(err.message);
+        }
+
+        this.log.debug('Fetching package metadata from server.');
+        let meta;
+        try {
+            meta = await fetchPackageMeta(
+                this.server,
+                this.org,
+                this.name,
+                version,
+            );
+        } catch (err) {
+            this.log.error('Unable to fetch package metadata from server');
+            this.log.warn(err.message);
+        }
+
+        this.log.debug('Hashing local files for comparison with server');
+
+        let localHash;
+        try {
+            const localFiles = [];
+            if (this.js) {
+                localFiles.push(
+                    join(this.path, 'main', 'index.js'),
+                    join(this.path, 'main', 'index.js.map'),
+                    join(this.path, 'ie11', 'index.js'),
+                    join(this.path, 'ie11', 'index.js.map'),
+                );
+            }
+            if (this.css) {
+                localFiles.push(
+                    join(this.path, 'main', 'index.css'),
+                    join(this.path, 'main', 'index.css.map'),
+                );
+            }
+            localHash = await calculateLocalHash(localFiles);
+        } catch (err) {
+            this.log.error('Unable to hash local files for comparison');
+            this.log.warn(err.message);
+        }
+
+        const same = compareHashes(meta.integrity, localHash);
+
+        if (same) {
+            this.log.warn(
+                `The current version of this package already contains these files, publishing is not necessary.`,
+            );
+
+            this.log.debug('Cleaning up');
+
+            if (fs.existsSync(this.path)) {
+                rimraf.sync(this.path);
+            }
+
             return true;
         }
 
@@ -374,7 +459,7 @@ module.exports = class PublishApp {
             const { message } = await sendCommand({
                 method: 'PUT',
                 host: this.server,
-                pathname: join(this.org, 'pkg', this.name, this.version),
+                pathname: join(this.org, 'pkg', this.name, version),
                 file: this.zipFile,
             });
 
@@ -397,7 +482,7 @@ module.exports = class PublishApp {
                     break;
                 case 409:
                     this.log.warn(
-                        `Package with name "${this.name}" and version "${this.version}" already exists on server`,
+                        `Package with name "${this.name}" and version "${version}" already exists on server`,
                     );
                     break;
                 case 415:
@@ -420,13 +505,21 @@ module.exports = class PublishApp {
             return false;
         }
 
+        this.log.debug('Saving .eikrc metafile.');
+        try {
+            await writeMetaFile({ version, integrity: [] });
+        } catch (err) {
+            this.log.error('Unable to save .eikrc metafile.');
+            this.log.warn(err.message);
+        }
+
         this.log.debug('Cleaning up');
         if (fs.existsSync(this.path)) {
             rimraf.sync(this.path);
         }
 
         this.log.info(
-            `Published app package "${this.name}" at version "${this.version}"`,
+            `Published app package "${this.name}" at version "${version}"`,
         );
         return true;
     }
