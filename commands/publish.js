@@ -2,7 +2,7 @@
 
 const ora = require('ora');
 const { readFileSync } = require('fs');
-const PublishApp = require('../classes/publish/app');
+const PublishApp = require('../classes/publish/app/index');
 const { resolvePath, logger } = require('../utils');
 
 exports.command = 'publish';

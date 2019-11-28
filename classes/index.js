@@ -5,7 +5,7 @@ const Version = require('./version');
 const Alias = require('./alias');
 const Meta = require('./meta');
 const PublishMap = require('./publish/map');
-const PublishApp = require('./publish/app');
+const PublishApp = require('./publish/app/index');
 const PublishDependency = require('./publish/dependency');
 
 module.exports = {
