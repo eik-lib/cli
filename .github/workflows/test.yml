@@ -1,9 +1,6 @@
-name: Push To Master
+name: Run Lint and Tests
 
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
   build:
@@ -11,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        node-version: [10.x, 12.x]
+        node-version: [10.x, 12.x, 13.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
@@ -23,7 +20,7 @@ jobs:
           npm install
         env:
           CI: true
-      - name: Run linting and tests
+      - name: Run tests
         run: |
           npm run lint && npm test
         env:
