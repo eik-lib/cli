@@ -11,7 +11,12 @@ module.exports = class UploadFiles {
             const { message } = await sendCommand({
                 method: 'PUT',
                 host: server,
-                pathname: join(org, 'pkg', name, nextVersion),
+                pathname: join(
+                    org,
+                    'pkg',
+                    encodeURIComponent(name),
+                    nextVersion,
+                ),
                 file: zipFile,
             });
 

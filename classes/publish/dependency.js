@@ -274,7 +274,12 @@ module.exports = class PublishDependency {
             const { message } = await sendCommand({
                 method: 'PUT',
                 host: this.server,
-                pathname: join(this.org, 'pkg', this.name, this.version),
+                pathname: join(
+                    this.org,
+                    'pkg',
+                    encodeURIComponent(this.name),
+                    this.version,
+                ),
                 file: this.zipFile,
             });
 
