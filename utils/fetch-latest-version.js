@@ -5,7 +5,6 @@ const fetch = require('node-fetch');
 
 module.exports = async (server, org, name, major) => {
     const res = await fetch(`${server}/${join(org, 'pkg', name)}`);
-
     if (!res.ok) {
         if (res.status === 404) {
             return null;
@@ -39,7 +38,7 @@ module.exports = async (server, org, name, major) => {
     }
 
     try {
-        const entry = versions.get(major || highestMajor);
+        const entry = versions.get(Number(major || highestMajor));
         return entry.version;
     } catch (err) {
         return null;

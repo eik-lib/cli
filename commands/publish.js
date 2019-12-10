@@ -73,9 +73,10 @@ exports.builder = yargs => {
             default: assets.major,
         },
         level: {
+            alias: 'l',
             describe:
                 'Specify the app semver level to use when updating the package.',
-            default: assets.level,
+            default: 'patch',
         },
     });
 };

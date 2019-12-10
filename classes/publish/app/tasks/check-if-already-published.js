@@ -13,6 +13,8 @@ module.exports = class CheckIfAlreadyPublished {
 
         log.debug('Fetching package metadata from server.');
 
+        if (!currentVersion) return state;
+
         let meta;
         try {
             meta = await fetchPackageMeta(server, org, name, currentVersion);

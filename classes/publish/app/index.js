@@ -78,6 +78,8 @@ module.exports = class PublishApp {
 
         this.cleanup.process(this);
 
+        this.log.info(`Done!`);
+
         return true;
     }
 };
