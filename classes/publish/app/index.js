@@ -78,7 +78,13 @@ module.exports = class PublishApp {
 
         this.cleanup.process(this);
 
-        this.log.info(`Done!`);
+        if (this.dryRun) {
+            this.log.info(
+                `Done! Dry run for version "${this.nextVersion}" completed`,
+            );
+        } else {
+            this.log.info(`Done! Version "${this.nextVersion}" published`);
+        }
 
         return true;
     }
