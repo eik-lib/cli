@@ -4,9 +4,14 @@ const { join } = require('path');
 const fetch = require('node-fetch');
 
 module.exports = async (server, org, name, version) => {
-    const res = await fetch(`${server}/${join(org, 'pkg', name, version)}`);
+    const url = `${server}/${join(org, 'pkg', name, version)}`;
+
+    const res = await fetch(url);
 
     if (!res.ok) {
+        if (res.status === 404) {
+            return null;
+        }
         throw new Error('Server responded with non 200 status code.');
     }
 

@@ -17,9 +17,11 @@ module.exports = class FetchVersion {
             const version = await fetchLatestVersion(server, org, name, major);
 
             if (!version) {
-                state.version = [`${major || '1'}`, '0', '0'].join('.');
+                state.currentVersion = null;
+                state.nextVersion = [`${major || '1'}`, '0', '0'].join('.');
             } else {
-                state.version = incrementSemverVersion(version, level);
+                state.currentVersion = version;
+                state.nextVersion = incrementSemverVersion(version, level);
             }
         } catch (err) {
             throw new Error(

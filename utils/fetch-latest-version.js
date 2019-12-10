@@ -7,6 +7,9 @@ module.exports = async (server, org, name, major) => {
     const res = await fetch(`${server}/${join(org, 'pkg', name)}`);
 
     if (!res.ok) {
+        if (res.status === 404) {
+            return null;
+        }
         throw new Error('Server responded with non 200 status code.');
     }
 
@@ -35,13 +38,10 @@ module.exports = async (server, org, name, major) => {
         );
     }
 
-    let latest;
     try {
         const entry = versions.get(major || highestMajor);
-        latest = entry.latest;
+        return entry.version;
     } catch (err) {
         return null;
     }
-
-    return latest;
 };

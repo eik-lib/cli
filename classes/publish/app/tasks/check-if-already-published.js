@@ -4,23 +4,25 @@ const { join } = require('path');
 const {
     compareHashes,
     fetchPackageMeta,
-    calculateLocalHash,
+    calculateFilesHash,
 } = require('../../../../utils');
 
 module.exports = class CheckIfAlreadyPublished {
     async process(state = {}) {
-        const { log, server, org, name, version, path, js, css } = state;
+        const { log, server, org, name, currentVersion, path, js, css } = state;
 
         log.debug('Fetching package metadata from server.');
 
         let meta;
         try {
-            meta = await fetchPackageMeta(server, org, name, version);
+            meta = await fetchPackageMeta(server, org, name, currentVersion);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
             );
         }
+
+        if (!meta) return state;
 
         log.debug('Hashing local files for comparison with server');
 
@@ -41,7 +43,7 @@ module.exports = class CheckIfAlreadyPublished {
                     join(path, 'main', 'index.css.map'),
                 );
             }
-            localHash = await calculateLocalHash(localFiles);
+            localHash = await calculateFilesHash(localFiles);
         } catch (err) {
             throw new Error(
                 `Unable to hash local files for comparison: ${err.message}`,
