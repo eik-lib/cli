@@ -10,7 +10,7 @@ module.exports = class Init {
         cwd = process.cwd(),
         org = '',
         name = '',
-        version = '1.0.0',
+        major = '',
         server = '',
         js = '',
         css = '',
@@ -20,7 +20,7 @@ module.exports = class Init {
         this.pathname = resolvePath('./assets.json', this.cwd).pathname;
         this.org = org;
         this.name = name;
-        this.version = version;
+        this.major = major;
         this.server = server;
         this.js = { input: js, options: {} };
         this.css = { input: css, options: {} };
@@ -47,7 +47,7 @@ module.exports = class Init {
                     {
                         organisation: this.org,
                         name: this.name,
-                        version: this.version,
+                        major: this.major,
                         server: this.server,
                         js: this.js,
                         css: this.css,
