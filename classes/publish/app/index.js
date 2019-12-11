@@ -80,10 +80,12 @@ module.exports = class PublishApp {
 
         if (this.dryRun) {
             this.log.info(
-                `Done! Dry run for version "${this.nextVersion}" completed`,
+                `Dry run for app package "${this.name}" at version "${this.nextVersion}" completed`,
             );
         } else {
-            this.log.info(`Done! Version "${this.nextVersion}" published`);
+            this.log.info(
+                `Published app package "${this.name}" at version "${this.nextVersion}"`,
+            );
         }
 
         return true;

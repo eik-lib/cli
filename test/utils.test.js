@@ -127,10 +127,9 @@ test('fetch latest version for a given published bundle', async t => {
     const server = fastify();
     server.get('/finn/pkg/foo', async () => {
         return {
-            latest: { major: 2, latest: '2.1.8' },
             versions: [
-                [1, { latest: '1.3.2' }],
-                [2, { latest: '2.1.8' }],
+                [1, { version: '1.3.2' }],
+                [2, { version: '2.1.8' }],
             ],
         };
     });
@@ -147,10 +146,9 @@ test('fetch latest version, filtered by major, for a given published bundle', as
     const server = fastify();
     server.get('/finn/pkg/foo', async () => {
         return {
-            latest: { major: 2, latest: '2.1.8' },
             versions: [
-                [1, { latest: '1.3.2' }],
-                [2, { latest: '2.1.8' }],
+                [1, { version: '1.3.2' }],
+                [2, { version: '2.1.8' }],
             ],
         };
     });
