@@ -46,6 +46,8 @@ module.exports = class CheckIfAlreadyPublished {
                 );
             }
             localHash = await calculateFilesHash(localFiles);
+            // eslint-disable-next-line no-param-reassign
+            state.integrity = localHash;
         } catch (err) {
             throw new Error(
                 `Unable to hash local files for comparison: ${err.message}`,

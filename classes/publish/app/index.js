@@ -13,6 +13,7 @@ const DryRun = require('./tasks/dry-run');
 const FetchVersion = require('./tasks/fetch-version');
 const CheckIfAlreadyPublished = require('./tasks/check-if-already-published');
 const UploadFiles = require('./tasks/upload-files');
+const SaveMetafile = require('./tasks/save-metafile');
 const Cleanup = require('./tasks/cleanup');
 
 module.exports = class PublishApp {
@@ -51,6 +52,7 @@ module.exports = class PublishApp {
         this.fetchVersion = new FetchVersion();
         this.checkIfAlreadyPublished = new CheckIfAlreadyPublished();
         this.uploadFiles = new UploadFiles();
+        this.saveMetafile = new SaveMetafile();
         this.cleanup = new Cleanup();
     }
 
@@ -70,6 +72,7 @@ module.exports = class PublishApp {
                 await this.runDryRun.process(this);
             } else {
                 await this.uploadFiles.process(this);
+                await this.saveMetafile.process(this);
             }
         } catch (err) {
             this.log.error(err.message);
