@@ -12,8 +12,13 @@ exports.aliases = ['a'];
 exports.describe = `Create a semver major alias for an import map or package as identified by its name and version.`;
 
 exports.builder = yargs => {
-    const assetsPath = resolvePath('./assets.json').pathname;
-    const assets = JSON.parse(readFileSync(assetsPath));
+    let assets = {};
+    try {
+        const assetsPath = resolvePath('./assets.json').pathname;
+        assets = JSON.parse(readFileSync(assetsPath));
+    } catch (err) {
+        // noop
+    }
 
     yargs
         .positional('type', {

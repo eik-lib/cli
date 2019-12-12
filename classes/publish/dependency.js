@@ -13,6 +13,8 @@ const rollupReplace = require('rollup-plugin-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
+// eslint-disable-next-line import/no-unresolved
+const json = require('@rollup/plugin-json');
 const { execSync } = require('child_process');
 const { writeFileSync, existsSync } = require('fs');
 const { join, dirname, parse } = require('path');
@@ -183,6 +185,7 @@ module.exports = class PublishDependency {
             const options = {
                 onwarn: () => {},
                 plugins: [
+                    json(),
                     esmImportToUrl({ imports: this.imports }),
                     resolve(),
                     commonjs({ include: /node_modules/ }),
@@ -274,7 +277,12 @@ module.exports = class PublishDependency {
             const { message } = await sendCommand({
                 method: 'PUT',
                 host: this.server,
-                pathname: join(this.org, 'pkg', this.name, this.version),
+                pathname: join(
+                    this.org,
+                    'pkg',
+                    encodeURIComponent(this.name),
+                    this.version,
+                ),
                 file: this.zipFile,
             });
 

@@ -20,13 +20,8 @@ test('Initializing a new assets.json file', async t => {
     );
 
     t.equals(result, true, 'Command should return true');
-
     t.equals(assets.name, '', 'assets.json "name" field should be empty');
-    t.equals(
-        assets.version,
-        '1.0.0',
-        'assets.json "version" field should not be empty',
-    );
+    t.equals(assets.major, '', 'assets.json "major" field should be empty');
     t.equals(
         assets.organisation,
         '',
@@ -61,7 +56,7 @@ test('Initializing a new assets.json file passing custom values', async t => {
         cwd: join(__dirname, 'tmp'),
         org: 'custom-org',
         name: 'custom-name',
-        version: '0.0.1',
+        major: '1',
         server: 'http://localhost:4001',
         js: './assets/client.js',
         css: './assets/styles.css',
@@ -80,9 +75,9 @@ test('Initializing a new assets.json file passing custom values', async t => {
         'assets.json "name" field should not be empty',
     );
     t.equals(
-        assets.version,
-        '0.0.1',
-        'assets.json "version" field should not be empty',
+        assets.major,
+        '1',
+        'assets.json "major" field should not be empty',
     );
     t.equals(
         assets.organisation,

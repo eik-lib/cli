@@ -2,7 +2,7 @@
 
 const ora = require('ora');
 const { readFileSync } = require('fs');
-const PublishApp = require('../classes/publish/app');
+const PublishApp = require('../classes/publish/app/index');
 const { resolvePath, logger } = require('../utils');
 
 exports.command = 'publish';
@@ -12,8 +12,13 @@ exports.aliases = ['p', 'pub'];
 exports.describe = `Publish an apps dependencies based on local assets.json file.`;
 
 exports.builder = yargs => {
-    const assetsPath = resolvePath('./assets.json').pathname;
-    const assets = JSON.parse(readFileSync(assetsPath));
+    let assets = {};
+    try {
+        const assetsPath = resolvePath('./assets.json').pathname;
+        assets = JSON.parse(readFileSync(assetsPath));
+    } catch (err) {
+        // noop
+    }
 
     yargs.options({
         server: {
@@ -63,9 +68,15 @@ exports.builder = yargs => {
             describe: 'Specify the app name.',
             default: assets.name,
         },
-        version: {
-            describe: 'Specify the app version.',
-            default: assets.version,
+        major: {
+            describe: 'Major semver version to lock updates to.',
+            default: assets.major,
+        },
+        level: {
+            alias: 'l',
+            describe:
+                'Specify the app semver level to use when updating the package.',
+            default: 'patch',
         },
     });
 };

@@ -12,8 +12,13 @@ exports.aliases = ['dep', 'd'];
 exports.describe = `Publish an NPM package to server by given name and version.`;
 
 exports.builder = yargs => {
-    const assetsPath = resolvePath('./assets.json').pathname;
-    const assets = JSON.parse(readFileSync(assetsPath));
+    let assets = {};
+    try {
+        const assetsPath = resolvePath('./assets.json').pathname;
+        assets = JSON.parse(readFileSync(assetsPath));
+    } catch (err) {
+        // noop
+    }
 
     yargs
         .positional('name', {
