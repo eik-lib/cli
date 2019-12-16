@@ -56,7 +56,7 @@
     "eslint-config-airbnb-base": "14.0.0",
     "eslint-config-prettier": "6.7.0",
     "eslint-plugin-import": "2.19.1",
-    "eslint-plugin-prettier": "3.1.1",
+    "eslint-plugin-prettier": "3.1.2",
     "fastify": "2.11.0",
     "fastify-cors": "3.0.0",
     "prettier": "1.19.1",
