@@ -6,6 +6,7 @@ const { join } = require('path');
 module.exports = async ({
     version,
     integrity,
+    development = { js: '', css: '' },
     path = join(process.cwd(), '.eikrc'),
 }) => {
     await fs.writeFile(
@@ -13,6 +14,7 @@ module.exports = async ({
         JSON.stringify({
             version,
             integrity,
+            development,
         }),
     );
 };
