@@ -30,6 +30,7 @@ exports.builder = yargs => {
             alias: 'w',
             describe: 'Watch for file system changes and rebuild.',
             default: false,
+            type: 'boolean',
         },
         cwd: {
             alias: 'c',
@@ -57,7 +58,7 @@ exports.builder = yargs => {
 exports.handler = async argv => {
     const spinner = ora().start('working...');
     let success = false;
-    const { debug } = argv;
+    const { debug, watch } = argv;
 
     try {
         const options = { logger: logger(spinner, debug), ...argv };
@@ -67,8 +68,24 @@ exports.handler = async argv => {
     }
 
     if (success) {
-        spinner.text = '';
-        spinner.stopAndPersist();
+        if (watch) {
+            spinner.text = 'watching...';
+
+            process
+                .on('SIGINT', () => {
+                    spinner.text = 'Done!';
+                    spinner.stopAndPersist();
+                    process.exit();
+                })
+                .on('SIGTERM', () => {
+                    spinner.text = 'Done!';
+                    spinner.stopAndPersist();
+                    process.exit();
+                });
+        } else {
+            spinner.text = '';
+            spinner.stopAndPersist();
+        }
     } else {
         spinner.text = '';
         spinner.stopAndPersist();
