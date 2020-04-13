@@ -3,7 +3,7 @@
 const { test } = require('tap');
 const { join } = require('path');
 const { unlinkSync, readFileSync } = require('fs');
-const cli = require('../');
+const cli = require('..');
 const { mockLogger } = require('./utils');
 
 test('Initializing a new assets.json file', async t => {

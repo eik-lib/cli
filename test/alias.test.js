@@ -2,7 +2,7 @@
 
 const { test } = require('tap');
 const { sink } = require('@eik/core');
-const cli = require('../');
+const cli = require('..');
 const { mockLogger, MockFastifyService } = require('./utils');
 
 test('Creating a package alias on an asset server', async t => {

@@ -2,7 +2,7 @@
 
 const { test } = require('tap');
 const { sink } = require('@eik/core');
-const cli = require('../');
+const cli = require('..');
 const { mockLogger, MockFastifyService } = require('./utils');
 
 test('Uploading import map to an asset server', async t => {
