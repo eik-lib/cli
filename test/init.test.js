@@ -22,11 +22,6 @@ test('Initializing a new assets.json file', async t => {
     t.equals(result, true, 'Command should return true');
     t.equals(assets.name, '', 'assets.json "name" field should be empty');
     t.equals(assets.major, '', 'assets.json "major" field should be empty');
-    t.equals(
-        assets.organisation,
-        '',
-        'assets.json "organisation" field should be empty',
-    );
     t.equals(assets.server, '', 'assets.json "server" field should be empty');
     t.equals(
         assets.js.input,
@@ -54,7 +49,6 @@ test('Initializing a new assets.json file passing custom values', async t => {
     const result = await new cli.Init({
         logger: l.logger,
         cwd: join(__dirname, 'tmp'),
-        org: 'custom-org',
         name: 'custom-name',
         major: '1',
         server: 'http://localhost:4001',
@@ -78,11 +72,6 @@ test('Initializing a new assets.json file passing custom values', async t => {
         assets.major,
         '1',
         'assets.json "major" field should not be empty',
-    );
-    t.equals(
-        assets.organisation,
-        'custom-org',
-        'assets.json "organisation" field should not be empty',
     );
     t.equals(
         assets.server,

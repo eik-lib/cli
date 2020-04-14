@@ -5,23 +5,23 @@ const { sendCommand } = require('../../../../utils');
 
 module.exports = class UploadFiles {
     async process(state = {}) {
-        const { log, server, org, name, nextVersion, zipFile } = state;
+        const { log, server, token, name, nextVersion, zipFile } = state;
         log.debug('Uploading zip file to server');
         try {
             const { message } = await sendCommand({
                 method: 'PUT',
                 host: server,
                 pathname: join(
-                    org,
                     'pkg',
                     encodeURIComponent(name),
                     nextVersion,
                 ),
                 file: zipFile,
+                token,
             });
 
             log.debug(
-                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`,
+                `  Name: ${message.name}, Version: ${message.version}`,
             );
             for (const file of message.files) {
                 log.debug(`  ==> ${JSON.stringify(file)}`);

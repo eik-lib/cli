@@ -21,7 +21,7 @@ module.exports = class PublishApp {
         logger,
         cwd = process.cwd(),
         server,
-        org,
+        token,
         name,
         major,
         level = 'patch',
@@ -33,7 +33,7 @@ module.exports = class PublishApp {
         this.log = abslog(logger);
         this.cwd = cwd;
         this.server = server;
-        this.org = org;
+        this.token = token;
         this.name = name;
         this.major = major;
         this.level = level;

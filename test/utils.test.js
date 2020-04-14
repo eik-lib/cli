@@ -125,7 +125,7 @@ test('increment semver version - valid semver - major increment', async t => {
 
 test('fetch latest version for a given published bundle', async t => {
     const server = fastify();
-    server.get('/finn/pkg/foo', async () => {
+    server.get('/pkg/foo', async () => {
         return {
             versions: [
                 [1, { version: '1.3.2' }],
@@ -135,7 +135,7 @@ test('fetch latest version for a given published bundle', async t => {
     });
     const address = await server.listen();
 
-    const version = await u.fetchLatestVersion(address, 'finn', 'foo');
+    const version = await u.fetchLatestVersion(address, 'foo');
 
     t.equal(version, '2.1.8', 'Version should match expected value');
 
@@ -144,7 +144,7 @@ test('fetch latest version for a given published bundle', async t => {
 
 test('fetch latest version, filtered by major, for a given published bundle', async t => {
     const server = fastify();
-    server.get('/finn/pkg/foo', async () => {
+    server.get('/pkg/foo', async () => {
         return {
             versions: [
                 [1, { version: '1.3.2' }],
@@ -154,7 +154,7 @@ test('fetch latest version, filtered by major, for a given published bundle', as
     });
     const address = await server.listen();
 
-    const version = await u.fetchLatestVersion(address, 'finn', 'foo', 1);
+    const version = await u.fetchLatestVersion(address, 'foo', 1);
 
     t.equal(version, '1.3.2', 'Version should match expected value');
 
@@ -166,7 +166,7 @@ test('fetch latest version for a given published bundle, non existant bundle on 
     const address = await server.listen();
 
     try {
-        await u.fetchLatestVersion(address, 'finn', 'foo');
+        await u.fetchLatestVersion(address, 'foo');
     } catch (err) {
         t.equal(
             err.message,
@@ -180,13 +180,13 @@ test('fetch latest version for a given published bundle, non existant bundle on 
 
 test('fetch latest version, filtered by major, for a given published bundle', async t => {
     const server = fastify();
-    server.get('/finn/pkg/foo', async () => {
+    server.get('/pkg/foo', async () => {
         return '';
     });
     const address = await server.listen();
 
     try {
-        await u.fetchLatestVersion(address, 'finn', 'foo');
+        await u.fetchLatestVersion(address, 'foo');
     } catch (err) {
         t.equal(
             err.message,
@@ -200,13 +200,13 @@ test('fetch latest version, filtered by major, for a given published bundle', as
 
 test('fetch latest version, invalid versions returned by server', async t => {
     const server = fastify();
-    server.get('/finn/pkg/foo', async () => {
+    server.get('/pkg/foo', async () => {
         return { versions: 1 };
     });
     const address = await server.listen();
 
     t.rejects(
-        u.fetchLatestVersion(address, 'finn', 'foo'),
+        u.fetchLatestVersion(address, 'foo'),
         'should throw when server responds with invalid version object',
     );
 
@@ -215,7 +215,7 @@ test('fetch latest version, invalid versions returned by server', async t => {
 
 test('fetch latest version, invalid versions keys returned by server', async t => {
     const server = fastify();
-    server.get('/finn/pkg/foo', async () => {
+    server.get('/pkg/foo', async () => {
         return {
             versions: [
                 ['not a number', 1],
@@ -226,7 +226,7 @@ test('fetch latest version, invalid versions keys returned by server', async t =
     const address = await server.listen();
 
     t.rejects(
-        u.fetchLatestVersion(address, 'finn', 'foo'),
+        u.fetchLatestVersion(address, 'foo'),
         'should throw when server responds with invalid version keys',
     );
 
@@ -235,7 +235,7 @@ test('fetch latest version, invalid versions keys returned by server', async t =
 
 test('fetch latest version, no bundles yet published', async t => {
     const server = fastify();
-    server.get('/finn/pkg/foo', async () => {
+    server.get('/pkg/foo', async () => {
         return {
             latest: {},
             versions: [],
@@ -243,7 +243,7 @@ test('fetch latest version, no bundles yet published', async t => {
     });
     const address = await server.listen();
 
-    const version = await u.fetchLatestVersion(address, 'finn', 'foo');
+    const version = await u.fetchLatestVersion(address, 'foo');
 
     t.equal(version, null, 'Version should be null');
 
@@ -252,7 +252,7 @@ test('fetch latest version, no bundles yet published', async t => {
 
 test('fetch remote hash for a given version', async t => {
     const server = fastify();
-    server.get('/finn/pkg/foo/1.0.0', async () => {
+    server.get('/pkg/foo/1.0.0', async () => {
         return {
             integrity:
                 'sha512-36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==',
@@ -269,7 +269,7 @@ test('fetch remote hash for a given version', async t => {
         };
     });
     const address = await server.listen();
-    const result = await u.fetchPackageMeta(address, 'finn', 'foo', '1.0.0');
+    const result = await u.fetchPackageMeta(address, 'foo', '1.0.0');
 
     t.equal(
         result.integrity,

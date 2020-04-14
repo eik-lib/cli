@@ -12,8 +12,10 @@ async function sendCommand({
     data,
     file,
     map,
+    token,
 } = {}) {
     const form = new FormData();
+    const headers = {};
 
     if (data) {
         for (const [key, value] of Object.entries(data)) {
@@ -29,13 +31,17 @@ async function sendCommand({
         form.append('map', createReadStream(resolvePath(map).pathname));
     }
 
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
     try {
         const url = new URL(pathname, host);
 
         const res = await fetch(url.href, {
             method,
             body: form,
-            headers: form.getHeaders(),
+            headers: { ...headers, ...form.getHeaders() },
         });
 
         if (!res.ok) {

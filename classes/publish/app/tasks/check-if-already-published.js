@@ -9,7 +9,7 @@ const {
 
 module.exports = class CheckIfAlreadyPublished {
     async process(state = {}) {
-        const { log, server, org, name, currentVersion, path, js, css } = state;
+        const { log, server, name, currentVersion, path, js, css } = state;
 
         log.debug('Fetching package metadata from server.');
 
@@ -17,7 +17,7 @@ module.exports = class CheckIfAlreadyPublished {
 
         let meta;
         try {
-            meta = await fetchPackageMeta(server, org, name, currentVersion);
+            meta = await fetchPackageMeta(server, name, currentVersion);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,

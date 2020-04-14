@@ -3,8 +3,8 @@
 const { join } = require('path');
 const fetch = require('node-fetch');
 
-module.exports = async (server, org, name, version) => {
-    const url = `${server}/${join(org, 'pkg', name, version)}`;
+module.exports = async (server, name, version) => {
+    const url = `${server}/${join('pkg', name, version)}`;
 
     const res = await fetch(url);
 

@@ -1,15 +1,16 @@
 'use strict';
 
+const assert = require('assert');
 const abslog = require('abslog');
 const { join } = require('path');
 const { validators } = require('@eik/common');
 const { sendCommand } = require('../utils');
 
 module.exports = class Alias {
-    constructor({ logger, server, org, type, name, version, alias } = {}) {
+    constructor({ logger, server, token, type, name, version, alias } = {}) {
         this.log = abslog(logger);
         this.server = server;
-        this.org = org;
+        this.token = token;
         this.type = type;
         this.name = name;
         this.alias = alias;
@@ -27,7 +28,13 @@ module.exports = class Alias {
         }
 
         try {
-            validators.org(this.org);
+            assert(this.token && typeof this.token === 'string');
+        } catch (err) {
+            this.log.error(`Parameter "token" is not valid`);
+            return false;
+        }
+
+        try {
             validators.type(this.type);
             validators.name(this.name);
             validators.version(this.version);
@@ -43,12 +50,12 @@ module.exports = class Alias {
                 host: this.server,
                 method: 'PUT',
                 pathname: join(
-                    this.org,
                     this.type,
                     this.name,
                     `v${this.alias}`,
                 ),
                 data: { version: this.version },
+                token: this.token,
             });
 
             if (message.org) {

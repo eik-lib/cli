@@ -6,10 +6,9 @@ const { validators } = require('@eik/common');
 const fetch = require('node-fetch');
 
 module.exports = class Meta {
-    constructor({ logger, server, org, name, version } = {}) {
+    constructor({ logger, server, name, version } = {}) {
         this.log = abslog(logger);
         this.server = server;
-        this.org = org;
         this.name = name;
         this.version = version;
     }
@@ -25,7 +24,6 @@ module.exports = class Meta {
         }
 
         try {
-            validators.org(this.org);
             validators.name(this.name);
             validators.version(this.version);
         } catch (err) {
@@ -37,7 +35,6 @@ module.exports = class Meta {
         try {
             const res = await fetch(
                 `${this.server}/${join(
-                    this.org,
                     'pkg',
                     this.name,
                     this.version,
