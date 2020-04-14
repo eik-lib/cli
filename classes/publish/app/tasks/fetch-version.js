@@ -9,12 +9,12 @@ const {
 
 module.exports = class FetchVersion {
     async process(state = {}) {
-        const { log, server, org, name, major, level } = state;
+        const { log, server, name, major, level } = state;
         log.debug(
             'Calculating latest version for package. Fetching previous version information from server.',
         );
         try {
-            const version = await fetchLatestVersion(server, org, name, major);
+            const version = await fetchLatestVersion(server, name, major);
 
             if (!version) {
                 state.currentVersion = null;

@@ -1,5 +1,6 @@
 'use strict';
 
+const assert = require('assert');
 const abslog = require('abslog');
 const fetch = require('node-fetch');
 const tempDir = require('temp-dir');
@@ -27,16 +28,16 @@ module.exports = class PublishDependency {
         logger,
         cwd = process.cwd(),
         server,
-        org,
         name,
         version,
         map = [],
         dryRun = false,
+        token,
     } = {}) {
         this.log = abslog(logger);
         this.cwd = cwd;
         this.server = server;
-        this.org = org;
+        this.token = token;
         this.name = name;
         this.version = version;
         this.map = map;
@@ -63,7 +64,13 @@ module.exports = class PublishDependency {
         }
 
         try {
-            validators.org(this.org);
+            assert(this.token && typeof this.token === 'string', 'Parameter "token" is not valid');
+        } catch (err) {
+            this.log.error('Parameter "token" is not valid');
+            return false;
+        }
+
+        try {
             validators.name(this.name);
             validators.version(this.version);
         } catch (err) {
@@ -278,16 +285,16 @@ module.exports = class PublishDependency {
                 method: 'PUT',
                 host: this.server,
                 pathname: join(
-                    this.org,
                     'pkg',
                     encodeURIComponent(this.name),
                     this.version,
                 ),
                 file: this.zipFile,
+                token: this.token,
             });
 
             this.log.debug(
-                `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`,
+                `  Name: ${message.name}, Version: ${message.version}`,
             );
             for (const file of message.files) {
                 this.log.debug(`  ==> ${JSON.stringify(file)}`);

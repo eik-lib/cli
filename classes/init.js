@@ -8,7 +8,6 @@ module.exports = class Init {
     constructor({
         logger,
         cwd = process.cwd(),
-        org = '',
         name = '',
         major = '',
         server = '',
@@ -18,7 +17,6 @@ module.exports = class Init {
         this.cwd = cwd;
         this.log = abslog(logger);
         this.pathname = resolvePath('./assets.json', this.cwd).pathname;
-        this.org = org;
         this.name = name;
         this.major = major;
         this.server = server;
@@ -45,7 +43,6 @@ module.exports = class Init {
                 this.pathname,
                 JSON.stringify(
                     {
-                        organisation: this.org,
                         name: this.name,
                         major: this.major,
                         server: this.server,

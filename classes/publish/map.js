@@ -1,5 +1,6 @@
 'use strict';
 
+const assert = require('assert');
 const abslog = require('abslog');
 const { join, parse } = require('path');
 const { existsSync } = require('fs');
@@ -11,7 +12,7 @@ module.exports = class PublishMap {
         logger,
         cwd = process.cwd(),
         server,
-        org,
+        token,
         file,
         name,
         version,
@@ -19,7 +20,7 @@ module.exports = class PublishMap {
         this.log = abslog(logger);
         this.cwd = cwd;
         this.server = server;
-        this.org = org;
+        this.token = token;
         this.name = name;
         this.version = version;
         this.file = file;
@@ -44,7 +45,13 @@ module.exports = class PublishMap {
         }
 
         try {
-            validators.org(this.org);
+            assert(this.token && typeof this.token === 'string');
+        } catch (err) {
+            this.log.error(`Parameter "server" is not valid`);
+            return false;
+        }
+
+        try {
             validators.name(this.name);
             validators.version(this.version);
         } catch (err) {
@@ -73,8 +80,9 @@ module.exports = class PublishMap {
             await sendCommand({
                 method: 'PUT',
                 host: this.server,
-                pathname: join(this.org, 'map', this.name, this.version),
+                pathname: join('map', this.name, this.version),
                 map: join(this.cwd, this.file),
+                token: this.token,
             });
         } catch (err) {
             this.log.error('Unable to complete upload of import map to server');

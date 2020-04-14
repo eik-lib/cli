@@ -3,8 +3,8 @@
 const { join } = require('path');
 const fetch = require('node-fetch');
 
-module.exports = async (server, org, name, major) => {
-    const res = await fetch(`${server}/${join(org, 'pkg', name)}`);
+module.exports = async (server, name, major) => {
+    const res = await fetch(`${server}/${join('pkg', name)}`);
     if (!res.ok) {
         if (res.status === 404) {
             return null;

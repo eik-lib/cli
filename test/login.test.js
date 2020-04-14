@@ -19,16 +19,8 @@ beforeEach(async (done, t) => {
         }
     });
     const address = await server.start();
-    
-    const login = new cli.Login({
-        server: address,
-        key: 'passkey',
-    });
-    const token = await login.run();
-    
     t.context.server = server
     t.context.address = address;
-    t.context.token = token;
     done();
 });
 
@@ -37,30 +29,34 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Uploading a dependency to an asset server', async t => {
-    const { address, token } = t.context;
+test('Logging in to an asset server', async t => {
+    const { address } = t.context;
     const l = mockLogger();
-
-    const publishDep = new cli.publish.Dependency({
-        logger: l.logger,
+    
+    const login = new cli.Login({
         server: address,
-        name: 'lit-html',
-        version: '1.1.2',
-        debug: true,
-        token,
+        key: 'passkey',
+        logger: l.logger,
     });
 
-    const result = await publishDep.run();
+    const token = await login.run();
 
-    t.equals(result, true, 'Command should return true');
-    t.match(
-        l.logs.debug,
-        'Name: lit-html, Version: 1.1.2',
-        'Log output should show published name and version',
-    );
-    t.match(
-        l.logs.info,
-        'Published dependency package "lit-html" at version "1.1.2"',
-        'Log output should command completion',
-    );
+    t.equal(token.length, 181, 'Command should return a token');
+    t.equal(l.logs.info, 'Login successful', 'Logs should indicate success');
+});
+
+test('Logging in to an asset server', async t => {
+    const { address } = t.context;
+    const l = mockLogger();
+    
+    const login = new cli.Login({
+        server: address,
+        key: 'incorrectkey',
+        logger: l.logger,
+    });
+
+    const result = await login.run();
+
+    t.equal(result, false, 'Command should return false on failure');
+    t.equal(l.logs.info, 'Login unsuccessful. Invalid credentials.', 'Logs should indicate failure');
 });

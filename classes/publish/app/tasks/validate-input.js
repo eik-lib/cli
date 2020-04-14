@@ -15,7 +15,7 @@ class ValidationError extends Error {
 
 module.exports = class ValidateInput {
     process(state = {}) {
-        const { log, cwd, server, org, name, js, css, map, dryRun } = state;
+        const { log, cwd, server, name, js, css, map, dryRun } = state;
 
         log.debug('Validating input');
 
@@ -29,12 +29,6 @@ module.exports = class ValidateInput {
             validators.origin(server);
         } catch (err) {
             throw new ValidationError(`Parameter "server" is not valid`, err);
-        }
-
-        try {
-            validators.org(org);
-        } catch (err) {
-            throw new ValidationError('Parameter "org" is not valid', err);
         }
 
         try {
