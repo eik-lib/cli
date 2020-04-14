@@ -12,10 +12,20 @@ exports.aliases = ['dep', 'd'];
 exports.describe = `Publish an NPM package to server by given name and version.`;
 
 exports.builder = yargs => {
+    const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
+
     let assets = {};
     try {
         const assetsPath = resolvePath('./assets.json').pathname;
         assets = JSON.parse(readFileSync(assetsPath));
+    } catch (err) {
+        // noop
+    }
+
+    let meta = {};
+    try {
+        const metaPath = resolvePath('./.eikrc', cwd).pathname;
+        meta = JSON.parse(readFileSync(metaPath));
     } catch (err) {
         // noop
     }
@@ -41,11 +51,6 @@ exports.builder = yargs => {
             describe: 'Alter current working directory.',
             default: process.cwd(),
         },
-        org: {
-            alias: 'o',
-            describe: 'Provide the organisation context for the command.',
-            default: assets.organisation || '',
-        },
         map: {
             alias: 'm',
             describe:
@@ -63,6 +68,10 @@ exports.builder = yargs => {
             describe: 'Logs additional messages',
             default: false,
             type: 'boolean',
+        },
+        token: {
+            describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
+            default: meta.token,
         },
     });
 };

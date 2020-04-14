@@ -17,7 +17,7 @@ const chokidar = require('chokidar');
 const { readMetaFile, writeMetaFile } = require('../utils');
 
 module.exports = class Meta {
-    constructor({ logger, name, watch, cwd, debug, js, css } = {}) {
+    constructor({ logger, name, watch, cwd = process.cwd(), debug, js, css } = {}) {
         this.log = abslog(logger);
         this.watch = watch;
         this.cwd = cwd;
@@ -174,9 +174,9 @@ module.exports = class Meta {
 
         if (development.js || development.css) {
             try {
-                const meta = await readMetaFile();
+                const meta = await readMetaFile({ cwd: this.cwd });
                 meta.development = development;
-                await writeMetaFile(meta);
+                await writeMetaFile(meta, { cwd: this.cwd });
                 this.log.debug('.eikrc metafile saved to disk');
                 return true;
             } catch (err) {

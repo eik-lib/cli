@@ -5,16 +5,20 @@ const { join } = require('path');
 
 module.exports = async ({
     version,
+    token,
     integrity,
     development = { js: '', css: '' },
-    path = join(process.cwd(), '.eikrc'),
+}, {
+    cwd = process.cwd(),
+    filename = '.eikrc',
 }) => {
     await fs.writeFile(
-        path,
+        join(cwd, filename),
         JSON.stringify({
             version,
             integrity,
             development,
+            token,
         }),
     );
 };
