@@ -12,10 +12,20 @@ exports.aliases = ['p', 'pub'];
 exports.describe = `Publish an apps dependencies based on local assets.json file.`;
 
 exports.builder = yargs => {
+    const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
+    
     let assets = {};
     try {
         const assetsPath = resolvePath('./assets.json').pathname;
         assets = JSON.parse(readFileSync(assetsPath));
+    } catch (err) {
+        // noop
+    }
+
+    let meta = {};
+    try {
+        const metaPath = resolvePath('./.eikrc', cwd).pathname;
+        meta = JSON.parse(readFileSync(metaPath));
     } catch (err) {
         // noop
     }
@@ -30,11 +40,6 @@ exports.builder = yargs => {
             alias: 'c',
             describe: 'Alter current working directory.',
             default: process.cwd(),
-        },
-        org: {
-            alias: 'o',
-            describe: 'Provide the organisation context for the command.',
-            default: assets.organisation || '',
         },
         map: {
             alias: 'm',
@@ -77,6 +82,10 @@ exports.builder = yargs => {
             describe:
                 'Specify the app semver level to use when updating the package.',
             default: 'patch',
+        },
+        token: {
+            describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
+            default: meta.token,
         },
     });
 };

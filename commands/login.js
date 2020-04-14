@@ -2,16 +2,16 @@
 
 const ora = require('ora');
 const { readFileSync } = require('fs');
-const Meta = require('../classes/meta');
+const Login = require('../classes/login');
 const { resolvePath, logger } = require('../utils');
 
-exports.command = 'meta <name> <version>';
+exports.command = 'login <key>';
 
-exports.aliases = ['show'];
+exports.aliases = [];
 
-exports.describe = `Retrieve meta information about a package`;
+exports.describe = `Authenticate with an Eik server`;
 
-exports.builder = yargs => {
+exports.builder = (yargs) => {
     let assets = {};
     try {
         const assetsPath = resolvePath('./assets.json').pathname;
@@ -20,23 +20,21 @@ exports.builder = yargs => {
         // noop
     }
 
-    yargs
-        .positional('name', {
-            describe:
-                'Name matching either package or import map name depending on type given',
-            type: 'string',
-        })
-        .positional('version', {
-            describe:
-                'Version matching either package or import map version depending on type given',
-            type: 'string',
-        });
+    yargs.positional('key', {
+        describe: 'Login access key',
+        type: 'string',
+    });
 
     yargs.options({
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
             default: assets.server || '',
+        },
+        cwd: {
+            alias: 'c',
+            describe: 'Alter current working directory.',
+            default: process.cwd(),
         },
         debug: {
             describe: 'Logs additional messages',
@@ -46,13 +44,13 @@ exports.builder = yargs => {
     });
 };
 
-exports.handler = async argv => {
+exports.handler = async (argv) => {
     const spinner = ora().start('working...');
     let success = false;
     const { debug } = argv;
 
     try {
-        success = await new Meta({
+        success = await new Login({
             logger: logger(spinner, debug),
             ...argv,
         }).run();
@@ -61,9 +59,6 @@ exports.handler = async argv => {
     }
 
     if (success) {
-        spinner.text = '';
-        spinner.stopAndPersist();
-        // eslint-disable-next-line no-console
         spinner.text = '';
         spinner.stopAndPersist();
     } else {

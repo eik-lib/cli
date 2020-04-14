@@ -3,13 +3,14 @@
 const abslog = require('abslog');
 const assert = require('assert');
 const { validators } = require('@eik/common');
-const { sendCommand } = require('../utils');
+const { sendCommand, readMetaFile, writeMetaFile } = require('../utils');
 
 module.exports = class Login {
-    constructor({ logger, server, key } = {}) {
+    constructor({ cwd = process.cwd(), logger, server, key } = {}) {
         this.log = abslog(logger);
         this.server = server;
         this.key = key;
+        this.cwd = cwd;
     }
 
     async run() {
@@ -23,7 +24,10 @@ module.exports = class Login {
         }
 
         try {
-            assert(this.key && typeof this.key === 'string', '"key" must be a string');
+            assert(
+                this.key && typeof this.key === 'string',
+                '"key" must be a string',
+            );
         } catch (err) {
             this.log.error(err.message);
             return false;
@@ -38,8 +42,12 @@ module.exports = class Login {
                 data: { key: this.key },
             });
 
+            const meta = await readMetaFile({ cwd: this.cwd });
+            meta.token = message.token;
+            await writeMetaFile(meta, { cwd: this.cwd });
+
             this.log.info(`Login successful`);
-            return message.token;
+            return true;
         } catch (err) {
             switch (err.statusCode) {
                 case 401:
