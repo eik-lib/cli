@@ -12,3 +12,4 @@ tmp/**/*
 *.log
 coverage
 .vscode
+.eikrc

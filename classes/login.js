@@ -47,7 +47,7 @@ module.exports = class Login {
             await writeMetaFile(meta, { cwd: this.cwd });
 
             this.log.info(`Login successful`);
-            return true;
+            return message.token;
         } catch (err) {
             switch (err.statusCode) {
                 case 401:
