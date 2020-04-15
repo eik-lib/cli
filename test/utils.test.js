@@ -280,9 +280,9 @@ test('fetch remote hash for a given version', async t => {
 });
 
 test('write meta file', async t => {
-    const path = join(__dirname, 'tmp', '.eikrc');
-    await u.writeMetaFile({ path, version: '1.0.0', integrity: [] });
-    const eikrc = fs.readFileSync(path);
+    const cwd = join(__dirname, 'tmp');
+    await u.writeMetaFile({ version: '1.0.0', integrity: [] }, { cwd });
+    const eikrc = fs.readFileSync(join(cwd, '.eikrc'));
     const { version, integrity } = JSON.parse(eikrc);
 
     t.equal(version, '1.0.0', 'Version should be 1.0.0');
