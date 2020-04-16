@@ -1,11 +1,12 @@
 'use strict';
 
+const readline = require("readline");
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const Login = require('../classes/login');
 const { resolvePath, logger } = require('../utils');
 
-exports.command = 'login <key>';
+exports.command = 'login';
 
 exports.aliases = [];
 
@@ -20,12 +21,13 @@ exports.builder = (yargs) => {
         // noop
     }
 
-    yargs.positional('key', {
-        describe: 'Login access key',
-        type: 'string',
-    });
-
     yargs.options({
+        key: {
+            alias: 'k',
+            describe: 'Login access key',
+            type: 'string',
+            default: '',
+        },
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
@@ -45,14 +47,32 @@ exports.builder = (yargs) => {
 };
 
 exports.handler = async (argv) => {
-    const spinner = ora().start('working...');
     let success = false;
-    const { debug } = argv;
+    const { debug, key } = argv;
+    let k = key;
+
+    if (!k) {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+        });
+
+        await new Promise((resolve) => {
+            rl.question('Enter login key > ', (input) => {
+                k = input;
+                rl.close();
+                resolve();
+            });
+        });
+    }
+
+    const spinner = ora().start('working...');
 
     try {
         success = await new Login({
             logger: logger(spinner, debug),
             ...argv,
+            key: k,
         }).run();
     } catch (err) {
         logger.warn(err.message);
