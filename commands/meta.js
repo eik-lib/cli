@@ -48,22 +48,38 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const spinner = ora().start('working...');
-    let success = false;
+    let meta = false;
     const { debug } = argv;
+    const l = logger(spinner, debug);
 
     try {
-        success = await new Meta({
-            logger: logger(spinner, debug),
+        meta = await new Meta({
+            logger: l,
             ...argv,
         }).run();
     } catch (err) {
-        logger.warn(err.message);
+        l.warn(err.message);
     }
 
-    if (success) {
+    if (meta) {
         spinner.text = '';
         spinner.stopAndPersist();
-        // eslint-disable-next-line no-console
+        
+        process.stdout.write(`:: pkg ${meta.name} v${meta.version}\n`);
+        process.stdout.write(`   scope:     ${meta.org}\n`);
+        process.stdout.write(`   integrity: ${meta.integrity}\n`);
+        process.stdout.write(`   files:\n`);
+
+        if (meta.files) {
+            for (const file of meta.files) {
+                process.stdout.write(`   ==> pathname:  ${file.pathname}\n`);
+                process.stdout.write(`       mimeType:  ${file.mimeType}\n`);
+                process.stdout.write(`       type:      ${file.type}\n`);
+                process.stdout.write(`       size:      ${file.size}\n`);
+                process.stdout.write(`       integrity: ${file.integrity}\n`);
+            }
+        }
+
         spinner.text = '';
         spinner.stopAndPersist();
     } else {
