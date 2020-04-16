@@ -293,11 +293,19 @@ module.exports = class PublishDependency {
                 token: this.token,
             });
 
-            this.log.debug(
-                `  Name: ${message.name}, Version: ${message.version}`,
-            );
-            for (const file of message.files) {
-                this.log.debug(`  ==> ${JSON.stringify(file)}`);
+            this.log.debug(`:: pkg ${message.name} v${message.version}`);
+            this.log.debug(`   scope:     ${message.org}`);
+            this.log.debug(`   integrity: ${message.integrity}`);
+            this.log.debug(`   files:`);
+
+            if (message.files) {
+                for (const file of message.files) {
+                    this.log.debug(`   ==> pathname:  ${file.pathname}`);
+                    this.log.debug(`       mimeType:  ${file.mimeType}`);
+                    this.log.debug(`       type:      ${file.type}`);
+                    this.log.debug(`       size:      ${file.size}`);
+                    this.log.debug(`       integrity: ${file.integrity}`);
+                }
             }
         } catch (err) {
             this.log.error('Unable to upload zip file to server');

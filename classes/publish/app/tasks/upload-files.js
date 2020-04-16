@@ -20,12 +20,21 @@ module.exports = class UploadFiles {
                 token,
             });
 
-            log.debug(
-                `  Name: ${message.name}, Version: ${message.version}`,
-            );
-            for (const file of message.files) {
-                log.debug(`  ==> ${JSON.stringify(file)}`);
+            log.debug(`:: pkg ${message.name} v${message.version}`);
+            log.debug(`   scope:     ${message.org}`);
+            log.debug(`   integrity: ${message.integrity}`);
+            log.debug(`   files:`);
+
+            if (message.files) {
+                for (const file of message.files) {
+                    log.debug(`   ==> pathname:  ${file.pathname}`);
+                    log.debug(`       mimeType:  ${file.mimeType}`);
+                    log.debug(`       type:      ${file.type}`);
+                    log.debug(`       size:      ${file.size}`);
+                    log.debug(`       integrity: ${file.integrity}`);
+                }
             }
+
         } catch (err) {
             log.error('Unable to upload zip file to server');
             switch (err.statusCode) {

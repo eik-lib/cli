@@ -58,15 +58,18 @@ module.exports = class Alias {
                 token: this.token,
             });
 
-            if (message.org) {
-                this.log.debug(
-                    `  Org: ${message.org}, Name: ${message.name}, Version: ${message.version}`,
-                );
-            }
+            this.log.debug(`:: alias ${message.name} v${this.alias} ==> v${message.version}`);
+            this.log.debug(`   scope:     ${message.org}`);
+            this.log.debug(`   integrity: ${message.integrity}`);
+            this.log.debug(`   files:`);
 
             if (message.files) {
                 for (const file of message.files) {
-                    this.log.debug(`  ==> ${JSON.stringify(file)}`);
+                    this.log.debug(`   ==> pathname:  ${file.pathname}`);
+                    this.log.debug(`       mimeType:  ${file.mimeType}`);
+                    this.log.debug(`       type:      ${file.type}`);
+                    this.log.debug(`       size:      ${file.size}`);
+                    this.log.debug(`       integrity: ${file.integrity}`);
                 }
             }
 
@@ -84,23 +87,26 @@ module.exports = class Alias {
                         host: this.server,
                         method: 'POST',
                         pathname: join(
-                            this.org,
                             this.type,
                             this.name,
                             `v${this.alias}`,
                         ),
                         data: { version: this.version },
+                        token: this.token,
                     });
 
-                    if (msg.org) {
-                        this.log.debug(
-                            `  Org: ${msg.org}, Name: ${msg.name}, Version: ${msg.version}`,
-                        );
-                    }
+                    this.log.debug(`:: alias ${msg.name} v${this.alias} ==> v${msg.version}`);
+                    this.log.debug(`   scope:     ${msg.org}`);
+                    this.log.debug(`   integrity: ${msg.integrity}`);
+                    this.log.debug(`   files:`);
 
                     if (msg.files) {
                         for (const file of msg.files) {
-                            this.log.debug(`  ==> ${JSON.stringify(file)}`);
+                            this.log.debug(`   ==> pathname:  ${file.pathname}`);
+                            this.log.debug(`       mimeType:  ${file.mimeType}`);
+                            this.log.debug(`       type:      ${file.type}`);
+                            this.log.debug(`       size:      ${file.size}`);
+                            this.log.debug(`       integrity: ${file.integrity}`);
                         }
                     }
 
