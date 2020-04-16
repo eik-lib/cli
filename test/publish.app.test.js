@@ -57,7 +57,7 @@ test('Uploading app assets to an asset server', async t => {
     t.equals(result, true, 'Command should return true');
     t.match(
         l.logs.debug,
-        'Name: my-app, Version: 1.0.0',
+        ':: pkg my-app v1.0.0',
         'Log output should show published name and version',
     );
     t.match(
