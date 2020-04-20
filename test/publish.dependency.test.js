@@ -3,26 +3,19 @@
 'use strict';
 
 const { test, beforeEach, afterEach } = require('tap');
-const AssetServer = require('@eik/core/services/fastify');
+const AssetServer = require('@eik/service');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
-    const server = new AssetServer({ 
-        customSink: memSink,
-        port: 0,
-        logger: false,
-        config: {
-            authKey: 'passkey',
-        }
-    });
+    const server = new AssetServer({ customSink: memSink });
     const address = await server.start();
     
     const login = new cli.Login({
         server: address,
-        key: 'passkey',
+        key: 'change_me',
     });
     const token = await login.run();
     
