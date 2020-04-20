@@ -66,7 +66,7 @@ exports.handler = async (argv) => {
         });
     }
 
-    const spinner = ora().start('working...');
+    const spinner = ora({ stream: process.stdout }).start('working...');
 
     try {
         success = await new Login({
