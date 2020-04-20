@@ -1,7 +1,8 @@
 'use strict';
 
-const ora = require('ora');
 const { readFileSync } = require('fs');
+const { join } = require('path');
+const ora = require('ora');
 const Meta = require('../classes/meta');
 const { resolvePath, logger } = require('../utils');
 
@@ -56,7 +57,7 @@ exports.builder = yargs => {
 exports.handler = async argv => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let meta = false;
-    const { debug } = argv;
+    const { debug, server } = argv;
     const l = logger(spinner, debug);
 
     try {
@@ -71,15 +72,21 @@ exports.handler = async argv => {
     if (meta) {
         spinner.text = '';
         spinner.stopAndPersist();
+
+        const metaUrl = new URL(join('pkg', meta.name, meta.version), server);
         
         process.stdout.write(`:: pkg ${meta.name} v${meta.version}\n`);
         process.stdout.write(`   scope:     ${meta.org}\n`);
         process.stdout.write(`   integrity: ${meta.integrity}\n`);
+        process.stdout.write(`   pathname:  /pkg/${meta.name}/${meta.version}\n`);
+        process.stdout.write(`   url:       ${metaUrl.href}\n`);
         process.stdout.write(`   files:\n`);
 
         if (meta.files) {
             for (const file of meta.files) {
-                process.stdout.write(`   ==> pathname:  ${file.pathname}\n`);
+                const fileUrl = new URL(join(metaUrl.pathname, file.pathname), server);
+                process.stdout.write(`   ==> pathname:  ${fileUrl.pathname}\n`);
+                process.stdout.write(`       url:       ${fileUrl.href}\n`);
                 process.stdout.write(`       mimeType:  ${file.mimeType}\n`);
                 process.stdout.write(`       type:      ${file.type}\n`);
                 process.stdout.write(`       size:      ${file.size}\n`);
