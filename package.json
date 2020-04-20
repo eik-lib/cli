@@ -7,7 +7,7 @@
     "eik": "index.js"
   },
   "scripts": {
-    "test": "tap --timeout 60 test/*.test.js",
+    "test": "tap --timeout 60000 test/*.test.js",
     "lint:format": "eslint --fix .",
     "lint": "eslint ."
   },
