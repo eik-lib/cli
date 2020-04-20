@@ -7,6 +7,7 @@ const os = require('os');
 const cp = require('child_process');
 const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
+const fetch = require('node-fetch');
 const AssetServer = require('@eik/core/services/fastify');
 const { sink } = require('@eik/core');
 
@@ -47,7 +48,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik publish --token --server --cwd : simple publish', async (t) => {
+test('eik publish --token --server : no assets.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} publish
         --name test-app 
@@ -59,25 +60,38 @@ test('eik publish --token --server --cwd : simple publish', async (t) => {
 
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
+    const res = await fetch(
+        new URL('/pkg/test-app/1.0.0/main/index.js', t.context.address),
+    );
+
+    t.equal(res.ok, true);
     t.notOk(error);
     t.match(stdout, 'Published app package "test-app" at version "1.0.0"');
     t.end();
 });
 
-test('eik publish : publish, details provided by assets.json file + .eikrc', async (t) => {
+test('eik publish : publish, details provided by assets.json file and .eikrc', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
         js: { input: join(__dirname, '..', 'fixtures', 'client.js') },
         css: { input: join(__dirname, '..', 'fixtures', 'styles.css') },
     };
-    await fs.writeFile(join(t.context.folder, 'assets.json'), JSON.stringify(assets));
+    await fs.writeFile(
+        join(t.context.folder, 'assets.json'),
+        JSON.stringify(assets),
+    );
 
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} publish --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
+    const res = await fetch(
+        new URL('/pkg/test-app/1.0.0/main/index.js', t.context.address),
+    );
+
+    t.equal(res.ok, true);
     t.notOk(error);
     t.match(stdout, 'Published app package "test-app" at version "1.0.0"');
     t.end();
