@@ -47,7 +47,7 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    const spinner = ora().start('working...');
+    const spinner = ora({ stream: process.stdout }).start('working...');
     let meta = false;
     const { debug } = argv;
     const l = logger(spinner, debug);

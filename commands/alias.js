@@ -11,9 +11,9 @@ exports.aliases = ['a'];
 
 exports.describe = `Create a semver major alias for an import map or package as identified by its name and version.`;
 
-exports.builder = yargs => {
+exports.builder = (yargs) => {
     const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
-    
+
     let assets = {};
     try {
         const assetsPath = resolvePath('./assets.json', cwd).pathname;
@@ -69,14 +69,15 @@ exports.builder = yargs => {
             type: 'boolean',
         },
         token: {
-            describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
+            describe:
+                'Provide a jwt token to be used to authenticate with the Eik server.',
             default: meta.token,
         },
     });
 };
 
-exports.handler = async argv => {
-    const spinner = ora().start('working...');
+exports.handler = async (argv) => {
+    const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
     const { debug } = argv;
 

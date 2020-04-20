@@ -16,7 +16,7 @@ exports.builder = yargs => {
     
     let assets = {};
     try {
-        const assetsPath = resolvePath('./assets.json').pathname;
+        const assetsPath = resolvePath('./assets.json', cwd).pathname;
         assets = JSON.parse(readFileSync(assetsPath));
     } catch (err) {
         // noop
@@ -91,7 +91,7 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    const spinner = ora().start('working...');
+    const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
     const { debug } = argv;
 

@@ -7,7 +7,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 const atImport = require('postcss-import');
-const { join } = require('path');
+const { join, isAbsolute } = require('path');
 const babel = require('rollup-plugin-babel');
 const autoprefixer = require('autoprefixer');
 const postcss = require('postcss');
@@ -33,7 +33,7 @@ module.exports = class CreateBundles {
                         }),
                         terser(),
                     ],
-                    input: join(cwd, js),
+                    input: isAbsolute(js) ? js : join(cwd, js),
                 };
 
                 const bundled = await rollup.rollup(options);
@@ -81,7 +81,7 @@ module.exports = class CreateBundles {
                         }),
                         terser(),
                     ],
-                    input: join(cwd, js),
+                    input: isAbsolute(js) ? js : join(cwd, js),
                 };
                 const bundled = await rollup.rollup(options);
                 await bundled.write({
@@ -104,7 +104,7 @@ module.exports = class CreateBundles {
             log.debug('Creating css bundle file');
             try {
                 if (css) {
-                    const input = join(cwd, css);
+                    const input = isAbsolute(css) ? css : join(cwd, css);
                     const precss = fs.readFileSync(input, 'utf8');
                     const processor = postcss(autoprefixer());
 
