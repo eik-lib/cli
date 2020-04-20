@@ -16,7 +16,7 @@ exports.builder = yargs => {
 
     let assets = {};
     try {
-        const assetsPath = resolvePath('./assets.json').pathname;
+        const assetsPath = resolvePath('./assets.json', cwd).pathname;
         assets = JSON.parse(readFileSync(assetsPath));
     } catch (err) {
         // noop
