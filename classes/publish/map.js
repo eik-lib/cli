@@ -47,7 +47,7 @@ module.exports = class PublishMap {
         try {
             assert(this.token && typeof this.token === 'string');
         } catch (err) {
-            this.log.error(`Parameter "server" is not valid`);
+            this.log.error(`Parameter "token" is not valid`);
             return false;
         }
 
