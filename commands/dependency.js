@@ -72,6 +72,7 @@ exports.builder = yargs => {
         token: {
             describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
             default: meta.token,
+            alias: 't',
         },
     });
 };

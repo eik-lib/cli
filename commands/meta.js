@@ -12,9 +12,11 @@ exports.aliases = ['show'];
 exports.describe = `Retrieve meta information about a package`;
 
 exports.builder = yargs => {
+    const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
+
     let assets = {};
     try {
-        const assetsPath = resolvePath('./assets.json').pathname;
+        const assetsPath = resolvePath('./assets.json', cwd).pathname;
         assets = JSON.parse(readFileSync(assetsPath));
     } catch (err) {
         // noop
@@ -42,6 +44,11 @@ exports.builder = yargs => {
             describe: 'Logs additional messages',
             default: false,
             type: 'boolean',
+        },
+        cwd: {
+            alias: 'c',
+            describe: 'Alter current working directory.',
+            default: process.cwd(),
         },
     });
 };
