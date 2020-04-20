@@ -8,7 +8,7 @@ const cp = require('child_process');
 const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
-const AssetServer = require('@eik/core/services/fastify');
+const AssetServer = require('@eik/service');
 const { sink } = require('@eik/core');
 
 function exec(cmd) {
@@ -21,18 +21,11 @@ function exec(cmd) {
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
-    const server = new AssetServer({
-        customSink: memSink,
-        port: 0,
-        logger: false,
-        config: {
-            authKey: 'passkey',
-        },
-    });
+    const server = new AssetServer({ customSink: memSink });
     const address = await server.start();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key passkey --server ${address} --cwd ${folder}`;
+    const cmd = `${eik} login --key change_me --server ${address} --cwd ${folder}`;
     await exec(cmd);
     const eikrc = JSON.parse(await fs.readFile(join(folder, '.eikrc')));
 
