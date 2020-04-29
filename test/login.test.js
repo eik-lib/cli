@@ -3,22 +3,25 @@
 'use strict';
 
 const { test, beforeEach, afterEach } = require('tap');
-const AssetServer = require('@eik/service');
+const fastify = require('fastify');
+const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
-    const server = new AssetServer({ customSink: memSink });
-    const address = await server.start();
+    const server = fastify({ logger: false });
+    const service = new EikService({ customSink: memSink });
+    server.register(service.api());
+    const address = await server.listen();
     t.context.server = server
     t.context.address = address;
     done();
 });
 
 afterEach(async (done, t) => {
-    await t.context.server.stop();
+    await t.context.server.close();
     done();
 });
 
