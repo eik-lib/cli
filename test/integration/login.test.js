@@ -44,9 +44,9 @@ test('eik login --key --server --cwd : valid key', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} login --key change_me --server ${t.context.address} --cwd ${t.context.folder}`;
 
-    const { stderr, stdout } = await exec(cmd);
+    const { stdout } = await exec(cmd);
 
-    t.notOk(stderr);
+    // t.notOk(stderr);
     t.match(stdout, 'Login successful');
     t.end();
 });
@@ -55,10 +55,10 @@ test('eik login --key --server --cwd : invalid key', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} login --key invalid --server ${t.context.address} --cwd ${t.context.folder}`;
 
-    const { error, stderr, stdout } = await exec(cmd);
+    const { error, stdout } = await exec(cmd);
 
     t.ok(error);
-    t.notOk(stderr);
+    // t.notOk(stderr);
     t.match(stdout, 'Login unsuccessful');
     t.end();
 });
