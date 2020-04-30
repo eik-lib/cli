@@ -4,7 +4,7 @@ const readline = require("readline");
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const Login = require('../classes/login');
-const { resolvePath, logger } = require('../utils');
+const { resolvePath, logger, readMetaFile, writeMetaFile } = require('../utils');
 
 exports.command = 'login';
 
@@ -48,7 +48,7 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     let success = false;
-    const { debug, key } = argv;
+    const { debug, key, cwd } = argv;
     let k = key;
 
     if (!k) {
@@ -69,11 +69,16 @@ exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
 
     try {
-        success = await new Login({
+        const token = await new Login({
             logger: logger(spinner, debug),
             ...argv,
             key: k,
         }).run();
+
+        const meta = await readMetaFile({ cwd });
+        meta.token = token;
+        await writeMetaFile(meta, { cwd });
+        success = true;
     } catch (err) {
         logger.warn(err.message);
     }
