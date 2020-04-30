@@ -3,7 +3,7 @@
 const abslog = require('abslog');
 const assert = require('assert');
 const { validators } = require('@eik/common');
-const { sendCommand, readMetaFile, writeMetaFile } = require('../utils');
+const { sendCommand } = require('../utils');
 
 module.exports = class Login {
     constructor({ cwd = process.cwd(), logger, server, key } = {}) {
@@ -41,10 +41,6 @@ module.exports = class Login {
                 pathname: '/auth/login',
                 data: { key: this.key },
             });
-
-            const meta = await readMetaFile({ cwd: this.cwd });
-            meta.token = message.token;
-            await writeMetaFile(meta, { cwd: this.cwd });
 
             this.log.info(`Login successful`);
             return message.token;
