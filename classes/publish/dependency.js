@@ -285,7 +285,7 @@ module.exports = class PublishDependency {
                 method: 'PUT',
                 host: this.server,
                 pathname: join(
-                    'pkg',
+                    'npm',
                     encodeURIComponent(this.name),
                     this.version,
                 ),
@@ -293,7 +293,7 @@ module.exports = class PublishDependency {
                 token: this.token,
             });
 
-            this.log.debug(`:: pkg ${message.name} v${message.version}`);
+            this.log.debug(`:: npm ${message.name} v${message.version}`);
             this.log.debug(`   scope:     ${message.org}`);
             this.log.debug(`   integrity: ${message.integrity}`);
             this.log.debug(`   files:`);
