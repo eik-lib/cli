@@ -10,6 +10,7 @@ const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
+const cli = require('../..');
 
 function exec(cmd) {
     return new Promise((resolve) => {
@@ -26,15 +27,16 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key change_me --server ${address} --cwd ${folder}`;
-    await exec(cmd);
-    const eikrc = JSON.parse(await fs.readFile(join(folder, '.eikrc')));
+
+    const token = await new cli.Login({
+        server: address,
+        key: 'change_me',
+    }).run();
 
     t.context.server = server;
     t.context.address = address;
     t.context.folder = folder;
-    t.context.token = eikrc.token;
+    t.context.token = token;
     done();
 });
 
@@ -46,7 +48,10 @@ afterEach(async (done, t) => {
 test('eik map --token --server : no assets.json or .eikrc', async (t) => {
     const map = {
         imports: {
-            lodash: new URL('/pkg/lodash/4.17.0/index.js', t.context.address).href,
+            'scroll-into-view-if-needed': new URL(
+                '/pkg/scroll-into-view-if-needed/2.2.24/index.js',
+                t.context.address,
+            ).href,
         },
     };
     await fs.writeFile(
@@ -68,14 +73,11 @@ test('eik map --token --server : no assets.json or .eikrc', async (t) => {
     t.equal(res.ok, true);
     t.same(result, map);
     t.notOk(error);
-    t.match(
-        stdout,
-        'Published import map "test-map" at version "1.0.0"',
-    );
+    t.match(stdout, 'Published import map "test-map" at version "1.0.0"');
     t.end();
 });
 
-test('eik map : publish, details provided by assets.json file and .eikrc', async (t) => {
+test('eik map : publish, details provided by assets.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
@@ -87,7 +89,10 @@ test('eik map : publish, details provided by assets.json file and .eikrc', async
 
     const map = {
         imports: {
-            lodash: new URL('/pkg/lodash/4.17.0/index.js', t.context.address).href,
+            'scroll-into-view-if-needed': new URL(
+                '/npm/scroll-into-view-if-needed/2.2.24/index.js',
+                t.context.address,
+            ).href,
         },
     };
     await fs.writeFile(
@@ -96,7 +101,7 @@ test('eik map : publish, details provided by assets.json file and .eikrc', async
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} map test-map 1.0.0 import-map.json --cwd ${t.context.folder}`;
+    const cmd = `${eik} map test-map 1.0.0 import-map.json --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -106,9 +111,6 @@ test('eik map : publish, details provided by assets.json file and .eikrc', async
     t.equal(res.ok, true);
     t.same(result, map);
     t.notOk(error);
-    t.match(
-        stdout,
-        'Published import map "test-map" at version "1.0.0"',
-    );
+    t.match(stdout, 'Published import map "test-map" at version "1.0.0"');
     t.end();
 });
