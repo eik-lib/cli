@@ -48,7 +48,7 @@ test('Creating a package alias on an asset server', async t => {
     const result = await new cli.Alias({
         logger: l.logger,
         server: address,
-        type: 'pkg',
+        type: 'npm',
         name: 'lit-html',
         version: '1.1.2',
         alias: '1',
