@@ -9,6 +9,7 @@ const { readFileSync } = require('fs');
 const { join } = require('path');
 const ora = require('ora');
 const formatDistance = require('date-fns/formatDistance');
+const av = require('yargs-parser')(process.argv.slice(2))
 const Meta = require('../classes/meta');
 const { resolvePath, logger } = require('../utils');
 
@@ -19,7 +20,7 @@ exports.aliases = ['show'];
 exports.describe = `Retrieve meta information by package, map or npm name`;
 
 exports.builder = (yargs) => {
-    const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
+    const cwd = av.cwd || av.c || process.cwd();
 
     let assets = {};
     try {

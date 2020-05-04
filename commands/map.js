@@ -3,6 +3,7 @@
 const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
+const av = require('yargs-parser')(process.argv.slice(2))
 const PublishMap = require('../classes/publish/map');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
@@ -13,7 +14,7 @@ exports.aliases = ['m'];
 exports.describe = `Upload an import map file to the server under a given name and version.`;
 
 exports.builder = yargs => {
-    const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
+    const cwd = av.cwd || av.c || process.cwd();
 
     let assets = {};
     try {

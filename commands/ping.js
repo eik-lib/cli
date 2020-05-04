@@ -2,6 +2,7 @@
 
 const ora = require('ora');
 const { readFileSync } = require('fs');
+const av = require('yargs-parser')(process.argv.slice(2))
 const Ping = require('../classes/ping');
 const { resolvePath, logger } = require('../utils');
 
@@ -12,9 +13,11 @@ exports.aliases = [];
 exports.describe = `Ping an Eik server`;
 
 exports.builder = (yargs) => {
+    const cwd = av.cwd || av.c || process.cwd();
+
     let assets = {};
     try {
-        const assetsPath = resolvePath('./assets.json').pathname;
+        const assetsPath = resolvePath('./assets.json', cwd).pathname;
         assets = JSON.parse(readFileSync(assetsPath));
     } catch (err) {
         // noop
@@ -30,6 +33,11 @@ exports.builder = (yargs) => {
             describe: 'Logs additional messages',
             default: false,
             type: 'boolean',
+        },
+        cwd: {
+            alias: 'c',
+            describe: 'Alter current working directory.',
+            default: process.cwd(),
         },
     });
 };
