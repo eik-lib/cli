@@ -48,12 +48,12 @@ test('Retrieving meta information about a package from an asset server', async t
         logger: l.logger,
         server: address,
         name: 'lit-html',
-        version: '1.1.2',
         debug: true,
         token,
     }).run();
 
     t.ok(result, 'Command should return truthy');
-    t.match(result.name, 'lit-html', 'Log output should show package name');
-    t.match(result.version, '1.1.2', 'Log output should show package version');
+    t.ok(result.npm, 'Command should be npm scoped');
+    t.equal(result.npm.name, 'lit-html', 'Log output should show package name');
+    t.equal(result.npm.versions[0].version, '1.1.2', 'Log output should show package version');
 });

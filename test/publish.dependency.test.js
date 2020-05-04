@@ -51,7 +51,7 @@ test('Uploading a dependency to an asset server', async t => {
     t.equals(result, true, 'Command should return true');
     t.match(
         l.logs.debug,
-        ':: pkg lit-html v1.1.2',
+        ':: npm lit-html v1.1.2',
         'Log output should show published name and version',
     );
     t.match(
