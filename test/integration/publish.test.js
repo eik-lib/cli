@@ -10,6 +10,7 @@ const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
+const cli = require('../..');
 
 function exec(cmd) {
     return new Promise((resolve) => {
@@ -26,15 +27,16 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key change_me --server ${address} --cwd ${folder}`;
-    await exec(cmd);
-    const eikrc = JSON.parse(await fs.readFile(join(folder, '.eikrc')));
+    
+    const token = await new cli.Login({
+        server: address,
+        key: 'change_me',
+    }).run();
 
     t.context.server = server;
     t.context.address = address;
     t.context.folder = folder;
-    t.context.token = eikrc.token;
+    t.context.token = token;
     done();
 });
 
@@ -43,7 +45,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik publish --token --server : no assets.json or .eikrc', async (t) => {
+test('eik publish --token --server : no assets.json', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} publish
         --name test-app 
@@ -65,7 +67,7 @@ test('eik publish --token --server : no assets.json or .eikrc', async (t) => {
     t.end();
 });
 
-test('eik publish : publish, details provided by assets.json file and .eikrc', async (t) => {
+test('eik publish : publish, details provided by assets.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
@@ -78,7 +80,7 @@ test('eik publish : publish, details provided by assets.json file and .eikrc', a
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} publish --cwd ${t.context.folder}`;
+    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
