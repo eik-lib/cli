@@ -1,6 +1,7 @@
 /* eslint-disable prefer-template */
 /* eslint-disable no-restricted-properties */
 /* eslint-disable one-var */
+
 'use strict';
 
 const chalk = require('chalk');
@@ -73,30 +74,31 @@ function colorType(type) {
 
 function formatMeta({ name, type, versions, org } = {}, server) {
     const metaUrl = new URL(join(type, name), server);
+    const write = process.stdout.write.bind(process.stdout);
 
-    process.stdout.write(`:: ${colorType(type)} > ${chalk.green(name)} | `);
-    process.stdout.write(`${chalk.bold('org:')} ${org} | `);
-    process.stdout.write(`${chalk.bold('url:')} ${chalk.cyan(metaUrl.href)}\n`);
+    write(`:: ${colorType(type)} > ${chalk.green(name)} | `);
+    write(`${chalk.bold('org:')} ${org} | `);
+    write(`${chalk.bold('url:')} ${chalk.cyan(metaUrl.href)}\n`);
 
     if (versions.length) {
-        process.stdout.write(`\n   ${chalk.bold('versions:')}\n`);
+        write(`\n   ${chalk.bold('versions:')}\n`);
     }
 
     for (const { version, integrity, created, author, files } of versions) {
         const baseUrl = new URL(join(metaUrl.pathname, version), server);
-        process.stdout.write(`   - ${chalk.green(version)}\n`);
-        process.stdout.write(`     ${chalk.bold('url:')} ${chalk.cyan(baseUrl.href)}\n`);
+        write(`   - ${chalk.green(version)}\n`);
+        write(`     ${chalk.bold('url:')} ${chalk.cyan(baseUrl.href)}\n`);
 
-        process.stdout.write(`     ${chalk.bold('integrity:')} ${integrity}\n`);
+        write(`     ${chalk.bold('integrity:')} ${integrity}\n`);
 
         if (files) {
-            process.stdout.write(`\n     ${chalk.bold('files:')}\n`);
+            write(`\n     ${chalk.bold('files:')}\n`);
             for (const file of files) {
                 const fileUrl = new URL(join(baseUrl.pathname, file.pathname), server);
-                process.stdout.write(`     - ${chalk.cyan(fileUrl.href)} `);
-                process.stdout.write(`${chalk.yellow(file.mimeType)} `);
-                process.stdout.write(`${chalk.magenta(readableBytes(file.size))}\n`);
-                process.stdout.write(`       ${chalk.bold('integrity:')} ${file.integrity}\n\n`);
+                write(`     - ${chalk.cyan(fileUrl.href)} `);
+                write(`${chalk.yellow(file.mimeType)} `);
+                write(`${chalk.magenta(readableBytes(file.size))}\n`);
+                write(`       ${chalk.bold('integrity:')} ${file.integrity}\n\n`);
             }
         }
 
@@ -106,14 +108,14 @@ function formatMeta({ name, type, versions, org } = {}, server) {
                 new Date(),
                 { addSuffix: true }
             );
-            process.stdout.write(`     ${chalk.bold('published')} ${chalk.yellow(d)}`);
+            write(`     ${chalk.bold('published')} ${chalk.yellow(d)}`);
         }
 
         if (author) {
-            process.stdout.write(` ${chalk.bold('by')} ${chalk.yellow(author.name)}`);
+            write(` ${chalk.bold('by')} ${chalk.yellow(author.name)}`);
         }
 
-        process.stdout.write(`\n`);
+        write(`\n`);
         
     }
 }
