@@ -1,9 +1,14 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-plusplus */
+
 'use strict';
 
 const abslog = require('abslog');
 const { join } = require('path');
 const { validators } = require('@eik/common');
 const fetch = require('node-fetch');
+
+const types = ['pkg', 'map', 'npm'];
 
 module.exports = class Meta {
     constructor({ logger, server, name, version } = {}) {
@@ -23,50 +28,63 @@ module.exports = class Meta {
             return false;
         }
 
-        try {
-            validators.name(this.name);
-            validators.version(this.version);
-        } catch (err) {
-            this.log.error(err.message);
-            return false;
-        }
-
         this.log.debug('Requesting meta information from asset server');
         try {
-            const res = await fetch(
-                `${this.server}/${join(
-                    'pkg',
-                    this.name,
-                    this.version,
-                )}`,
-            );
+            const typeFetches = [];
+            for (const type of types) {
+                const url = new URL(join(type, this.name), this.server);
 
-            if (!res.ok) {
-                this.log.error(
-                    'Unable to retrieve meta information for package',
-                );
-                switch (res.status) {
-                    case 400:
-                        this.log.warn(
-                            'Client attempted to send an invalid URL parameter',
-                        );
-                        break;
-                    case 401:
-                        this.log.warn('Client unauthorized with server');
-                        break;
-                    case 404:
-                        this.log.warn(
-                            'The server was unable to locate the required resource',
-                        );
-                        break;
-                    default:
-                        this.log.warn(`Server failed: ${await res.text()}`);
-                }
-
-                return false;
+                typeFetches.push(fetch(url));
             }
 
-            return await res.json();
+            const responses = await Promise.all(typeFetches);
+
+            const data = {};
+
+            for (const res of responses) {
+                if (res.ok) {
+                    const { versions, type, name, org } = await res.json();
+                    data[type] = {
+                        versions: Object.values(versions),
+                        type,
+                        name,
+                        org,
+                    };
+
+                    const vers = new Map(versions);
+                    data[type].versions = Array.from(vers.values());
+
+                    for (let i = 0; i < data[type].versions.length; i++) {
+                        const { version } = data[type].versions[i];
+                        const url = new URL(
+                            join(type, name, version),
+                            this.server,
+                        );
+
+                        const resp = await fetch(url);
+                        const meta = await resp.json();
+
+                        data[type].versions[i] = {
+                            ...data[type].versions[i],
+                            ...meta,
+                        };
+                    }
+                }
+
+                if (res.status === 400) {
+                    this.log.warn(
+                        'Client attempted to send an invalid URL parameter',
+                    );
+                    return false;
+                }
+
+                if (res.status === 401) {
+                    this.log.warn('Client unauthorized with server');
+                    return false;
+                }
+            }
+
+            return data;
         } catch (err) {
             this.log.error('Unable to retrieve meta information for package');
             this.log.warn(err.message);
