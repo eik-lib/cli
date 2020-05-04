@@ -1,10 +1,16 @@
 'use strict';
 
-const readline = require("readline");
+const homedir = require('os').homedir();
+const readline = require('readline');
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const Login = require('../classes/login');
-const { resolvePath, logger, readMetaFile, writeMetaFile } = require('../utils');
+const {
+    resolvePath,
+    logger,
+    readMetaFile,
+    writeMetaFile,
+} = require('../utils');
 
 exports.command = 'login';
 
@@ -48,10 +54,10 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     let success = false;
-    const { debug, key, cwd } = argv;
+    const { debug, key, server } = argv;
     let k = key;
 
-    if (!k) {
+    if (!k && server) {
         const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout,
@@ -75,10 +81,16 @@ exports.handler = async (argv) => {
             key: k,
         }).run();
 
-        const meta = await readMetaFile({ cwd });
-        meta.token = token;
-        await writeMetaFile(meta, { cwd });
-        success = true;
+        if (token) {
+            const meta = await readMetaFile({ cwd: homedir });
+
+            const tokens = new Map(meta.tokens);
+            tokens.set(server, token);
+            meta.tokens = Array.from(tokens);
+
+            await writeMetaFile(meta, { cwd: homedir });
+            success = true;
+        }
     } catch (err) {
         logger.warn(err.message);
     }
