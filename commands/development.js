@@ -7,7 +7,7 @@ const { resolvePath, logger } = require('../utils');
 
 exports.command = 'development';
 
-exports.aliases = ['d', 'dev'];
+exports.aliases = ['dev'];
 
 exports.describe = `Build an apps dependencies based on local assets.json file.`;
 

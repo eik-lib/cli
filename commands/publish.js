@@ -3,17 +3,18 @@
 const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
+const av = require('yargs-parser')(process.argv.slice(2))
 const PublishApp = require('../classes/publish/app/index');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'publish';
 
-exports.aliases = ['p', 'pub'];
+exports.aliases = ['pub'];
 
 exports.describe = `Publish an apps dependencies based on local assets.json file.`;
 
 exports.builder = (yargs) => {
-    const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
+    const cwd = av.cwd || av.c || process.cwd();
 
     let assets = {};
     try {

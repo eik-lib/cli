@@ -3,17 +3,18 @@
 const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
+const av = require('yargs-parser')(process.argv.slice(2))
 const PublishDependency = require('../classes/publish/dependency');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'dependency <name> <version>';
 
-exports.aliases = ['dep', 'd'];
+exports.aliases = ['dep'];
 
 exports.describe = `Publish an NPM package to server by given name and version.`;
 
-exports.builder = async yargs => {
-    const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
+exports.builder = yargs => {
+    const cwd = av.cwd || av.c || process.cwd();
 
     let assets = {};
     try {
