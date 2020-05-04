@@ -11,6 +11,7 @@ const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
+const cli = require('../..');
 
 function exec(cmd) {
     return new Promise((resolve) => {
@@ -21,19 +22,21 @@ function exec(cmd) {
 }
 
 beforeEach(async (done, t) => {
-    const server = fastify({logger: false});
+    const server = fastify({ logger: false });
     const memSink = new sink.MEM();
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key change_me --server ${address} --cwd ${folder}`;
-    await exec(cmd);
-    const eikrc = JSON.parse(await fs.readFile(join(folder, '.eikrc')));
 
-    const publishCmd = `${eik} dependency lodash 4.17.0
-        --token ${eikrc.token}
+    const token = await new cli.Login({
+        server: address,
+        key: 'change_me',
+    }).run();
+
+    const publishCmd = `${eik} dependency scroll-into-view-if-needed 2.2.24
+        --token ${token}
         --server ${address}
         --cwd ${folder}`;
 
@@ -41,15 +44,15 @@ beforeEach(async (done, t) => {
 
     const map = {
         imports: {
-            lodash: new URL('/pkg/lodash/4.17.0/index.js', address).href,
+            'scroll-into-view-if-needed': new URL(
+                '/npm/scroll-into-view-if-needed/2.2.24/index.js',
+                address,
+            ).href,
         },
     };
-    await fs.writeFile(
-        join(folder, 'import-map.json'),
-        JSON.stringify(map),
-    );
+    await fs.writeFile(join(folder, 'import-map.json'), JSON.stringify(map));
     const mapCmd = `${eik} map test-map 1.0.0 import-map.json
-        --token ${eikrc.token}
+        --token ${token}
         --server ${address}
         --cwd ${folder}`;
     await exec(mapCmd.split('\n').join(' '));
@@ -57,7 +60,7 @@ beforeEach(async (done, t) => {
     t.context.server = server;
     t.context.address = address;
     t.context.folder = folder;
-    t.context.token = eikrc.token;
+    t.context.token = token;
     done();
 });
 
@@ -66,9 +69,9 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik alias pkg <name> <version> <alias> --token --server : no assets.json or .eikrc', async (t) => {
+test('eik npm-alias <name> <version> <alias> --token --server : no assets.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} alias pkg lodash 4.17.0 4
+    const cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
         --token ${t.context.token}
         --server ${t.context.address}
         --cwd ${t.context.folder}`;
@@ -76,17 +79,16 @@ test('eik alias pkg <name> <version> <alias> --token --server : no assets.json o
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
     const res = await fetch(
-        new URL('/pkg/lodash/v4/index.js', t.context.address),
+        new URL('/npm/scroll-into-view-if-needed/v2/index.js', t.context.address),
     );
 
     t.equal(res.ok, true);
-    
     t.notOk(error);
-    t.match(stdout, 'Created pkg alias "v4" (for "lodash") and set it to point to version "4.17.0"');
+    t.match(stdout, 'Created npm alias "v2" (for "scroll-into-view-if-needed") and set it to point to version "2.2.24"');
     t.end();
 });
 
-test('eik alias pkg <name> <version> <alias> : publish details provided by assets.json file and .eikrc', async (t) => {
+test('eik pkg-alias <name> <version> <alias> : publish details provided by assets.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
@@ -96,24 +98,23 @@ test('eik alias pkg <name> <version> <alias> : publish details provided by asset
         JSON.stringify(assets),
     );
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} alias pkg lodash 4.17.0 4 --cwd ${t.context.folder}`;
+    const cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2 --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
     const res = await fetch(
-        new URL('/pkg/lodash/v4/index.js', t.context.address),
+        new URL('/npm/scroll-into-view-if-needed/v2/index.js', t.context.address),
     );
 
     t.equal(res.ok, true);
-    
     t.notOk(error);
-    t.match(stdout, 'Created pkg alias "v4" (for "lodash") and set it to point to version "4.17.0"');
+    t.match(stdout, 'Created npm alias "v2" (for "scroll-into-view-if-needed") and set it to point to version "2.2.24"');
     t.end();
 });
 
-test('eik alias map <name> <version> <alias> --token --server : no assets.json or .eikrc', async (t) => {
+test('eik map-alias <name> <version> <alias> --token --server : no assets.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} alias map test-map 1.0.0 1
+    const cmd = `${eik} map-alias test-map 1.0.0 1
         --token ${t.context.token}
         --server ${t.context.address}
         --cwd ${t.context.folder}`;
@@ -125,13 +126,13 @@ test('eik alias map <name> <version> <alias> --token --server : no assets.json o
     );
 
     t.equal(res.ok, true);
-    
+
     t.notOk(error);
     t.match(stdout, 'Created map alias "v1" (for "test-map") and set it to point to version "1.0.0"');
     t.end();
 });
 
-test('eik alias map <name> <version> <alias> : publish details provided by assets.json file and .eikrc', async (t) => {
+test('eik map-alias <name> <version> <alias> : publish details provided by assets.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
@@ -141,7 +142,7 @@ test('eik alias map <name> <version> <alias> : publish details provided by asset
         JSON.stringify(assets),
     );
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} alias map test-map 1.0.0 1 --cwd ${t.context.folder}`;
+    const cmd = `${eik} map-alias test-map 1.0.0 1 --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -150,7 +151,7 @@ test('eik alias map <name> <version> <alias> : publish details provided by asset
     );
 
     t.equal(res.ok, true);
-    
+
     t.notOk(error);
     t.match(stdout, 'Created map alias "v1" (for "test-map") and set it to point to version "1.0.0"');
     t.end();
