@@ -1,9 +1,10 @@
 'use strict';
 
+const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const PublishDependency = require('../classes/publish/dependency');
-const { resolvePath, logger } = require('../utils');
+const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'dependency <name> <version>';
 
@@ -11,21 +12,13 @@ exports.aliases = ['dep', 'd'];
 
 exports.describe = `Publish an NPM package to server by given name and version.`;
 
-exports.builder = yargs => {
+exports.builder = async yargs => {
     const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
 
     let assets = {};
     try {
         const assetsPath = resolvePath('./assets.json', cwd).pathname;
         assets = JSON.parse(readFileSync(assetsPath));
-    } catch (err) {
-        // noop
-    }
-
-    let meta = {};
-    try {
-        const metaPath = resolvePath('./.eikrc', cwd).pathname;
-        meta = JSON.parse(readFileSync(metaPath));
     } catch (err) {
         // noop
     }
@@ -71,7 +64,7 @@ exports.builder = yargs => {
         },
         token: {
             describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
-            default: meta.token,
+            default: '',
             alias: 't',
         },
     });
@@ -80,10 +73,14 @@ exports.builder = yargs => {
 exports.handler = async argv => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug } = argv;
+    const { debug, token, server } = argv;
 
     try {
-        const options = { logger: logger(spinner, debug), ...argv };
+        const meta = await readMetaFile({ cwd: homedir });
+        const tokens = new Map(meta.tokens);
+        const t = token || tokens.get(server) || '';
+
+        const options = { logger: logger(spinner, debug), ...argv, token: t };
         success = await new PublishDependency(options).run();
     } catch (err) {
         spinner.warn(err.message);
