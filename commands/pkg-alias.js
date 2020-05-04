@@ -1,15 +1,16 @@
 'use strict';
 
+const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const Alias = require('../classes/alias');
-const { resolvePath, logger } = require('../utils');
+const { resolvePath, logger, readMetaFile } = require('../utils');
 
-exports.command = 'alias <type> <name> <version> <alias>';
+exports.command = 'pkg-alias <name> <version> <alias>';
 
-exports.aliases = ['a'];
+exports.aliases = ['pa'];
 
-exports.describe = `Create a semver major alias for an import map or package as identified by its name and version.`;
+exports.describe = `Create a semver major alias for a package as identified by its name and version.`;
 
 exports.builder = (yargs) => {
     const cwd = yargs.argv.cwd || yargs.argv.c || process.cwd();
@@ -22,20 +23,7 @@ exports.builder = (yargs) => {
         // noop
     }
 
-    let meta = {};
-    try {
-        const metaPath = resolvePath('./.eikrc', cwd).pathname;
-        meta = JSON.parse(readFileSync(metaPath));
-    } catch (err) {
-        // noop
-    }
-
     yargs
-        .positional('type', {
-            describe:
-                'Resource type to perform alias on. Either "pkg" for a package or "map" for an import map',
-            type: 'string',
-        })
         .positional('name', {
             describe:
                 'Name matching either package or import map name depending on type given',
@@ -71,7 +59,7 @@ exports.builder = (yargs) => {
         token: {
             describe:
                 'Provide a jwt token to be used to authenticate with the Eik server.',
-            default: meta.token,
+            default: '',
             alias: 't',
         },
     });
@@ -80,12 +68,18 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug } = argv;
+    const { debug, token, server } = argv;
 
     try {
+        const meta = await readMetaFile({ cwd: homedir });
+        const tokens = new Map(meta.tokens);
+        const t = token || tokens.get(server) || '';
+
         success = await new Alias({
+            type: 'pkg',
             logger: logger(spinner, debug),
             ...argv,
+            token: t,
         }).run();
     } catch (err) {
         logger.warn(err.message);
