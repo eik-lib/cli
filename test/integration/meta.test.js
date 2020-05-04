@@ -9,6 +9,7 @@ const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
+const cli = require('../..');
 
 function exec(cmd) {
     return new Promise((resolve) => {
@@ -26,17 +27,19 @@ beforeEach(async (done, t) => {
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key change_me --server ${address} --cwd ${folder}`;
-    await exec(cmd);
-    const eikrc = JSON.parse(await fs.readFile(join(folder, '.eikrc')));
+    
+    const token = await new cli.Login({
+        server: address,
+        key: 'change_me',
+    }).run();
 
-    const depcmd = `${eik} dep lodash 4.17.0 -t ${eikrc.token} -s ${address} -c ${folder}`;
+    const depcmd = `${eik} dep scroll-into-view-if-needed 2.2.24 -t ${token} -s ${address} -c ${folder}`;
     await exec(depcmd);
 
     t.context.server = server;
     t.context.address = address;
     t.context.folder = folder;
-    t.context.token = eikrc.token;
+    t.context.token = token;
     done();
 });
 
@@ -45,14 +48,14 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik meta --server : no assets.json or .eikrc', async (t) => {
+test('eik meta --server : no assets.json', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} meta lodash 4.17.0 --server ${t.context.address}`;
+    const cmd = `${eik} meta scroll-into-view-if-needed --server ${t.context.address}`;
 
     const { error, stdout } = await exec(cmd);
 
     t.notOk(error);
-    t.match(stdout, ':: pkg lodash v4.17.0');
+    t.match(stdout, '::  NPM  > scroll-into-view-if-needed | org: local | url:');
     t.end();
 });
 
@@ -67,11 +70,11 @@ test('eik meta : details provided by assets.json', async (t) => {
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} meta lodash 4.17.0 --cwd ${t.context.folder}`;
+    const cmd = `${eik} meta scroll-into-view-if-needed --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
     
     t.notOk(error);
-    t.match(stdout, ':: pkg lodash v4.17.0');
+    t.match(stdout, '::  NPM  > scroll-into-view-if-needed | org: local | url:');
     t.end();
 });
