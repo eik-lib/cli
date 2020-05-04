@@ -1,9 +1,10 @@
 'use strict';
 
+const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
-const Map = require('../classes/publish/map');
-const { resolvePath, logger } = require('../utils');
+const PublishMap = require('../classes/publish/map');
+const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'map <name> <version> <file>';
 
@@ -18,14 +19,6 @@ exports.builder = yargs => {
     try {
         const assetsPath = resolvePath('./assets.json', cwd).pathname;
         assets = JSON.parse(readFileSync(assetsPath));
-    } catch (err) {
-        // noop
-    }
-
-    let meta = {};
-    try {
-        const metaPath = resolvePath('./.eikrc', cwd).pathname;
-        meta = JSON.parse(readFileSync(metaPath));
     } catch (err) {
         // noop
     }
@@ -64,7 +57,7 @@ exports.builder = yargs => {
         },
         token: {
             describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
-            default: meta.token,
+            default: '',
             alias: 't',
         },
     });
@@ -73,12 +66,17 @@ exports.builder = yargs => {
 exports.handler = async argv => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug } = argv;
+    const { debug, token, server } = argv;
 
     try {
-        success = await new Map({
+        const meta = await readMetaFile({ cwd: homedir });
+        const tokens = new Map(meta.tokens);
+        const t = token || tokens.get(server) || '';
+
+        success = await new PublishMap({
             logger: logger(spinner, debug),
             ...argv,
+            token: t,
         }).run();
     } catch (err) {
         spinner.warn(err.message);
