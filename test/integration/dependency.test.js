@@ -10,6 +10,7 @@ const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
+const cli = require('../..');
 
 function exec(cmd) {
     return new Promise((resolve) => {
@@ -26,15 +27,16 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key change_me --server ${address} --cwd ${folder}`;
-    await exec(cmd);
-    const eikrc = JSON.parse(await fs.readFile(join(folder, '.eikrc')));
+    
+    const token = await new cli.Login({
+        server: address,
+        key: 'change_me',
+    }).run();
 
     t.context.server = server;
     t.context.address = address;
     t.context.folder = folder;
-    t.context.token = eikrc.token;
+    t.context.token = token;
     done();
 });
 
@@ -45,7 +47,7 @@ afterEach(async (done, t) => {
 
 test('eik dependency --token --server : no assets.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} dependency lodash 4.17.0
+    const cmd = `${eik} dependency scroll-into-view-if-needed 2.2.24
         --token ${t.context.token}
         --server ${t.context.address}
         --cwd ${t.context.folder}`;
@@ -53,12 +55,12 @@ test('eik dependency --token --server : no assets.json or .eikrc', async (t) => 
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
     const res = await fetch(
-        new URL('/pkg/lodash/4.17.0/index.js', t.context.address),
+        new URL('/npm/scroll-into-view-if-needed/2.2.24/index.js', t.context.address),
     );
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published dependency package "lodash" at version "4.17.0"');
+    t.match(stdout, 'Published dependency package "scroll-into-view-if-needed" at version "2.2.24"');
     t.end();
 });
 
@@ -73,16 +75,16 @@ test('eik dependency : publish details provided by assets.json file and .eikrc',
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} dependency --cwd ${t.context.folder} lodash 4.17.0`;
+    const cmd = `${eik} dependency --token ${t.context.token} --cwd ${t.context.folder} scroll-into-view-if-needed 2.2.24`;
 
     const { error, stdout } = await exec(cmd);
 
     const res = await fetch(
-        new URL('/pkg/lodash/4.17.0/index.js', t.context.address),
+        new URL('/npm/scroll-into-view-if-needed/2.2.24/index.js', t.context.address),
     );
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published dependency package "lodash" at version "4.17.0"');
+    t.match(stdout, 'Published dependency package "scroll-into-view-if-needed" at version "2.2.24"');
     t.end();
 });
