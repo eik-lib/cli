@@ -55,7 +55,9 @@ test('eik meta --server : no assets.json', async (t) => {
     const { error, stdout } = await exec(cmd);
 
     t.notOk(error);
-    t.match(stdout, '::  NPM  > scroll-into-view-if-needed | org: local | url:');
+    t.match(stdout, '::');
+    t.match(stdout, 'NPM');
+    t.match(stdout, 'scroll-into-view-if-needed');
     t.end();
 });
 
@@ -75,6 +77,8 @@ test('eik meta : details provided by assets.json', async (t) => {
     const { error, stdout } = await exec(cmd);
     
     t.notOk(error);
-    t.match(stdout, '::  NPM  > scroll-into-view-if-needed | org: local | url:');
+    t.match(stdout, '::');
+    t.match(stdout, 'NPM');
+    t.match(stdout, 'scroll-into-view-if-needed');
     t.end();
 });
