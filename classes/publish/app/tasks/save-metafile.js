@@ -1,6 +1,6 @@
 'use strict';
 
-const { writeMetaFile } = require('../../../../utils');
+const { writeMetaFile, readMetaFile } = require('../../../../utils');
 
 module.exports = class SaveMetaFile {
     async process(state = {}) {
@@ -8,7 +8,10 @@ module.exports = class SaveMetaFile {
 
         log.debug('Saving .eikrc metafile.');
         try {
-            await writeMetaFile({ version: nextVersion, integrity }, { cwd });
+            const meta = await readMetaFile({ cwd });
+            meta.version = nextVersion;
+            meta.integrity = integrity;
+            await writeMetaFile(meta, { cwd });
         } catch (err) {
             throw new Error(`Unable to save .eikrc metafile: ${err.message}`);
         }
