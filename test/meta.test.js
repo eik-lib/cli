@@ -37,7 +37,7 @@ test('Retrieving meta information about a package from an asset server', async t
     const { address, token } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.Dependency({
+    await new cli.publish.NPM({
         server: address,
         name: 'lit-html',
         version: '1.1.2',

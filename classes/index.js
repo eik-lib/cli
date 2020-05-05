@@ -5,8 +5,8 @@ const Alias = require('./alias');
 const Meta = require('./meta');
 const Login = require('./login');
 const PublishMap = require('./publish/map');
-const PublishApp = require('./publish/app/index');
-const PublishDependency = require('./publish/dependency');
+const PublishPackage = require('./publish/package/index');
+const PublishNPM = require('./publish/npm');
 
 module.exports = {
     Init,
@@ -14,8 +14,8 @@ module.exports = {
     Meta,
     Login,
     publish: {
-        App: PublishApp,
+        Package: PublishPackage,
         Map: PublishMap,
-        Dependency: PublishDependency,
+        NPM: PublishNPM,
     },
 };

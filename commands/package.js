@@ -4,7 +4,7 @@ const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const av = require('yargs-parser')(process.argv.slice(2))
-const PublishApp = require('../classes/publish/app/index');
+const PublishPackage = require('../classes/publish/package/index');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'package';
@@ -107,7 +107,7 @@ exports.handler = async (argv) => {
             token: t,
             map: m,
         };
-        success = await new PublishApp(options).run();
+        success = await new PublishPackage(options).run();
     } catch (err) {
         spinner.warn(err.message);
     }
