@@ -7,7 +7,7 @@ const av = require('yargs-parser')(process.argv.slice(2))
 const PublishDependency = require('../classes/publish/dependency');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
-exports.command = 'dependency <name> <version>';
+exports.command = 'dependency <name> [<version>]';
 
 exports.aliases = ['dep'];
 
