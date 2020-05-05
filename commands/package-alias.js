@@ -7,9 +7,9 @@ const av = require('yargs-parser')(process.argv.slice(2))
 const Alias = require('../classes/alias');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
-exports.command = 'pkg-alias <name> <version> <alias>';
+exports.command = 'package-alias <name> <version> <alias>';
 
-exports.aliases = ['pa'];
+exports.aliases = ['pkg-alias', 'pa'];
 
 exports.describe = `Create a semver major alias for a package as identified by its name and version.`;
 

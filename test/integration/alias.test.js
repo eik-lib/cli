@@ -35,7 +35,7 @@ beforeEach(async (done, t) => {
         key: 'change_me',
     }).run();
 
-    const publishCmd = `${eik} dependency scroll-into-view-if-needed 2.2.24
+    const publishCmd = `${eik} npm scroll-into-view-if-needed 2.2.24
         --token ${token}
         --server ${address}
         --cwd ${folder}`;
@@ -88,7 +88,7 @@ test('eik npm-alias <name> <version> <alias> --token --server : no assets.json o
     t.end();
 });
 
-test('eik pkg-alias <name> <version> <alias> : publish details provided by assets.json file', async (t) => {
+test('eik npm-alias <name> <version> <alias> : publish details provided by assets.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,

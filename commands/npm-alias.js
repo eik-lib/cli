@@ -9,7 +9,7 @@ const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'npm-alias <name> <version> <alias>';
 
-exports.aliases = ['na'];
+exports.aliases = ['na', 'dep-alias', 'dependency-alias'];
 
 exports.describe = `Create a semver major alias for an npm package as identified by its name and version.`;
 

@@ -4,16 +4,16 @@ const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const av = require('yargs-parser')(process.argv.slice(2))
-const PublishDependency = require('../classes/publish/dependency');
+const PublishApp = require('../classes/publish/app/index');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
-exports.command = 'dependency <name> [<version>]';
+exports.command = 'package';
 
-exports.aliases = ['dep'];
+exports.aliases = ['publish', 'pkg', 'pub'];
 
-exports.describe = `Publish an NPM package to server by given name and version.`;
+exports.describe = `Publish an apps dependencies based on local assets.json file.`;
 
-exports.builder = yargs => {
+exports.builder = (yargs) => {
     const cwd = av.cwd || av.c || process.cwd();
 
     let assets = {};
@@ -23,16 +23,6 @@ exports.builder = yargs => {
     } catch (err) {
         // noop
     }
-
-    yargs
-        .positional('name', {
-            describe: 'NPM package name.',
-            type: 'string',
-        })
-        .positional('version', {
-            describe: 'Semver NPM package version.',
-            type: 'string',
-        });
 
     yargs.options({
         server: {
@@ -63,26 +53,61 @@ exports.builder = yargs => {
             default: false,
             type: 'boolean',
         },
+        js: {
+            describe:
+                'Specify the path on local disk to JavaScript client side assets relative to the current working directory.',
+            default: assets.js && assets.js.input,
+        },
+        css: {
+            describe:
+                'Specify the path on local disk to CSS client side assets relative to the current working directory.',
+            default: assets.css && assets.css.input,
+        },
+        name: {
+            describe: 'Specify the app name.',
+            default: assets.name,
+        },
+        major: {
+            describe: 'Major semver version to lock updates to.',
+            default: assets.major,
+        },
+        level: {
+            alias: 'l',
+            describe:
+                'Specify the app semver level to use when updating the package.',
+            default: 'patch',
+        },
         token: {
-            describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
+            describe:
+                'Provide a jwt token to be used to authenticate with the Eik server.',
             default: '',
             alias: 't',
         },
     });
 };
 
-exports.handler = async argv => {
+exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug, token, server } = argv;
+    const { debug, token, server, map } = argv;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
         const tokens = new Map(meta.tokens);
         const t = token || tokens.get(server) || '';
 
-        const options = { logger: logger(spinner, debug), ...argv, token: t };
-        success = await new PublishDependency(options).run();
+        let m = map;
+        if (m && !Array.isArray(m)) {
+            m = [m];
+        }
+        
+        const options = { 
+            logger: logger(spinner, debug), 
+            ...argv, 
+            token: t,
+            map: m,
+        };
+        success = await new PublishApp(options).run();
     } catch (err) {
         spinner.warn(err.message);
     }
