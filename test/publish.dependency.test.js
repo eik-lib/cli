@@ -60,3 +60,31 @@ test('Uploading a dependency to an asset server', async t => {
         'Log output should command completion',
     );
 });
+
+test('Uploading a dependency with @ character in name', async t => {
+    const { address, token } = t.context;
+    const l = mockLogger();
+
+    const publishDep = new cli.publish.Dependency({
+        logger: l.logger,
+        server: address,
+        name: '@podium/browser',
+        version: '1.0.0-beta.2',
+        debug: true,
+        token,
+    });
+
+    const result = await publishDep.run();
+
+    t.equals(result, true, 'Command should return true');
+    t.match(
+        l.logs.debug,
+        ':: npm @podium/browser v1.0.0-beta.2',
+        'Log output should show published name and version',
+    );
+    t.match(
+        l.logs.info,
+        'Published dependency package "@podium/browser" at version "1.0.0-beta.2"',
+        'Log output should command completion',
+    );
+});

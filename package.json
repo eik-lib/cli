@@ -36,7 +36,7 @@
     "node-fetch": "^2.6.0",
     "ora": "^4.0.4",
     "pkg-dir": "^4.2.0",
-    "postcss": "^7.0.28",
+    "postcss": "^7.0.29",
     "postcss-import": "^12.0.1",
     "read-pkg-up": "^7.0.1",
     "rimraf": "^3.0.2",
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@eik/core": "1.0.0-alpha.17",
-    "@eik/service": "^1.0.0-alpha.7",
+    "@eik/service": "^1.0.0-alpha.8",
     "eslint": "6.8.0",
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-config-prettier": "6.11.0",
