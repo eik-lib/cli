@@ -276,7 +276,7 @@ module.exports = class PublishDependency {
             this.log.debug(`  ==> ${this.file}`);
             this.log.debug(`  ==> ${this.file}.map`);
             this.log.info(
-                `Published dependency package "${this.name}" at version "${this.version}" (dry run)`,
+                `Published npm package "${this.name}" at version "${this.version}" (dry run)`,
             );
             return true;
         }
@@ -323,7 +323,7 @@ module.exports = class PublishDependency {
                     break;
                 case 409:
                     this.log.warn(
-                        `Package with name "${this.name}" and version "${this.version}" already exists on server`,
+                        `NPM package with name "${this.name}" and version "${this.version}" already exists on server`,
                     );
                     break;
                 case 415:
@@ -352,7 +352,7 @@ module.exports = class PublishDependency {
         }
 
         this.log.info(
-            `Published dependency package "${this.name}" at version "${this.version}"`,
+            `Published npm package "${this.name}" at version "${this.version}"`,
         );
         return true;
     }

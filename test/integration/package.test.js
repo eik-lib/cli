@@ -45,9 +45,9 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik publish --token --server : no assets.json', async (t) => {
+test('eik package --token --server : no assets.json', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} publish
+    const cmd = `${eik} package
         --name test-app 
         --token ${t.context.token}
         --server ${t.context.address}
@@ -67,7 +67,7 @@ test('eik publish --token --server : no assets.json', async (t) => {
     t.end();
 });
 
-test('eik publish : publish, details provided by assets.json file', async (t) => {
+test('eik package : package, details provided by assets.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
@@ -80,7 +80,7 @@ test('eik publish : publish, details provided by assets.json file', async (t) =>
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -94,12 +94,12 @@ test('eik publish : publish, details provided by assets.json file', async (t) =>
     t.end();
 });
 
-test('workflow: publish dep, alias dep, publish map, alias map and then publish using map', async (t) => {
+test('workflow: publish npm, alias npm, publish map, alias map and then publish package using map', async (t) => {
     const eik = join(__dirname, '../../index.js');
     let cmd = '';
     
     // publish npm dep
-    cmd = `${eik} dep scroll-into-view-if-needed 2.2.24
+    cmd = `${eik} npm scroll-into-view-if-needed 2.2.24
         --token ${t.context.token} 
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
@@ -138,7 +138,7 @@ test('workflow: publish dep, alias dep, publish map, alias map and then publish 
     await exec(cmd.split('\n').join(' '));
 
     // use import map when publishing app files
-    cmd = `${eik} publish
+    cmd = `${eik} package
         --name test-app 
         --token ${t.context.token}
         --server ${t.context.address}

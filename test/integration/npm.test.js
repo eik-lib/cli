@@ -45,9 +45,9 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik dependency --token --server : no assets.json or .eikrc', async (t) => {
+test('eik npm --token --server : no assets.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} dependency scroll-into-view-if-needed 2.2.24
+    const cmd = `${eik} npm scroll-into-view-if-needed 2.2.24
         --token ${t.context.token}
         --server ${t.context.address}
         --cwd ${t.context.folder}`;
@@ -60,11 +60,11 @@ test('eik dependency --token --server : no assets.json or .eikrc', async (t) => 
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published dependency package "scroll-into-view-if-needed" at version "2.2.24"');
+    t.match(stdout, 'Published npm package "scroll-into-view-if-needed" at version "2.2.24"');
     t.end();
 });
 
-test('eik dependency : publish details provided by assets.json file and .eikrc', async (t) => {
+test('eik npm : publish details provided by assets.json file and .eikrc', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
@@ -75,7 +75,7 @@ test('eik dependency : publish details provided by assets.json file and .eikrc',
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} dependency --token ${t.context.token} --cwd ${t.context.folder} scroll-into-view-if-needed 2.2.24`;
+    const cmd = `${eik} npm --token ${t.context.token} --cwd ${t.context.folder} scroll-into-view-if-needed 2.2.24`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -85,6 +85,6 @@ test('eik dependency : publish details provided by assets.json file and .eikrc',
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published dependency package "scroll-into-view-if-needed" at version "2.2.24"');
+    t.match(stdout, 'Published npm package "scroll-into-view-if-needed" at version "2.2.24"');
     t.end();
 });

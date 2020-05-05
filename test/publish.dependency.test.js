@@ -56,7 +56,7 @@ test('Uploading a dependency to an asset server', async t => {
     );
     t.match(
         l.logs.info,
-        'Published dependency package "lit-html" at version "1.1.2"',
+        'Published npm package "lit-html" at version "1.1.2"',
         'Log output should command completion',
     );
 });
@@ -84,7 +84,7 @@ test('Uploading a dependency with @ character in name', async t => {
     );
     t.match(
         l.logs.info,
-        'Published dependency package "@podium/browser" at version "1.0.0-beta.2"',
+        'Published npm package "@podium/browser" at version "1.0.0-beta.2"',
         'Log output should command completion',
     );
 });
