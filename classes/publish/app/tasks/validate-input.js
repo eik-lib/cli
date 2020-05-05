@@ -7,7 +7,9 @@ const { validators } = require('@eik/common');
 
 class ValidationError extends Error {
     constructor(message, err) {
-        super(`${message}: ${err.message}`);
+        let m = message;
+        if (err && err.message) m += `: ${err.message}`;
+        super(m);
         this.name = this.constructor.name;
         Error.captureStackTrace(this, this.constructor);
     }

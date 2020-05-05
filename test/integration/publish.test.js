@@ -93,3 +93,67 @@ test('eik publish : publish, details provided by assets.json file', async (t) =>
     t.match(stdout, 'Published app package "test-app" at version "1.0.0"');
     t.end();
 });
+
+test('workflow: publish dep, alias dep, publish map, alias map and then publish using map', async (t) => {
+    const eik = join(__dirname, '../../index.js');
+    let cmd = '';
+    
+    // publish npm dep
+    cmd = `${eik} dep scroll-into-view-if-needed 2.2.24
+        --token ${t.context.token} 
+        --server ${t.context.address}`;
+    await exec(cmd.split('\n').join(' '));
+
+    // alias npm dependency
+    cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
+        --token ${t.context.token} 
+        --server ${t.context.address}`;
+    await exec(cmd.split('\n').join(' '));
+
+    // create import map file locally
+    const map = {
+        imports: {
+            'scroll-into-view-if-needed': new URL(
+                '/npm/scroll-into-view-if-needed/v2/index.js',
+                t.context.address,
+            ).href,
+        },
+    };
+    await fs.writeFile(
+        join(t.context.folder, 'import-map.json'),
+        JSON.stringify(map),
+    );
+
+    // upload import map file
+    cmd = `${eik} map my-map 1.0.0 ./import-map.json
+        --cwd ${t.context.folder}
+        --token ${t.context.token}
+        --server ${t.context.address}`;
+    await exec(cmd.split('\n').join(' '));
+
+    // alias import map
+    cmd = `${eik} map-alias my-map 1.0.0 1
+        --token ${t.context.token} 
+        --server ${t.context.address}`;
+    await exec(cmd.split('\n').join(' '));
+
+    // use import map when publishing app files
+    cmd = `${eik} publish
+        --name test-app 
+        --token ${t.context.token}
+        --server ${t.context.address}
+        --cwd ${t.context.folder}
+        --map ${new URL('/map/my-map/v1', t.context.address).href}
+        --debug
+        --js ${join(__dirname, '..', 'fixtures', 'client-with-bare-imports.js')}`;
+    await exec(cmd.split('\n').join(' '));
+
+    const res = await fetch(new URL('/pkg/test-app/1.0.0/main/index.js', t.context.address));
+    const text = await res.text();
+
+    t.equal(res.ok, true);
+    t.match(text, new URL(
+        '/npm/scroll-into-view-if-needed/v2/index.js',
+        t.context.address,
+    ).href)
+});

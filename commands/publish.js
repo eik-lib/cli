@@ -89,14 +89,24 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug, token, server } = argv;
+    const { debug, token, server, map } = argv;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
         const tokens = new Map(meta.tokens);
         const t = token || tokens.get(server) || '';
 
-        const options = { logger: logger(spinner, debug), ...argv, token: t };
+        let m = map;
+        if (m && !Array.isArray(m)) {
+            m = [m];
+        }
+        
+        const options = { 
+            logger: logger(spinner, debug), 
+            ...argv, 
+            token: t,
+            map: m,
+        };
         success = await new PublishApp(options).run();
     } catch (err) {
         spinner.warn(err.message);
