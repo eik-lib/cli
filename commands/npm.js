@@ -4,7 +4,7 @@ const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const av = require('yargs-parser')(process.argv.slice(2))
-const PublishDependency = require('../classes/publish/dependency');
+const PublishNPM = require('../classes/publish/npm');
 const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'npm <name> [<version>]';
@@ -82,7 +82,7 @@ exports.handler = async argv => {
         const t = token || tokens.get(server) || '';
 
         const options = { logger: logger(spinner, debug), ...argv, token: t };
-        success = await new PublishDependency(options).run();
+        success = await new PublishNPM(options).run();
     } catch (err) {
         spinner.warn(err.message);
     }

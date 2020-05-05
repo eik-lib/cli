@@ -37,7 +37,7 @@ test('Uploading a dependency to an asset server', async t => {
     const { address, token } = t.context;
     const l = mockLogger();
 
-    const publishDep = new cli.publish.Dependency({
+    const publishDep = new cli.publish.NPM({
         logger: l.logger,
         server: address,
         name: 'lit-html',
@@ -65,7 +65,7 @@ test('Uploading a dependency with @ character in name', async t => {
     const { address, token } = t.context;
     const l = mockLogger();
 
-    const publishDep = new cli.publish.Dependency({
+    const publishDep = new cli.publish.NPM({
         logger: l.logger,
         server: address,
         name: '@podium/browser',

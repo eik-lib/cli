@@ -37,7 +37,7 @@ test('Uploading app assets to an asset server', async t => {
     const { address, token } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.App({
+    const publishApp = new cli.publish.Package({
         logger: l.logger,
         cwd: __dirname,
         server: address,
@@ -67,7 +67,7 @@ test('Uploading JS app assets only to an asset server', async t => {
     const { address, token } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.App({
+    const publishApp = new cli.publish.Package({
         logger: l.logger,
         cwd: __dirname,
         server: address,
@@ -96,7 +96,7 @@ test('Uploading CSS app assets only to an asset server', async t => {
     const { address, token } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.App({
+    const publishApp = new cli.publish.Package({
         logger: l.logger,
         cwd: __dirname,
         server: address,
