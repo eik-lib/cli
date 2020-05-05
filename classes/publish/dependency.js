@@ -17,7 +17,7 @@ const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 // eslint-disable-next-line import/no-unresolved
 const json = require('@rollup/plugin-json');
 const { execSync } = require('child_process');
-const { writeFileSync, existsSync } = require('fs');
+const { writeFileSync, existsSync, readFileSync } = require('fs');
 const { join, dirname, parse } = require('path');
 const { validators } = require('@eik/common');
 const rimraf = require('rimraf');
@@ -72,7 +72,6 @@ module.exports = class PublishDependency {
 
         try {
             validators.name(this.name);
-            validators.version(this.version);
         } catch (err) {
             this.log.error(err.message);
             return false;
@@ -103,9 +102,7 @@ module.exports = class PublishDependency {
                 join(this.path, 'package.json'),
                 JSON.stringify({
                     name: '',
-                    dependencies: {
-                        [this.name]: this.version,
-                    },
+                    dependencies: {},
                 }),
             );
         } catch (err) {
@@ -151,7 +148,12 @@ module.exports = class PublishDependency {
 
         this.log.debug('Running npm install in temp directory');
         try {
-            execSync('npm i --loglevel=silent', { cwd: this.path });
+            let cmd = `npm install ${this.name}`;
+            if (this.version) cmd += `@${this.version}`;
+            execSync(`${cmd} --loglevel=silent -E`, { cwd: this.path });
+
+            const pkgjson = JSON.parse(readFileSync(join(this.path, 'package.json')));
+            this.version = pkgjson.dependencies[this.name];
         } catch (err) {
             this.log.error(
                 'Unable to complete npm install operation, is the supplied module version correct?',
