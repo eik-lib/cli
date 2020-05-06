@@ -129,7 +129,7 @@ class Version {
         write(`     ${chalk.bold('url:')} ${chalk.cyan(bURL.href)}\n`);
         write(`     ${chalk.bold('integrity:')} ${this.integrity}\n`);
 
-        if (this.files) {
+        if (this.files && this.files.length) {
             write(`\n     ${chalk.bold('files:')}\n`);
             for (const file of this.files) {
                 const fileUrl = new URL(join(bURL.pathname, file.pathname), url.origin);
@@ -149,7 +149,7 @@ class Version {
             write(`     ${chalk.bold('published')} ${chalk.yellow(d)}`);
         }
 
-        if (this.author) {
+        if (this.author && this.author.name) {
             write(` ${chalk.bold('by')} ${chalk.yellow(this.author.name)}`);
         }
     }
