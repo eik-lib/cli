@@ -77,7 +77,7 @@ exports.handler = async argv => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
     let artifact;
-    const { debug, token, server, name } = argv;
+    const { debug, token, server, name, dryRun } = argv;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
@@ -87,18 +87,24 @@ exports.handler = async argv => {
         const options = { logger: logger(spinner, debug), ...argv, token: t };
         const version = await new PublishNPM(options).run();
 
-        let url = new URL(join('npm', name), server);
-        let res = await fetch(url);
-        const pkgMeta = await res.json();
+        if (!dryRun) {
+            let url = new URL(join('npm', name), server);
+            let res = await fetch(url);
+            const pkgMeta = await res.json();
 
-        url = new URL(join('npm', name, version), server);
-        res = await fetch(url);
-        const pkgVersionMeta = await res.json();
+            url = new URL(join('npm', name, version), server);
+            res = await fetch(url);
+            const pkgVersionMeta = await res.json();
 
-        artifact = new Artifact(pkgMeta);
-        artifact.versions = [ pkgVersionMeta ];
+            artifact = new Artifact(pkgMeta);
+            artifact.versions = [ pkgVersionMeta ];
+        }
 
-        success = true;
+        if (version || dryRun) {
+            success = true;
+        } else {
+            success = false;
+        }
     } catch (err) {
         spinner.warn(err.message);
     }
@@ -106,8 +112,10 @@ exports.handler = async argv => {
     if (success) {
         spinner.text = '';
         spinner.stopAndPersist();
-        artifact.format(server);
-        process.stdout.write('\n');
+        if (!dryRun) {
+            artifact.format(server);
+            process.stdout.write('\n');
+        }
     } else {
         spinner.text = '';
         spinner.stopAndPersist();
