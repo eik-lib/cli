@@ -1,8 +1,8 @@
 'use strict';
 
+const fs = require('fs');
 const ora = require('ora');
-const Init = require('../classes/init');
-const { logger } = require('../utils');
+const { logger, resolvePath } = require('../utils');
 
 exports.command = 'init';
 
@@ -10,7 +10,7 @@ exports.aliases = ['i'];
 
 exports.describe = `Create a new assets.json file in the current working directory`;
 
-exports.builder = yargs => {
+exports.builder = (yargs) => {
     yargs.options({
         server: {
             alias: 's',
@@ -22,20 +22,15 @@ exports.builder = yargs => {
             describe: 'Alter current working directory.',
             default: process.cwd(),
         },
-        org: {
-            alias: 'o',
-            describe: 'Specify the organisation context for the command.',
-            default: '',
+        major: {
+            alias: 'm',
+            describe: 'Specify the semver major version for the package.',
+            default: 1,
         },
         name: {
             alias: 'n',
             describe: 'Specify the app name context for the command.',
             default: '',
-        },
-        version: {
-            alias: 'v',
-            describe: 'Specify the app version context for the command.',
-            default: '1.0.0',
         },
         js: {
             describe:
@@ -55,24 +50,50 @@ exports.builder = yargs => {
     });
 };
 
-exports.handler = async argv => {
+exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    let success = false;
-    const { debug } = argv;
+    const { name, major, server, js, css, cwd, debug } = argv;
+    const { pathname } = resolvePath('./assets.json', cwd);
+    const log = logger(spinner, debug);
+    let assetFileExists = false;
 
     try {
-        success = await new Init({
-            logger: logger(spinner, debug),
-            ...argv,
-        }).run();
-    } catch (err) {
-        logger.warn(err.message);
-    }
+        log.debug(`Checking for existing "assets.json" file in directory (${cwd})`);
+        try {
+            const st = fs.statSync(pathname);
+            if (st.isFile()) {
+                assetFileExists = true;
+            }
+        } catch(err) {
+            // noop
+        }
+        
+        if (assetFileExists) {
+            throw new Error(`An "assets.json" file already exists in directory. File will not be written`);
+        }
 
-    if (success) {
+        log.debug(`Writing "assets.json" to directory (${cwd})`);
+        fs.writeFileSync(
+            pathname,
+            JSON.stringify(
+                {
+                    name,
+                    major,
+                    server,
+                    js: { input: js, options: {} },
+                    css: { input: css, options: {} },
+                },
+                null,
+                2,
+            ),
+        );
+
+        log.info(`"assets.json" successfully written to directory`);
         spinner.text = '';
         spinner.stopAndPersist();
-    } else {
+    } catch (err) {
+        log.warn(err.message);
+
         spinner.text = '';
         spinner.stopAndPersist();
         process.exit(1);

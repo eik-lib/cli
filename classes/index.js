@@ -1,6 +1,6 @@
 'use strict';
 
-const Init = require('./init');
+const Ping = require('./ping');
 const Alias = require('./alias');
 const Meta = require('./meta');
 const Login = require('./login');
@@ -9,7 +9,7 @@ const PublishPackage = require('./publish/package/index');
 const PublishNPM = require('./publish/npm');
 
 module.exports = {
-    Init,
+    Ping,
     Alias,
     Meta,
     Login,
