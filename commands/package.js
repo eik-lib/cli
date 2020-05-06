@@ -92,7 +92,7 @@ exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
     let artifact;
-    const { debug, token, server, map, name } = argv;
+    const { debug, token, server, map, name, dryRun } = argv;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
@@ -112,18 +112,25 @@ exports.handler = async (argv) => {
         };
         const version = await new PublishPackage(options).run();
 
-        let url = new URL(join('pkg', name), server);
-        let res = await fetch(url);
-        const pkgMeta = await res.json();
+        if (!dryRun) {
+            let url = new URL(join('pkg', name), server);
+            let res = await fetch(url);
+            const pkgMeta = await res.json();
 
-        url = new URL(join('pkg', name, version), server);
-        res = await fetch(url);
-        const pkgVersionMeta = await res.json();
+            url = new URL(join('pkg', name, version), server);
+            res = await fetch(url);
+            const pkgVersionMeta = await res.json();
 
-        artifact = new Artifact(pkgMeta);
-        artifact.versions = [ pkgVersionMeta ];
+            artifact = new Artifact(pkgMeta);
+            artifact.versions = [ pkgVersionMeta ];
+        } 
+        
+        if (version || dryRun) {
+            success = true;
+        } else {
+            success = false;
+        }
 
-        success = true;
     } catch (err) {
         spinner.warn(err.message);
     }
@@ -131,8 +138,10 @@ exports.handler = async (argv) => {
     if (success) {
         spinner.text = '';
         spinner.stopAndPersist();
-        artifact.format(server);
-        process.stdout.write('\n');
+        if (!dryRun) { 
+            artifact.format(server);
+            process.stdout.write('\n');
+        }
     } else {
         spinner.text = '';
         spinner.stopAndPersist();
