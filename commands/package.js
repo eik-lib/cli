@@ -1,11 +1,13 @@
 'use strict';
 
+const { join } = require('path');
+const fetch = require('node-fetch');
 const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
-const av = require('yargs-parser')(process.argv.slice(2))
+const av = require('yargs-parser')(process.argv.slice(2));
 const PublishPackage = require('../classes/publish/package/index');
-const { resolvePath, logger, readMetaFile } = require('../utils');
+const { resolvePath, logger, readMetaFile, Artifact } = require('../utils');
 
 exports.command = 'package';
 
@@ -89,7 +91,8 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug, token, server, map } = argv;
+    let artifact;
+    const { debug, token, server, map, name } = argv;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
@@ -107,7 +110,20 @@ exports.handler = async (argv) => {
             token: t,
             map: m,
         };
-        success = await new PublishPackage(options).run();
+        const version = await new PublishPackage(options).run();
+
+        let url = new URL(join('pkg', name), server);
+        let res = await fetch(url);
+        const pkgMeta = await res.json();
+
+        url = new URL(join('pkg', name, version), server);
+        res = await fetch(url);
+        const pkgVersionMeta = await res.json();
+
+        artifact = new Artifact(pkgMeta);
+        artifact.versions = [ pkgVersionMeta ];
+
+        success = true;
     } catch (err) {
         spinner.warn(err.message);
     }
@@ -115,6 +131,8 @@ exports.handler = async (argv) => {
     if (success) {
         spinner.text = '';
         spinner.stopAndPersist();
+        artifact.format(server);
+        process.stdout.write('\n');
     } else {
         spinner.text = '';
         spinner.stopAndPersist();

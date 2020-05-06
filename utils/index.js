@@ -14,6 +14,7 @@ const incrementSemverVersion = require('./increment-semver-version');
 const writeMetaFile = require('./write-meta-file');
 const readMetaFile = require('./read-meta-file');
 const compressedSize = require('./compressed-size');
+const Artifact = require('./artifact');
 
 module.exports = {
     resolvePath,
@@ -30,4 +31,5 @@ module.exports = {
     writeMetaFile,
     readMetaFile,
     compressedSize,
+    Artifact,
 };
