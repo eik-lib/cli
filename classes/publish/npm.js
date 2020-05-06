@@ -354,6 +354,7 @@ module.exports = class PublishDependency {
         this.log.info(
             `Published npm package "${this.name}" at version "${this.version}"`,
         );
-        return true;
+
+        return this.version;
     }
 };
