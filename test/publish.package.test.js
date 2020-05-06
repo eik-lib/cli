@@ -42,7 +42,6 @@ test('Uploading app assets to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        version: '1.0.0',
         js: './fixtures/client.js',
         css: './fixtures/styles.css',
         debug: true,
@@ -50,7 +49,7 @@ test('Uploading app assets to an asset server', async t => {
     });
 
     const result = await publishApp.run();
-    t.equals(result, true, 'Command should return true');
+    t.equals(result, '1.0.0', 'Command should return true');
     t.match(
         l.logs.debug,
         ':: pkg my-app v1.0.0',
@@ -72,14 +71,13 @@ test('Uploading JS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        version: '1.0.0',
         js: './fixtures/client.js',
         debug: true,
         token,
     });
 
     const result = await publishApp.run();
-    t.equals(result, true, 'Command should return true');
+    t.equals(result, '1.0.0', 'Command should return true');
     t.match(
         l.logs.debug,
         'CSS entrypoint not defined, skipping CSS bundling',
@@ -101,14 +99,13 @@ test('Uploading CSS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        version: '1.0.0',
         css: './fixtures/styles.css',
         debug: true,
         token,
     });
 
     const result = await publishApp.run();
-    t.equals(result, true, 'Command should return true');
+    t.equals(result, '1.0.0', 'Command should return true');
     t.match(
         l.logs.debug,
         'JavaScript entrypoint not defined, skipping JS bundling',

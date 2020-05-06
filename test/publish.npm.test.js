@@ -48,7 +48,7 @@ test('Uploading a dependency to an asset server', async t => {
 
     const result = await publishDep.run();
 
-    t.equals(result, true, 'Command should return true');
+    t.equals(result, '1.1.2', 'Command should return true');
     t.match(
         l.logs.debug,
         ':: npm lit-html v1.1.2',
@@ -76,7 +76,7 @@ test('Uploading a dependency with @ character in name', async t => {
 
     const result = await publishDep.run();
 
-    t.equals(result, true, 'Command should return true');
+    t.equals(result, '1.0.0-beta.2', 'Command should return true');
     t.match(
         l.logs.debug,
         ':: npm @podium/browser v1.0.0-beta.2',
