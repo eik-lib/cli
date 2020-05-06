@@ -91,6 +91,6 @@ module.exports = class PublishApp {
             );
         }
 
-        return true;
+        return this.nextVersion;
     }
 };
