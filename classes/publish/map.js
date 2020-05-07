@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const abslog = require('abslog');
-const { join, parse } = require('path');
+const { join, parse, isAbsolute } = require('path');
 const { existsSync } = require('fs');
 const { validators } = require('@eik/common');
 const { sendCommand } = require('../../utils');
@@ -66,7 +66,9 @@ module.exports = class PublishMap {
             return false;
         }
 
-        if (!existsSync(join(this.cwd, this.file))) {
+        this.absoluteFile = isAbsolute(this.file) ? this.file : join(this.cwd, this.file);
+        
+        if (!existsSync(this.absoluteFile)) {
             this.log.error(
                 'Parameter "file" is not valid. File does not exist',
             );
@@ -81,7 +83,7 @@ module.exports = class PublishMap {
                 method: 'PUT',
                 host: this.server,
                 pathname: join('map', this.name, this.version),
-                map: join(this.cwd, this.file),
+                map: this.absoluteFile,
                 token: this.token,
             });
         } catch (err) {
