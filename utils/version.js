@@ -8,22 +8,7 @@
 const {join} = require('path');
 const chalk = require('chalk');
 const formatDistance = require('date-fns/formatDistance');
-
-const _integrity = Symbol('integrity');
-const _version = Symbol('type');
-const _author = Symbol('author');
-const _created = Symbol('created');
-const _type = Symbol('type');
-const _name = Symbol('name');
-const _org = Symbol('org');
-const _files = Symbol('files');
-const _meta = Symbol('meta');
-
-function readableBytes(bytes) {
-    const i = Math.floor(Math.log(bytes) / Math.log(1024)),
-    sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
-}
+const File = require('./file');
 
 class Version {
     constructor({
@@ -48,78 +33,6 @@ class Version {
         this.meta = meta;
     }
 
-    get version() {
-        return this[_version];
-    }
-
-    set version(version) {
-        this[_version] = version;
-    }
-
-    get integrity() {
-        return this[_integrity];
-    }
-
-    set integrity(integrity) {
-        this[_integrity] = integrity;
-    }
-
-    get author() {
-        return this[_author];
-    }
-    
-    set author(author) {
-        this[_author] = author;
-    }
-
-    get created() {
-        return this[_created];
-    }
-    
-    set created(created) {
-        this[_created] = created;
-    }
-    
-    get type() {
-        return this[_type];
-    }
-    
-    set type(type) {
-        this[_type] = type;
-    }
-
-    get name() {
-        return this[_name];
-    }
-    
-    set name(name) {
-        this[_name] = name;
-    }
-
-    get org() {
-        return this[_org];
-    }
-    
-    set org(org) {
-        this[_org] = org;
-    }
-
-    get files() {
-        return this[_files];
-    }
-    
-    set files(files) {
-        this[_files] = files;
-    }
-
-    get meta() {
-        return this[_meta];
-    }
-    
-    set meta(meta) {
-        this[_meta] = meta;
-    }
-
     format(baseURL = '') {
         const write = process.stdout.write.bind(process.stdout);
         const url = new URL(baseURL);
@@ -132,11 +45,8 @@ class Version {
         if (this.files && this.files.length) {
             write(`\n     ${chalk.bold('files:')}\n`);
             for (const file of this.files) {
-                const fileUrl = new URL(join(bURL.pathname, file.pathname), url.origin);
-                write(`     - ${chalk.cyan(fileUrl.href)} `);
-                write(`${chalk.yellow(file.mimeType)} `);
-                write(`${chalk.magenta(readableBytes(file.size))}\n`);
-                write(`       ${chalk.bold('integrity:')} ${file.integrity}\n\n`);
+                new File(file).format(bURL.href);
+                write(`\n`);
             }
         }
 
