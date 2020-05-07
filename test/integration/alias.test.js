@@ -69,6 +69,39 @@ afterEach(async (done, t) => {
     done();
 });
 
+test('eik package-alias <name> <version> <alias>', async t => {
+    const { address, token, folder: cwd } = t.context;
+
+    await new cli.publish.Package({
+        server: address,
+        name: 'my-pack',
+        js: join(__dirname, '../fixtures/client.js'),
+        css: join(__dirname, '../fixtures/styles.css'),
+        token,
+        cwd,
+    }).run();
+
+    const eik = join(__dirname, '../../index.js');
+    const cmd = `${eik} package-alias my-pack 1.0.0 1
+        --token ${token}
+        --server ${address}
+        --cwd ${cwd}`;
+
+    const { error, stdout } = await exec(cmd.split('\n').join(' '));
+
+    const res = await fetch(
+        new URL('/pkg/my-pack/v1/main/index.js', address),
+    );
+
+    t.equal(res.ok, true);
+    t.notOk(error);
+    t.match(stdout, 'PACKAGE');
+    t.match(stdout, 'my-pack');
+    t.match(stdout, '1.0.0');
+    t.match(stdout, 'v1');
+    t.match(stdout, 'NEW');
+});
+
 test('eik npm-alias <name> <version> <alias> --token --server : no assets.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
@@ -84,7 +117,11 @@ test('eik npm-alias <name> <version> <alias> --token --server : no assets.json o
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Created npm alias "v2" (for "scroll-into-view-if-needed") and set it to point to version "2.2.24"');
+    t.match(stdout, 'NPM');
+    t.match(stdout, 'scroll-into-view-if-needed');
+    t.match(stdout, '2.2.24');
+    t.match(stdout, 'v2');
+    t.match(stdout, 'NEW');
     t.end();
 });
 
@@ -108,7 +145,11 @@ test('eik npm-alias <name> <version> <alias> : publish details provided by asset
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Created npm alias "v2" (for "scroll-into-view-if-needed") and set it to point to version "2.2.24"');
+    t.match(stdout, 'NPM');
+    t.match(stdout, 'scroll-into-view-if-needed');
+    t.match(stdout, '2.2.24');
+    t.match(stdout, 'v2');
+    t.match(stdout, 'NEW');
     t.end();
 });
 
@@ -128,7 +169,11 @@ test('eik map-alias <name> <version> <alias> --token --server : no assets.json o
     t.equal(res.ok, true);
 
     t.notOk(error);
-    t.match(stdout, 'Created map alias "v1" (for "test-map") and set it to point to version "1.0.0"');
+    t.match(stdout, 'MAP');
+    t.match(stdout, 'test-map');
+    t.match(stdout, '1.0.0');
+    t.match(stdout, 'v1');
+    t.match(stdout, 'NEW');
     t.end();
 });
 
@@ -153,6 +198,10 @@ test('eik map-alias <name> <version> <alias> : publish details provided by asset
     t.equal(res.ok, true);
 
     t.notOk(error);
-    t.match(stdout, 'Created map alias "v1" (for "test-map") and set it to point to version "1.0.0"');
+    t.match(stdout, 'MAP');
+    t.match(stdout, 'test-map');
+    t.match(stdout, '1.0.0');
+    t.match(stdout, 'v1');
+    t.match(stdout, 'NEW');
     t.end();
 });
