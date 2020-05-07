@@ -15,6 +15,7 @@ const writeMetaFile = require('./write-meta-file');
 const readMetaFile = require('./read-meta-file');
 const compressedSize = require('./compressed-size');
 const Artifact = require('./artifact');
+const Alias = require('./alias');
 
 module.exports = {
     resolvePath,
@@ -32,4 +33,5 @@ module.exports = {
     readMetaFile,
     compressedSize,
     Artifact,
+    Alias,
 };

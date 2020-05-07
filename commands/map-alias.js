@@ -5,7 +5,7 @@ const ora = require('ora');
 const { readFileSync } = require('fs');
 const av = require('yargs-parser')(process.argv.slice(2))
 const Alias = require('../classes/alias');
-const { resolvePath, logger, readMetaFile } = require('../utils');
+const { resolvePath, logger, readMetaFile, Alias: AliasFormatter } = require('../utils');
 
 exports.command = 'map-alias <name> <version> <alias>';
 
@@ -69,26 +69,38 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug, token, server } = argv;
+    const { debug, token, server, name, version } = argv;
+    const log = logger(spinner, debug);
+    let data = {};
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
         const tokens = new Map(meta.tokens);
         const t = token || tokens.get(server) || '';
 
-        success = await new Alias({
+        data = await new Alias({
             type: 'map',
-            logger: logger(spinner, debug),
+            logger: log,
             ...argv,
             token: t,
         }).run();
+
+        data.name = name;
+        data.version = version;
+        data.files = [];
+
+        const createdOrUpdated = data.update ? 'Updated' : 'Created';
+        log.info(`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`);
+        success = true;
     } catch (err) {
-        logger.warn(err.message);
+        log.warn(err.message);
     }
 
     if (success) {
         spinner.text = '';
         spinner.stopAndPersist();
+
+        new AliasFormatter(data).format(server);
     } else {
         spinner.text = '';
         spinner.stopAndPersist();

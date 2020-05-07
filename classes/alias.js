@@ -18,33 +18,27 @@ module.exports = class Alias {
     }
 
     async run() {
-        this.log.debug('Validating input');
+        const data = {
+            server: this.server,
+            type: this.type,
+            name: this.name,
+            alias: this.alias,
+            version: this.version,
+            update: false,
+            files: [],
+            org: '',
+            integrity: '',
+        };
+        
+        this.log.debug('Validating command input');
+        validators.origin(this.server);
+        assert(this.token && typeof this.token === 'string', `Parameter "token" is not valid`);
+        validators.type(this.type);
+        validators.name(this.name);
+        validators.version(this.version);
+        validators.alias(this.alias);
 
-        try {
-            validators.origin(this.server);
-        } catch (err) {
-            this.log.error(`Parameter "server" is not valid`);
-            return false;
-        }
-
-        try {
-            assert(this.token && typeof this.token === 'string');
-        } catch (err) {
-            this.log.error(`Parameter "token" is not valid`);
-            return false;
-        }
-
-        try {
-            validators.type(this.type);
-            validators.name(this.name);
-            validators.version(this.version);
-            validators.alias(this.alias);
-        } catch (err) {
-            this.log.error(err.message);
-            return false;
-        }
-
-        this.log.debug('Requesting alias creation from asset server');
+        this.log.debug('Requesting alias creation from server');
         try {
             const { message } = await sendCommand({
                 host: this.server,
@@ -58,29 +52,18 @@ module.exports = class Alias {
                 token: this.token,
             });
 
-            this.log.debug(`:: alias ${message.name} v${this.alias} ==> v${message.version}`);
-            this.log.debug(`   scope:     ${message.org}`);
-            this.log.debug(`   integrity: ${message.integrity}`);
-            this.log.debug(`   files:`);
+            data.org = message.org || '';
+            data.integrity = message.integrity || '';
+            data.version = message.version || this.version;
+            data.name = message.name || this.name;
+            data.files = message.files || [];
 
-            if (message.files) {
-                for (const file of message.files) {
-                    this.log.debug(`   ==> pathname:  ${file.pathname}`);
-                    this.log.debug(`       mimeType:  ${file.mimeType}`);
-                    this.log.debug(`       type:      ${file.type}`);
-                    this.log.debug(`       size:      ${file.size}`);
-                    this.log.debug(`       integrity: ${file.integrity}`);
-                }
-            }
-
-            this.log.info(
-                `Created ${this.type} alias "v${this.alias}" (for "${this.name}") and set it to point to version "${this.version}"`,
-            );
+            return data;
         } catch (err) {
             let status = err.statusCode;
 
             if (status === 409) {
-                this.log.debug('Alias already exists, publishing update');
+                this.log.debug('Alias already exists on server, performing update');
 
                 try {
                     const { message: msg } = await sendCommand({
@@ -95,66 +78,43 @@ module.exports = class Alias {
                         token: this.token,
                     });
 
-                    this.log.debug(`:: alias ${msg.name} v${this.alias} ==> v${msg.version}`);
-                    this.log.debug(`   scope:     ${msg.org}`);
-                    this.log.debug(`   integrity: ${msg.integrity}`);
-                    this.log.debug(`   files:`);
+                    data.org = msg.org || '';
+                    data.integrity = msg.integrity || '';
+                    data.version = msg.version || this.version;
+                    data.name = msg.name || this.name;
+                    data.files = msg.files || [];
+                    data.update = true;
 
-                    if (msg.files) {
-                        for (const file of msg.files) {
-                            this.log.debug(`   ==> pathname:  ${file.pathname}`);
-                            this.log.debug(`       mimeType:  ${file.mimeType}`);
-                            this.log.debug(`       type:      ${file.type}`);
-                            this.log.debug(`       size:      ${file.size}`);
-                            this.log.debug(`       integrity: ${file.integrity}`);
-                        }
-                    }
-
-                    this.log.info(
-                        `Updated ${this.type} alias "v${this.alias}" (for "${this.name}") to point to version "${this.version}"`,
-                    );
-                    return true;
+                    return data;
                 } catch (error) {
                     status = error.statusCode;
                 }
             }
 
-            this.log.error('Unable to complete alias command');
-
             switch (status) {
                 case 400:
-                    this.log.warn(
+                    throw new Error(
                         'Client attempted to send an invalid URL parameter',
                     );
-                    break;
                 case 401:
-                    this.log.warn('Client unauthorized with server');
-                    break;
+                    throw new Error('Client unauthorized with server');
                 case 404:
-                    this.log.warn(
+                    throw new Error(
                         'The server was unable to locate the required resource',
                     );
-                    break;
                 case 409:
-                    this.log.warn(
+                    throw new Error(
                         `${this.type} with name "${this.name}" and version "${this.version}" already exists on server`,
                     );
-                    break;
                 case 415:
-                    this.log.warn(
+                    throw new Error(
                         'Client attempted to send an unsupported file format to server',
                     );
-                    break;
                 case 502:
-                    this.log.warn('Server was unable to write file to storage');
-                    break;
+                    throw new Error('Server was unable to write file to storage');
                 default:
-                    this.log.warn('Server failed');
+                    throw new Error('Server failure');
             }
-
-            return false;
         }
-
-        return true;
     }
 };
