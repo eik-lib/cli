@@ -28,52 +28,26 @@ module.exports = class PublishMap {
 
     async run() {
         this.log.debug('Running import map publish command');
-
         this.log.debug('Validating input');
-        try {
-            parse(this.cwd);
-        } catch (err) {
-            this.log.error('Parameter "cwd" is not valid');
-            return false;
-        }
 
-        try {
-            validators.origin(this.server);
-        } catch (err) {
-            this.log.error(`Parameter "server" is not valid`);
-            return false;
-        }
+        parse(this.cwd);
+        validators.origin(this.server);
+        assert(
+            this.token && typeof this.token === 'string',
+            'Parameter "token" is not valid',
+        );
+        validators.name(this.name);
+        validators.version(this.version);
+        parse(this.file);
 
-        try {
-            assert(this.token && typeof this.token === 'string');
-        } catch (err) {
-            this.log.error(`Parameter "token" is not valid`);
-            return false;
-        }
+        this.absoluteFile = isAbsolute(this.file)
+            ? this.file
+            : join(this.cwd, this.file);
 
-        try {
-            validators.name(this.name);
-            validators.version(this.version);
-        } catch (err) {
-            this.log.error(err.message);
-            return false;
-        }
-
-        try {
-            parse(this.file);
-        } catch (err) {
-            this.log.error('Parameter "file" is not valid');
-            return false;
-        }
-
-        this.absoluteFile = isAbsolute(this.file) ? this.file : join(this.cwd, this.file);
-        
-        if (!existsSync(this.absoluteFile)) {
-            this.log.error(
-                'Parameter "file" is not valid. File does not exist',
-            );
-            return false;
-        }
+        assert(
+            existsSync(this.absoluteFile),
+            'Parameter "file" is not valid. File does not exist',
+        );
 
         this.log.debug(
             `Uploading import map "${this.name}" version "${this.version}" to asset server`,
@@ -86,39 +60,37 @@ module.exports = class PublishMap {
                 map: this.absoluteFile,
                 token: this.token,
             });
+
+            return {
+                server: this.server,
+                name: this.name,
+                version: this.version,
+                type: 'map',
+            };
         } catch (err) {
-            this.log.error('Unable to complete upload of import map to server');
+            const msg = 'Unable to complete upload of import map to server';
             switch (err.statusCode) {
                 case 400:
-                    this.log.warn(
-                        'Client attempted to send an invalid URL parameter',
+                    throw new Error(
+                        `${msg}: Client attempted to send an invalid URL parameter`,
                     );
-                    break;
                 case 401:
-                    this.log.warn('Client unauthorized with server');
-                    break;
+                    throw new Error(`${msg}: Client unauthorized with server`);
                 case 409:
-                    this.log.warn(
-                        `Map with name "${this.name}" and version "${this.version}" already exists on server`,
+                    throw new Error(
+                        `${msg}: Map with name "${this.name}" and version "${this.version}" already exists on server`,
                     );
-                    break;
                 case 415:
-                    this.log.warn(
-                        'Client attempted to send an unsupported file format to server',
+                    throw new Error(
+                        `${msg}: Client attempted to send an unsupported file format to server`,
                     );
-                    break;
                 case 502:
-                    this.log.warn('Server was unable to write file to storage');
-                    break;
+                    throw new Error(
+                        `${msg}: Server was unable to write file to storage`,
+                    );
                 default:
-                    this.log.warn('Server failed');
+                    throw new Error(`${msg}: Server failed`);
             }
-            return false;
         }
-
-        this.log.info(
-            `Published import map "${this.name}" at version "${this.version}"`,
-        );
-        return true;
     }
 };

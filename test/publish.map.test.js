@@ -49,15 +49,15 @@ test('Uploading import map to an asset server', async t => {
     });
 
     const result = await publishMap.run();
-    t.equals(result, true, 'Command should return true');
+    t.same(result, {
+        name: 'my-map',
+        version: '1.0.0',
+        server: address,
+        type: 'map',
+    }, 'Command should return an object');
     t.match(
         l.logs.debug,
         'Uploading import map "my-map" version "1.0.0" to asset server',
         'Log output should show published name, version and org',
-    );
-    t.match(
-        l.logs.info,
-        'Published import map "my-map" at version "1.0.0"',
-        'Log output should command completion',
     );
 });
