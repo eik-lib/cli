@@ -68,17 +68,16 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    let success = false;
-    let artifact;
     const { debug, token, server, name, version } = argv;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
         const tokens = new Map(meta.tokens);
         const t = token || tokens.get(server) || '';
+        const log = logger(spinner, debug);
 
-        success = await new PublishMap({
-            logger: logger(spinner, debug),
+        await new PublishMap({
+            logger: log,
             ...argv,
             token: t,
         }).run();
@@ -90,19 +89,19 @@ exports.handler = async argv => {
         url = new URL(join('map', name, version), server);
         res = await fetch(url);
 
-        artifact = new Artifact(pkgMeta);
-        const versions = new Map(pkgMeta.versions);
-        artifact.versions = Array.from(versions.values());
-    } catch (err) {
-        spinner.warn(err.message);
-    }
-
-    if (success) {
+        log.info(`Published import map "${name}" at version "${version}"`);
+        
         spinner.text = '';
         spinner.stopAndPersist();
+        
+        const artifact = new Artifact(pkgMeta);
+        const versions = new Map(pkgMeta.versions);
+        artifact.versions = Array.from(versions.values());
         artifact.format(server);
+
         process.stdout.write('\n');
-    } else {
+    } catch (err) {
+        spinner.warn(err.message);
         spinner.text = '';
         spinner.stopAndPersist();
         process.exit(1);
