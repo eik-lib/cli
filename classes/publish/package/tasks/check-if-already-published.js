@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 'use strict';
 
 const { join } = require('path');
@@ -8,12 +10,12 @@ const {
 } = require('../../../../utils');
 
 module.exports = class CheckIfAlreadyPublished {
-    async process(state = {}) {
-        const { log, server, name, currentVersion, path, js, css } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { log, server, name, currentVersion, path, js, css } = incoming;
 
         log.debug('Fetching package metadata from server.');
 
-        if (!currentVersion) return state;
+        if (!currentVersion) return incoming;
 
         let meta;
         try {
@@ -24,7 +26,7 @@ module.exports = class CheckIfAlreadyPublished {
             );
         }
 
-        if (!meta) return state;
+        if (!meta) return outgoing;
 
         log.debug('Hashing local files for comparison with server');
 
@@ -47,7 +49,7 @@ module.exports = class CheckIfAlreadyPublished {
             }
             localHash = await calculateFilesHash(localFiles);
             // eslint-disable-next-line no-param-reassign
-            state.integrity = localHash;
+            incoming.integrity = localHash;
         } catch (err) {
             throw new Error(
                 `Unable to hash local files for comparison: ${err.message}`,
@@ -62,6 +64,8 @@ module.exports = class CheckIfAlreadyPublished {
             );
         }
 
-        return state;
+        outgoing.integrity = localHash;
+
+        return outgoing;
     }
 };

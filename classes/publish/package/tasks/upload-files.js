@@ -1,11 +1,13 @@
+/* eslint-disable no-param-reassign */
+
 'use strict';
 
 const { join } = require('path');
 const { sendCommand } = require('../../../../utils');
 
 module.exports = class UploadFiles {
-    async process(state = {}) {
-        const { log, server, token, name, nextVersion, zipFile } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { log, server, token, name, nextVersion, zipFile } = incoming;
         log.debug('Uploading zip file to server');
         try {
             const { message } = await sendCommand({
@@ -20,20 +22,11 @@ module.exports = class UploadFiles {
                 token,
             });
 
-            log.debug(`:: pkg ${message.name} v${message.version}`);
-            log.debug(`   scope:     ${message.org}`);
-            log.debug(`   integrity: ${message.integrity}`);
-            log.debug(`   files:`);
-
-            if (message.files) {
-                for (const file of message.files) {
-                    log.debug(`   ==> pathname:  ${file.pathname}`);
-                    log.debug(`       mimeType:  ${file.mimeType}`);
-                    log.debug(`       type:      ${file.type}`);
-                    log.debug(`       size:      ${file.size}`);
-                    log.debug(`       integrity: ${file.integrity}`);
-                }
-            }
+            outgoing.created = message.created;
+            outgoing.author = message.author;
+            outgoing.integrity = message.integrity;
+            outgoing.org = message.org;
+            outgoing.files = message.files;
 
         } catch (err) {
             log.error('Unable to upload zip file to server');
@@ -60,6 +53,6 @@ module.exports = class UploadFiles {
                     throw new Error('Server failed');
             }
         }
-        return state;
+        return outgoing;
     }
 };

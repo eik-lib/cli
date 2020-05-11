@@ -14,8 +14,8 @@ class IOError extends Error {
 }
 
 module.exports = class CreateTempDir {
-    async process(state = {}) {
-        const { path, log } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { path, log } = incoming;
 
         log.debug('Creating temporary directory');
 
@@ -27,6 +27,6 @@ module.exports = class CreateTempDir {
             throw new IOError('Unable to create temp dir', err);
         }
 
-        return state;
+        return outgoing;
     }
 };

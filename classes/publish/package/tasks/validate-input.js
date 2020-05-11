@@ -16,8 +16,8 @@ class ValidationError extends Error {
 }
 
 module.exports = class ValidateInput {
-    process(state = {}) {
-        const { log, cwd, server, name, js, css, map, dryRun } = state;
+    process(incoming = {}, outgoing = {}) {
+        const { log, cwd, server, name, js, css, map, dryRun } = incoming;
 
         log.debug('Validating input');
 
@@ -61,6 +61,6 @@ module.exports = class ValidateInput {
             throw new ValidationError('Parameter "dryRun" is not valid');
         }
 
-        return state;
+        return outgoing;
     }
 };

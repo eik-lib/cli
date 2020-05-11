@@ -63,7 +63,9 @@ test('eik package --token --server : no assets.json', async (t) => {
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published app package "test-app" at version "1.0.0"');
+    t.match(stdout, 'published');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
     t.end();
 });
 
@@ -90,7 +92,9 @@ test('eik package : package, details provided by assets.json file', async (t) =>
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published app package "test-app" at version "1.0.0"');
+    t.match(stdout, 'published');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
     t.end();
 });
 

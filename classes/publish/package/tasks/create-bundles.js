@@ -15,8 +15,8 @@ const fs = require('fs');
 const cssnano = require('cssnano');
 
 module.exports = class CreateBundles {
-    async process(state = {}) {
-        const { js, css, log, importMap, cwd, path } = state;
+    async process(incoming = {}, outgoing = {}) {
+    const { js, css, log, importMap, cwd, path } = incoming;
         if (js) {
             log.debug('Creating main bundle file');
             try {
@@ -133,6 +133,6 @@ module.exports = class CreateBundles {
             log.debug('CSS entrypoint not defined, skipping CSS bundling');
         }
 
-        return state;
+        return outgoing;
     }
 };

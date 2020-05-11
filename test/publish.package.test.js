@@ -49,17 +49,13 @@ test('Uploading app assets to an asset server', async t => {
     });
 
     const result = await publishApp.run();
-    t.equals(result, '1.0.0', 'Command should return true');
-    t.match(
-        l.logs.debug,
-        ':: pkg my-app v1.0.0',
-        'Log output should show published name and version',
-    );
-    t.match(
-        l.logs.info,
-        'Published app package "my-app" at version "1.0.0"',
-        'Log output should command completion',
-    );
+    t.equals(result.type, 'pkg', 'Command should return correct type');
+    t.equals(result.name, 'my-app', 'Command should return correct name');
+    t.equals(result.version, '1.0.0', 'Command should return correct version');
+    t.equals(result.files.length, 6, 'Command should return files array');
+    t.match(l.logs.debug, 'Running publish command');
+    t.match(l.logs.debug, 'Uploading zip file to server');
+    t.match(l.logs.debug, 'Cleaning up');
 });
 
 test('Uploading JS app assets only to an asset server', async t => {
@@ -77,17 +73,13 @@ test('Uploading JS app assets only to an asset server', async t => {
     });
 
     const result = await publishApp.run();
-    t.equals(result, '1.0.0', 'Command should return true');
-    t.match(
-        l.logs.debug,
-        'CSS entrypoint not defined, skipping CSS bundling',
-        'Log output should show that CSS bundling was skipped',
-    );
-    t.match(
-        l.logs.info,
-        'Published app package "my-app" at version "1.0.0"',
-        'Log output should command completion',
-    );
+    t.equals(result.type, 'pkg', 'Command should return correct type');
+    t.equals(result.name, 'my-app', 'Command should return correct name');
+    t.equals(result.version, '1.0.0', 'Command should return correct version');
+    t.equals(result.files.length, 4, 'Command should return files array');
+    t.match(l.logs.debug, 'Running publish command');
+    t.match(l.logs.debug, 'Uploading zip file to server');
+    t.match(l.logs.debug, 'Cleaning up');
 });
 
 test('Uploading CSS app assets only to an asset server', async t => {
@@ -105,15 +97,11 @@ test('Uploading CSS app assets only to an asset server', async t => {
     });
 
     const result = await publishApp.run();
-    t.equals(result, '1.0.0', 'Command should return true');
-    t.match(
-        l.logs.debug,
-        'JavaScript entrypoint not defined, skipping JS bundling',
-        'Log output should show that JS bundling was skipped',
-    );
-    t.match(
-        l.logs.info,
-        'Published app package "my-app" at version "1.0.0"',
-        'Log output should command completion',
-    );
+    t.equals(result.type, 'pkg', 'Command should return correct type');
+    t.equals(result.name, 'my-app', 'Command should return correct name');
+    t.equals(result.version, '1.0.0', 'Command should return corrrect version');
+    t.equals(result.files.length, 2, 'Command should return files array');
+    t.match(l.logs.debug, 'Running publish command');
+    t.match(l.logs.debug, 'Uploading zip file to server');
+    t.match(l.logs.debug, 'Cleaning up');
 });

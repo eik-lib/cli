@@ -8,8 +8,8 @@ const {
 } = require('../../../../utils');
 
 module.exports = class FetchVersion {
-    async process(state = {}) {
-        const { log, server, name, major, level } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { log, server, name, major, level } = incoming;
         log.debug(
             'Calculating latest version for package. Fetching previous version information from server.',
         );
@@ -17,11 +17,11 @@ module.exports = class FetchVersion {
             const version = await fetchLatestVersion(server, name, major);
 
             if (!version) {
-                state.currentVersion = null;
-                state.nextVersion = [`${major || '1'}`, '0', '0'].join('.');
+                incoming.currentVersion = null;
+                incoming.nextVersion = [`${major || '1'}`, '0', '0'].join('.');
             } else {
-                state.currentVersion = version;
-                state.nextVersion = incrementSemverVersion(version, level);
+                incoming.currentVersion = version;
+                incoming.nextVersion = incrementSemverVersion(version, level);
             }
         } catch (err) {
             throw new Error(
@@ -29,6 +29,8 @@ module.exports = class FetchVersion {
             );
         }
 
-        return state;
+        outgoing.version = incoming.nextVersion;
+
+        return outgoing;
     }
 };

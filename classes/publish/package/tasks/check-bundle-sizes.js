@@ -5,8 +5,8 @@ const fs = require('fs');
 const { compressedSize } = require('../../../../utils');
 
 module.exports = class CheckBundleSizes {
-    async process(state = {}) {
-        const { log, path, js, css } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { log, path, js, css } = incoming;
         log.debug('Checking bundle file sizes');
         try {
             if (js) {
@@ -34,5 +34,7 @@ module.exports = class CheckBundleSizes {
         } catch (err) {
             throw new Error(`Failed to check bundle sizes: ${err.message}`);
         }
+
+        return outgoing;
     }
 };

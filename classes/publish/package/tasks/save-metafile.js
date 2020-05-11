@@ -3,8 +3,8 @@
 const { writeMetaFile, readMetaFile } = require('../../../../utils');
 
 module.exports = class SaveMetaFile {
-    async process(state = {}) {
-        const { log, nextVersion, integrity, cwd } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { log, nextVersion, integrity, cwd } = incoming;
 
         log.debug('Saving .eikrc metafile.');
         try {
@@ -16,6 +16,6 @@ module.exports = class SaveMetaFile {
             throw new Error(`Unable to save .eikrc metafile: ${err.message}`);
         }
 
-        return state;
+        return outgoing;
     }
 };

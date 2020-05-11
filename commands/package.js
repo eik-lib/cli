@@ -4,6 +4,7 @@ const { join } = require('path');
 const fetch = require('node-fetch');
 const homedir = require('os').homedir();
 const ora = require('ora');
+const chalk = require('chalk');
 const { readFileSync } = require('fs');
 const av = require('yargs-parser')(process.argv.slice(2));
 const PublishPackage = require('../classes/publish/package/index');
@@ -90,8 +91,6 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    let success = false;
-    let artifact;
     const { debug, token, server, map, name, dryRun } = argv;
 
     try {
@@ -110,7 +109,7 @@ exports.handler = async (argv) => {
             token: t,
             map: m,
         };
-        const version = await new PublishPackage(options).run();
+        const { version, files } = await new PublishPackage(options).run();
 
         if (!dryRun) {
             let url = new URL(join('pkg', name), server);
@@ -121,28 +120,29 @@ exports.handler = async (argv) => {
             res = await fetch(url);
             const pkgVersionMeta = await res.json();
 
-            artifact = new Artifact(pkgMeta);
+            const artifact = new Artifact(pkgMeta);
             artifact.versions = [ pkgVersionMeta ];
-        } 
-        
-        if (version || dryRun) {
-            success = true;
-        } else {
-            success = false;
-        }
 
-    } catch (err) {
-        spinner.warn(err.message);
-    }
+            spinner.text = '';
+            spinner.stopAndPersist();
 
-    if (success) {
-        spinner.text = '';
-        spinner.stopAndPersist();
-        if (!dryRun) { 
             artifact.format(server);
             process.stdout.write('\n');
+        } else {
+            spinner.text = '';
+            spinner.stopAndPersist();
+
+            process.stdout.write(`:: ${chalk.bgYellow.white.bold(' PACKAGE ')} > ${chalk.green(name)} | ${chalk.bold('dry run')}`);
+            process.stdout.write('\n\n');
+            process.stdout.write('   files (local temporary):\n');
+            for (const file of files) {
+                process.stdout.write(`   - ${chalk.bold('type')}: ${file.type}\n`);
+                process.stdout.write(`     ${chalk.bold('path')}: ${file.pathname}\n\n`);
+            }
+            process.stdout.write(`   ${chalk.bold('No files were published to remote server')}\n\n`);
         }
-    } else {
+    } catch (err) {
+        spinner.warn(err.message);
         spinner.text = '';
         spinner.stopAndPersist();
         process.exit(1);
