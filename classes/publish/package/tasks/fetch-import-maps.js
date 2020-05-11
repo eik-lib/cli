@@ -3,10 +3,10 @@
 const fetch = require('node-fetch');
 
 module.exports = class FetchImportMaps {
-    async process(state = {}) {
-        state.log.debug('Loading import map file from server');
+    async process(incoming = {}, outgoing = {}) {
+        incoming.log.debug('Loading import map file from server');
         try {
-            const maps = state.map.map(m =>
+            const maps = incoming.map.map(m =>
                 fetch(m).then(r => {
                     switch (true) {
                         case r.status === 404:
@@ -25,7 +25,7 @@ module.exports = class FetchImportMaps {
             const results = await Promise.all(maps);
             const dependencies = results.map(r => r.imports);
             // eslint-disable-next-line no-param-reassign
-            state.importMap = {
+            incoming.importMap = {
                 imports: Object.assign({}, ...dependencies),
             };
         } catch (err) {
@@ -34,6 +34,6 @@ module.exports = class FetchImportMaps {
             );
         }
 
-        return state;
+        return outgoing;
     }
 };

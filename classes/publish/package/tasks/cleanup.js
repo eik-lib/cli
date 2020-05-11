@@ -4,14 +4,14 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 
 module.exports = class Cleanup {
-    async process(state = {}) {
-        const { path, log } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { path, log } = incoming;
         log.debug('Cleaning up');
 
         if (fs.existsSync(path)) {
             rimraf.sync(path);
         }
 
-        return state;
+        return outgoing;
     }
 };

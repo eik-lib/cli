@@ -4,8 +4,8 @@ const { join } = require('path');
 const tar = require('tar');
 
 module.exports = class CreateZipFile {
-    async process(state = {}) {
-        const { log, js, css, path } = state;
+    async process(incoming = {}, outgoing = {}) {
+        const { log, js, css, path } = incoming;
 
         log.debug('Creating zip file');
 
@@ -25,12 +25,12 @@ module.exports = class CreateZipFile {
 
         try {
             // eslint-disable-next-line no-param-reassign
-            state.zipFile = join(path, `archive.tgz`);
+            incoming.zipFile = join(path, `archive.tgz`);
 
             await tar.c(
                 {
                     gzip: true,
-                    file: state.zipFile,
+                    file: incoming.zipFile,
                     cwd: path,
                 },
                 filesToZip,
@@ -39,6 +39,6 @@ module.exports = class CreateZipFile {
             throw new Error(`Unable to create zip file: ${err.message}`);
         }
 
-        return state;
+        return outgoing;
     }
 };

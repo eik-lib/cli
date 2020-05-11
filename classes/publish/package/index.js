@@ -23,7 +23,7 @@ module.exports = class PublishApp {
         server,
         token,
         name,
-        major,
+        major = 1,
         level = 'patch',
         map = [],
         js,
@@ -58,39 +58,31 @@ module.exports = class PublishApp {
 
     async run() {
         this.log.debug('Running publish command');
+        const outgoing = {
+            type: 'pkg',
+            server: this.server,
+            name: this.name,
+            major: this.major,
+            level: this.level,
+            dryRun: this.dryRun,
+        };
 
-        try {
-            await this.validateInput.process(this);
-            await this.createTempDirectory.process(this);
-            await this.fetchImportMaps.process(this);
-            await this.createBundles.process(this);
-            await this.createZipFile.process(this);
-            await this.checkBundleSizes.process(this);
-            await this.fetchVersion.process(this);
-            await this.checkIfAlreadyPublished.process(this);
-            if (this.dryRun) {
-                await this.runDryRun.process(this);
-            } else {
-                await this.uploadFiles.process(this);
-                await this.saveMetafile.process(this);
-            }
-        } catch (err) {
-            this.log.error(err.message);
-            return false;
-        }
-
-        this.cleanup.process(this);
-
+        await this.validateInput.process(this, outgoing);
+        await this.createTempDirectory.process(this, outgoing);
+        await this.fetchImportMaps.process(this, outgoing);
+        await this.createBundles.process(this, outgoing);
+        await this.createZipFile.process(this, outgoing);
+        await this.checkBundleSizes.process(this, outgoing);
+        await this.fetchVersion.process(this, outgoing);
+        await this.checkIfAlreadyPublished.process(this, outgoing);
         if (this.dryRun) {
-            this.log.info(
-                `Dry run for app package "${this.name}" at version "${this.nextVersion}" completed`,
-            );
+            await this.runDryRun.process(this, outgoing);
         } else {
-            this.log.info(
-                `Published app package "${this.name}" at version "${this.nextVersion}"`,
-            );
+            await this.uploadFiles.process(this, outgoing);
+            await this.saveMetafile.process(this, outgoing);
         }
+        await this.cleanup.process(this, outgoing);
 
-        return this.nextVersion;
+        return outgoing;
     }
 };
