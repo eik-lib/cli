@@ -42,58 +42,39 @@ module.exports = class PublishDependency {
         this.version = version;
         this.map = map;
         this.dryRun = dryRun;
-        this.path = join(tempDir, `publish-${name}-${version}-${Date.now()}`);
+        this.path = join(tempDir, `publish-${name}-${version || 'latest'}-${Date.now()}`);
     }
 
     async run() {
+        const data = {
+            type: 'npm',
+            dryRun: this.dryRun,
+            name: this.name,
+            server: this.server,
+            version: this.version,
+        };
+
         this.log.debug('Running publish command');
 
         this.log.debug('Validating input');
-        try {
-            parse(this.cwd);
-        } catch (err) {
-            this.log.error('Parameter "cwd" is not valid');
-            return false;
-        }
-
-        try {
-            validators.origin(this.server);
-        } catch (err) {
-            this.log.error(`Parameter "server" is not valid`);
-            return false;
-        }
-
-        try {
-            assert(this.token && typeof this.token === 'string', 'Parameter "token" is not valid');
-        } catch (err) {
-            this.log.error('Parameter "token" is not valid');
-            return false;
-        }
-
-        try {
-            validators.name(this.name);
-        } catch (err) {
-            this.log.error(err.message);
-            return false;
-        }
-
-        if (!Array.isArray(this.map)) {
-            this.log.error('Parameter "map" is not valid');
-            return false;
-        }
-
-        if (this.dryRun && this.dryRun !== true && this.dryRun !== false) {
-            this.log.error('Parameter "dryRun" is not valid');
-            return false;
-        }
+        parse(this.cwd);
+        validators.origin(this.server);
+        assert(
+            this.token && typeof this.token === 'string',
+            'Parameter "token" is not valid',
+        );
+        validators.name(this.name);
+        assert(Array.isArray(this.map), 'Parameter "map" is not valid');
+        assert(
+            !this.dryRun || this.dryRun === true || this.dryRun === false,
+            'Parameter "dryRun" is not valid',
+        );
 
         this.log.debug('Creating temporary directory');
         try {
             mkdir.sync(this.path);
         } catch (err) {
-            this.log.error('Unable to create temp dir');
-            this.log.warn(err.message);
-            return false;
+            throw new Error('Unable to create temp dir');
         }
 
         this.log.debug('Creating package json file in temp directory');
@@ -106,21 +87,17 @@ module.exports = class PublishDependency {
                 }),
             );
         } catch (err) {
-            this.log.error('Unable to create package json in temp directory');
-            this.log.warn(err.message);
-
             this.log.debug('Cleaning up');
             if (existsSync(this.path)) {
                 rimraf.sync(this.path);
             }
-
-            return false;
+            throw new Error('Unable to create package json in temp directory');
         }
 
         this.log.debug('Loading import map file from server');
         try {
-            const maps = this.map.map(m =>
-                fetch(m).then(r => {
+            const maps = this.map.map((m) =>
+                fetch(m).then((r) => {
                     switch (true) {
                         case r.status === 404:
                             throw new Error(
@@ -136,12 +113,12 @@ module.exports = class PublishDependency {
                 }),
             );
             const results = await Promise.all(maps);
-            const dependencies = results.map(r => r.imports);
+            const dependencies = results.map((r) => r.imports);
             this.importMap = {
                 imports: Object.assign({}, ...dependencies),
             };
         } catch (err) {
-            this.log.warn(
+            throw new Error(
                 `Unable to load import map file from server: ${err.message}`,
             );
         }
@@ -152,20 +129,18 @@ module.exports = class PublishDependency {
             if (this.version) cmd += `@${this.version}`;
             execSync(`${cmd} --loglevel=silent -E`, { cwd: this.path });
 
-            const pkgjson = JSON.parse(readFileSync(join(this.path, 'package.json')));
+            const pkgjson = JSON.parse(
+                readFileSync(join(this.path, 'package.json')),
+            );
             this.version = pkgjson.dependencies[this.name];
         } catch (err) {
-            this.log.error(
-                'Unable to complete npm install operation, is the supplied module version correct?',
-            );
-            this.log.warn(err.message);
-
             this.log.debug('Cleaning up');
             if (existsSync(this.path)) {
                 rimraf.sync(this.path);
             }
-
-            return false;
+            throw new Error(
+                'Unable to complete npm install operation, is the supplied module version correct?',
+            );
         }
 
         this.log.debug(`Loading meta information for ${this.name} package`);
@@ -178,15 +153,11 @@ module.exports = class PublishDependency {
                 cwd: this.installedDepBasePath,
             }).packageJson;
         } catch (err) {
-            this.log.error('Unable to load package meta information');
-            this.log.warn(err.message);
-
             this.log.debug('Cleaning up');
             if (existsSync(this.path)) {
                 rimraf.sync(this.path);
             }
-
-            return false;
+            throw new Error('Unable to load package meta information');
         }
 
         this.log.debug('Creating bundle in temp directory');
@@ -235,15 +206,11 @@ module.exports = class PublishDependency {
                 sourcemap: true,
             });
         } catch (err) {
-            this.log.error('Unable to complete bundle operation');
-            this.log.warn(err.message);
-
             this.log.debug('Cleaning up');
             if (existsSync(this.path)) {
                 rimraf.sync(this.path);
             }
-
-            return false;
+            throw new Error('Unable to complete bundle operation');
         }
 
         this.log.debug('Creating zip file');
@@ -259,102 +226,67 @@ module.exports = class PublishDependency {
                 [`index.js`, `index.js.map`],
             );
         } catch (err) {
-            this.log.error('Unable to create zip file');
-            this.log.warn(err.message);
-
             this.log.debug('Cleaning up');
             if (existsSync(this.path)) {
                 rimraf.sync(this.path);
             }
-
-            return false;
+            throw new Error('Unable to create zip file');
         }
 
         if (this.dryRun) {
-            this.log.debug('Dry run files ready for upload to server');
-            this.log.debug(`  ==> ${this.zipFile}`);
-            this.log.debug(`  ==> ${this.file}`);
-            this.log.debug(`  ==> ${this.file}.map`);
-            this.log.info(
-                `Published npm package "${this.name}" at version "${this.version}" (dry run)`,
-            );
-            return true;
+            return {
+                ...data,
+                version: this.version,
+                files: [
+                    { pathname: this.path, type: 'temporary directory' },
+                    { pathname: this.zipFile, type: 'package archive' },
+                    { pathname: this.file, type: 'package file' },
+                    { pathname: `${this.file}.map`, type: 'package file' },
+                ],
+            };
         }
 
         this.log.debug('Uploading zip file to server');
-
         try {
             const { message } = await sendCommand({
                 method: 'PUT',
                 host: this.server,
-                pathname: join(
-                    'npm',
-                    this.name,
-                    this.version,
-                ),
+                pathname: join('npm', this.name, this.version),
                 file: this.zipFile,
                 token: this.token,
             });
 
-            this.log.debug(`:: npm ${message.name} v${message.version}`);
-            this.log.debug(`   scope:     ${message.org}`);
-            this.log.debug(`   integrity: ${message.integrity}`);
-            this.log.debug(`   files:`);
-
-            if (message.files) {
-                for (const file of message.files) {
-                    this.log.debug(`   ==> pathname:  ${file.pathname}`);
-                    this.log.debug(`       mimeType:  ${file.mimeType}`);
-                    this.log.debug(`       type:      ${file.type}`);
-                    this.log.debug(`       size:      ${file.size}`);
-                    this.log.debug(`       integrity: ${file.integrity}`);
-                }
-            }
+            return {
+                ...data,
+                ...message,
+            };
         } catch (err) {
-            this.log.error('Unable to upload zip file to server');
-            switch (err.statusCode) {
-                case 400:
-                    this.log.warn(
-                        'Client attempted to send an invalid URL parameter',
-                    );
-                    break;
-                case 401:
-                    this.log.warn('Client unauthorized with server');
-                    break;
-                case 409:
-                    this.log.warn(
-                        `NPM package with name "${this.name}" and version "${this.version}" already exists on server`,
-                    );
-                    break;
-                case 415:
-                    this.log.warn(
-                        'Client attempted to send an unsupported file format to server',
-                    );
-                    break;
-                case 502:
-                    this.log.warn('Server was unable to write file to storage');
-                    break;
-                default:
-                    this.log.warn('Server failed');
-            }
-
             this.log.debug('Cleaning up');
             if (existsSync(this.path)) {
                 rimraf.sync(this.path);
             }
-
-            return false;
+            switch (err.statusCode) {
+                case 400:
+                    throw new Error(
+                        'Client attempted to send an invalid URL parameter',
+                    );
+                case 401:
+                    throw new Error('Client unauthorized with server');
+                case 409:
+                    throw new Error(
+                        `NPM package with name "${this.name}" and version "${this.version}" already exists on server`,
+                    );
+                case 415:
+                    throw new Error(
+                        'Client attempted to send an unsupported file format to server',
+                    );
+                case 502:
+                    throw new Error(
+                        'Server was unable to write file to storage',
+                    );
+                default:
+                    throw new Error('Server failed');
+            }
         }
-
-        this.log.debug('Cleaning up');
-        if (existsSync(this.path)) {
-            rimraf.sync(this.path);
-        }
-
-        this.log.info(
-            `Published npm package "${this.name}" at version "${this.version}"`,
-        );
-
-        return this.version;
     }
 };
