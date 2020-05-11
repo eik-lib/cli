@@ -60,7 +60,9 @@ test('eik npm --token --server : no assets.json or .eikrc', async (t) => {
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published npm package "scroll-into-view-if-needed" at version "2.2.24"');
+    t.match(stdout, 'published');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
     t.end();
 });
 
@@ -85,6 +87,8 @@ test('eik npm : publish details provided by assets.json file and .eikrc', async 
 
     t.equal(res.ok, true);
     t.notOk(error);
-    t.match(stdout, 'Published npm package "scroll-into-view-if-needed" at version "2.2.24"');
+    t.match(stdout, 'published');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
     t.end();
 });
