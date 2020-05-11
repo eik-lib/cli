@@ -48,17 +48,12 @@ test('Uploading a dependency to an asset server', async t => {
 
     const result = await publishDep.run();
 
-    t.equals(result, '1.1.2', 'Command should return true');
-    t.match(
-        l.logs.debug,
-        ':: npm lit-html v1.1.2',
-        'Log output should show published name and version',
-    );
-    t.match(
-        l.logs.info,
-        'Published npm package "lit-html" at version "1.1.2"',
-        'Log output should command completion',
-    );
+    t.equals(result.name, 'lit-html', 'Command should return name of package');
+    t.equals(result.version, '1.1.2', 'Command should return version of package');
+    t.match(l.logs.debug, 'Running publish command');
+    t.notMatch(l.logs.debug, 'Dependency format: common js modules detected, conversion to esm will occur');
+    t.match(l.logs.debug, 'Creating zip file');
+    t.match(l.logs.debug, 'Uploading zip file to server');
 });
 
 test('Uploading a dependency with @ character in name', async t => {
@@ -76,15 +71,10 @@ test('Uploading a dependency with @ character in name', async t => {
 
     const result = await publishDep.run();
 
-    t.equals(result, '1.0.0-beta.2', 'Command should return true');
-    t.match(
-        l.logs.debug,
-        ':: npm @podium/browser v1.0.0-beta.2',
-        'Log output should show published name and version',
-    );
-    t.match(
-        l.logs.info,
-        'Published npm package "@podium/browser" at version "1.0.0-beta.2"',
-        'Log output should command completion',
-    );
+    t.equals(result.name, '@podium/browser', 'Command should return version of package');
+    t.equals(result.version, '1.0.0-beta.2', 'Command should return version of package');
+    t.match(l.logs.debug, 'Running publish command');
+    t.match(l.logs.debug, 'Dependency format: common js modules detected, conversion to esm will occur');
+    t.match(l.logs.debug, 'Creating zip file');
+    t.match(l.logs.debug, 'Uploading zip file to server');
 });
