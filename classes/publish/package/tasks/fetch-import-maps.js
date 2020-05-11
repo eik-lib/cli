@@ -1,12 +1,15 @@
 'use strict';
 
 const fetch = require('node-fetch');
+const Task = require('./task');
 
-module.exports = class FetchImportMaps {
+module.exports = class FetchImportMaps extends Task {
     async process(incoming = {}, outgoing = {}) {
-        incoming.log.debug('Loading import map file from server');
+        const { log } = this;
+        const { map } = incoming;
+        log.debug('Loading import map file from server');
         try {
-            const maps = incoming.map.map(m =>
+            const maps = map.map(m =>
                 fetch(m).then(r => {
                     switch (true) {
                         case r.status === 404:

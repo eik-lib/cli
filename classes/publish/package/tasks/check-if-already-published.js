@@ -8,18 +8,20 @@ const {
     fetchPackageMeta,
     calculateFilesHash,
 } = require('../../../../utils');
+const Task = require('./task');
 
-module.exports = class CheckIfAlreadyPublished {
+module.exports = class CheckIfAlreadyPublished extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { log, server, name, currentVersion, path, js, css } = incoming;
+        const { log } = this;
+        const { server, name, version, path, js, css } = incoming;
 
         log.debug('Fetching package metadata from server.');
 
-        if (!currentVersion) return incoming;
+        if (!version) return incoming;
 
         let meta;
         try {
-            meta = await fetchPackageMeta(server, name, currentVersion);
+            meta = await fetchPackageMeta(server, name, version);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
@@ -48,8 +50,6 @@ module.exports = class CheckIfAlreadyPublished {
                 );
             }
             localHash = await calculateFilesHash(localFiles);
-            // eslint-disable-next-line no-param-reassign
-            incoming.integrity = localHash;
         } catch (err) {
             throw new Error(
                 `Unable to hash local files for comparison: ${err.message}`,

@@ -3,23 +3,24 @@
 const bytes = require('bytes');
 const fs = require('fs');
 const { compressedSize } = require('../../../../utils');
+const Task = require('./task');
 
-module.exports = class CheckBundleSizes {
+module.exports = class CheckBundleSizes extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { log, path, js, css } = incoming;
-        log.debug('Checking bundle file sizes');
+        const { path, js, css } = incoming;
+        this.log.debug('Checking bundle file sizes');
         try {
             if (js) {
                 const mainIndexJSSize = compressedSize(
                     fs.readFileSync(`${path}/main/index.js`, 'utf8'),
                 );
-                log.debug(
+                this.log.debug(
                     `  ==> Main index.js size: ${bytes(mainIndexJSSize)}`,
                 );
                 const ie11IndexJSSize = compressedSize(
                     fs.readFileSync(`${path}/ie11/index.js`, 'utf8'),
                 );
-                log.debug(
+                this.log.debug(
                     `  ==> ie11 index.js size: ${bytes(ie11IndexJSSize)}`,
                 );
             }
@@ -27,7 +28,7 @@ module.exports = class CheckBundleSizes {
                 const mainIndexCSSSize = compressedSize(
                     fs.readFileSync(`${path}/main/index.css`, 'utf8'),
                 );
-                log.debug(
+                this.log.debug(
                     `  ==> Main index.css size: ${bytes(mainIndexCSSSize)}`,
                 );
             }

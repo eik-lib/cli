@@ -6,10 +6,12 @@ const {
     fetchLatestVersion,
     incrementSemverVersion,
 } = require('../../../../utils');
+const Task = require('./task');
 
-module.exports = class FetchVersion {
+module.exports = class FetchVersion extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { log, server, name, major, level } = incoming;
+        const { log } = this;
+        const { server, name, major, level } = incoming;
         log.debug(
             'Calculating latest version for package. Fetching previous version information from server.',
         );
@@ -17,19 +19,17 @@ module.exports = class FetchVersion {
             const version = await fetchLatestVersion(server, name, major);
 
             if (!version) {
-                incoming.currentVersion = null;
-                incoming.nextVersion = [`${major || '1'}`, '0', '0'].join('.');
+                incoming.version = null;
+                outgoing.version = [`${major || '1'}`, '0', '0'].join('.');
             } else {
-                incoming.currentVersion = version;
-                incoming.nextVersion = incrementSemverVersion(version, level);
+                incoming.version = version;
+                outgoing.version = incrementSemverVersion(version, level);
             }
         } catch (err) {
             throw new Error(
                 `Unable to calculate latest version for package: ${err.message}`,
             );
         }
-
-        outgoing.version = incoming.nextVersion;
 
         return outgoing;
     }

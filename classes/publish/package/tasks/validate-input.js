@@ -4,6 +4,7 @@
 
 const { parse } = require('path');
 const { validators } = require('@eik/common');
+const Task = require('./task');
 
 class ValidationError extends Error {
     constructor(message, err) {
@@ -15,9 +16,10 @@ class ValidationError extends Error {
     }
 }
 
-module.exports = class ValidateInput {
+module.exports = class ValidateInput extends Task {
     process(incoming = {}, outgoing = {}) {
-        const { log, cwd, server, name, js, css, map, dryRun } = incoming;
+        const { log } = this;
+        const { cwd, server, name, js, css, map, dryRun } = incoming;
 
         log.debug('Validating input');
 

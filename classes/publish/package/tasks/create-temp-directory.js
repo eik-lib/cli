@@ -4,6 +4,7 @@
 
 const { join } = require('path');
 const mkdir = require('make-dir');
+const Task = require('./task');
 
 class IOError extends Error {
     constructor(message, err) {
@@ -13,9 +14,10 @@ class IOError extends Error {
     }
 }
 
-module.exports = class CreateTempDir {
+module.exports = class CreateTempDir extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { path, log } = incoming;
+        const { log } = this;
+        const { path } = incoming;
 
         log.debug('Creating temporary directory');
 
