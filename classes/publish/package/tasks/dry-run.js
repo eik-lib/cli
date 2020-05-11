@@ -2,7 +2,9 @@
 
 'use strict';
 
-module.exports = class DryRun {
+const Task = require('./task');
+
+module.exports = class DryRun extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { dryRun, path, zipFile } = incoming;
         if (dryRun) {

@@ -13,10 +13,12 @@ const autoprefixer = require('autoprefixer');
 const postcss = require('postcss');
 const fs = require('fs');
 const cssnano = require('cssnano');
+const Task = require('./task');
 
-module.exports = class CreateBundles {
+module.exports = class CreateBundles extends Task {
     async process(incoming = {}, outgoing = {}) {
-    const { js, css, log, importMap, cwd, path } = incoming;
+    const { js, css, importMap, cwd, path } = incoming;
+    const { log } = this;
         if (js) {
             log.debug('Creating main bundle file');
             try {

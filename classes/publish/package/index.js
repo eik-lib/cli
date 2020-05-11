@@ -42,22 +42,40 @@ module.exports = class PublishApp {
         this.css = css;
         this.dryRun = dryRun;
         this.path = join(tempDir, `publish-${name}-${major}-${Date.now()}`);
-        this.validateInput = new ValidateInput();
-        this.createTempDirectory = new CreateTempDirectory();
-        this.fetchImportMaps = new FetchImportMaps();
-        this.createBundles = new CreateBundles();
-        this.createZipFile = new CreateZipFile();
-        this.checkBundleSizes = new CheckBundleSizes();
-        this.runDryRun = new DryRun();
-        this.fetchVersion = new FetchVersion();
-        this.checkIfAlreadyPublished = new CheckIfAlreadyPublished();
-        this.uploadFiles = new UploadFiles();
-        this.saveMetafile = new SaveMetafile();
-        this.cleanup = new Cleanup();
+        this.validateInput = new ValidateInput(this.log);
+        this.createTempDirectory = new CreateTempDirectory(this.log);
+        this.fetchImportMaps = new FetchImportMaps(this.log);
+        this.createBundles = new CreateBundles(this.log);
+        this.createZipFile = new CreateZipFile(this.log);
+        this.checkBundleSizes = new CheckBundleSizes(this.log);
+        this.runDryRun = new DryRun(this.log);
+        this.fetchVersion = new FetchVersion(this.log);
+        this.checkIfAlreadyPublished = new CheckIfAlreadyPublished(this.log);
+        this.uploadFiles = new UploadFiles(this.log);
+        this.saveMetafile = new SaveMetafile(this.log);
+        this.cleanup = new Cleanup(this.log);
     }
 
     async run() {
         this.log.debug('Running publish command');
+
+        const incoming = {
+            path: this.path,
+            js: this.js,
+            css: this.css,
+            server: this.server,
+            name: this.name,
+            version: null,
+            importMap: {},
+            zipFile: '',
+            major: this.major,
+            level: this.level,
+            map: this.map,
+            cwd: this.cwd,
+            token: this.token,
+            dryRun: this.dryRun,
+        };
+
         const outgoing = {
             type: 'pkg',
             server: this.server,
@@ -65,23 +83,31 @@ module.exports = class PublishApp {
             major: this.major,
             level: this.level,
             dryRun: this.dryRun,
+            integrity: '',
+            files: [],
+            created: null,
+            author: {},
+            org: '',
+            version: '',
         };
 
-        await this.validateInput.process(this, outgoing);
-        await this.createTempDirectory.process(this, outgoing);
-        await this.fetchImportMaps.process(this, outgoing);
-        await this.createBundles.process(this, outgoing);
-        await this.createZipFile.process(this, outgoing);
-        await this.checkBundleSizes.process(this, outgoing);
-        await this.fetchVersion.process(this, outgoing);
-        await this.checkIfAlreadyPublished.process(this, outgoing);
+        await this.validateInput.process(incoming, outgoing);
+        await this.createTempDirectory.process(incoming, outgoing);
+        await this.fetchImportMaps.process(incoming, outgoing);
+        await this.createBundles.process(incoming, outgoing);
+        await this.createZipFile.process(incoming, outgoing);
+        await this.checkBundleSizes.process(incoming, outgoing);
+        await this.fetchVersion.process(incoming, outgoing);
+        await this.checkIfAlreadyPublished.process(incoming, outgoing);
+
         if (this.dryRun) {
-            await this.runDryRun.process(this, outgoing);
+            await this.runDryRun.process(incoming, outgoing);
         } else {
-            await this.uploadFiles.process(this, outgoing);
-            await this.saveMetafile.process(this, outgoing);
+            await this.uploadFiles.process(incoming, outgoing);
+            await this.saveMetafile.process(incoming, outgoing);
         }
-        await this.cleanup.process(this, outgoing);
+
+        await this.cleanup.process(incoming, outgoing);
 
         return outgoing;
     }

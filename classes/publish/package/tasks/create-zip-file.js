@@ -2,10 +2,12 @@
 
 const { join } = require('path');
 const tar = require('tar');
+const Task = require('./task');
 
-module.exports = class CreateZipFile {
+module.exports = class CreateZipFile extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { log, js, css, path } = incoming;
+        const { log } = this;
+        const { js, css, path } = incoming;
 
         log.debug('Creating zip file');
 
