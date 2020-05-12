@@ -11,6 +11,11 @@ exports.aliases = ['i'];
 exports.describe = `Create a new assets.json file in the current working directory`;
 
 exports.builder = (yargs) => {
+    yargs.example('eik init');
+    yargs.example('eik init --cwd /path/to/dir');
+    yargs.example('eik init --server https://assets.myserver.com --major 2 --name my-app --js ./scripts.js --css ./styles.css');
+    yargs.example('eik init --debug');
+
     yargs.options({
         server: {
             alias: 's',
