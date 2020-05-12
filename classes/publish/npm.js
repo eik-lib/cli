@@ -166,7 +166,7 @@ module.exports = class PublishDependency {
                 onwarn: () => {},
                 plugins: [
                     json(),
-                    esmImportToUrl({ imports: this.imports }),
+                    esmImportToUrl(this.importMap),
                     resolve(),
                     commonjs({ include: /node_modules/ }),
                     rollupReplace({
