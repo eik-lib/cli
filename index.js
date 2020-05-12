@@ -33,6 +33,13 @@ if (runningAsScript) {
 
     // eslint-disable-next-line no-unused-expressions
     yargs
+        .example('eik init')
+        .example('eik login --server https://assets.myserver.com --key ######')
+        .example('eik package --server https://assets.myserver.com --js ./client.js --name my-app --token ######')
+        .example('eik meta my-app --server https://assets.myserver.com')
+        .example('eik npm lit-html --server https://assets.myserver.com --token ######')
+        .example('eik npm-alias lit-html 1.0.0 1 --server https://assets.myserver.com --token ######')
+        .example('eik map my-map 1.0.0 ./import-map.json --server https://assets.myserver.com --token ######')
         .commandDir('commands')
         .demandCommand()
         .wrap(150)
