@@ -11,7 +11,10 @@ exports.command = 'npm-alias <name> <version> <alias>';
 
 exports.aliases = ['na', 'dep-alias', 'dependency-alias'];
 
-exports.describe = `Create a semver major alias for an npm package as identified by its name and version.`;
+exports.describe = `Create a semver major alias for an NPM package as identified by its name and version.
+    An NPM package with the given name and version must already exist on the asset server
+    Alias should be the semver major part of the NPM package version.
+    Eg. For an NPM package of version 5.4.3, you should use 5 as the alias`;
 
 exports.builder = (yargs) => {
     const cwd = av.cwd || av.c || process.cwd();
@@ -27,17 +30,17 @@ exports.builder = (yargs) => {
     yargs
         .positional('name', {
             describe:
-                'Name matching either package or import map name depending on type given',
+                'Name matching NPM package name.',
             type: 'string',
         })
         .positional('version', {
             describe:
-                'Version matching either package or import map version depending on type given',
+                'Version matching NPM package version.',
             type: 'string',
         })
         .positional('alias', {
             describe:
-                'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
+                'Alias for a semver version. Must be the semver major component of version.',
             type: 'string',
         });
 
@@ -64,6 +67,10 @@ exports.builder = (yargs) => {
             alias: 't',
         },
     });
+
+    yargs.example(`eik npm lit-html 1.0.0 1`);
+    yargs.example(`eik npm lit-html 1.3.5 1 --debug`);
+    yargs.example(`eik npm lit-html 5.3.2 5 --server https://assets.myeikserver.com`);
 };
 
 exports.handler = async (argv) => {
