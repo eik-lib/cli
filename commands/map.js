@@ -13,7 +13,9 @@ exports.command = 'map <name> <version> <file>';
 
 exports.aliases = ['m'];
 
-exports.describe = `Upload an import map file to the server under a given name and version.`;
+exports.describe = `Upload an import map file to the server under a given name and version.
+    A name/version combination must be unique and a version must be semver compliant.
+    Subsquent published versions must increase. Eg. 1.0.0 1.0.1, 1.1.0, 2.0.0 etc.`;
 
 exports.builder = yargs => {
     const cwd = av.cwd || av.c || process.cwd();
@@ -64,6 +66,10 @@ exports.builder = yargs => {
             alias: 't',
         },
     });
+
+    yargs.example(`eik map my-map 1.0.0 ./import-map.json`);
+    yargs.example(`eik map my-map 2.1.0 ./import-map.json --debug`);
+    yargs.example(`eik map my-map 2.1.1 ./import-map.json --server https://assets.myeikserver.com`);
 };
 
 exports.handler = async argv => {
