@@ -11,7 +11,10 @@ exports.command = 'map-alias <name> <version> <alias>';
 
 exports.aliases = ['ma'];
 
-exports.describe = `Create a semver major alias for an import map as identified by its name and version.`;
+exports.describe = `Create a semver major alias for an import map as identified by its name and version.
+    An import map with the given name and version must already exist on asset server
+    Alias should be the semver major part of the import map version.
+    Eg. For an import map of version 5.4.3, you should use 5 as the alias`;
 
 exports.builder = (yargs) => {
     const cwd = av.cwd || av.c || process.cwd();
@@ -27,17 +30,17 @@ exports.builder = (yargs) => {
     yargs
         .positional('name', {
             describe:
-                'Name matching either package or import map name depending on type given',
+                `Import map name for import map that is to be aliased`,
             type: 'string',
         })
         .positional('version', {
             describe:
-                'Version matching either package or import map version depending on type given',
+                `Import map version for import map that is to be aliased`,
             type: 'string',
         })
         .positional('alias', {
             describe:
-                'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
+                `Alias for a semver version. Should be the semver major component of version.`,
             type: 'string',
         });
 
@@ -64,6 +67,12 @@ exports.builder = (yargs) => {
             alias: 't',
         },
     });
+
+    yargs.example(`eik map-alias my-map 1.0.0 1`);
+    yargs.example(`eik map-alias my-map 1.7.3 1`);
+    yargs.example(`eik map-alias my-map 6.3.1 6`);
+    yargs.example(`eik map-alias my-map 6.3.1 6 --server https://assets.myeikserver.com`);
+    yargs.example(`eik map-alias my-map 4.2.2 4 --debug`);
 };
 
 exports.handler = async (argv) => {
