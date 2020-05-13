@@ -100,7 +100,7 @@ exports.handler = async (argv) => {
             const meta = await readMetaFile({ cwd: homedir });
 
             const tokens = new Map(meta.tokens);
-            tokens.set(server, token);
+            tokens.set(s, token);
             meta.tokens = Array.from(tokens);
 
             await writeMetaFile(meta, { cwd: homedir });

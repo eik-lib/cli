@@ -92,11 +92,17 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, token, server, map, name, dryRun } = argv;
+    let s = server;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
         const tokens = new Map(meta.tokens);
-        const t = token || tokens.get(server) || '';
+
+        if (!s && tokens.size === 1) {
+            s = tokens.keys().next().value;
+        }
+
+        const t = token || tokens.get(s) || '';
 
         let m = map;
         if (m && !Array.isArray(m)) {
@@ -107,16 +113,17 @@ exports.handler = async (argv) => {
             logger: logger(spinner, debug), 
             ...argv, 
             token: t,
+            server: s,
             map: m,
         };
         const { version, files } = await new PublishPackage(options).run();
 
         if (!dryRun) {
-            let url = new URL(join('pkg', name), server);
+            let url = new URL(join('pkg', name), s);
             let res = await fetch(url);
             const pkgMeta = await res.json();
 
-            url = new URL(join('pkg', name, version), server);
+            url = new URL(join('pkg', name, version), s);
             res = await fetch(url);
             const pkgVersionMeta = await res.json();
 
@@ -126,7 +133,7 @@ exports.handler = async (argv) => {
             spinner.text = '';
             spinner.stopAndPersist();
 
-            artifact.format(server);
+            artifact.format(s);
             process.stdout.write('\n');
         } else {
             spinner.text = '';

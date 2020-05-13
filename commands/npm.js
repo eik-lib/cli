@@ -77,21 +77,27 @@ exports.builder = yargs => {
 exports.handler = async argv => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, token, server, name, dryRun } = argv;
+    let s = server;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
         const tokens = new Map(meta.tokens);
-        const t = token || tokens.get(server) || '';
 
-        const options = { logger: logger(spinner, debug), ...argv, token: t };
+        if (!s && tokens.size === 1) {
+            s = tokens.keys().next().value;
+        }
+
+        const t = token || tokens.get(s) || '';
+
+        const options = { logger: logger(spinner, debug), ...argv, token: t, server: s };
         const { version, files } = await new PublishNPM(options).run();
 
         if (!dryRun) {
-            let url = new URL(join('npm', name), server);
+            let url = new URL(join('npm', name), s);
             let res = await fetch(url);
             const pkgMeta = await res.json();
 
-            url = new URL(join('npm', name, version), server);
+            url = new URL(join('npm', name, version), s);
             res = await fetch(url);
             const pkgVersionMeta = await res.json();
 
@@ -101,7 +107,7 @@ exports.handler = async argv => {
             spinner.text = '';
             spinner.stopAndPersist();
 
-            artifact.format(server);
+            artifact.format(s);
             process.stdout.write('\n');
         } else {
             spinner.text = '';

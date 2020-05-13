@@ -72,17 +72,25 @@ exports.handler = async (argv) => {
     const { debug, token, server } = argv;
     const log = logger(spinner, debug);
     let af;
+    let s = server;
 
     try {
         const meta = await readMetaFile({ cwd: homedir });
         const tokens = new Map(meta.tokens);
-        const t = token || tokens.get(server) || '';
+
+        // fallback to ~/.eikrc server if logged in to a single server
+        if (!s && tokens.size === 1) {
+            s = tokens.keys().next().value;
+        }
+
+        const t = token || tokens.get(s) || '';
 
         const data = await new Alias({
             type: 'pkg',
             logger: log,
             ...argv,
             token: t,
+            server: s,
         }).run();
 
         af = new AliasFormatter(data);
@@ -98,7 +106,7 @@ exports.handler = async (argv) => {
         spinner.text = '';
         spinner.stopAndPersist();
 
-        af.format(server);
+        af.format(s);
     } else {
         spinner.text = '';
         spinner.stopAndPersist();
