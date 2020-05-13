@@ -2,8 +2,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-undef */
 
-'use strict';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
