@@ -4,12 +4,13 @@
 
 'use strict';
 
+const homedir = require('os').homedir();
 const { readFileSync } = require('fs');
 const ora = require('ora');
 const av = require('yargs-parser')(process.argv.slice(2))
 const Meta = require('../classes/meta');
 const Artifact = require('../utils/artifact');
-const { resolvePath, logger } = require('../utils');
+const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'meta <name>';
 
@@ -58,11 +59,20 @@ exports.handler = async (argv) => {
     let meta = false;
     const { debug, server } = argv;
     const l = logger(spinner, debug);
+    let s = server;
 
     try {
+        const m = await readMetaFile({ cwd: homedir });
+        const tokens = new Map(m.tokens);
+
+        if (!s && tokens.size === 1) {
+            s = tokens.keys().next().value;
+        }
+
         meta = await new Meta({
             logger: l,
             ...argv,
+            server: s,
         }).run();
     } catch (err) {
         l.warn(err.message);
@@ -74,7 +84,7 @@ exports.handler = async (argv) => {
         
         for (const m of Object.values(meta)) {
             const artifact = new Artifact(m);
-            artifact.format(server);
+            artifact.format(s);
             process.stdout.write(`\n`);
         }
 

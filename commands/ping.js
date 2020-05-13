@@ -1,10 +1,11 @@
 'use strict';
 
+const homedir = require('os').homedir();
 const ora = require('ora');
 const { readFileSync } = require('fs');
 const av = require('yargs-parser')(process.argv.slice(2))
 const Ping = require('../classes/ping');
-const { resolvePath, logger } = require('../utils');
+const { resolvePath, logger, readMetaFile } = require('../utils');
 
 exports.command = 'ping';
 
@@ -34,23 +35,26 @@ exports.builder = (yargs) => {
             default: false,
             type: 'boolean',
         },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter current working directory.',
-            default: process.cwd(),
-        },
     });
 };
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug } = argv;
+    const { debug, server } = argv;
+    let s = server;
+
+    const meta = await readMetaFile({ cwd: homedir });
+    const tokens = new Map(meta.tokens);
+
+    if (!s && tokens.size === 1) {
+        s = tokens.keys().next().value;
+    }
 
     try {
         success = await new Ping({
             logger: logger(spinner, debug),
-            ...argv,
+            server: s,
         }).run();
     } catch (err) {
         logger.warn(err.message);
