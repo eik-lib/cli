@@ -6,11 +6,10 @@ const { validators } = require('@eik/common');
 const { sendCommand } = require('../utils');
 
 module.exports = class Login {
-    constructor({ cwd = process.cwd(), logger, server, key } = {}) {
+    constructor({ logger, server, key } = {}) {
         this.log = abslog(logger);
         this.server = server;
         this.key = key;
-        this.cwd = cwd;
     }
 
     async run() {
