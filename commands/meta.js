@@ -16,7 +16,8 @@ exports.command = 'meta <name>';
 
 exports.aliases = ['show'];
 
-exports.describe = `Retrieve meta information by package, map or npm name`;
+exports.describe = `Retrieve meta information by package, map or npm name
+    If a given name exists in several types (package and map for example), results will be returned and displayed from all matching types`;
 
 exports.builder = (yargs) => {
     const cwd = av.cwd || av.c || process.cwd();
@@ -31,7 +32,7 @@ exports.builder = (yargs) => {
 
     yargs.positional('name', {
         describe:
-            'Name matching either package or import map name depending on type given',
+            'Name matching one or more of package, npm or import map name',
         type: 'string',
     });
 
@@ -52,6 +53,10 @@ exports.builder = (yargs) => {
             default: process.cwd(),
         },
     });
+
+    yargs.example(`eik meta lit-html`);
+    yargs.example(`eik meta my-map --debug`);
+    yargs.example(`eik meta my-app --server https://assets.myeikserver.com`);
 };
 
 exports.handler = async (argv) => {
