@@ -23,7 +23,7 @@ module.exports = class PublishApp {
         server,
         token,
         name,
-        major = 1,
+        major,
         level = 'patch',
         map = [],
         js,

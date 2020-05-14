@@ -2,12 +2,9 @@
 
 const { join } = require('path');
 const fetch = require('node-fetch');
-const homedir = require('os').homedir();
 const ora = require('ora');
-const { readFileSync } = require('fs');
-const av = require('yargs-parser')(process.argv.slice(2))
 const PublishMap = require('../classes/publish/map');
-const { resolvePath, logger, readMetaFile, Artifact } = require('../utils');
+const { logger, Artifact, getDefaults, getCWD } = require('../utils');
 
 exports.command = 'map <name> <version> <file>';
 
@@ -18,15 +15,8 @@ exports.describe = `Upload an import map file to the server under a given name a
     Subsquent published versions must increase. Eg. 1.0.0 1.0.1, 1.1.0, 2.0.0 etc.`;
 
 exports.builder = yargs => {
-    const cwd = av.cwd || av.c || process.cwd();
-
-    let assets = {};
-    try {
-        const assetsPath = resolvePath('./assets.json', cwd).pathname;
-        assets = JSON.parse(readFileSync(assetsPath));
-    } catch (err) {
-        // noop
-    }
+    const cwd = getCWD();
+    const defaults = getDefaults(cwd);
 
     yargs
         .positional('name', {
@@ -48,12 +38,12 @@ exports.builder = yargs => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
-            default: assets.server || '',
+            default: defaults.server,
         },
         cwd: {
             alias: 'c',
             describe: 'Alter current working directory.',
-            default: process.cwd(),
+            default: defaults.cwd,
         },
         debug: {
             describe: 'Logs additional messages',
@@ -67,6 +57,8 @@ exports.builder = yargs => {
         },
     });
 
+    yargs.default('token', defaults.token, defaults.token ? '######' : '');
+
     yargs.example(`eik map my-map 1.0.0 ./import-map.json`);
     yargs.example(`eik map my-map 2.1.0 ./import-map.json --debug`);
     yargs.example(`eik map my-map 2.1.1 ./import-map.json --server https://assets.myeikserver.com`);
@@ -74,33 +66,18 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, token, server, name, version } = argv;
-    let s = server;
+    const { debug, server, name, version } = argv;
 
     try {
-        const meta = await readMetaFile({ cwd: homedir });
-        const tokens = new Map(meta.tokens);
-
-        // fallback to ~/.eikrc server if logged in to a single server
-        if (!s && tokens.size === 1) {
-            s = tokens.keys().next().value;
-        }
-
-        const t = token || tokens.get(s) || '';
         const log = logger(spinner, debug);
 
-        await new PublishMap({
-            logger: log,
-            ...argv,
-            token: t,
-            server: s,
-        }).run();
+        await new PublishMap({ logger: log, ...argv }).run();
 
-        let url = new URL(join('map', name), s);
+        let url = new URL(join('map', name), server);
         let res = await fetch(url);
         const pkgMeta = await res.json();
 
-        url = new URL(join('map', name, version), s);
+        url = new URL(join('map', name, version), server);
         res = await fetch(url);
 
         log.info(`Published import map "${name}" at version "${version}"`);
@@ -111,7 +88,7 @@ exports.handler = async argv => {
         const artifact = new Artifact(pkgMeta);
         const versions = new Map(pkgMeta.versions);
         artifact.versions = Array.from(versions.values());
-        artifact.format(s);
+        artifact.format(server);
 
         process.stdout.write('\n');
     } catch (err) {

@@ -22,6 +22,9 @@ module.exports = class FetchVersion extends Task {
                 incoming.version = null;
                 outgoing.version = [`${major || '1'}`, '0', '0'].join('.');
             } else {
+                if (level === 'major' && major) {
+                    throw new Error(`Unable to increment major version which is locked to ${major}`);
+                }
                 incoming.version = version;
                 outgoing.version = incrementSemverVersion(version, level);
             }
