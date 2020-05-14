@@ -30,7 +30,7 @@ module.exports = class PublishDependency {
         server,
         name,
         version,
-        map = '',
+        map = [],
         dryRun = false,
         token,
     } = {}) {
