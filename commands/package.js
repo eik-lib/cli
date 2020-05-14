@@ -2,47 +2,57 @@
 
 const { join } = require('path');
 const fetch = require('node-fetch');
-const homedir = require('os').homedir();
 const ora = require('ora');
 const chalk = require('chalk');
-const { readFileSync } = require('fs');
-const av = require('yargs-parser')(process.argv.slice(2));
 const PublishPackage = require('../classes/publish/package/index');
-const { resolvePath, logger, readMetaFile, Artifact } = require('../utils');
+const { logger, Artifact, getDefaults, getCWD } = require('../utils');
 
-exports.command = 'package';
+exports.command = 'package [level]';
 
-exports.aliases = ['publish', 'pkg', 'pub'];
+exports.aliases = ['pkg'];
 
-exports.describe = `Publish an apps dependencies based on local assets.json file.`;
+exports.describe = `Publish an app package to an Eik server by a given semver level.
+    Bundles and publishes JavaScript and CSS at given local paths creating a new version based off the previous version and the given semver level.
+    Specifying semver level is optional and defaults to "patch", specifying "major" locks version to the given semver major.
+    If a package has never previously been published, the first version generated will be equal to specified major version or 1.0.0 if no major is specified.
+    Local paths to asset files can be defined in an "assets.json" file using "js.input" and "css.input" fields or can be provided directly to the CLI command using the flags --js and --css.
+    URLs to import maps can be provided to map "bare" imports found in asset files, to do so either use the field "map" in "assets.json" or the --map CLI flag.`;
 
 exports.builder = (yargs) => {
-    const cwd = av.cwd || av.c || process.cwd();
+    const cwd = getCWD();
+    const defaults = getDefaults(cwd);
 
-    let assets = {};
-    try {
-        const assetsPath = resolvePath('./assets.json', cwd).pathname;
-        assets = JSON.parse(readFileSync(assetsPath));
-    } catch (err) {
-        // noop
-    }
+    yargs.positional('level', {
+        describe:
+            'Specify the app semver level to use when updating the package.',
+        type: 'string',
+        choices: ['major', 'minor', 'patch'],
+        default: 'patch',
+    });
 
     yargs.options({
         server: {
             alias: 's',
-            describe: 'Specify location of asset server.',
-            default: assets.server || '',
+            describe: `Specify location of Eik asset server.
+                When authenticated (using "eik login") with a single Eik asset server, this can be automatically determined.
+                Otherwise, it must be provided as a CLI flag or in an "assets.json" file's "server" field`,
+            type: 'string',
+            default: defaults.server,
         },
         cwd: {
             alias: 'c',
-            describe: 'Alter current working directory.',
-            default: process.cwd(),
+            describe: 'Alter the current working directory.',
+            default: defaults.cwd,
+            type: 'string',
         },
         map: {
             alias: 'm',
             describe:
-                'Provide an array of URLs to import maps that should be used when making bundles',
-            default: assets['import-map'] || [],
+                `Provide one or more URLs to import maps that should be used to map "bare" imports when making bundles.
+                Taken from the "assets.json" file's "map" field if not provided by CLI flag.
+                Flag can be supplied multiple times, once for each import map URL
+                Eg. --map http://my-map.com --map http://my-other-map.com`,
+            default: defaults.map,
         },
         dryRun: {
             alias: 'd',
@@ -58,72 +68,74 @@ exports.builder = (yargs) => {
         },
         js: {
             describe:
-                'Specify the path on local disk to JavaScript client side assets relative to the current working directory.',
-            default: assets.js && assets.js.input,
+                `Specify the path on local disk to JavaScript client side assets relative to the current working directory.
+                Taken from "assets.json" file's "js.input" field if not provided by CLI flag.`,
+            default: defaults.js,
+            type: 'string',
         },
         css: {
             describe:
-                'Specify the path on local disk to CSS client side assets relative to the current working directory.',
-            default: assets.css && assets.css.input,
+                `Specify the path on local disk to CSS client side assets relative to the current working directory.
+                Taken from "assets.json" file's "css.input" field if not provided by CLI flag.`,
+            default: defaults.css,
+            type: 'string',
         },
         name: {
-            describe: 'Specify the app name.',
-            default: assets.name,
+            describe: `Specify the app name.
+                Taken from "assets.json" file's "name" field if not provided by CLI flag.`,
+            default: defaults.name,
+            type: 'string',
         },
         major: {
-            describe: 'Major semver version to lock updates to.',
-            default: assets.major,
-        },
-        level: {
-            alias: 'l',
-            describe:
-                'Specify the app semver level to use when updating the package.',
-            default: 'patch',
+            describe: `Major semver version to lock updates to. 
+                Taken from "assets.json" file's "major" field if not provided by CLI flag.`,
+            default: defaults.major,
+            type: 'number',
         },
         token: {
             describe:
-                'Provide a jwt token to be used to authenticate with the Eik server.',
-            default: '',
+                `Provide a jwt token to be used to authenticate with the Eik server.
+                Automatically determined if authenticated (via eik login)`,
+            type: 'string',
             alias: 't',
         },
     });
+
+    yargs.array('map');
+    yargs.default('token', defaults.token, defaults.token ? '######' : '');
+
+    yargs.example(`eik package`);
+    yargs.example(`eik package patch`);
+    yargs.example(`eik package minor --major 1`);
+    yargs.example(`eik package patch --major 1 --js ./assets/client.js --css ./assets/styles.css`);
+    yargs.example(`eik package patch --name my-app`);
+    yargs.example(`eik pkg patch --name my-app`);
+    yargs.example(`eik pkg --name my-app --server https://assets.myeikserver.com`);
+    yargs.example(`eik pkg --dry-run`);
+    yargs.example(`eik pkg --token ######`);
+    yargs.example(`eik pkg --map https://server/my-map1.json`);
+    yargs.example(`eik pkg --map https://server/my-map1.json --map https://server/my-map2.json`);
+    yargs.example(`eik pkg --debug`);
+    yargs.example(`eik pkg -s https://assets.myeikserver.com -t ###### --name my-app --js ./assets/client.js --css ./assets/styles.css`);
 };
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, token, server, map, name, dryRun } = argv;
-    let s = server;
+    const { debug, name, dryRun, server } = argv;
 
     try {
-        const meta = await readMetaFile({ cwd: homedir });
-        const tokens = new Map(meta.tokens);
-
-        if (!s && tokens.size === 1) {
-            s = tokens.keys().next().value;
-        }
-
-        const t = token || tokens.get(s) || '';
-
-        let m = map;
-        if (m && !Array.isArray(m)) {
-            m = [m];
-        }
-        
         const options = { 
             logger: logger(spinner, debug), 
-            ...argv, 
-            token: t,
-            server: s,
-            map: m,
+            ...argv,
         };
         const { version, files } = await new PublishPackage(options).run();
 
         if (!dryRun) {
-            let url = new URL(join('pkg', name), s);
+            let url = new URL(join('pkg', name), server);
             let res = await fetch(url);
             const pkgMeta = await res.json();
 
-            url = new URL(join('pkg', name, version), s);
+            url = new URL(join('pkg', name, version), server);
             res = await fetch(url);
             const pkgVersionMeta = await res.json();
 
@@ -133,7 +145,7 @@ exports.handler = async (argv) => {
             spinner.text = '';
             spinner.stopAndPersist();
 
-            artifact.format(s);
+            artifact.format(server);
             process.stdout.write('\n');
         } else {
             spinner.text = '';

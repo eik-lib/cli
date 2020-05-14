@@ -4,13 +4,10 @@
 
 'use strict';
 
-const homedir = require('os').homedir();
-const { readFileSync } = require('fs');
 const ora = require('ora');
-const av = require('yargs-parser')(process.argv.slice(2))
 const Meta = require('../classes/meta');
 const Artifact = require('../utils/artifact');
-const { resolvePath, logger, readMetaFile } = require('../utils');
+const { logger, getDefaults, getCWD } = require('../utils');
 
 exports.command = 'meta <name>';
 
@@ -20,15 +17,8 @@ exports.describe = `Retrieve meta information by package, map or npm name
     If a given name exists in several types (package and map for example), results will be returned and displayed from all matching types`;
 
 exports.builder = (yargs) => {
-    const cwd = av.cwd || av.c || process.cwd();
-
-    let assets = {};
-    try {
-        const assetsPath = resolvePath('./assets.json', cwd).pathname;
-        assets = JSON.parse(readFileSync(assetsPath));
-    } catch (err) {
-        // noop
-    }
+    const cwd = getCWD();
+    const defaults = getDefaults(cwd);
 
     yargs.positional('name', {
         describe:
@@ -40,7 +30,7 @@ exports.builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
-            default: assets.server || '',
+            default: defaults.server,
         },
         debug: {
             describe: 'Logs additional messages',
@@ -50,7 +40,7 @@ exports.builder = (yargs) => {
         cwd: {
             alias: 'c',
             describe: 'Alter current working directory.',
-            default: process.cwd(),
+            default: defaults.cwd,
         },
     });
 
@@ -64,21 +54,9 @@ exports.handler = async (argv) => {
     let meta = false;
     const { debug, server } = argv;
     const l = logger(spinner, debug);
-    let s = server;
 
     try {
-        const m = await readMetaFile({ cwd: homedir });
-        const tokens = new Map(m.tokens);
-
-        if (!s && tokens.size === 1) {
-            s = tokens.keys().next().value;
-        }
-
-        meta = await new Meta({
-            logger: l,
-            ...argv,
-            server: s,
-        }).run();
+        meta = await new Meta({ logger: l, ...argv }).run();
     } catch (err) {
         l.warn(err.message);
     }
@@ -89,7 +67,7 @@ exports.handler = async (argv) => {
         
         for (const m of Object.values(meta)) {
             const artifact = new Artifact(m);
-            artifact.format(s);
+            artifact.format(server);
             process.stdout.write(`\n`);
         }
 

@@ -1,38 +1,31 @@
 'use strict';
 
-const homedir = require('os').homedir();
 const ora = require('ora');
-const { readFileSync } = require('fs');
-const av = require('yargs-parser')(process.argv.slice(2))
 const Alias = require('../classes/alias');
-const { resolvePath, logger, readMetaFile, Alias: AliasFormatter } = require('../utils');
+const { logger, Alias: AliasFormatter, getDefaults, getCWD } = require('../utils');
 
 exports.command = 'package-alias <name> <version> <alias>';
 
 exports.aliases = ['pkg-alias', 'pa'];
 
-exports.describe = `Create a semver major alias for a package as identified by its name and version.`;
+exports.describe = `Create a semver major alias for a package as identified by its name and version.
+    A package with the given name and version must already exist on asset server
+    Alias should be the semver major part of the package version.
+    Eg. For a package of version 5.4.3, you should use 5 as the alias`;
 
 exports.builder = (yargs) => {
-    const cwd = av.cwd || av.c || process.cwd();
-
-    let assets = {};
-    try {
-        const assetsPath = resolvePath('./assets.json', cwd).pathname;
-        assets = JSON.parse(readFileSync(assetsPath));
-    } catch (err) {
-        // noop
-    }
+    const cwd = getCWD();
+    const defaults = getDefaults(cwd);
 
     yargs
         .positional('name', {
             describe:
-                'Name matching either package or import map name depending on type given',
+                'Name matching existing name for a package on Eik server',
             type: 'string',
         })
         .positional('version', {
             describe:
-                'Version matching either package or import map version depending on type given',
+                'Version matching existing version for a package on Eik server',
             type: 'string',
         })
         .positional('alias', {
@@ -44,13 +37,13 @@ exports.builder = (yargs) => {
     yargs.options({
         server: {
             alias: 's',
-            describe: 'Specify location of asset server.',
-            default: assets.server || '',
+            describe: 'Specify location of Eik asset server.',
+            default: defaults.server,
         },
         cwd: {
             alias: 'c',
-            describe: 'Alter current working directory.',
-            default: process.cwd(),
+            describe: 'Alter the current working directory.',
+            default: defaults.cwd,
         },
         debug: {
             describe: 'Logs additional messages',
@@ -64,33 +57,28 @@ exports.builder = (yargs) => {
             alias: 't',
         },
     });
+
+    yargs.default('token', defaults.token, defaults.token ? '######' : '');
+
+    yargs.example(`eik package-alias my-app 1.0.0 1`);
+    yargs.example(`eik package-alias my-app 1.7.3 1`);
+    yargs.example(`eik package-alias my-app 6.3.1 6`);
+    yargs.example(`eik package-alias my-app 6.3.1 6 --server https://assets.myeikserver.com`);
+    yargs.example(`eik package-alias my-app 4.2.2 4 --debug`);
 };
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug, token, server } = argv;
+    const { debug, server } = argv;
     const log = logger(spinner, debug);
     let af;
-    let s = server;
 
     try {
-        const meta = await readMetaFile({ cwd: homedir });
-        const tokens = new Map(meta.tokens);
-
-        // fallback to ~/.eikrc server if logged in to a single server
-        if (!s && tokens.size === 1) {
-            s = tokens.keys().next().value;
-        }
-
-        const t = token || tokens.get(s) || '';
-
         const data = await new Alias({
             type: 'pkg',
             logger: log,
             ...argv,
-            token: t,
-            server: s,
         }).run();
 
         af = new AliasFormatter(data);
@@ -106,7 +94,7 @@ exports.handler = async (argv) => {
         spinner.text = '';
         spinner.stopAndPersist();
 
-        af.format(s);
+        af.format(server);
     } else {
         spinner.text = '';
         spinner.stopAndPersist();

@@ -1,11 +1,8 @@
 'use strict';
 
-const homedir = require('os').homedir();
 const ora = require('ora');
-const { readFileSync } = require('fs');
-const av = require('yargs-parser')(process.argv.slice(2))
 const Alias = require('../classes/alias');
-const { resolvePath, logger, readMetaFile, Alias: AliasFormatter } = require('../utils');
+const { logger, Alias: AliasFormatter, getDefaults, getCWD } = require('../utils');
 
 exports.command = 'map-alias <name> <version> <alias>';
 
@@ -17,15 +14,8 @@ exports.describe = `Create a semver major alias for an import map as identified 
     Eg. For an import map of version 5.4.3, you should use 5 as the alias`;
 
 exports.builder = (yargs) => {
-    const cwd = av.cwd || av.c || process.cwd();
-
-    let assets = {};
-    try {
-        const assetsPath = resolvePath('./assets.json', cwd).pathname;
-        assets = JSON.parse(readFileSync(assetsPath));
-    } catch (err) {
-        // noop
-    }
+    const cwd = getCWD();
+    const defaults = getDefaults(cwd);
 
     yargs
         .positional('name', {
@@ -48,12 +38,12 @@ exports.builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
-            default: assets.server || '',
+            default: defaults.server,
         },
         cwd: {
             alias: 'c',
             describe: 'Alter current working directory.',
-            default: process.cwd(),
+            default: defaults.cwd,
         },
         debug: {
             describe: 'Logs additional messages',
@@ -68,6 +58,8 @@ exports.builder = (yargs) => {
         },
     });
 
+    yargs.default('token', defaults.token, defaults.token ? '######' : '');
+
     yargs.example(`eik map-alias my-map 1.0.0 1`);
     yargs.example(`eik map-alias my-map 1.7.3 1`);
     yargs.example(`eik map-alias my-map 6.3.1 6`);
@@ -78,28 +70,15 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug, token, server, name, version } = argv;
+    const { debug, name, version, server } = argv;
     const log = logger(spinner, debug);
     let data = {};
-    let s = server;
 
     try {
-        const meta = await readMetaFile({ cwd: homedir });
-        const tokens = new Map(meta.tokens);
-
-        // fallback to ~/.eikrc server if logged in to a single server
-        if (!s && tokens.size === 1) {
-            s = tokens.keys().next().value;
-        }
-
-        const t = token || tokens.get(s) || '';
-
         data = await new Alias({
             type: 'map',
             logger: log,
             ...argv,
-            token: t,
-            server: s,
         }).run();
 
         data.name = name;
@@ -117,7 +96,7 @@ exports.handler = async (argv) => {
         spinner.text = '';
         spinner.stopAndPersist();
 
-        new AliasFormatter(data).format(s);
+        new AliasFormatter(data).format(server);
     } else {
         spinner.text = '';
         spinner.stopAndPersist();
