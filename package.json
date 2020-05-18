@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@eik/core": "1.0.0-alpha.17",
-    "@eik/service": "1.0.0-alpha.10",
+    "@eik/service": "1.0.0-alpha.12",
     "eslint": "7.0.0",
     "eslint-config-airbnb-base": "14.1.0",
     "eslint-config-prettier": "6.11.0",
