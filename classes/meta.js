@@ -33,7 +33,6 @@ module.exports = class Meta {
             const typeFetches = [];
             for (const type of types) {
                 const url = new URL(join(type, this.name), this.server);
-
                 typeFetches.push(fetch(url));
             }
 
@@ -53,7 +52,6 @@ module.exports = class Meta {
 
                     const vers = new Map(versions);
                     data[type].versions = Array.from(vers.values());
-
                     for (let i = 0; i < data[type].versions.length; i++) {
                         const { version } = data[type].versions[i];
                         const url = new URL(
