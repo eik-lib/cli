@@ -105,13 +105,9 @@ exports.handler = async (argv) => {
         );
 
         log.info(`"assets.json" successfully written to directory`);
-        spinner.text = '';
-        spinner.stopAndPersist();
     } catch (err) {
         log.warn(err.message);
-
-        spinner.text = '';
-        spinner.stopAndPersist();
-        process.exit(1);
     }
+    spinner.text = '';
+    spinner.stopAndPersist();
 };
