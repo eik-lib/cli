@@ -71,11 +71,7 @@ exports.handler = async (argv) => {
             process.stdout.write(`\n`);
         }
 
-        spinner.text = '';
-        spinner.stopAndPersist();
-    } else {
-        spinner.text = '';
-        spinner.stopAndPersist();
-        process.exit(1);
     }
+    spinner.text = '';
+    spinner.stopAndPersist();
 };

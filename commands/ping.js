@@ -34,21 +34,14 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    let success = false;
     const { debug } = argv;
 
     try {
-        success = await new Ping({ logger: logger(spinner, debug) }).run();
+        await new Ping({ logger: logger(spinner, debug) }).run();
     } catch (err) {
         logger.warn(err.message);
     }
 
-    if (success) {
-        spinner.text = '';
-        spinner.stopAndPersist();
-    } else {
-        spinner.text = '';
-        spinner.stopAndPersist();
-        process.exit(1);
-    }
+    spinner.text = '';
+    spinner.stopAndPersist();
 };

@@ -90,14 +90,9 @@ exports.handler = async (argv) => {
         log.warn(err.message);
     }
 
+    spinner.text = '';
+    spinner.stopAndPersist();
     if (success) {
-        spinner.text = '';
-        spinner.stopAndPersist();
-
         af.format(server);
-    } else {
-        spinner.text = '';
-        spinner.stopAndPersist();
-        process.exit(1);
     }
 };
