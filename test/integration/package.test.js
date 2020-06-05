@@ -45,30 +45,6 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik package --token --server : no assets.json', async (t) => {
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package
-        --name test-app 
-        --token ${t.context.token}
-        --server ${t.context.address}
-        --cwd ${t.context.folder}
-        --js ${join(__dirname, '..', 'fixtures', 'client.js')}
-        --css ${join(__dirname, '..', 'fixtures', 'styles.css')}`;
-
-    const { error, stdout } = await exec(cmd.split('\n').join(' '));
-
-    const res = await fetch(
-        new URL('/pkg/test-app/1.0.0/main/index.js', t.context.address),
-    );
-
-    t.equal(res.ok, true);
-    t.notOk(error);
-    t.match(stdout, 'published');
-    t.match(stdout, 'less than a minute ago');
-    t.match(stdout, 'Generic User');
-    t.end();
-});
-
 test('eik package : package, details provided by assets.json file', async (t) => {
     const assets = {
         name: 'test-app',
@@ -141,15 +117,23 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
+    const assets = {
+        name: 'test-app',
+        server: t.context.address,
+        js: { input: join(__dirname, '..', 'fixtures', 'client-with-bare-imports.js') },
+        css: { input: join(__dirname, '..', 'fixtures', 'styles.css') },
+        'import-map': [new URL('/map/my-map/v1', t.context.address).href]
+    };
+    await fs.writeFile(
+        join(t.context.folder, 'assets.json'),
+        JSON.stringify(assets),
+    );
+
     // use import map when publishing app files
     cmd = `${eik} package
-        --name test-app 
         --token ${t.context.token}
-        --server ${t.context.address}
         --cwd ${t.context.folder}
-        --map ${new URL('/map/my-map/v1', t.context.address).href}
-        --debug
-        --js ${join(__dirname, '..', 'fixtures', 'client-with-bare-imports.js')}`;
+        --debug`;
     await exec(cmd.split('\n').join(' '));
 
     const res = await fetch(new URL('/pkg/test-app/1.0.0/main/index.js', t.context.address));
