@@ -4,7 +4,8 @@ const { join } = require('path');
 const fetch = require('node-fetch');
 
 module.exports = async (server, name, major) => {
-    const res = await fetch(`${server}/${join('pkg', name)}`);
+    const url = new URL(`${join('pkg', name)}?t=${Date.now()}`, server);
+    const res = await fetch(url);
     if (!res.ok) {
         if (res.status === 404) {
             return null;
