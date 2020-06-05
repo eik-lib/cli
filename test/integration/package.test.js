@@ -52,6 +52,7 @@ test('eik package : package, details provided by assets.json file', async (t) =>
         js: { input: join(__dirname, '..', 'fixtures', 'client.js') },
         css: { input: join(__dirname, '..', 'fixtures', 'styles.css') },
     };
+
     await fs.writeFile(
         join(t.context.folder, 'assets.json'),
         JSON.stringify(assets),
