@@ -9,7 +9,7 @@ const { logger, Artifact, getDefaults, getCWD } = require('../utils');
 
 exports.command = 'package [level]';
 
-exports.aliases = ['pkg'];
+exports.aliases = ['pkg', 'publish'];
 
 exports.describe = `Publish an app package to an Eik server by a given semver level.
     Bundles and publishes JavaScript and CSS at given local paths creating a new version based off the previous version and the given semver level.
@@ -31,28 +31,11 @@ exports.builder = (yargs) => {
     });
 
     yargs.options({
-        server: {
-            alias: 's',
-            describe: `Specify location of Eik asset server.
-                When authenticated (using "eik login") with a single Eik asset server, this can be automatically determined.
-                Otherwise, it must be provided as a CLI flag or in an "assets.json" file's "server" field`,
-            type: 'string',
-            default: defaults.server,
-        },
         cwd: {
             alias: 'c',
             describe: 'Alter the current working directory.',
             default: defaults.cwd,
             type: 'string',
-        },
-        map: {
-            alias: 'm',
-            describe:
-                `Provide one or more URLs to import maps that should be used to map "bare" imports when making bundles.
-                Taken from the "assets.json" file's "map" field if not provided by CLI flag.
-                Flag can be supplied multiple times, once for each import map URL
-                Eg. --map http://my-map.com --map http://my-other-map.com`,
-            default: defaults.map,
         },
         dryRun: {
             alias: 'd',
@@ -65,32 +48,6 @@ exports.builder = (yargs) => {
             describe: 'Logs additional messages',
             default: false,
             type: 'boolean',
-        },
-        js: {
-            describe:
-                `Specify the path on local disk to JavaScript client side assets relative to the current working directory.
-                Taken from "assets.json" file's "js.input" field if not provided by CLI flag.`,
-            default: defaults.js,
-            type: 'string',
-        },
-        css: {
-            describe:
-                `Specify the path on local disk to CSS client side assets relative to the current working directory.
-                Taken from "assets.json" file's "css.input" field if not provided by CLI flag.`,
-            default: defaults.css,
-            type: 'string',
-        },
-        name: {
-            describe: `Specify the app name.
-                Taken from "assets.json" file's "name" field if not provided by CLI flag.`,
-            default: defaults.name,
-            type: 'string',
-        },
-        major: {
-            describe: `Major semver version to lock updates to. 
-                Taken from "assets.json" file's "major" field if not provided by CLI flag.`,
-            default: defaults.major,
-            type: 'number',
         },
         token: {
             describe:
@@ -121,13 +78,24 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, name, dryRun, server } = argv;
+    const { debug, dryRun, cwd, token } = argv;
+    const {name, server, map, js, css, major} = getDefaults(cwd);
 
     try {
         const options = { 
-            logger: logger(spinner, debug), 
-            ...argv,
+            logger: logger(spinner, debug),
+            name,
+            server,
+            map,
+            js,
+            css,
+            major,
+            cwd,
+            token,
+            dryRun,
+            debug,
         };
+
         const { version, files } = await new PublishPackage(options).run();
 
         if (!dryRun) {
