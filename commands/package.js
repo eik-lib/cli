@@ -62,18 +62,11 @@ exports.builder = (yargs) => {
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik package`);
+    yargs.example(`eik publish`);
     yargs.example(`eik package patch`);
-    yargs.example(`eik package minor --major 1`);
-    yargs.example(`eik package patch --major 1 --js ./assets/client.js --css ./assets/styles.css`);
-    yargs.example(`eik package patch --name my-app`);
-    yargs.example(`eik pkg patch --name my-app`);
-    yargs.example(`eik pkg --name my-app --server https://assets.myeikserver.com`);
-    yargs.example(`eik pkg --dry-run`);
+    yargs.example(`eik publish --dry-run`);
     yargs.example(`eik pkg --token ######`);
-    yargs.example(`eik pkg --map https://server/my-map1.json`);
-    yargs.example(`eik pkg --map https://server/my-map1.json --map https://server/my-map2.json`);
     yargs.example(`eik pkg --debug`);
-    yargs.example(`eik pkg -s https://assets.myeikserver.com -t ###### --name my-app --js ./assets/client.js --css ./assets/styles.css`);
 };
 
 exports.handler = async (argv) => {
