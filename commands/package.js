@@ -132,5 +132,6 @@ exports.handler = async (argv) => {
         spinner.warn(err.message);
         spinner.text = '';
         spinner.stopAndPersist();
+        process.exit(1);
     }
 };

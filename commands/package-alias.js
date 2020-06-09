@@ -94,5 +94,7 @@ exports.handler = async (argv) => {
     spinner.stopAndPersist();
     if (success) {
         af.format(server);
+    } else {
+        process.exit(1);
     }
 };

@@ -57,14 +57,16 @@ exports.handler = async (argv) => {
 
     try {
         meta = await new Meta({ logger: l, ...argv }).run();
-    } catch (err) {
-        l.warn(err.message);
-    }
-
-    if (meta) {
         spinner.text = '';
         spinner.stopAndPersist();
-        
+    } catch (err) {
+        spinner.text = '';
+        spinner.stopAndPersist();
+        l.warn(err.message);
+        process.exit(1);
+    }
+    
+    if (meta) {
         for (const m of Object.values(meta)) {
             const artifact = new Artifact(m);
             artifact.format(server);
@@ -72,6 +74,4 @@ exports.handler = async (argv) => {
         }
 
     }
-    spinner.text = '';
-    spinner.stopAndPersist();
 };

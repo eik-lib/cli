@@ -96,5 +96,7 @@ exports.handler = async (argv) => {
     spinner.stopAndPersist();
     if (success) {
         new AliasFormatter(data).format(server);
+    } else {
+        process.exit(1);
     }
 };
