@@ -61,10 +61,7 @@ module.exports = class CreateBundles extends Task {
                             compact: true,
                             presets: [
                                 [
-                                    join(
-                                        __dirname,
-                                        `../../../../node_modules/@babel/preset-env`,
-                                    ),
+                                    require.resolve('@babel/preset-env'),
                                     {
                                         useBuiltIns: 'usage',
                                         corejs: 3,
