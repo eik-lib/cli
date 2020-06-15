@@ -9,13 +9,13 @@ exports.command = 'development';
 
 exports.aliases = ['dev'];
 
-// exports.describe = `Build an apps dependencies based on local assets.json file.`;
+// exports.describe = `Build an apps dependencies based on local eik.json file.`;
 exports.describe = false;
 
 exports.builder = yargs => {
     let assets = {};
     try {
-        const assetsPath = resolvePath('./assets.json').pathname;
+        const assetsPath = resolvePath('./eik.json').pathname;
         assets = JSON.parse(readFileSync(assetsPath));
     } catch (err) {
         // noop

@@ -45,7 +45,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik package : package, details provided by assets.json file', async (t) => {
+test('eik package : package, details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
@@ -54,7 +54,7 @@ test('eik package : package, details provided by assets.json file', async (t) =>
     };
 
     await fs.writeFile(
-        join(t.context.folder, 'assets.json'),
+        join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
 
@@ -126,7 +126,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         'import-map': [new URL('/map/my-map/v1', t.context.address).href]
     };
     await fs.writeFile(
-        join(t.context.folder, 'assets.json'),
+        join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
 
