@@ -48,7 +48,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik meta --server : no assets.json', async (t) => {
+test('eik meta --server : no eik.json', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} meta scroll-into-view-if-needed --server ${t.context.address}`;
 
@@ -61,13 +61,13 @@ test('eik meta --server : no assets.json', async (t) => {
     t.end();
 });
 
-test('eik meta : details provided by assets.json', async (t) => {
+test('eik meta : details provided by eik.json', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
     };
     await fs.writeFile(
-        join(t.context.folder, 'assets.json'),
+        join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
 

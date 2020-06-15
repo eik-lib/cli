@@ -45,7 +45,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik map --token --server : no assets.json or .eikrc', async (t) => {
+test('eik map --token --server : no eik.json or .eikrc', async (t) => {
     const map = {
         imports: {
             'scroll-into-view-if-needed': new URL(
@@ -77,13 +77,13 @@ test('eik map --token --server : no assets.json or .eikrc', async (t) => {
     t.end();
 });
 
-test('eik map : publish, details provided by assets.json file', async (t) => {
+test('eik map : publish, details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
     };
     await fs.writeFile(
-        join(t.context.folder, 'assets.json'),
+        join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
 

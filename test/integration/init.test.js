@@ -15,7 +15,7 @@ function exec(cmd) {
     });
 }
 
-test('Initializing a new assets.json file', async t => {
+test('Initializing a new eik.json file', async t => {
     const eik = join(__dirname, '../../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
 
@@ -23,25 +23,25 @@ test('Initializing a new assets.json file', async t => {
     await exec(publishCmd);
 
     const assets = JSON.parse(
-        readFileSync(join(folder, 'assets.json')),
+        readFileSync(join(folder, 'eik.json')),
     );
 
-    t.equals(assets.name, '', 'assets.json "name" field should be empty');
-    t.equals(assets.major, 1, 'assets.json "major" field should equal 1');
-    t.equals(assets.server, '', 'assets.json "server" field should be empty');
+    t.equals(assets.name, '', 'eik.json "name" field should be empty');
+    t.equals(assets.major, 1, 'eik.json "major" field should equal 1');
+    t.equals(assets.server, '', 'eik.json "server" field should be empty');
     t.equals(
         assets.js.input,
         '',
-        'assets.json "js.input" field should be empty',
+        'eik.json "js.input" field should be empty',
     );
     t.equals(
         assets.css.input,
         '',
-        'assets.json "css.input" field should be empty',
+        'eik.json "css.input" field should be empty',
     );
 });
 
-test('Initializing a new assets.json file passing custom values', async t => {
+test('Initializing a new eik.json file passing custom values', async t => {
     const eik = join(__dirname, '../../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
 
@@ -55,32 +55,32 @@ test('Initializing a new assets.json file passing custom values', async t => {
     await exec(publishCmd.split('\n').join(' '));
 
     const assets = JSON.parse(
-        readFileSync(join(folder, 'assets.json')),
+        readFileSync(join(folder, 'eik.json')),
     );
 
     t.equals(
         assets.name,
         'custom-name',
-        'assets.json "name" field should not be empty',
+        'eik.json "name" field should not be empty',
     );
     t.equals(
         assets.major,
         2,
-        'assets.json "major" field should not be empty',
+        'eik.json "major" field should not be empty',
     );
     t.equals(
         assets.server,
         'http://localhost:4001',
-        'assets.json "server" field should not be empty',
+        'eik.json "server" field should not be empty',
     );
     t.equals(
         assets.js.input,
         './assets/client.js',
-        'assets.json "js.input" field should not be empty',
+        'eik.json "js.input" field should not be empty',
     );
     t.equals(
         assets.css.input,
         './assets/styles.css',
-        'assets.json "css.input" field should not be empty',
+        'eik.json "css.input" field should not be empty',
     );
 });
