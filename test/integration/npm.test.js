@@ -45,7 +45,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik npm --token --server : no assets.json or .eikrc', async (t) => {
+test('eik npm --token --server : no eik.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} npm scroll-into-view-if-needed 2.2.24
         --token ${t.context.token}
@@ -66,13 +66,13 @@ test('eik npm --token --server : no assets.json or .eikrc', async (t) => {
     t.end();
 });
 
-test('eik npm : publish details provided by assets.json file and .eikrc', async (t) => {
+test('eik npm : publish details provided by eik.json file and .eikrc', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
     };
     await fs.writeFile(
-        join(t.context.folder, 'assets.json'),
+        join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
 
