@@ -7,8 +7,8 @@ const resolvePath = require('./resolve-path');
 
 module.exports = function getDefaults(cwd) {
     try {
-        // read assets.json in current dir
-        const assetsPath = resolvePath('./assets.json', cwd).pathname;
+        // read eik.json in current dir
+        const assetsPath = resolvePath('./eik.json', cwd).pathname;
         const assetsFile = existsSync(assetsPath) ? readFileSync(assetsPath) : '{}';
         const assets = JSON.parse(assetsFile);
         
@@ -24,7 +24,7 @@ module.exports = function getDefaults(cwd) {
             server = tokens.keys().next().value;
         }
         
-        // server value in assets.json always takes presedence
+        // server value in eik.json always takes presedence
         if (assets.server) {
             server = assets.server;
         }

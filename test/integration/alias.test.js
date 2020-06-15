@@ -102,7 +102,7 @@ test('eik package-alias <name> <version> <alias>', async t => {
     t.match(stdout, 'NEW');
 });
 
-test('eik npm-alias <name> <version> <alias> --token --server : no assets.json or .eikrc', async (t) => {
+test('eik npm-alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
         --token ${t.context.token}
@@ -125,13 +125,13 @@ test('eik npm-alias <name> <version> <alias> --token --server : no assets.json o
     t.end();
 });
 
-test('eik npm-alias <name> <version> <alias> : publish details provided by assets.json file', async (t) => {
+test('eik npm-alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
     };
     await fs.writeFile(
-        join(t.context.folder, 'assets.json'),
+        join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
     const eik = join(__dirname, '../../index.js');
@@ -153,7 +153,7 @@ test('eik npm-alias <name> <version> <alias> : publish details provided by asset
     t.end();
 });
 
-test('eik map-alias <name> <version> <alias> --token --server : no assets.json or .eikrc', async (t) => {
+test('eik map-alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} map-alias test-map 1.0.0 1
         --token ${t.context.token}
@@ -177,13 +177,13 @@ test('eik map-alias <name> <version> <alias> --token --server : no assets.json o
     t.end();
 });
 
-test('eik map-alias <name> <version> <alias> : publish details provided by assets.json file', async (t) => {
+test('eik map-alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
         server: t.context.address,
     };
     await fs.writeFile(
-        join(t.context.folder, 'assets.json'),
+        join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
     const eik = join(__dirname, '../../index.js');

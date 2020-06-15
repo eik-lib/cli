@@ -16,8 +16,8 @@ exports.describe = `Publish an app package to an Eik server by a given semver le
     Bundles and publishes JavaScript and CSS at given local paths creating a new version based off the previous version and the given semver level.
     Specifying semver level is optional and defaults to "patch", specifying "major" locks version to the given semver major.
     If a package has never previously been published, the first version generated will be equal to specified major version or 1.0.0 if no major is specified.
-    Local paths to asset files can be defined in an "assets.json" file using "js.input" and "css.input" fields or can be provided directly to the CLI command using the flags --js and --css.
-    URLs to import maps can be provided to map "bare" imports found in asset files, to do so either use the field "map" in "assets.json" or the --map CLI flag.`;
+    Local paths to asset files can be defined in an "eik.json" file using "js.input" and "css.input" fields or can be provided directly to the CLI command using the flags --js and --css.
+    URLs to import maps can be provided to map "bare" imports found in asset files, to do so either use the field "map" in "eik.json" or the --map CLI flag.`;
 
 exports.builder = (yargs) => {
     const cwd = getCWD();
@@ -77,9 +77,9 @@ exports.handler = async (argv) => {
 
     try {
         try {
-            await fs.access(join(cwd, 'assets.json'), constants.F_OK);
+            await fs.access(join(cwd, 'eik.json'), constants.F_OK);
         } catch(err) {
-            throw new Error('No assets.json file found in the current working directory. Please run eik init');
+            throw new Error('No eik.json file found in the current working directory. Please run eik init');
         }
 
         const options = { 
