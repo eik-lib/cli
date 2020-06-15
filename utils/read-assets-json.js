@@ -5,7 +5,7 @@ const resolvePath = require('./resolve-path');
 
 function readAssetsJson() {
     try {
-        const { pathname } = resolvePath('./assets.json');
+        const { pathname } = resolvePath('./eik.json');
         return JSON.parse(readFileSync(pathname));
     } catch (err) {
         throw new Error(`Unable to locate assets file: ${err.message}`);
