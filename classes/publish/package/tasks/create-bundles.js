@@ -118,7 +118,7 @@ module.exports = class CreateBundles extends Task {
                     fs.writeFileSync(join(path, 'main/index.css'), result.css);
                     fs.writeFileSync(
                         join(path, 'main/index.css.map'),
-                        result.map,
+                        String(result.map),
                     );
                 } else {
                     log.debug('CSS assets not specified');
