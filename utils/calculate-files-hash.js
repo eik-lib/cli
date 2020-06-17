@@ -1,15 +1,14 @@
 'use strict';
 
-const crypto = require('crypto');
+const ssri = require('ssri');
 const fileHash = require('./calculate-file-hash');
 
 module.exports = async files => {
     const hashes = await Promise.all(files.map(fileHash));
-    const hasher = crypto.createHash('sha512');
-
+    const hasher = ssri.create();
     for (const hash of hashes.sort()) {
         hasher.update(hash);
     }
-
-    return `sha512-${hasher.digest('base64')}`;
+    const integrity = hasher.digest()
+    return integrity.toString();
 };
