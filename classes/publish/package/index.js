@@ -102,11 +102,11 @@ module.exports = class PublishApp {
 
         if (this.dryRun) {
             await this.runDryRun.process(incoming, outgoing);
-        } else {
-            await this.uploadFiles.process(incoming, outgoing);
-            await this.saveMetafile.process(incoming, outgoing);
+            return outgoing;
         }
-
+            
+        await this.uploadFiles.process(incoming, outgoing);
+        await this.saveMetafile.process(incoming, outgoing);
         await this.cleanup.process(incoming, outgoing);
 
         return outgoing;
