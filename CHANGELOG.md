@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/eik-lib/cli/compare/v1.1.0...v1.1.1) (2020-06-24)
+
+
+### Bug Fixes
+
+* pass missing server value to ping command ([004d00c](https://github.com/eik-lib/cli/commit/004d00cb8f505501d166c64391750a946b130ea7))
+
 # [1.1.0](https://github.com/eik-lib/cli/compare/v1.0.0...v1.1.0) (2020-06-23)
 
 
