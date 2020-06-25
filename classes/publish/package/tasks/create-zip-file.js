@@ -28,10 +28,11 @@ module.exports = class CreateZipFile extends Task {
 
         if (js) {
             try {
-                const jsPathSrc = isAbsolute(js) ? js : join(cwd, js);
-                const jsPathDest = join(path, basename(js));
-                copyFileSync(jsPathSrc, jsPathDest);
-                filesToZip.push(basename(jsPathDest));
+                for (const [key, val] of Object.entries(js)) {
+                    const jsPathSrc = isAbsolute(val) ? val : join(cwd, val);
+                    copyFileSync(jsPathSrc, join(path, key));
+                    filesToZip.push(key);
+                }
             } catch (err) {
                 throw new Error(`Failed to zip JavaScripts: ${err.message}`);
             }
@@ -39,10 +40,11 @@ module.exports = class CreateZipFile extends Task {
 
         if (css) {
             try {
-                const cssPathSrc = isAbsolute(css) ? css : join(cwd, css);
-                const cssPathDest = join(path, basename(css));
-                copyFileSync(cssPathSrc, cssPathDest);
-                filesToZip.push(basename(cssPathDest));
+                for (const [key, val] of Object.entries(css)) {
+                    const cssPathSrc = isAbsolute(val) ? val : join(cwd, val);
+                    copyFileSync(cssPathSrc, join(path, key));
+                    filesToZip.push(key);
+                }
             } catch (err) {
                 throw new Error(`Failed to zip CSS: ${err.message}`);
             }

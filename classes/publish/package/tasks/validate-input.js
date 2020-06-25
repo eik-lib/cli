@@ -53,11 +53,11 @@ module.exports = class ValidateInput extends Task {
             );
         }
 
-        if (js && typeof js !== 'string') {
+        if (js && typeof js !== 'string' && typeof js !== 'object') {
             throw new ValidationError('Parameter "js" is not valid');
         }
 
-        if (css && typeof css !== 'string') {
+        if (css && typeof css !== 'string' && typeof css !== 'object') {
             throw new ValidationError('Parameter "css" is not valid');
         }
 

@@ -39,8 +39,19 @@ module.exports = class PublishApp {
         this.version = version;
         this.level = level;
         this.map = map;
+
         this.js = js;
+        if (typeof js === 'string') {
+            this.js = {
+                './index.js': js,
+            };
+        }
         this.css = css;
+        if (typeof css === 'string') {
+            this.css = {
+                './index.css': css,
+            };
+        }
         this.dryRun = dryRun;
         this.out = out;
         this.path = isAbsolute(out) ? out : join(cwd, out);
