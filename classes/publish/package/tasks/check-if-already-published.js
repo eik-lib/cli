@@ -15,7 +15,8 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         const { log } = this;
         const { server, name, version, js, css, path } = incoming;
 
-        log.debug('Fetching package metadata from server.');
+        log.debug(`Checking for existence of package ${name} version ${version}`);
+        log.debug('  ==> Fetching package metadata from server');
 
         // TODO: version needs to be the previous version. How can we get this?
         try {
@@ -24,6 +25,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
                     `${name} version ${version} already exists on the Eik server. Publishing is not necessary.`,
                 );
             }
+            log.debug(`  ==> Package version ${version} does not yet exist`);
         } catch(err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
@@ -39,9 +41,13 @@ module.exports = class CheckIfAlreadyPublished extends Task {
             );
         }
 
-        if (!meta) return outgoing;
+        if (!meta) {
+            log.debug('  ==> Package has never been published');
+            return outgoing;
+        }
 
-        log.debug('Hashing local files for comparison with server');
+        log.debug(`  ==> However, previous versions of package do exist`);
+        log.debug('  ==> Checking if local files have changed');
 
         let localHash;
         try {
@@ -71,6 +77,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
                     `Version ${v.version} of this package already contains these files, publishing is not necessary.`,
                 );
             }
+            log.debug('  ==> New files do not match existing files, continue with publishing');
         }
 
         outgoing.integrity = localHash;

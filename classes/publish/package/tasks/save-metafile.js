@@ -1,5 +1,6 @@
 'use strict';
 
+const { join } = require('path');
 const { writeMetaFile, readMetaFile } = require('../../../../utils');
 const Task = require('./task');
 
@@ -9,7 +10,8 @@ module.exports = class SaveMetaFile extends Task {
         const { cwd } = incoming;
         const { version, integrity } = outgoing;
 
-        log.debug('Saving .eikrc metafile.');
+        log.debug('Saving .eikrc metafile');
+        log.debug(`  ==> ${join(cwd, '.eikrc')}`);
         try {
             const meta = await readMetaFile({ cwd });
             meta.version = version;
