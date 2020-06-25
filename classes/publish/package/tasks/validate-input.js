@@ -19,7 +19,7 @@ class ValidationError extends Error {
 module.exports = class ValidateInput extends Task {
     process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { cwd, server, name, js, css, map, dryRun } = incoming;
+        const { cwd, server, name, js, css, map, dryRun, version } = incoming;
 
         log.debug('Validating input');
 
@@ -39,6 +39,12 @@ module.exports = class ValidateInput extends Task {
             validators.name(name);
         } catch (err) {
             throw new ValidationError('Parameter "name" is not valid', err);
+        }
+
+        try {
+            validators.version(version);
+        } catch (err) {
+            throw new ValidationError('Parameter "version" is not valid', err);
         }
 
         if (!js && !css) {

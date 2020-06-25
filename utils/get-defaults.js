@@ -34,11 +34,12 @@ module.exports = function getDefaults(cwd) {
         return {
             server: server || undefined, 
             token: token || undefined, 
-            js: assets.js && assets.js.input || undefined,
-            css: assets.css && assets.css.input || undefined,
-            major: assets.major || undefined,
+            js: assets.js || undefined,
+            css: assets.css || undefined,
+            version: assets.version || undefined,
             map: assets['import-map'] || [],
             name: assets.name || undefined,
+            out: assets.out || undefined,
             cwd,
         }
     } catch (err) {
