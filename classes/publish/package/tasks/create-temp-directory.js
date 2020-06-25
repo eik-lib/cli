@@ -2,7 +2,6 @@
 
 'use strict';
 
-const { join } = require('path');
 const mkdir = require('make-dir');
 const Task = require('./task');
 
@@ -23,8 +22,6 @@ module.exports = class CreateTempDir extends Task {
 
         try {
             mkdir.sync(path);
-            mkdir.sync(join(path, 'main'));
-            mkdir.sync(join(path, 'ie11'));
         } catch (err) {
             throw new IOError('Unable to create temp dir', err);
         }

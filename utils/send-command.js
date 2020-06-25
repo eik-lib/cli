@@ -37,8 +37,9 @@ async function sendCommand({
 
     try {
         const url = new URL(pathname, host);
+        url.search = `?t=${Date.now()}`;
 
-        const res = await fetch(url.href, {
+        const res = await fetch(url, {
             method,
             body: form,
             headers: { ...headers, ...form.getHeaders() },

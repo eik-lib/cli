@@ -9,8 +9,7 @@ const Task = require('./task');
 module.exports = class UploadFiles extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, token, name, zipFile } = incoming;
-        const { version } = outgoing;
+        const { server, token, name, zipFile, version } = incoming;
         log.debug('Uploading zip file to server');
         try {
             const { message } = await sendCommand({
@@ -30,6 +29,7 @@ module.exports = class UploadFiles extends Task {
             outgoing.integrity = message.integrity;
             outgoing.org = message.org;
             outgoing.files = message.files;
+            outgoing.version = version;
 
         } catch (err) {
             log.error('Unable to upload zip file to server');
