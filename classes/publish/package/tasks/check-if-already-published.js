@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { join, basename } = require('path');
+const { join } = require('path');
 const {
     compareHashes,
     fetchPackageMeta,
@@ -47,10 +47,14 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         try {
             const localFiles = [join(path, './eik.json')];
             if (js) {
-                localFiles.push(join(path, basename(js)));
+                for (const key of Object.keys(js)) {
+                    localFiles.push(join(path, key));
+                }
             }
             if (css) {
-                localFiles.push(join(path, basename(css)));
+                for (const key of Object.keys(css)) {
+                    localFiles.push(join(path, key));
+                }
             }
             localHash = await calculateFilesHash(localFiles);
         } catch (err) {
