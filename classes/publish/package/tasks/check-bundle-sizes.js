@@ -12,26 +12,30 @@ module.exports = class CheckBundleSizes extends Task {
         this.log.debug('Checking bundle file sizes');
         try {
             if (js) {
-                const path = isAbsolute(js) ? js : join(cwd, js);
-                const jsEntrypointFile = compressedSize(
-                    fs.readFileSync(path, 'utf8'),
-                );
-                this.log.debug(
-                    `  ==> JavaScript entrypoint size: ${bytes(
-                        jsEntrypointFile,
-                    )}`,
-                );
+                for (const [key, val] of Object.entries(js)) {
+                    const path = isAbsolute(val) ? val : join(cwd, val);
+                    const jsEntrypointFile = compressedSize(
+                        fs.readFileSync(path, 'utf8'),
+                    );
+                    this.log.debug(
+                        `  ==> JavaScript entrypoint size (${key} => ${val}): ${bytes(
+                            jsEntrypointFile,
+                        )}`,
+                    );
+                }
             }
             if (css) {
-                const path = isAbsolute(css) ? css : join(cwd, css);
-                const cssEntrypointFile = compressedSize(
-                    fs.readFileSync(path, 'utf8'),
-                );
-                this.log.debug(
-                    `  ==> CSS entrypoint size: ${bytes(
-                        cssEntrypointFile,
-                    )}`,
-                );
+                for (const [key, val] of Object.entries(css)) {
+                    const path = isAbsolute(val) ? val : join(cwd, val);
+                    const cssEntrypointFile = compressedSize(
+                        fs.readFileSync(path, 'utf8'),
+                    );
+                    this.log.debug(
+                        `  ==> CSS entrypoint size (${key} => ${val}): ${bytes(
+                            cssEntrypointFile,
+                        )}`,
+                    );
+                }
             }
         } catch (err) {
             throw new Error(`Failed to check bundle sizes: ${err.message}`);
