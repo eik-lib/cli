@@ -8,7 +8,7 @@ const chalk = require('chalk');
 const PublishPackage = require('../classes/publish/package/index');
 const { logger, Artifact, getDefaults, getCWD } = require('../utils');
 
-exports.command = 'package [level]';
+exports.command = 'package';
 
 exports.aliases = ['pkg', 'publish'];
 
@@ -22,14 +22,6 @@ exports.describe = `Publish an app package to an Eik server by a given semver le
 exports.builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
-
-    yargs.positional('level', {
-        describe:
-            'Specify the app semver level to use when updating the package.',
-        type: 'string',
-        choices: ['major', 'minor', 'patch'],
-        default: 'patch',
-    });
 
     yargs.options({
         cwd: {
@@ -59,12 +51,10 @@ exports.builder = (yargs) => {
         },
     });
 
-    yargs.array('map');
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik package`);
     yargs.example(`eik publish`);
-    yargs.example(`eik package patch`);
     yargs.example(`eik publish --dry-run`);
     yargs.example(`eik pkg --token ######`);
     yargs.example(`eik pkg --debug`);
@@ -73,7 +63,7 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, dryRun, cwd, token } = argv;
-    const {name, server, map, js, css, major} = getDefaults(cwd);
+    const {name, server, map, js, css, version, out} = getDefaults(cwd);
 
     try {
         try {
@@ -86,17 +76,18 @@ exports.handler = async (argv) => {
             logger: logger(spinner, debug),
             name,
             server,
-            map,
+            map: Array.isArray(map) ? map : [map],
             js,
             css,
-            major,
+            version,
             cwd,
             token,
             dryRun,
             debug,
+            out,
         };
 
-        const { version, files } = await new PublishPackage(options).run();
+        const { files } = await new PublishPackage(options).run();
 
         if (!dryRun) {
             let url = new URL(join('pkg', name), server);

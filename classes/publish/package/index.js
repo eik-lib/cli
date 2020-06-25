@@ -1,16 +1,16 @@
 'use strict';
 
 const abslog = require('abslog');
-const tempDir = require('temp-dir');
-const { join } = require('path');
+// const tempDir = require('temp-dir');
+const { join, isAbsolute } = require('path');
 const ValidateInput = require('./tasks/validate-input');
 const CreateTempDirectory = require('./tasks/create-temp-directory');
-const FetchImportMaps = require('./tasks/fetch-import-maps');
-const CreateBundles = require('./tasks/create-bundles');
+// const FetchImportMaps = require('./tasks/fetch-import-maps');
+// const CreateBundles = require('./tasks/create-bundles');
 const CreateZipFile = require('./tasks/create-zip-file');
 const CheckBundleSizes = require('./tasks/check-bundle-sizes');
 const DryRun = require('./tasks/dry-run');
-const FetchVersion = require('./tasks/fetch-version');
+// const FetchVersion = require('./tasks/fetch-version');
 const CheckIfAlreadyPublished = require('./tasks/check-if-already-published');
 const UploadFiles = require('./tasks/upload-files');
 const SaveMetafile = require('./tasks/save-metafile');
@@ -23,33 +23,35 @@ module.exports = class PublishApp {
         server,
         token,
         name,
-        major = 1,
+        version = '1.0.0',
         level = 'patch',
         map = [],
         js,
         css,
         dryRun = false,
+        out = './.eik',
     } = {}) {
         this.log = abslog(logger);
         this.cwd = cwd;
         this.server = server;
         this.token = token;
         this.name = name;
-        this.major = major;
+        this.version = version;
         this.level = level;
         this.map = map;
         this.js = js;
         this.css = css;
         this.dryRun = dryRun;
-        this.path = join(tempDir, `publish-${name}-${major}-${Date.now()}`);
+        this.out = out;
+        this.path = isAbsolute(out) ? out : join(cwd, out);
         this.validateInput = new ValidateInput(this.log);
         this.createTempDirectory = new CreateTempDirectory(this.log);
-        this.fetchImportMaps = new FetchImportMaps(this.log);
-        this.createBundles = new CreateBundles(this.log);
+        // this.fetchImportMaps = new FetchImportMaps(this.log);
+        // this.createBundles = new CreateBundles(this.log);
         this.createZipFile = new CreateZipFile(this.log);
         this.checkBundleSizes = new CheckBundleSizes(this.log);
         this.runDryRun = new DryRun(this.log);
-        this.fetchVersion = new FetchVersion(this.log);
+        // this.fetchVersion = new FetchVersion(this.log);
         this.checkIfAlreadyPublished = new CheckIfAlreadyPublished(this.log);
         this.uploadFiles = new UploadFiles(this.log);
         this.saveMetafile = new SaveMetafile(this.log);
@@ -57,7 +59,7 @@ module.exports = class PublishApp {
     }
 
     async run() {
-        this.log.debug('Running publish command');
+        this.log.debug('Running package command');
 
         const incoming = {
             path: this.path,
@@ -65,10 +67,9 @@ module.exports = class PublishApp {
             css: this.css,
             server: this.server,
             name: this.name,
-            version: null,
+            version: this.version,
             importMap: {},
             zipFile: '',
-            major: this.major,
             level: this.level,
             map: this.map,
             cwd: this.cwd,
@@ -80,7 +81,6 @@ module.exports = class PublishApp {
             type: 'pkg',
             server: this.server,
             name: this.name,
-            major: this.major,
             level: this.level,
             dryRun: this.dryRun,
             integrity: '',
@@ -88,16 +88,16 @@ module.exports = class PublishApp {
             created: null,
             author: {},
             org: '',
-            version: '',
+            version: this.version,
         };
 
         await this.validateInput.process(incoming, outgoing);
         await this.createTempDirectory.process(incoming, outgoing);
-        await this.fetchImportMaps.process(incoming, outgoing);
-        await this.createBundles.process(incoming, outgoing);
+        // await this.fetchImportMaps.process(incoming, outgoing);
+        // await this.createBundles.process(incoming, outgoing);
         await this.createZipFile.process(incoming, outgoing);
         await this.checkBundleSizes.process(incoming, outgoing);
-        await this.fetchVersion.process(incoming, outgoing);
+        // await this.fetchVersion.process(incoming, outgoing);
         await this.checkIfAlreadyPublished.process(incoming, outgoing);
 
         if (this.dryRun) {

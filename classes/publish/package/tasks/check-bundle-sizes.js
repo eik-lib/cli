@@ -1,5 +1,6 @@
 'use strict';
 
+const { join, isAbsolute } = require('path');
 const bytes = require('bytes');
 const fs = require('fs');
 const { compressedSize } = require('../../../../utils');
@@ -7,29 +8,29 @@ const Task = require('./task');
 
 module.exports = class CheckBundleSizes extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { path, js, css } = incoming;
+        const { js, css, cwd } = incoming;
         this.log.debug('Checking bundle file sizes');
         try {
             if (js) {
-                const mainIndexJSSize = compressedSize(
-                    fs.readFileSync(`${path}/main/index.js`, 'utf8'),
+                const path = isAbsolute(js) ? js : join(cwd, js);
+                const jsEntrypointFile = compressedSize(
+                    fs.readFileSync(path, 'utf8'),
                 );
                 this.log.debug(
-                    `  ==> Main index.js size: ${bytes(mainIndexJSSize)}`,
-                );
-                const ie11IndexJSSize = compressedSize(
-                    fs.readFileSync(`${path}/ie11/index.js`, 'utf8'),
-                );
-                this.log.debug(
-                    `  ==> ie11 index.js size: ${bytes(ie11IndexJSSize)}`,
+                    `  ==> JavaScript entrypoint size: ${bytes(
+                        jsEntrypointFile,
+                    )}`,
                 );
             }
             if (css) {
-                const mainIndexCSSSize = compressedSize(
-                    fs.readFileSync(`${path}/main/index.css`, 'utf8'),
+                const path = isAbsolute(css) ? css : join(cwd, css);
+                const cssEntrypointFile = compressedSize(
+                    fs.readFileSync(path, 'utf8'),
                 );
                 this.log.debug(
-                    `  ==> Main index.css size: ${bytes(mainIndexCSSSize)}`,
+                    `  ==> CSS entrypoint size: ${bytes(
+                        cssEntrypointFile,
+                    )}`,
                 );
             }
         } catch (err) {

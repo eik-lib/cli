@@ -2,7 +2,7 @@
 
 'use strict';
 
-const { join } = require('path');
+const { join, basename } = require('path');
 const {
     compareHashes,
     fetchPackageMeta,
@@ -13,15 +13,26 @@ const Task = require('./task');
 module.exports = class CheckIfAlreadyPublished extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, name, version, path, js, css } = incoming;
+        const { server, name, version, js, css, path } = incoming;
 
         log.debug('Fetching package metadata from server.');
 
-        if (!version) return incoming;
-
+        // TODO: version needs to be the previous version. How can we get this?
+        try {
+            if (await fetchPackageMeta(server, name, version)) {
+                throw new Error(
+                    `${name} version ${version} already exists on the Eik server. Publishing is not necessary.`,
+                );
+            }
+        } catch(err) {
+            throw new Error(
+                `Unable to fetch package metadata from server: ${err.message}`,
+            );
+        }
+        
         let meta;
         try {
-            meta = await fetchPackageMeta(server, name, version);
+            meta = await fetchPackageMeta(server, name);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
@@ -34,20 +45,12 @@ module.exports = class CheckIfAlreadyPublished extends Task {
 
         let localHash;
         try {
-            const localFiles = [];
+            const localFiles = [join(path, './eik.json')];
             if (js) {
-                localFiles.push(
-                    join(path, 'main', 'index.js'),
-                    join(path, 'main', 'index.js.map'),
-                    join(path, 'ie11', 'index.js'),
-                    join(path, 'ie11', 'index.js.map'),
-                );
+                localFiles.push(join(path, basename(js)));
             }
             if (css) {
-                localFiles.push(
-                    join(path, 'main', 'index.css'),
-                    join(path, 'main', 'index.css.map'),
-                );
+                localFiles.push(join(path, basename(css)));
             }
             localHash = await calculateFilesHash(localFiles);
         } catch (err) {
@@ -56,12 +59,14 @@ module.exports = class CheckIfAlreadyPublished extends Task {
             );
         }
 
-        const same = compareHashes(meta.integrity, localHash);
-
-        if (same) {
-            throw new Error(
-                `The current version of this package already contains these files, publishing is not necessary.`,
-            );
+        const versions = new Map(meta.versions);
+        for (const v of versions.values()) {
+            const same = compareHashes(v.integrity, localHash);
+            if (same) {
+                throw new Error(
+                    `Version ${v.version} of this package already contains these files, publishing is not necessary.`,
+                );
+            }
         }
 
         outgoing.integrity = localHash;

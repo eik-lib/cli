@@ -3,8 +3,11 @@
 const { join } = require('path');
 const fetch = require('node-fetch');
 
-module.exports = async (server, name, version) => {
-    const url = `${server}/${join('pkg', name, version)}`;
+module.exports = async (server, name, version = '') => {
+    const pkg = join('pkg', name);
+    const vers = join(pkg, version);
+    const url = new URL(version ? vers : pkg, server);
+    url.search = `?t=${Date.now()}`;
 
     const res = await fetch(url);
 
@@ -24,7 +27,10 @@ module.exports = async (server, name, version) => {
         );
     }
 
-    const { files = '', integrity = [] } = body || {};
+    if (version) {
+        const { files = '', integrity = [] } = body || {};
+        return { integrity, files };
+    }
 
-    return { integrity, files };
+    return body;
 };
