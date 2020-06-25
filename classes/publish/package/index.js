@@ -63,7 +63,10 @@ module.exports = class PublishApp {
     }
 
     async run() {
-        this.log.debug('Running package command');
+        this.log.debug(`Running package command against server`);
+        this.log.debug(`  ==> package name: ${this.name}`);
+        this.log.debug(`  ==> package version: ${this.version}`);
+        this.log.debug(`  ==> server: ${this.server}`);
 
         const incoming = {
             path: this.path,

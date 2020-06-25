@@ -10,7 +10,8 @@ module.exports = class CreateZipFile extends Task {
         const { log } = this;
         const { js, css, path, cwd } = incoming;
 
-        log.debug('Creating zip file');
+        log.debug(`Creating zip file`);
+        log.debug(`  ==> ${join(path, `eik.tgz`)}`);
 
         const filesToZip = [];
 
