@@ -18,7 +18,8 @@ module.exports = class CreateTempDir extends Task {
         const { log } = this;
         const { path } = incoming;
 
-        log.debug('Creating temporary directory');
+        log.debug(`Creating temporary directory`);
+        log.debug(`  ==> ${path}`);
 
         try {
             mkdir.sync(path);
