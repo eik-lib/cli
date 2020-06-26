@@ -1,6 +1,6 @@
 'use strict';
 
-const { copyFileSync, readFileSync, writeFileSync } = require('fs');
+const { copyFileSync, writeFileSync } = require('fs');
 const { join, isAbsolute, basename } = require('path');
 const tar = require('tar');
 const Task = require('./task');
