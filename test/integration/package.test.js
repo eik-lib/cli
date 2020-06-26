@@ -48,9 +48,10 @@ afterEach(async (done, t) => {
 test('eik package : package, details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
+        version: '1.0.0',
         server: t.context.address,
-        js: { input: join(__dirname, '..', 'fixtures', 'client.js') },
-        css: { input: join(__dirname, '..', 'fixtures', 'styles.css') },
+        js: join(__dirname, '..', 'fixtures', 'client.js'),
+        css: join(__dirname, '..', 'fixtures', 'styles.css'),
     };
 
     await fs.writeFile(
@@ -64,7 +65,7 @@ test('eik package : package, details provided by eik.json file', async (t) => {
     const { error, stdout } = await exec(cmd);
 
     const res = await fetch(
-        new URL('/pkg/test-app/1.0.0/main/index.js', t.context.address),
+        new URL('/pkg/test-app/1.0.0/index.js', t.context.address),
     );
 
     t.equal(res.ok, true);
@@ -120,9 +121,10 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
 
     const assets = {
         name: 'test-app',
+        version: '1.0.0',
         server: t.context.address,
-        js: { input: join(__dirname, '..', 'fixtures', 'client-with-bare-imports.js') },
-        css: { input: join(__dirname, '..', 'fixtures', 'styles.css') },
+        js: join(__dirname, '..', 'fixtures', 'client-with-bare-imports.js'),
+        css: join(__dirname, '..', 'fixtures', 'styles.css'),
         'import-map': [new URL('/map/my-map/v1', t.context.address).href]
     };
     await fs.writeFile(
@@ -130,19 +132,21 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         JSON.stringify(assets),
     );
 
+    // TODO: create a bundle that uses import maps
+
     // use import map when publishing app files
-    cmd = `${eik} package
-        --token ${t.context.token}
-        --cwd ${t.context.folder}
-        --debug`;
-    await exec(cmd.split('\n').join(' '));
+    // cmd = `${eik} package
+    //     --token ${t.context.token}
+    //     --cwd ${t.context.folder}
+    //     --debug`;
+    // await exec(cmd.split('\n').join(' '));
 
-    const res = await fetch(new URL('/pkg/test-app/1.0.0/main/index.js', t.context.address));
-    const text = await res.text();
+    // const res = await fetch(new URL('/pkg/test-app/1.0.0/index.js', t.context.address));
+    // const text = await res.text();
 
-    t.equal(res.ok, true);
-    t.match(text, new URL(
-        '/npm/scroll-into-view-if-needed/v2/index.js',
-        t.context.address,
-    ).href)
+    // t.equal(res.ok, true);
+    // t.match(text, new URL(
+    //     '/npm/scroll-into-view-if-needed/v2/index.js',
+    //     t.context.address,
+    // ).href)
 });

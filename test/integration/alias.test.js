@@ -79,6 +79,7 @@ test('eik package-alias <name> <version> <alias>', async t => {
         css: join(__dirname, '../fixtures/styles.css'),
         token,
         cwd,
+        version: '1.0.0',
     }).run();
 
     const eik = join(__dirname, '../../index.js');
@@ -90,7 +91,7 @@ test('eik package-alias <name> <version> <alias>', async t => {
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
     const res = await fetch(
-        new URL('/pkg/my-pack/v1/main/index.js', address),
+        new URL('/pkg/my-pack/v1/index.js', address),
     );
 
     t.equal(res.ok, true);

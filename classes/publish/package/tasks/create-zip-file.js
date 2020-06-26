@@ -8,7 +8,7 @@ const Task = require('./task');
 module.exports = class CreateZipFile extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { js, css, path, cwd } = incoming;
+        const { js, css, path, name, map, server, out, cwd } = incoming;
 
         log.debug(`Creating zip file`);
         log.debug(`  ==> ${join(path, `eik.tgz`)}`);
@@ -16,12 +16,15 @@ module.exports = class CreateZipFile extends Task {
         const filesToZip = [];
 
         try {
-            const eikPathSrc = join(cwd, './eik.json');
             const eikPathDest = join(path, './eik.json');
-            const eikrc = JSON.parse(readFileSync(eikPathSrc, 'utf8'));
-            // remove version field to avoid non determinism
-            delete eikrc.version;
-            writeFileSync(eikPathDest, JSON.stringify(eikrc, null, 2));
+            writeFileSync(eikPathDest, JSON.stringify({
+                name,
+                server,
+                js,
+                css,
+                'import-map': map,
+                out,
+            }, null, 2));
             filesToZip.push(basename(eikPathDest));
         } catch (err) {
             throw new Error(`Failed to zip eik.json file: ${err.message}`);
