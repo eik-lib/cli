@@ -20,7 +20,6 @@ module.exports = class PublishApp {
         token,
         name,
         version = '1.0.0',
-        level = 'patch',
         map = [],
         js,
         css,
@@ -33,7 +32,6 @@ module.exports = class PublishApp {
         this.token = token;
         this.name = name;
         this.version = version;
-        this.level = level;
         this.map = map;
 
         this.js = js;
