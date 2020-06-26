@@ -67,7 +67,7 @@ test('Creating a package alias', async t => {
     t.equals(result.alias, '1', 'alias property should return 1');
     t.equals(result.version, '1.0.0', 'version property should return 1.0.0');
     t.equals(result.update, false, 'update property should return false');
-    t.equals(result.files.length, 6, 'files property should be 5');
+    t.equals(result.files.length, 3, 'files property should be 3');
     t.equals(result.org, 'local', 'org property should return an organisation');
     t.match(result.integrity, '==', 'integrity property should contain an integrity string');
 });
