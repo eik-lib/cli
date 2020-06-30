@@ -1,3 +1,18 @@
+# [1.2.0-alpha.1](https://github.com/eik-lib/cli/compare/v1.1.1...v1.2.0-alpha.1) (2020-06-30)
+
+
+### Bug Fixes
+
+* do not check for bundle existence on dry run ([4eb8e12](https://github.com/eik-lib/cli/commit/4eb8e129de45a8a7a158175ac99cb034ca03a950))
+* improve package command output ([fa69be0](https://github.com/eik-lib/cli/commit/fa69be0de5fcc49e3b77787e594bb6a353ec8fe5))
+* lint error ([799488b](https://github.com/eik-lib/cli/commit/799488b31f41c57f47a7a2b72ff7c2ac62f1b1eb))
+
+
+### Features
+
+* refactor client to support wider use cases ([f5eca5e](https://github.com/eik-lib/cli/commit/f5eca5e73c4af917734b6aa2b25a9397ff73936a))
+* support npm style entrypoint mapping ([5578f16](https://github.com/eik-lib/cli/commit/5578f163e49fc915487d04d20a80227ad14fe613))
+
 ## [1.1.1](https://github.com/eik-lib/cli/compare/v1.1.0...v1.1.1) (2020-06-24)
 
 
