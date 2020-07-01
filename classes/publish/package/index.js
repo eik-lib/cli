@@ -80,6 +80,7 @@ module.exports = class PublishApp {
             cwd: this.cwd,
             token: this.token,
             dryRun: this.dryRun,
+            out: this.out,
         };
 
         const outgoing = {

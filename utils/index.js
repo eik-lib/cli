@@ -18,6 +18,7 @@ const Artifact = require('./artifact');
 const Alias = require('./alias');
 const getDefaults = require('./get-defaults');
 const getCWD = require('./get-cwd');
+const writeEikJSON = require('./write-eik-json');
 
 module.exports = {
     resolvePath,
@@ -38,4 +39,5 @@ module.exports = {
     Alias,
     getDefaults,
     getCWD,
+    writeEikJSON,
 };
