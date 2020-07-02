@@ -1,5 +1,6 @@
 'use strict';
 
+const { execSync } = require('child_process');
 const { promises: fs, constants } = require('fs');
 const { join } = require('path');
 const ora = require('ora');
@@ -92,10 +93,42 @@ exports.handler = async (argv) => {
         const newVersion = await new VersionPackage(options).run();
 
         if (dryRun) {
-            log.info(`Dry Run: new version needed, determined new version to be ${newVersion}`);
+            log.info(
+                `Dry Run: new version needed, determined new version to be ${newVersion}`,
+            );
         } else {
+            log.debug(`Writing new version ${newVersion} to eik.json`);
             await writeEikJSON({ version: newVersion }, { cwd });
-            log.info(`New version ${newVersion} written back to eik.json`);
+
+            log.debug(`Committing eik.json to local git repository`);
+            try {
+                execSync(`git add ${join(cwd, 'eik.json')}`);
+                log.debug(`  ==> stage: ${join(cwd, 'eik.json')}`);
+            } catch (err) {
+                throw new Error(
+                    'Failed to stage file "eik.json". Is this directory (or any parent directories) a git repository?',
+                );
+            }
+
+            try {
+                execSync(
+                    `git commit -m "build(assets): version eik.json to v${newVersion} [skip ci]"`,
+                    {
+                        env: {
+                            GIT_AUTHOR_NAME: 'Eik Cli',
+                            GIT_AUTHOR_EMAIL: 'eik@eik.dev',
+                            GIT_COMMITTER_NAME: 'Eik Cli',
+                            GIT_COMMITTER_EMAIL: 'eik@eik.dev',
+                        },
+                        stdio: 'ignore',
+                    },
+                );
+                log.debug(`  ==> commit`);
+
+                log.info(`New version ${newVersion} written back to eik.json`);
+            } catch (err) {
+                throw new Error('Failed to commit changes to file "eik.json".');
+            }
         }
 
         spinner.text = '';
