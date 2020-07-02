@@ -57,9 +57,9 @@ module.exports = class Ping {
 
         const { log, server, name, version, level, cwd, js, css, map, path, out } = this;
         
-        log.debug('Checking package version');
-        log.debug(`Current package determined to be ${version}`);
-        log.debug('Fetching package metadata from server.');
+        log.debug('Checking local package version');
+        log.debug(`Current local package version determined to be ${version}`);
+        log.debug(`Fetching remote package metadata from ${server}`);
 
         let meta;
         try {
