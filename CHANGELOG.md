@@ -11,6 +11,19 @@
 * add version command to support CI usage ([46cd6f5](https://github.com/eik-lib/cli/commit/46cd6f5840617b262e5d5ebfa412cb013ba0def2))
 * commit eik.json file after version write ([15167b3](https://github.com/eik-lib/cli/commit/15167b38aa11f8f9107e516a0fca29cc11baa6f4))
 
+# [1.2.0-alpha.2](https://github.com/eik-lib/cli/compare/v1.2.0-alpha.1...v1.2.0-alpha.2) (2020-07-02)
+
+
+### Bug Fixes
+
+* adjust command output ([39c6af4](https://github.com/eik-lib/cli/commit/39c6af4b74f026ad14bebd3a2342370af4b6aa74))
+
+
+### Features
+
+* add version command to support CI usage ([46cd6f5](https://github.com/eik-lib/cli/commit/46cd6f5840617b262e5d5ebfa412cb013ba0def2))
+* commit eik.json file after version write ([15167b3](https://github.com/eik-lib/cli/commit/15167b38aa11f8f9107e516a0fca29cc11baa6f4))
+
 # [1.2.0-alpha.1](https://github.com/eik-lib/cli/compare/v1.1.1...v1.2.0-alpha.1) (2020-06-30)
 
 
