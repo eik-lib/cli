@@ -1,6 +1,10 @@
 name: Run Lint and Tests
 
 on: push
+  branches-ignore:
+    - master
+    - alpha
+    - beta
 
 jobs:
   build:
