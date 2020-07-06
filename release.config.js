@@ -22,5 +22,6 @@ module.exports = {
         { name: 'master' },
         { name: 'alpha', prerelease: true },
         { name: 'beta', prerelease: true },
+        { name: 'next', prerelease: true },
     ],
 };
