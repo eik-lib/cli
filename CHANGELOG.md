@@ -1,3 +1,24 @@
+# [1.2.0-next.1](https://github.com/eik-lib/cli/compare/v1.1.1...v1.2.0-next.1) (2020-07-06)
+
+
+### Bug Fixes
+
+* adjust command output ([fd19ce5](https://github.com/eik-lib/cli/commit/fd19ce528fed6a1d0446f320009923de74d001f5))
+* do not check for bundle existence on dry run ([d4777ea](https://github.com/eik-lib/cli/commit/d4777ea612bb93292a13f157bfb4d731e093106e))
+* do not run extra tests during release ([f051b42](https://github.com/eik-lib/cli/commit/f051b4274df8ef7ef8e31d41bdfdb10c9a9b300c))
+* improve package command output ([5b9ee9b](https://github.com/eik-lib/cli/commit/5b9ee9b684e7e02e3267527bfee2c5cca5586917))
+* lint error ([e921508](https://github.com/eik-lib/cli/commit/e9215084233a4a3023736742b1eab5cb9be4a461))
+* test.yml file syntax ([b306894](https://github.com/eik-lib/cli/commit/b30689472c2cda898aa872b305449925c273566c))
+
+
+### Features
+
+* add input validation ([a1797e1](https://github.com/eik-lib/cli/commit/a1797e1c148d0725bab26c7adcc2bfbd55a2161f))
+* add version command to support CI usage ([ba9bc1d](https://github.com/eik-lib/cli/commit/ba9bc1d90b95ce28b119e579cf53043e5d113f01))
+* commit eik.json file after version write ([e1d19d6](https://github.com/eik-lib/cli/commit/e1d19d6cd3ddf34d1419d28b9fea1fa83ae26b20))
+* refactor client to support wider use cases ([9cc3721](https://github.com/eik-lib/cli/commit/9cc3721beeb6122c7276cc2100802b5e0cfbf267))
+* support npm style entrypoint mapping ([d85307c](https://github.com/eik-lib/cli/commit/d85307c38c6632c1f16db3d771fb20de8e24c517))
+
 # [1.2.0-alpha.2](https://github.com/eik-lib/cli/compare/v1.2.0-alpha.1...v1.2.0-alpha.2) (2020-07-03)
 
 
