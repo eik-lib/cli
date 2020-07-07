@@ -6,6 +6,7 @@ const { copyFileSync, writeFileSync } = require('fs');
 const { join, isAbsolute, parse } = require('path');
 const abslog = require('abslog');
 const semver = require('semver');
+const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
 const {
     fetchPackageMeta,
@@ -155,6 +156,7 @@ module.exports = class Ping {
 
         let localHash;
         try {
+            mkdir.sync(path);
             const eikPathDest = join(path, './eik.json');
             const eikJSON = {
                 name,
