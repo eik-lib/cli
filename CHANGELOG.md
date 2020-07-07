@@ -1,3 +1,10 @@
+# [1.2.0-next.2](https://github.com/eik-lib/cli/compare/v1.2.0-next.1...v1.2.0-next.2) (2020-07-07)
+
+
+### Bug Fixes
+
+* create temp dir if it does't exist ([e7a3776](https://github.com/eik-lib/cli/commit/e7a37763086bc931f55a76d0d8afeea7c2147467))
+
 # [1.2.0-next.1](https://github.com/eik-lib/cli/compare/v1.1.1...v1.2.0-next.1) (2020-07-06)
 
 
