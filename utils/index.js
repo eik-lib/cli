@@ -11,8 +11,8 @@ const compareHashes = require('./compare-hashes');
 const fetchLatestVersion = require('./fetch-latest-version');
 const fetchPackageMeta = require('./fetch-package-meta');
 const incrementSemverVersion = require('./increment-semver-version');
-const writeMetaFile = require('./write-meta-file');
-const readMetaFile = require('./read-meta-file');
+const readJSON = require('./read-json');
+const writeJSON = require('./write-json');
 const compressedSize = require('./compressed-size');
 const Artifact = require('./artifact');
 const Alias = require('./alias');
@@ -32,8 +32,8 @@ module.exports = {
     fetchLatestVersion,
     fetchPackageMeta,
     incrementSemverVersion,
-    writeMetaFile,
-    readMetaFile,
+    writeJSON,
+    readJSON,
     compressedSize,
     Artifact,
     Alias,
