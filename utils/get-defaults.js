@@ -39,7 +39,7 @@ module.exports = function getDefaults(cwd) {
             version: assets.version || undefined,
             map: assets['import-map'] || [],
             name: assets.name || undefined,
-            out: assets.out || undefined,
+            out: assets.out || '.eik',
             cwd,
         }
     } catch (err) {
