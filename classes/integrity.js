@@ -102,7 +102,6 @@ module.exports = class Integrity {
 
             throw new Error('Server Error');
         } catch (err) {
-            console.log(err);
             this.log.error('Unable to retrieve meta information for package');
             this.log.warn(err.message);
             return false;
