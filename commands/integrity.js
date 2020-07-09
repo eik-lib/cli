@@ -79,7 +79,6 @@ exports.handler = async (argv) => {
         if (integrity) {
             const filename = join(out, 'integrity.json');
             await writeJSON(integrity, { cwd, filename });
-            // print "integrity information for package x at version y saved to location z"
             spinner.succeed(`integrity information for package "${name}" (v${version}) saved to "${filename}"`);
             process.stdout.write('\n');
         }
