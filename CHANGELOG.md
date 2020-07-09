@@ -1,3 +1,10 @@
+# [1.2.0-next.3](https://github.com/eik-lib/cli/compare/v1.2.0-next.2...v1.2.0-next.3) (2020-07-09)
+
+
+### Features
+
+* add integrity command and tests ([0c87a6e](https://github.com/eik-lib/cli/commit/0c87a6e410947fe124dcb2b2e7e7b3d27b62b4c4))
+
 # [1.2.0-next.2](https://github.com/eik-lib/cli/compare/v1.2.0-next.1...v1.2.0-next.2) (2020-07-07)
 
 
