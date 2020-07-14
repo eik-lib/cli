@@ -19,7 +19,10 @@ const { join, isAbsolute, dirname } = require('path');
  */
 module.exports = async (meta = {}, location) => {
     if (typeof location !== 'string') {
-        assert(location.filename, 'When "location" is not of type "string" then it must be an "object" with property "filename"');
+        assert(
+            location.filename,
+            'When "location" is not of type "string" then it must be an "object" with property "filename"',
+        );
     }
     let cwd = process.cwd();
     let filename = '';
