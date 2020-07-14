@@ -338,7 +338,10 @@ test('read JSON file - object - file absolute path', async (t) => {
 });
 
 test('read JSON file - string - file relative path', async (t) => {
-    fs.writeFileSync(join(__dirname, '../test-read-json.json'), JSON.stringify({ key: 'val' }));
+    fs.writeFileSync(
+        join(__dirname, '../test-read-json.json'),
+        JSON.stringify({ key: 'val' }),
+    );
     const json = await u.readJSON('./test-read-json.json');
 
     t.equal(json.key, 'val', 'Key should equal val');
@@ -346,7 +349,10 @@ test('read JSON file - string - file relative path', async (t) => {
 
 test('read JSON file - string - file absolute path', async (t) => {
     const cwd = join(__dirname, 'tmp');
-    fs.writeFileSync(join(cwd, './test-read-json-2.json'), JSON.stringify({ key: 'val' }));
+    fs.writeFileSync(
+        join(cwd, './test-read-json-2.json'),
+        JSON.stringify({ key: 'val' }),
+    );
     const json = await u.readJSON(join(cwd, './test-read-json-2.json'));
 
     t.equal(json.key, 'val', 'Key should equal val');
