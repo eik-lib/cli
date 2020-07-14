@@ -7,7 +7,7 @@ const { test } = require('tap');
 const fastify = require('fastify');
 const u = require('../utils');
 
-test('calculate file hash', async t => {
+test('calculate file hash', async (t) => {
     const hash = await u.calculateFileHash(
         join(__dirname, 'fixtures', 'client.js'),
     );
@@ -18,7 +18,7 @@ test('calculate file hash', async t => {
     );
 });
 
-test('calculate files hash', async t => {
+test('calculate files hash', async (t) => {
     const hash = await u.calculateFilesHash([
         join(__dirname, 'fixtures', 'styles.css'),
         join(__dirname, 'fixtures', 'client.js'),
@@ -47,7 +47,7 @@ test('calculate files hash', async t => {
     );
 });
 
-test('compare hashes - true', async t => {
+test('compare hashes - true', async (t) => {
     const fileHash1 = await u.calculateFileHash(
         join(__dirname, 'fixtures', 'client.js'),
     );
@@ -62,7 +62,7 @@ test('compare hashes - true', async t => {
     );
 });
 
-test('compare hashes - false', async t => {
+test('compare hashes - false', async (t) => {
     const fileHash1 = await u.calculateFileHash(
         join(__dirname, 'fixtures', 'client.js'),
     );
@@ -77,7 +77,7 @@ test('compare hashes - false', async t => {
     );
 });
 
-test('increment semver version - invalid semver', async t => {
+test('increment semver version - invalid semver', async (t) => {
     const semver = 'foo';
 
     try {
@@ -91,7 +91,7 @@ test('increment semver version - invalid semver', async t => {
     }
 });
 
-test('increment semver version - invalid incrementation level given', async t => {
+test('increment semver version - invalid incrementation level given', async (t) => {
     const semver = '1.0.0';
 
     try {
@@ -105,25 +105,25 @@ test('increment semver version - invalid incrementation level given', async t =>
     }
 });
 
-test('increment semver version - valid semver - patch increment', async t => {
+test('increment semver version - valid semver - patch increment', async (t) => {
     const semver = '1.0.0';
     const result = u.incrementSemverVersion(semver, 'patch');
     t.equal(result, '1.0.1', 'incremented semver should now be 1.0.1');
 });
 
-test('increment semver version - valid semver - minor increment', async t => {
+test('increment semver version - valid semver - minor increment', async (t) => {
     const semver = '1.0.0';
     const result = u.incrementSemverVersion(semver, 'minor');
     t.equal(result, '1.1.0', 'incremented semver should now be 1.1.0');
 });
 
-test('increment semver version - valid semver - major increment', async t => {
+test('increment semver version - valid semver - major increment', async (t) => {
     const semver = '1.0.0';
     const result = u.incrementSemverVersion(semver, 'major');
     t.equal(result, '2.0.0', 'incremented semver should now be 2.0.0');
 });
 
-test('fetch latest version for a given published bundle', async t => {
+test('fetch latest version for a given published bundle', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => {
         return {
@@ -142,7 +142,7 @@ test('fetch latest version for a given published bundle', async t => {
     await server.close();
 });
 
-test('fetch latest version, filtered by major, for a given published bundle', async t => {
+test('fetch latest version, filtered by major, for a given published bundle', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => {
         return {
@@ -161,7 +161,7 @@ test('fetch latest version, filtered by major, for a given published bundle', as
     await server.close();
 });
 
-test('fetch latest version for a given published bundle, non existant bundle on server', async t => {
+test('fetch latest version for a given published bundle, non existant bundle on server', async (t) => {
     const server = fastify();
     const address = await server.listen();
 
@@ -178,7 +178,7 @@ test('fetch latest version for a given published bundle, non existant bundle on 
     await server.close();
 });
 
-test('fetch latest version, filtered by major, for a given published bundle', async t => {
+test('fetch latest version, filtered by major, for a given published bundle', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => {
         return '';
@@ -198,7 +198,7 @@ test('fetch latest version, filtered by major, for a given published bundle', as
     await server.close();
 });
 
-test('fetch latest version, invalid versions returned by server', async t => {
+test('fetch latest version, invalid versions returned by server', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => {
         return { versions: 1 };
@@ -213,7 +213,7 @@ test('fetch latest version, invalid versions returned by server', async t => {
     await server.close();
 });
 
-test('fetch latest version, invalid versions keys returned by server', async t => {
+test('fetch latest version, invalid versions keys returned by server', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => {
         return {
@@ -233,7 +233,7 @@ test('fetch latest version, invalid versions keys returned by server', async t =
     await server.close();
 });
 
-test('fetch latest version, no bundles yet published', async t => {
+test('fetch latest version, no bundles yet published', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => {
         return {
@@ -250,7 +250,7 @@ test('fetch latest version, no bundles yet published', async t => {
     await server.close();
 });
 
-test('fetch remote hash for a given version', async t => {
+test('fetch remote hash for a given version', async (t) => {
     const server = fastify();
     server.get('/pkg/foo/1.0.0', async () => {
         return {
@@ -279,12 +279,44 @@ test('fetch remote hash for a given version', async t => {
     await server.close();
 });
 
-test('write JSON file', async t => {
+test('write JSON file - object - file relative to cwd', async (t) => {
     const cwd = join(__dirname, 'tmp');
-    await u.writeJSON({ version: '1.0.0', integrity: [] }, { cwd, filename: '.eikrc' });
+    await u.writeJSON(
+        { version: '1.0.0', integrity: [] },
+        { cwd, filename: '.eikrc' },
+    );
     const eikrc = fs.readFileSync(join(cwd, '.eikrc'));
     const { version, integrity } = JSON.parse(eikrc);
 
     t.equal(version, '1.0.0', 'Version should be 1.0.0');
     t.same(integrity, [], 'Integrity should be an array');
+});
+
+test('write JSON file - object - file absolute path', async (t) => {
+    const cwd = join(__dirname, 'tmp');
+    await u.writeJSON({ prop: 'val' }, { filename: join(cwd, 'test.json') });
+    const eikrc = fs.readFileSync(join(cwd, 'test.json'));
+    const { prop } = JSON.parse(eikrc);
+
+    t.equal(prop, 'val', 'Prop should equal val');
+});
+
+test('write JSON file - string - file relative path', async (t) => {
+    await u.writeJSON({ prop: 'val' }, './test-using-relative.json');
+    const eikrc = fs.readFileSync(
+        join(__dirname, '../test-using-relative.json'),
+    );
+    const { prop } = JSON.parse(eikrc);
+    await fs.unlinkSync(join(__dirname, '../test-using-relative.json'));
+
+    t.equal(prop, 'val', 'Prop should equal val');
+});
+
+test('write JSON file - string - file absolute path', async (t) => {
+    const cwd = join(__dirname, 'tmp');
+    await u.writeJSON({ prop: 'val' }, join(cwd, 'test3.json'));
+    const eikrc = fs.readFileSync(join(cwd, 'test3.json'));
+    const { prop } = JSON.parse(eikrc);
+
+    t.equal(prop, 'val', 'Prop should equal val');
 });
