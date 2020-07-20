@@ -1,8 +1,9 @@
 'use strict';
 
+const { join } = require('path');
 const fs = require('fs');
 const ora = require('ora');
-const { logger, resolvePath } = require('../utils');
+const { logger } = require('../utils');
 
 exports.command = 'init';
 
@@ -69,7 +70,7 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { name, major, server, js, css, cwd, debug } = argv;
-    const { pathname } = resolvePath('./eik.json', cwd);
+    const pathname = join(cwd, './eik.json');
     const log = logger(spinner, debug);
     let assetFileExists = false;
 
