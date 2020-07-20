@@ -8,7 +8,7 @@ const { join } = require('path');
 const ora = require('ora');
 const Integrity = require('../classes/integrity');
 const { logger, getDefaults, getCWD } = require('../utils');
-const { write: writeJSON } = require('../utils/json');
+const json = require('../utils/json');
 
 exports.command = 'integrity [name] [version]';
 
@@ -79,7 +79,7 @@ exports.handler = async (argv) => {
 
         if (integrity) {
             const filename = join(out, 'integrity.json');
-            await writeJSON(integrity, { cwd, filename });
+            await json.write(integrity, { cwd, filename });
             spinner.succeed(`integrity information for package "${name}" (v${version}) saved to "${filename}"`);
             process.stdout.write('\n');
         }

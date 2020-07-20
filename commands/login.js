@@ -5,7 +5,7 @@ const readline = require('readline');
 const ora = require('ora');
 const Login = require('../classes/login');
 const { logger } = require('../utils');
-const { write: writeJSON, read: readJSON } = require('../utils/json');
+const json = require('../utils/json');
 
 exports.command = 'login';
 
@@ -94,13 +94,13 @@ exports.handler = async (argv) => {
         }).run();
 
         if (token) {
-            const meta = await readJSON({ cwd: homedir, filename: '.eikrc' });
+            const meta = await json.read({ cwd: homedir, filename: '.eikrc' });
 
             const tokens = new Map(meta.tokens);
             tokens.set(s, token);
             meta.tokens = Array.from(tokens);
 
-            await writeJSON(meta, { cwd: homedir, filename: '.eikrc' });
+            await json.write(meta, { cwd: homedir, filename: '.eikrc' });
             success = true;
         }
     } catch (err) {
