@@ -3,12 +3,11 @@
 const { join } = require('path');
 const homedir = require('os').homedir();
 const { readFileSync, existsSync } = require('fs');
-const resolvePath = require('./resolve-path');
 
 module.exports = function getDefaults(cwd) {
     try {
         // read eik.json in current dir
-        const assetsPath = resolvePath('./eik.json', cwd).pathname;
+        const assetsPath = join(cwd, './eik.json');
         const assetsFile = existsSync(assetsPath) ? readFileSync(assetsPath) : '{}';
         const assets = JSON.parse(assetsFile);
         
