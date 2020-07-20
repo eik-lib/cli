@@ -1,7 +1,7 @@
 'use strict';
 
 const { join } = require('path');
-const { write: writeJSON, read: readJSON } = require('../../../../utils/json');
+const json = require('../../../../utils/json');
 const Task = require('./task');
 
 module.exports = class SaveMetaFile extends Task {
@@ -14,10 +14,10 @@ module.exports = class SaveMetaFile extends Task {
         log.debug('Saving integrity file');
         log.debug(`  ==> ${filepath}`);
         try {
-            const meta = await readJSON({ cwd, filename: filepath });
+            const meta = await json.read({ cwd, filename: filepath });
             meta.version = version;
             meta.integrity = integrity;
-            await writeJSON(meta, { cwd, filename: filepath });
+            await json.write(meta, { cwd, filename: filepath });
         } catch (err) {
             throw new Error(`Unable to save integrity file [${filepath}]: ${err.message}`);
         }
