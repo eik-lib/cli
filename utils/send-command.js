@@ -3,7 +3,6 @@
 const fetch = require('node-fetch');
 const FormData = require('form-data');
 const { createReadStream } = require('fs');
-const resolvePath = require('./resolve-path');
 
 async function sendCommand({
     method = 'POST',
@@ -24,11 +23,11 @@ async function sendCommand({
     }
 
     if (file) {
-        form.append('package', createReadStream(resolvePath(file).pathname));
+        form.append('package', createReadStream(file));
     }
 
     if (map) {
-        form.append('map', createReadStream(resolvePath(map).pathname));
+        form.append('map', createReadStream(map));
     }
 
     if (token) {

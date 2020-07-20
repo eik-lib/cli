@@ -1,6 +1,6 @@
 'use strict';
 
-const resolvePath = require('./resolve-path');
+// const resolvePath = require('./resolve-path');
 const sendCommand = require('./send-command');
 const logger = require('./logger');
 const calculateFileHash = require('./calculate-file-hash');
@@ -17,7 +17,7 @@ const getCWD = require('./get-cwd');
 const writeEikJSON = require('./write-eik-json');
 
 module.exports = {
-    resolvePath,
+    // resolvePath,
     sendCommand,
     logger,
     calculateFileHash,
