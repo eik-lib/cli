@@ -6,6 +6,7 @@ const { join } = require('path');
 const { test } = require('tap');
 const fastify = require('fastify');
 const u = require('../utils');
+const j = require('../utils/json');
 
 test('calculate file hash', async (t) => {
     const hash = await u.calculateFileHash(
@@ -281,7 +282,7 @@ test('fetch remote hash for a given version', async (t) => {
 
 test('write JSON file - object - file relative to cwd', async (t) => {
     const cwd = join(__dirname, 'tmp');
-    await u.writeJSON(
+    await j.write(
         { version: '1.0.0', integrity: [] },
         { cwd, filename: '.eikrc' },
     );
@@ -294,7 +295,7 @@ test('write JSON file - object - file relative to cwd', async (t) => {
 
 test('write JSON file - object - file absolute path', async (t) => {
     const cwd = join(__dirname, 'tmp');
-    await u.writeJSON({ prop: 'val' }, { filename: join(cwd, 'test.json') });
+    await j.write({ prop: 'val' }, { filename: join(cwd, 'test.json') });
     const eikrc = fs.readFileSync(join(cwd, 'test.json'));
     const { prop } = JSON.parse(eikrc);
 
@@ -302,7 +303,7 @@ test('write JSON file - object - file absolute path', async (t) => {
 });
 
 test('write JSON file - string - file relative path', async (t) => {
-    await u.writeJSON({ prop: 'val' }, './test-using-relative.json');
+    await j.write({ prop: 'val' }, './test-using-relative.json');
     const eikrc = fs.readFileSync(
         join(__dirname, '../test-using-relative.json'),
     );
@@ -314,7 +315,7 @@ test('write JSON file - string - file relative path', async (t) => {
 
 test('write JSON file - string - file absolute path', async (t) => {
     const cwd = join(__dirname, 'tmp');
-    await u.writeJSON({ prop: 'val' }, join(cwd, 'test3.json'));
+    await j.write({ prop: 'val' }, join(cwd, 'test3.json'));
     const eikrc = fs.readFileSync(join(cwd, 'test3.json'));
     const { prop } = JSON.parse(eikrc);
 
@@ -324,7 +325,7 @@ test('write JSON file - string - file absolute path', async (t) => {
 test('read JSON file - object - file relative path', async (t) => {
     const cwd = join(__dirname, 'tmp');
     fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
-    const json = await u.readJSON({ cwd, filename: './test3.json' });
+    const json = await j.read({ cwd, filename: './test3.json' });
 
     t.equal(json.key, 'val', 'Key should equal val');
 });
@@ -332,7 +333,7 @@ test('read JSON file - object - file relative path', async (t) => {
 test('read JSON file - object - file absolute path', async (t) => {
     const cwd = join(__dirname, 'tmp');
     fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
-    const json = await u.readJSON({ filename: join(cwd, './test3.json') });
+    const json = await j.read({ filename: join(cwd, './test3.json') });
 
     t.equal(json.key, 'val', 'Key should equal val');
 });
@@ -342,7 +343,7 @@ test('read JSON file - string - file relative path', async (t) => {
         join(__dirname, '../test-read-json.json'),
         JSON.stringify({ key: 'val' }),
     );
-    const json = await u.readJSON('./test-read-json.json');
+    const json = await j.read('./test-read-json.json');
 
     t.equal(json.key, 'val', 'Key should equal val');
 });
@@ -353,7 +354,7 @@ test('read JSON file - string - file absolute path', async (t) => {
         join(cwd, './test-read-json-2.json'),
         JSON.stringify({ key: 'val' }),
     );
-    const json = await u.readJSON(join(cwd, './test-read-json-2.json'));
+    const json = await j.read(join(cwd, './test-read-json-2.json'));
 
     t.equal(json.key, 'val', 'Key should equal val');
 });

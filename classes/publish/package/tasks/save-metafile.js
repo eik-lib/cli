@@ -1,7 +1,7 @@
 'use strict';
 
 const { join } = require('path');
-const { writeJSON, readJSON } = require('../../../../utils');
+const { write: writeJSON, read: readJSON } = require('../../../../utils/json');
 const Task = require('./task');
 
 module.exports = class SaveMetaFile extends Task {
