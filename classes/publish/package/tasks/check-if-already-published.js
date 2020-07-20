@@ -4,7 +4,7 @@
 
 const { join } = require('path');
 const { fetchPackageMeta } = require('../../../../utils');
-const { files: calculateFilesHash, compare: compareHashes } = require('../../../../utils/hash');
+const hash = require('../../../../utils/hash');
 const Task = require('./task');
 
 module.exports = class CheckIfAlreadyPublished extends Task {
@@ -59,7 +59,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
                     localFiles.push(join(path, key));
                 }
             }
-            localHash = await calculateFilesHash(localFiles);
+            localHash = await hash.files(localFiles);
         } catch (err) {
             throw new Error(
                 `Unable to hash local files for comparison: ${err.message}`,
@@ -68,7 +68,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
 
         const versions = new Map(meta.versions);
         for (const v of versions.values()) {
-            const same = compareHashes(v.integrity, localHash);
+            const same = hash.compare(v.integrity, localHash);
             if (same) {
                 throw new Error(
                     `Version ${v.version} of this package already contains these files, publishing is not necessary.`,
