@@ -5,7 +5,8 @@ const fetch = require('node-fetch');
 const ora = require('ora');
 const chalk = require('chalk');
 const PublishNPM = require('../classes/publish/npm');
-const { logger, Artifact, getDefaults, getCWD } = require('../utils');
+const { logger, getDefaults, getCWD } = require('../utils');
+const { Artifact } = require('../formatters');
 
 exports.command = 'npm <name> [<version>]';
 

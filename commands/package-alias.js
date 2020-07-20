@@ -2,7 +2,8 @@
 
 const ora = require('ora');
 const Alias = require('../classes/alias');
-const { logger, Alias: AliasFormatter, getDefaults, getCWD } = require('../utils');
+const { logger, getDefaults, getCWD } = require('../utils');
+const { Alias: AliasFormatter } = require('../formatters');
 
 exports.command = 'package-alias <name> <version> <alias>';
 
