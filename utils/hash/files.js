@@ -1,7 +1,7 @@
 'use strict';
 
 const ssri = require('ssri');
-const fileHash = require('./calculate-file-hash');
+const fileHash = require('./file');
 
 module.exports = async files => {
     const hashes = await Promise.all(files.map(fileHash));

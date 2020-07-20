@@ -3,11 +3,8 @@
 'use strict';
 
 const { join } = require('path');
-const {
-    compareHashes,
-    fetchPackageMeta,
-    calculateFilesHash,
-} = require('../../../../utils');
+const { fetchPackageMeta } = require('../../../../utils');
+const { files: calculateFilesHash, compare: compareHashes } = require('../../../../utils/hash');
 const Task = require('./task');
 
 module.exports = class CheckIfAlreadyPublished extends Task {
