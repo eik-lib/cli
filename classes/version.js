@@ -9,7 +9,7 @@ const semver = require('semver');
 const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
 const { fetchPackageMeta } = require('../utils');
-const { files: calculateFilesHash, compare: compareHashes } = require('../utils/hash');
+const hash = require('../utils/hash');
 
 class ValidationError extends Error {
     constructor(message, err) {
@@ -195,7 +195,7 @@ module.exports = class Ping {
                 }
             }
 
-            localHash = await calculateFilesHash(localFiles);
+            localHash = await hash.files(localFiles);
         } catch (err) {
             throw new Error(
                 `Unable to hash local files for comparison: ${err.message}`,
@@ -205,7 +205,7 @@ module.exports = class Ping {
         log.debug(`Comparing hashes:`);
         log.debug(`  ==> local: ${localHash}`);
         log.debug(`  ==> remote: ${meta.integrity}`);
-        const same = compareHashes(meta.integrity, localHash);
+        const same = hash.compare(meta.integrity, localHash);
 
         if (same) {
             throw new Error(
