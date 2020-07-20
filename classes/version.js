@@ -8,11 +8,8 @@ const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
-const {
-    fetchPackageMeta,
-    calculateFilesHash,
-    compareHashes,
-} = require('../utils');
+const { fetchPackageMeta } = require('../utils');
+const { files: calculateFilesHash, compare: compareHashes } = require('../utils/hash');
 
 class ValidationError extends Error {
     constructor(message, err) {

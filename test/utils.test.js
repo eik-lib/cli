@@ -7,9 +7,10 @@ const { test } = require('tap');
 const fastify = require('fastify');
 const u = require('../utils');
 const j = require('../utils/json');
+const h = require('../utils/hash');
 
 test('calculate file hash', async (t) => {
-    const hash = await u.calculateFileHash(
+    const hash = await h.file(
         join(__dirname, 'fixtures', 'client.js'),
     );
     t.equal(
@@ -20,19 +21,19 @@ test('calculate file hash', async (t) => {
 });
 
 test('calculate files hash', async (t) => {
-    const hash = await u.calculateFilesHash([
+    const hash = await h.files([
         join(__dirname, 'fixtures', 'styles.css'),
         join(__dirname, 'fixtures', 'client.js'),
         join(__dirname, 'fixtures', 'import-map.json'),
     ]);
 
-    const fileHash1 = await u.calculateFileHash(
+    const fileHash1 = await h.file(
         join(__dirname, 'fixtures', 'client.js'),
     );
-    const fileHash2 = await u.calculateFileHash(
+    const fileHash2 = await h.file(
         join(__dirname, 'fixtures', 'import-map.json'),
     );
-    const fileHash3 = await u.calculateFileHash(
+    const fileHash3 = await h.file(
         join(__dirname, 'fixtures', 'styles.css'),
     );
 
@@ -49,30 +50,30 @@ test('calculate files hash', async (t) => {
 });
 
 test('compare hashes - true', async (t) => {
-    const fileHash1 = await u.calculateFileHash(
+    const fileHash1 = await h.file(
         join(__dirname, 'fixtures', 'client.js'),
     );
-    const fileHash2 = await u.calculateFileHash(
+    const fileHash2 = await h.file(
         join(__dirname, 'fixtures', 'client.js'),
     );
 
     t.equal(
-        u.compareHashes(fileHash1, fileHash2),
+        h.compare(fileHash1, fileHash2),
         true,
         'hashes compared should produce a true result',
     );
 });
 
 test('compare hashes - false', async (t) => {
-    const fileHash1 = await u.calculateFileHash(
+    const fileHash1 = await h.file(
         join(__dirname, 'fixtures', 'client.js'),
     );
-    const fileHash2 = await u.calculateFileHash(
+    const fileHash2 = await h.file(
         join(__dirname, 'fixtures', 'import-map.json'),
     );
 
     t.equal(
-        u.compareHashes(fileHash1, fileHash2),
+        h.compare(fileHash1, fileHash2),
         false,
         'hashes compared should produce a false result',
     );
