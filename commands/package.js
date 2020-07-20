@@ -6,7 +6,8 @@ const fetch = require('node-fetch');
 const ora = require('ora');
 const chalk = require('chalk');
 const PublishPackage = require('../classes/publish/package/index');
-const { logger, Artifact, getDefaults, getCWD } = require('../utils');
+const { logger, getDefaults, getCWD } = require('../utils');
+const { Artifact } = require('../formatters');
 
 exports.command = 'package';
 

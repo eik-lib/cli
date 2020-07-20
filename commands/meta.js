@@ -6,7 +6,7 @@
 
 const ora = require('ora');
 const Meta = require('../classes/meta');
-const Artifact = require('../utils/artifact');
+const { Artifact } = require('../formatters');
 const { logger, getDefaults, getCWD } = require('../utils');
 
 exports.command = 'meta <name>';
