@@ -4,7 +4,8 @@ const { join } = require('path');
 const fetch = require('node-fetch');
 const ora = require('ora');
 const PublishMap = require('../classes/publish/map');
-const { logger, Artifact, getDefaults, getCWD } = require('../utils');
+const { logger, getDefaults, getCWD } = require('../utils');
+const { Artifact } = require('../formatters');
 
 exports.command = 'map <name> <version> <file>';
 

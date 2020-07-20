@@ -12,8 +12,6 @@ const incrementSemverVersion = require('./increment-semver-version');
 const readJSON = require('./read-json');
 const writeJSON = require('./write-json');
 const compressedSize = require('./compressed-size');
-const Artifact = require('./artifact');
-const Alias = require('./alias');
 const getDefaults = require('./get-defaults');
 const getCWD = require('./get-cwd');
 const writeEikJSON = require('./write-eik-json');
@@ -31,8 +29,6 @@ module.exports = {
     writeJSON,
     readJSON,
     compressedSize,
-    Artifact,
-    Alias,
     getDefaults,
     getCWD,
     writeEikJSON,
