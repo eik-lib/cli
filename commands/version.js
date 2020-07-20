@@ -6,7 +6,7 @@ const { join } = require('path');
 const ora = require('ora');
 const VersionPackage = require('../classes/version');
 const { logger, getDefaults, getCWD } = require('../utils');
-const { writeEik: writeEikJSON } = require('../utils/json');
+const json = require('../utils/json');
 
 exports.command = 'version [level]';
 
@@ -99,7 +99,7 @@ exports.handler = async (argv) => {
             );
         } else {
             log.debug(`Writing new version ${newVersion} to eik.json`);
-            await writeEikJSON({ version: newVersion }, { cwd });
+            await json.writeEik({ version: newVersion }, { cwd });
 
             log.debug(`Committing eik.json to local git repository`);
             try {
