@@ -5,7 +5,8 @@ const { promises: fs, constants } = require('fs');
 const { join } = require('path');
 const ora = require('ora');
 const VersionPackage = require('../classes/version');
-const { logger, getDefaults, getCWD, writeEikJSON } = require('../utils');
+const { logger, getDefaults, getCWD } = require('../utils');
+const { writeEik: writeEikJSON } = require('../utils/json');
 
 exports.command = 'version [level]';
 

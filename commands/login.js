@@ -4,11 +4,8 @@ const homedir = require('os').homedir();
 const readline = require('readline');
 const ora = require('ora');
 const Login = require('../classes/login');
-const {
-    logger,
-    readJSON,
-    writeJSON,
-} = require('../utils');
+const { logger } = require('../utils');
+const { write: writeJSON, read: readJSON } = require('../utils/json');
 
 exports.command = 'login';
 

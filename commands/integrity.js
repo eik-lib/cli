@@ -7,7 +7,8 @@
 const { join } = require('path');
 const ora = require('ora');
 const Integrity = require('../classes/integrity');
-const { logger, getDefaults, getCWD, writeJSON } = require('../utils');
+const { logger, getDefaults, getCWD } = require('../utils');
+const { write: writeJSON } = require('../utils/json');
 
 exports.command = 'integrity [name] [version]';
 
