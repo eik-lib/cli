@@ -21,7 +21,7 @@ const { writeFileSync, existsSync, readFileSync } = require('fs');
 const { join, dirname, parse } = require('path');
 const { validators } = require('@eik/common');
 const rimraf = require('rimraf');
-const { sendCommand } = require('../../utils/fetch');
+const { request } = require('../../utils/fetch');
 
 module.exports = class PublishDependency {
     constructor({
@@ -248,7 +248,7 @@ module.exports = class PublishDependency {
 
         this.log.debug('Uploading zip file to server');
         try {
-            const { message } = await sendCommand({
+            const { message } = await request({
                 method: 'PUT',
                 host: this.server,
                 pathname: join('npm', this.name, this.version),

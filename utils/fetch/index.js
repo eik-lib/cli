@@ -1,6 +1,6 @@
 const latestVersion = require('./latest-version');
 const versions = require('./versions');
 const integrity = require('./integrity');
-const sendCommand = require('./send-command');
+const request = require('./request');
 
-module.exports = { latestVersion, versions, integrity, sendCommand };
+module.exports = { latestVersion, versions, integrity, request };

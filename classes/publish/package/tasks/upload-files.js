@@ -3,7 +3,7 @@
 'use strict';
 
 const { join } = require('path');
-const { sendCommand } = require('../../../../utils/fetch');
+const { request } = require('../../../../utils/fetch');
 const Task = require('./task');
 
 module.exports = class UploadFiles extends Task {
@@ -12,7 +12,7 @@ module.exports = class UploadFiles extends Task {
         const { server, token, name, zipFile, version } = incoming;
         log.debug('Uploading zip file to server');
         try {
-            const { message } = await sendCommand({
+            const { message } = await request({
                 method: 'PUT',
                 host: server,
                 pathname: join(
