@@ -8,7 +8,7 @@ const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
-const { packageMeta } = require('../utils/fetch');
+const { integrity } = require('../utils/fetch');
 const hash = require('../utils/hash');
 
 class ValidationError extends Error {
@@ -133,16 +133,16 @@ module.exports = class Ping {
         log.debug(`Current local package version determined to be ${version}`);
         log.debug(`Fetching remote package metadata from ${server}`);
 
-        let meta;
+        let integrityHash;
         try {
-            meta = await packageMeta(server, name, version);
+            integrityHash = await integrity(server, name, version);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
             );
         }
 
-        if (!meta) {
+        if (!integrityHash) {
             // version does not exist on server yet. No increment needed.
             throw new Error(
                 `The current version of this package has not yet been published, version change is not needed.`,
@@ -204,8 +204,8 @@ module.exports = class Ping {
 
         log.debug(`Comparing hashes:`);
         log.debug(`  ==> local: ${localHash}`);
-        log.debug(`  ==> remote: ${meta.integrity}`);
-        const same = hash.compare(meta.integrity, localHash);
+        log.debug(`  ==> remote: ${integrityHash}`);
+        const same = hash.compare(integrityHash, localHash);
 
         if (same) {
             throw new Error(
