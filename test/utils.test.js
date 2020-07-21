@@ -225,10 +225,10 @@ test('fetch remote hash for a given version', async (t) => {
         };
     });
     const address = await server.listen();
-    const result = await f.packageMeta(address, 'foo', '1.0.0');
+    const result = await f.integrity(address, 'foo', '1.0.0');
 
     t.equal(
-        result.integrity,
+        result,
         'sha512-36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==',
         'should return correct hash',
     );
