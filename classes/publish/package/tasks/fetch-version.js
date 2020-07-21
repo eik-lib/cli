@@ -2,10 +2,8 @@
 
 'use strict';
 
-const {
-    fetchLatestVersion,
-    incrementSemverVersion,
-} = require('../../../../utils');
+const semver = require('semver');
+const { fetchLatestVersion } = require('../../../../utils');
 const Task = require('./task');
 
 module.exports = class FetchVersion extends Task {
@@ -26,7 +24,7 @@ module.exports = class FetchVersion extends Task {
                     throw new Error(`Unable to increment major version which is locked to ${major}`);
                 }
                 incoming.version = version;
-                outgoing.version = incrementSemverVersion(version, level);
+                outgoing.version = semver.inc(version, level);
             }
         } catch (err) {
             throw new Error(
