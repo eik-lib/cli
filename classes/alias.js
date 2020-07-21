@@ -4,7 +4,7 @@ const assert = require('assert');
 const abslog = require('abslog');
 const { join } = require('path');
 const { validators } = require('@eik/common');
-const { sendCommand } = require('../utils');
+const { sendCommand } = require('../utils/fetch');
 
 module.exports = class Alias {
     constructor({ logger, server, token, type, name, version, alias } = {}) {

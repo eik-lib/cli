@@ -8,7 +8,7 @@ const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
-const { fetchPackageMeta } = require('../utils');
+const { packageMeta } = require('../utils/fetch');
 const hash = require('../utils/hash');
 
 class ValidationError extends Error {
@@ -135,7 +135,7 @@ module.exports = class Ping {
 
         let meta;
         try {
-            meta = await fetchPackageMeta(server, name, version);
+            meta = await packageMeta(server, name, version);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,

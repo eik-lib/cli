@@ -5,9 +5,9 @@ const crypto = require('crypto');
 const { join } = require('path');
 const { test } = require('tap');
 const fastify = require('fastify');
-const u = require('../utils');
 const j = require('../utils/json');
 const h = require('../utils/hash');
+const f = require('../utils/fetch');
 
 test('calculate file hash', async (t) => {
     const hash = await h.file(
@@ -91,7 +91,7 @@ test('fetch latest version for a given published bundle', async (t) => {
     });
     const address = await server.listen();
 
-    const version = await u.fetchLatestVersion(address, 'foo');
+    const version = await f.latestVersion(address, 'foo');
 
     t.equal(version, '2.1.8', 'Version should match expected value');
 
@@ -110,7 +110,7 @@ test('fetch latest version, filtered by major, for a given published bundle', as
     });
     const address = await server.listen();
 
-    const version = await u.fetchLatestVersion(address, 'foo', 1);
+    const version = await f.latestVersion(address, 'foo', 1);
 
     t.equal(version, '1.3.2', 'Version should match expected value');
 
@@ -122,7 +122,7 @@ test('fetch latest version for a given published bundle, non existant bundle on 
     const address = await server.listen();
 
     try {
-        await u.fetchLatestVersion(address, 'foo');
+        await f.latestVersion(address, 'foo');
     } catch (err) {
         t.equal(
             err.message,
@@ -142,7 +142,7 @@ test('fetch latest version, filtered by major, for a given published bundle', as
     const address = await server.listen();
 
     try {
-        await u.fetchLatestVersion(address, 'foo');
+        await f.latestVersion(address, 'foo');
     } catch (err) {
         t.equal(
             err.message,
@@ -162,7 +162,7 @@ test('fetch latest version, invalid versions returned by server', async (t) => {
     const address = await server.listen();
 
     t.rejects(
-        u.fetchLatestVersion(address, 'foo'),
+        f.latestVersion(address, 'foo'),
         'should throw when server responds with invalid version object',
     );
 
@@ -182,7 +182,7 @@ test('fetch latest version, invalid versions keys returned by server', async (t)
     const address = await server.listen();
 
     t.rejects(
-        u.fetchLatestVersion(address, 'foo'),
+        f.latestVersion(address, 'foo'),
         'should throw when server responds with invalid version keys',
     );
 
@@ -199,7 +199,7 @@ test('fetch latest version, no bundles yet published', async (t) => {
     });
     const address = await server.listen();
 
-    const version = await u.fetchLatestVersion(address, 'foo');
+    const version = await f.latestVersion(address, 'foo');
 
     t.equal(version, null, 'Version should be null');
 
@@ -225,7 +225,7 @@ test('fetch remote hash for a given version', async (t) => {
         };
     });
     const address = await server.listen();
-    const result = await u.fetchPackageMeta(address, 'foo', '1.0.0');
+    const result = await f.packageMeta(address, 'foo', '1.0.0');
 
     t.equal(
         result.integrity,

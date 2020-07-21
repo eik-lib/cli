@@ -3,7 +3,7 @@
 const abslog = require('abslog');
 const assert = require('assert');
 const { validators } = require('@eik/common');
-const { sendCommand } = require('../utils');
+const { sendCommand } = require('../utils/fetch');
 
 module.exports = class Login {
     constructor({ logger, server, key } = {}) {
