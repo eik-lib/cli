@@ -4,7 +4,7 @@ const assert = require('assert');
 const abslog = require('abslog');
 const { join } = require('path');
 const { validators } = require('@eik/common');
-const { sendCommand } = require('../utils/fetch');
+const { request } = require('../utils/fetch');
 
 module.exports = class Alias {
     constructor({ logger, server, token, type, name, version, alias } = {}) {
@@ -40,7 +40,7 @@ module.exports = class Alias {
 
         this.log.debug('Requesting alias creation from server');
         try {
-            const { message } = await sendCommand({
+            const { message } = await request({
                 host: this.server,
                 method: 'PUT',
                 pathname: join(
@@ -66,7 +66,7 @@ module.exports = class Alias {
                 this.log.debug('Alias already exists on server, performing update');
 
                 try {
-                    const { message: msg } = await sendCommand({
+                    const { message: msg } = await request({
                         host: this.server,
                         method: 'POST',
                         pathname: join(
