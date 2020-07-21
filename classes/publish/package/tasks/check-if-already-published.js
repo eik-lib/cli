@@ -3,7 +3,7 @@
 'use strict';
 
 const { join } = require('path');
-const { fetchPackageMeta } = require('../../../../utils');
+const { packageMeta } = require('../../../../utils/fetch');
 const hash = require('../../../../utils/hash');
 const Task = require('./task');
 
@@ -17,7 +17,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
 
         // TODO: version needs to be the previous version. How can we get this?
         try {
-            if (await fetchPackageMeta(server, name, version)) {
+            if (await packageMeta(server, name, version)) {
                 throw new Error(
                     `${name} version ${version} already exists on the Eik server. Publishing is not necessary.`,
                 );
@@ -31,7 +31,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         
         let meta;
         try {
-            meta = await fetchPackageMeta(server, name);
+            meta = await packageMeta(server, name);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
