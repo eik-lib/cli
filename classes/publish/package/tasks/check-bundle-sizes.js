@@ -3,7 +3,7 @@
 const { join, isAbsolute } = require('path');
 const bytes = require('bytes');
 const fs = require('fs');
-const { compressedSize } = require('../../../../utils');
+const gzipSize = require('gzip-size');
 const Task = require('./task');
 
 module.exports = class CheckBundleSizes extends Task {
@@ -14,7 +14,7 @@ module.exports = class CheckBundleSizes extends Task {
             if (js) {
                 for (const [key, val] of Object.entries(js)) {
                     const path = isAbsolute(val) ? val : join(cwd, val);
-                    const jsEntrypointFile = compressedSize(
+                    const jsEntrypointFile = gzipSize.sync(
                         fs.readFileSync(path, 'utf8'),
                     );
                     this.log.debug(
@@ -27,7 +27,7 @@ module.exports = class CheckBundleSizes extends Task {
             if (css) {
                 for (const [key, val] of Object.entries(css)) {
                     const path = isAbsolute(val) ? val : join(cwd, val);
-                    const cssEntrypointFile = compressedSize(
+                    const cssEntrypointFile = gzipSize.sync(
                         fs.readFileSync(path, 'utf8'),
                     );
                     this.log.debug(
