@@ -3,7 +3,7 @@
 'use strict';
 
 const semver = require('semver');
-const { fetchLatestVersion } = require('../../../../utils');
+const { latestVersion } = require('../../../../utils/fetch');
 const Task = require('./task');
 
 module.exports = class FetchVersion extends Task {
@@ -14,7 +14,7 @@ module.exports = class FetchVersion extends Task {
             'Calculating latest version for package. Fetching previous version information from server.',
         );
         try {
-            const version = await fetchLatestVersion(server, name, major);
+            const version = await latestVersion(server, name, major);
 
             if (!version) {
                 incoming.version = null;
