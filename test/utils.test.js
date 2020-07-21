@@ -79,52 +79,6 @@ test('compare hashes - false', async (t) => {
     );
 });
 
-test('increment semver version - invalid semver', async (t) => {
-    const semver = 'foo';
-
-    try {
-        u.incrementSemverVersion(semver, 'patch');
-    } catch (err) {
-        t.equal(
-            err.message,
-            'Invalid semver given. Argument must be of the form x.x.x. Eg. 1.0.0',
-            'incrementing invalid semver should throw correct error',
-        );
-    }
-});
-
-test('increment semver version - invalid incrementation level given', async (t) => {
-    const semver = '1.0.0';
-
-    try {
-        u.incrementSemverVersion(semver, 'foo');
-    } catch (err) {
-        t.equal(
-            err.message,
-            `Invalid incrementation level given. Argument must be one of 'major', 'minor' or 'patch'`,
-            'incrementing invalid semver should throw correct error',
-        );
-    }
-});
-
-test('increment semver version - valid semver - patch increment', async (t) => {
-    const semver = '1.0.0';
-    const result = u.incrementSemverVersion(semver, 'patch');
-    t.equal(result, '1.0.1', 'incremented semver should now be 1.0.1');
-});
-
-test('increment semver version - valid semver - minor increment', async (t) => {
-    const semver = '1.0.0';
-    const result = u.incrementSemverVersion(semver, 'minor');
-    t.equal(result, '1.1.0', 'incremented semver should now be 1.1.0');
-});
-
-test('increment semver version - valid semver - major increment', async (t) => {
-    const semver = '1.0.0';
-    const result = u.incrementSemverVersion(semver, 'major');
-    t.equal(result, '2.0.0', 'incremented semver should now be 2.0.0');
-});
-
 test('fetch latest version for a given published bundle', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => {
