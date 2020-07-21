@@ -11,6 +11,8 @@ const fetch = require('node-fetch');
  * @param {string} version - Semver major version to lock fetch to
  * 
  * @returns {Promise<string>} - Package integrity string
+ * 
+ * @throws Error
  */
 module.exports = async (server, name, version) => {
     const url = new URL(join('pkg', name, version), server);

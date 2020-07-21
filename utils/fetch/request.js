@@ -4,15 +4,25 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 const { createReadStream } = require('fs');
 
-async function request({
-    method = 'POST',
-    host,
-    pathname,
-    data,
-    file,
-    map,
-    token,
-} = {}) {
+/**
+ * HTTP Utility for making requests against an Eik server
+ *
+ * @param {{method:string,host:string,pathname:string,data:object,file:string,map:string,token:string}} options
+ *
+ * @returns {Promise<{status:number,message:object|string}>} - Promise that resolves to an object with properties status and message
+ * 
+ * @throws Error
+ */
+async function request(options) {
+    const {
+        method = 'POST',
+        host,
+        pathname,
+        data,
+        file,
+        map,
+        token,
+    } = options;
     const form = new FormData();
     const headers = {};
 
