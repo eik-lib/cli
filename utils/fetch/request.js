@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const FormData = require('form-data');
 const { createReadStream } = require('fs');
 
-async function sendCommand({
+async function request({
     method = 'POST',
     host,
     pathname,
@@ -63,4 +63,4 @@ async function sendCommand({
     }
 }
 
-module.exports = sendCommand;
+module.exports = request;

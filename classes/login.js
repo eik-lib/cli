@@ -3,7 +3,7 @@
 const abslog = require('abslog');
 const assert = require('assert');
 const { validators } = require('@eik/common');
-const { sendCommand } = require('../utils/fetch');
+const { request } = require('../utils/fetch');
 
 module.exports = class Login {
     constructor({ logger, server, key } = {}) {
@@ -34,7 +34,7 @@ module.exports = class Login {
 
         this.log.debug('Requesting jwt token from server');
         try {
-            const { message } = await sendCommand({
+            const { message } = await request({
                 host: this.server,
                 method: 'POST',
                 pathname: '/auth/login',

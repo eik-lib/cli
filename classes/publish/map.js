@@ -5,7 +5,7 @@ const abslog = require('abslog');
 const { join, parse, isAbsolute } = require('path');
 const { existsSync } = require('fs');
 const { validators } = require('@eik/common');
-const { sendCommand } = require('../../utils/fetch');
+const { request } = require('../../utils/fetch');
 
 module.exports = class PublishMap {
     constructor({
@@ -53,7 +53,7 @@ module.exports = class PublishMap {
             `Uploading import map "${this.name}" version "${this.version}" to asset server`,
         );
         try {
-            await sendCommand({
+            await request({
                 method: 'PUT',
                 host: this.server,
                 pathname: join('map', this.name, this.version),
