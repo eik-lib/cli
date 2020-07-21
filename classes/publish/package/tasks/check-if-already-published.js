@@ -3,7 +3,7 @@
 'use strict';
 
 const { join } = require('path');
-const { integrity, versions } = require('../../../../utils/fetch');
+const { integrity, versions } = require('../../../../utils/http');
 const hash = require('../../../../utils/hash');
 const Task = require('./task');
 

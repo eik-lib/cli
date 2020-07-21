@@ -7,7 +7,7 @@ const { test } = require('tap');
 const fastify = require('fastify');
 const j = require('../utils/json');
 const h = require('../utils/hash');
-const f = require('../utils/fetch');
+const f = require('../utils/http');
 
 test('calculate file hash', async (t) => {
     const hash = await h.file(

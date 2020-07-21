@@ -21,7 +21,7 @@ const { writeFileSync, existsSync, readFileSync } = require('fs');
 const { join, dirname, parse } = require('path');
 const { validators } = require('@eik/common');
 const rimraf = require('rimraf');
-const { request } = require('../../utils/fetch');
+const { request } = require('../../utils/http');
 
 module.exports = class PublishDependency {
     constructor({

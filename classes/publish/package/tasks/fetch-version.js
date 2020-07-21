@@ -3,7 +3,7 @@
 'use strict';
 
 const semver = require('semver');
-const { latestVersion } = require('../../../../utils/fetch');
+const { latestVersion } = require('../../../../utils/http');
 const Task = require('./task');
 
 module.exports = class FetchVersion extends Task {
