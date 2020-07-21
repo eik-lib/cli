@@ -5,7 +5,7 @@ const abslog = require('abslog');
 const { join, parse, isAbsolute } = require('path');
 const { existsSync } = require('fs');
 const { validators } = require('@eik/common');
-const { request } = require('../../utils/fetch');
+const { request } = require('../../utils/http');
 
 module.exports = class PublishMap {
     constructor({

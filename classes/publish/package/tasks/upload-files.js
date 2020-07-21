@@ -3,7 +3,7 @@
 'use strict';
 
 const { join } = require('path');
-const { request } = require('../../../../utils/fetch');
+const { request } = require('../../../../utils/http');
 const Task = require('./task');
 
 module.exports = class UploadFiles extends Task {

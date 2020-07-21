@@ -8,7 +8,7 @@ const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
-const { integrity } = require('../utils/fetch');
+const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
 
 class ValidationError extends Error {
