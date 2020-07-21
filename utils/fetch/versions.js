@@ -10,6 +10,8 @@ const fetch = require('node-fetch');
  * @param {string} name - Package name to lookup
  * 
  * @returns {Promise<Array<Array<number,{version:string,integrity:string}>>>}
+ * 
+ * @throws Error
  */
 module.exports = async (server, name) => {
     const pkg = join('pkg', name);

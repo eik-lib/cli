@@ -12,11 +12,11 @@ const { join, isAbsolute } = require('path');
  *                                   If location is an object, `pathname` must be given which can be relative or absolute. `cwd` can also be given to define the current working directory.
  * @return {Promise<any{}>} - JavaScript object deserialized from JSON file contents
  *
- * @example readJSON('/path/to/file.json');
- * @example readJSON('./relative/path/to/file.json');
- * @example readJSON({ filename: '/path/to/file.json' });
- * @example readJSON({ filename: './relative/path/to/file.json' });
- * @example readJSON({ filename: './relative/path/to/file.json', cwd: '/path/to/cwd });
+ * @example json.read('/path/to/file.json');
+ * @example json.read('./relative/path/to/file.json');
+ * @example json.read({ filename: '/path/to/file.json' });
+ * @example json.read({ filename: './relative/path/to/file.json' });
+ * @example json.read({ filename: './relative/path/to/file.json', cwd: '/path/to/cwd });
  */
 module.exports = async (location) => {
     if (typeof location !== 'string') {

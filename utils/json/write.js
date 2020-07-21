@@ -11,11 +11,15 @@ const { join, isAbsolute, dirname } = require('path');
  * @param {string|{cwd:string,filename:string}} location - Path string or object describing location for where to write JSON to.
  *                                   If location is a string it can be relative or absolute.
  *                                   If location is an object, `pathname` must be given which can be relative or absolute. `cwd` can also be given to define the current working directory.
- * @example writeJSON({ key: 'value' }, '/path/to/file.json');
- * @example writeJSON({ key: 'value' }, './relative/path/to/file.json');
- * @example writeJSON({ key: 'value' }, { filename: '/path/to/file.json' });
- * @example writeJSON({ key: 'value' }, { filename: './relative/path/to/file.json' });
- * @example writeJSON({ key: 'value' }, { filename: './relative/path/to/file.json', cwd: '/path/to/cwd' });
+ * @returns {Promise<undefined>}
+ * 
+ * @example json.write({ key: 'value' }, '/path/to/file.json');
+ * @example json.write({ key: 'value' }, './relative/path/to/file.json');
+ * @example json.write({ key: 'value' }, { filename: '/path/to/file.json' });
+ * @example json.write({ key: 'value' }, { filename: './relative/path/to/file.json' });
+ * @example json.write({ key: 'value' }, { filename: './relative/path/to/file.json', cwd: '/path/to/cwd' });
+ * 
+ * @throws Error
  */
 module.exports = async (meta = {}, location) => {
     if (typeof location !== 'string') {

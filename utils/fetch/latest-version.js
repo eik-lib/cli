@@ -3,6 +3,17 @@
 const { join } = require('path');
 const fetch = require('node-fetch');
 
+/**
+ * Fetches the latest version from an Eik server of a package by name, optionally restricting the lookup to a specified semver major version
+ * 
+ * @param {string} server - Eik asset server address
+ * @param {string} name - Package name
+ * @param {string|number} major - optional - Semver major version number to lock fetch to.
+ * 
+ * @returns {Promise<string|null>} - Semver version string or null if no versions exist
+ * 
+ * @throws Error
+ */
 module.exports = async (server, name, major) => {
     const url = new URL(`${join('pkg', name)}?t=${Date.now()}`, server);
     const res = await fetch(url);
