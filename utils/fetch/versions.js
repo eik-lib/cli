@@ -3,10 +3,17 @@
 const { join } = require('path');
 const fetch = require('node-fetch');
 
-module.exports = async (server, name, version = '') => {
+/**
+ * Fetches package versions by name from a given Eik asset server.
+ * 
+ * @param {string} server - Eik asset server URL to perform lookup against
+ * @param {string} name - Package name to lookup
+ * 
+ * @returns {Promise<Array<Array<number,{version:string,integrity:string}>>>}
+ */
+module.exports = async (server, name) => {
     const pkg = join('pkg', name);
-    const vers = join(pkg, version);
-    const url = new URL(version ? vers : pkg, server);
+    const url = new URL(pkg, server);
     url.search = `?t=${Date.now()}`;
 
     const res = await fetch(url);
@@ -27,10 +34,5 @@ module.exports = async (server, name, version = '') => {
         );
     }
 
-    if (version) {
-        const { files = '', integrity = [] } = body || {};
-        return { integrity, files };
-    }
-
-    return body;
+    return body.versions;
 };
