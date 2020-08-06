@@ -64,7 +64,7 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, dryRun, cwd, token } = argv;
-    const {name, server, map, js, css, version, out} = getDefaults(cwd);
+    const {name, server, map, entrypoints, version, out} = getDefaults(cwd);
 
     try {
         try {
@@ -78,8 +78,7 @@ exports.handler = async (argv) => {
             name,
             server,
             map: Array.isArray(map) ? map : [map],
-            js,
-            css,
+            entrypoints,
             version,
             cwd,
             token,

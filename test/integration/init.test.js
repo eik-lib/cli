@@ -29,15 +29,10 @@ test('Initializing a new eik.json file', async t => {
     t.equals(assets.name, '', 'eik.json "name" field should be empty');
     t.equals(assets.major, 1, 'eik.json "major" field should equal 1');
     t.equals(assets.server, '', 'eik.json "server" field should be empty');
-    t.equals(
-        assets.js.input,
-        '',
-        'eik.json "js.input" field should be empty',
-    );
-    t.equals(
-        assets.css.input,
-        '',
-        'eik.json "css.input" field should be empty',
+    t.same(
+        assets.entrypoints,
+        {},
+        'eik.json "entrypoints" should be an empty object',
     );
 });
 
@@ -49,9 +44,7 @@ test('Initializing a new eik.json file passing custom values', async t => {
         --cwd ${folder}
         --name custom-name
         --major 2
-        --server http://localhost:4001
-        --js ./assets/client.js
-        --css ./assets/styles.css`;
+        --server http://localhost:4001`;
     await exec(publishCmd.split('\n').join(' '));
 
     const assets = JSON.parse(
@@ -73,14 +66,9 @@ test('Initializing a new eik.json file passing custom values', async t => {
         'http://localhost:4001',
         'eik.json "server" field should not be empty',
     );
-    t.equals(
-        assets.js.input,
-        './assets/client.js',
+    t.same(
+        assets.entrypoints,
+        {},
         'eik.json "js.input" field should not be empty',
-    );
-    t.equals(
-        assets.css.input,
-        './assets/styles.css',
-        'eik.json "css.input" field should not be empty',
     );
 });

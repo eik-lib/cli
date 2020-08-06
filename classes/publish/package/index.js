@@ -21,8 +21,7 @@ module.exports = class PublishApp {
         name,
         version = '1.0.0',
         map = [],
-        js,
-        css,
+        entrypoints,
         dryRun = false,
         out = './.eik',
     } = {}) {
@@ -33,19 +32,7 @@ module.exports = class PublishApp {
         this.name = name;
         this.version = version;
         this.map = map;
-
-        this.js = js;
-        if (typeof js === 'string') {
-            this.js = {
-                './index.js': js,
-            };
-        }
-        this.css = css;
-        if (typeof css === 'string') {
-            this.css = {
-                './index.css': css,
-            };
-        }
+        this.entrypoints = entrypoints;
         this.dryRun = dryRun;
         this.out = out;
         this.path = isAbsolute(out) ? out : join(cwd, out);
@@ -68,8 +55,7 @@ module.exports = class PublishApp {
 
         const incoming = {
             path: this.path,
-            js: this.js,
-            css: this.css,
+            entrypoints: this.entrypoints,
             server: this.server,
             name: this.name,
             version: this.version,

@@ -50,8 +50,10 @@ test('eik package : package, details provided by eik.json file', async (t) => {
         name: 'test-app',
         version: '1.0.0',
         server: t.context.address,
-        js: join(__dirname, '..', 'fixtures', 'client.js'),
-        css: join(__dirname, '..', 'fixtures', 'styles.css'),
+        entrypoints: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
     };
 
     await fs.writeFile(
@@ -123,8 +125,10 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         name: 'test-app',
         version: '1.0.0',
         server: t.context.address,
-        js: join(__dirname, '..', 'fixtures', 'client-with-bare-imports.js'),
-        css: join(__dirname, '..', 'fixtures', 'styles.css'),
+        entrypoints: {
+            './index.js': join(__dirname, './../fixtures/client-with-bare-imports.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
         'import-map': [new URL('/map/my-map/v1', t.context.address).href]
     };
     await fs.writeFile(

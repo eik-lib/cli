@@ -10,7 +10,7 @@ const Task = require('./task');
 module.exports = class CheckIfAlreadyPublished extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, name, version, js, css, path } = incoming;
+        const { server, name, version, entrypoints, path } = incoming;
 
         log.debug(`Checking for existence of package ${name} version ${version}`);
         log.debug('  ==> Fetching package metadata from server');
@@ -49,13 +49,8 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         let localHash;
         try {
             const localFiles = [join(path, './eik.json')];
-            if (js) {
-                for (const key of Object.keys(js)) {
-                    localFiles.push(join(path, key));
-                }
-            }
-            if (css) {
-                for (const key of Object.keys(css)) {
+            if (entrypoints) {
+                for (const key of Object.keys(entrypoints)) {
                     localFiles.push(join(path, key));
                 }
             }

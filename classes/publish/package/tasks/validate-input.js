@@ -19,7 +19,7 @@ class ValidationError extends Error {
 module.exports = class ValidateInput extends Task {
     process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { cwd, server, name, js, css, map, dryRun, version } = incoming;
+        const { cwd, server, name, entrypoints, map, dryRun, version } = incoming;
 
         log.debug('Validating input');
 
@@ -51,21 +51,13 @@ module.exports = class ValidateInput extends Task {
             throw new ValidationError('Parameter "version" is not valid', err);
         }
 
-        log.debug(`  ==> at least 1 of js or css: ${!!js || !!css}`);
-        if (!js && !css) {
-            throw new ValidationError(
-                'At least one of "js" or "css" must be provided',
-            );
+        if (!entrypoints) {
+            throw new ValidationError('Entrypoints must be provided');
         }
 
-        log.debug(`  ==> js: ${JSON.stringify(js)}`);
-        if (js && typeof js !== 'string' && typeof js !== 'object') {
-            throw new ValidationError('Parameter "js" is not valid');
-        }
-
-        log.debug(`  ==> css: ${JSON.stringify(css)}`);
-        if (css && typeof css !== 'string' && typeof css !== 'object') {
-            throw new ValidationError('Parameter "css" is not valid');
+        log.debug(`  ==> entrypoints: ${JSON.stringify(entrypoints)}`);
+        if (typeof entrypoints !== 'object') {
+            throw new ValidationError('Parameter "entrypoints" is not valid');
         }
 
         log.debug(`  ==> map: ${JSON.stringify(map)}`);

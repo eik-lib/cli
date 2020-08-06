@@ -2,6 +2,7 @@
 
 'use strict';
 
+const { join } = require('path');
 const fastify = require('fastify');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
@@ -39,8 +40,10 @@ test('package integrity', async (t) => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        js: './fixtures/client.js',
-        css: './fixtures/styles.css',
+        entrypoints: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
         token,
         version: '1.0.0',
     }).run();

@@ -45,8 +45,10 @@ test('Creating a package alias', async t => {
     await new cli.publish.Package({
         server: address,
         name: 'my-pack',
-        js: join(__dirname, './fixtures/client.js'),
-        css: join(__dirname, './fixtures/styles.css'),
+        entrypoints: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
         token,
         cwd,
     }).run();
