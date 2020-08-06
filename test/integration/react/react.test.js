@@ -135,7 +135,9 @@ beforeEach(async (done, t) => {
         cwd,
         server: address,
         name: 'my-app',
-        js: join(__dirname, 'client.js'),
+        entrypoints: {
+            './index.js': join(__dirname, './client.js'),
+        },
         map: [new URL('/map/my-map/v1', address).href],
         token,
     }).run();

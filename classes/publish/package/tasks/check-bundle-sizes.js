@@ -8,31 +8,15 @@ const Task = require('./task');
 
 module.exports = class CheckBundleSizes extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { js, css, cwd } = incoming;
+        const { entrypoints, cwd } = incoming;
         this.log.debug('Checking bundle file sizes');
         try {
-            if (js) {
-                for (const [key, val] of Object.entries(js)) {
+            if (entrypoints) {
+                for (const [key, val] of Object.entries(entrypoints)) {
                     const path = isAbsolute(val) ? val : join(cwd, val);
-                    const jsEntrypointFile = gzipSize.sync(
-                        fs.readFileSync(path, 'utf8'),
-                    );
                     this.log.debug(
-                        `  ==> JavaScript entrypoint size (${key} => ${val}): ${bytes(
-                            jsEntrypointFile,
-                        )}`,
-                    );
-                }
-            }
-            if (css) {
-                for (const [key, val] of Object.entries(css)) {
-                    const path = isAbsolute(val) ? val : join(cwd, val);
-                    const cssEntrypointFile = gzipSize.sync(
-                        fs.readFileSync(path, 'utf8'),
-                    );
-                    this.log.debug(
-                        `  ==> CSS entrypoint size (${key} => ${val}): ${bytes(
-                            cssEntrypointFile,
+                        `  ==> entrypoint size (${key} => ${val}): ${bytes(
+                            gzipSize.sync(fs.readFileSync(path, 'utf8')),
                         )}`,
                     );
                 }

@@ -47,18 +47,6 @@ exports.builder = (yargs) => {
                 Eg. --name my-great-app`,
             default: '',
         },
-        js: {
-            describe:
-                `Specify the path on local disk to JavaScript client side assets relative to the current working directory.
-                This will be used to populate the "js.input" field of "eik.json"`,
-            default: '',
-        },
-        css: {
-            describe:
-                `Specify the path on local disk to CSS client side assets relative to the current working directory.
-                This will be used to populate the "css.input" field of "eik.json"`,
-            default: '',
-        },
         debug: {
             describe: 'Logs additional messages during command run',
             default: false,
@@ -69,7 +57,7 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { name, major, server, js, css, cwd, debug } = argv;
+    const { name, major, server, cwd, debug } = argv;
     const pathname = join(cwd, './eik.json');
     const log = logger(spinner, debug);
     let assetFileExists = false;
@@ -97,8 +85,7 @@ exports.handler = async (argv) => {
                     name,
                     major,
                     server,
-                    js: { input: js, options: {} },
-                    css: { input: css, options: {} },
+                    entrypoints: {},
                 },
                 null,
                 2,

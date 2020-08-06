@@ -49,8 +49,10 @@ test('eik meta : details provided by eik.json', async (t) => {
         name: 'test-app',
         version: '1.0.0',
         server: t.context.address,
-        js: join(__dirname, '..', 'fixtures', 'client.js'),
-        css: join(__dirname, '..', 'fixtures', 'styles.css'),
+        entrypoints: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
     };
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),
