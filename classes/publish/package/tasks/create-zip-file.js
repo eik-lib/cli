@@ -8,7 +8,7 @@ const Task = require('./task');
 module.exports = class CreateZipFile extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { js, css, path, name, map, server, out, cwd } = incoming;
+        const { entrypoints, path, name, map, server, out, cwd } = incoming;
 
         log.debug(`Creating zip file`);
         log.debug(`  ==> ${join(path, `eik.tgz`)}`);
@@ -20,8 +20,7 @@ module.exports = class CreateZipFile extends Task {
             writeFileSync(eikPathDest, JSON.stringify({
                 name,
                 server,
-                js,
-                css,
+                entrypoints,
                 'import-map': map,
                 out,
             }, null, 2));
@@ -30,27 +29,15 @@ module.exports = class CreateZipFile extends Task {
             throw new Error(`Failed to zip eik.json file: ${err.message}`);
         }
 
-        if (js) {
+        if (entrypoints) {
             try {
-                for (const [key, val] of Object.entries(js)) {
-                    const jsPathSrc = isAbsolute(val) ? val : join(cwd, val);
-                    copyFileSync(jsPathSrc, join(path, key));
+                for (const [key, val] of Object.entries(entrypoints)) {
+                    const pathSrc = isAbsolute(val) ? val : join(cwd, val);
+                    copyFileSync(pathSrc, join(path, key));
                     filesToZip.push(key);
                 }
             } catch (err) {
-                throw new Error(`Failed to zip JavaScripts: ${err.message}`);
-            }
-        }
-
-        if (css) {
-            try {
-                for (const [key, val] of Object.entries(css)) {
-                    const cssPathSrc = isAbsolute(val) ? val : join(cwd, val);
-                    copyFileSync(cssPathSrc, join(path, key));
-                    filesToZip.push(key);
-                }
-            } catch (err) {
-                throw new Error(`Failed to zip CSS: ${err.message}`);
+                throw new Error(`Failed to copy files for zipping: ${err.message}`);
             }
         }
 

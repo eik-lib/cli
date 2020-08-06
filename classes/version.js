@@ -29,8 +29,7 @@ module.exports = class Ping {
         version,
         level = 'patch',
         cwd,
-        js,
-        css,
+        entrypoints,
         map,
         out = './.eik',
     } = {}) {
@@ -40,18 +39,7 @@ module.exports = class Ping {
         this.version = version;
         this.level = level;
         this.cwd = cwd;
-        this.js = js;
-        if (typeof js === 'string') {
-            this.js = {
-                './index.js': js,
-            };
-        }
-        this.css = css;
-        if (typeof css === 'string') {
-            this.css = {
-                './index.css': css,
-            };
-        }
+        this.entrypoints = entrypoints;
         this.map = map;
         this.out = out;
         this.path = isAbsolute(out) ? out : join(cwd, out);
@@ -65,8 +53,7 @@ module.exports = class Ping {
             version,
             level,
             cwd,
-            js,
-            css,
+            entrypoints,
             map,
             path,
             out,
@@ -107,21 +94,9 @@ module.exports = class Ping {
             throw new ValidationError('Parameter "version" is not valid');
         }
 
-        log.debug(`  ==> at least 1 of js or css: ${!!js || !!css}`);
-        if (!js && !css) {
-            throw new ValidationError(
-                'At least one of "js" or "css" must be provided',
-            );
-        }
-
-        log.debug(`  ==> js: ${JSON.stringify(js)}`);
-        if (js && typeof js !== 'string' && typeof js !== 'object') {
-            throw new ValidationError('Parameter "js" is not valid');
-        }
-
-        log.debug(`  ==> css: ${JSON.stringify(css)}`);
-        if (css && typeof css !== 'string' && typeof css !== 'object') {
-            throw new ValidationError('Parameter "css" is not valid');
+        log.debug(`  ==> entrypoints: ${JSON.stringify(entrypoints)}`);
+        if (!Array.isArray(entrypoints)) {
+            throw new ValidationError('Parameter "entrypoints" is not valid');
         }
 
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
@@ -158,8 +133,7 @@ module.exports = class Ping {
             const eikJSON = {
                 name,
                 server,
-                js,
-                css,
+                entrypoints,
                 'import-map': map,
                 out,
             };
@@ -168,9 +142,9 @@ module.exports = class Ping {
             const localFiles = [eikPathDest];
             log.debug(`  ==> ${eikPathDest}`);
 
-            if (js) {
+            if (entrypoints) {
                 try {
-                    for (const [key, val] of Object.entries(js)) {
+                    for (const [key, val] of Object.entries(entrypoints)) {
                         const src = isAbsolute(val) ? val : join(cwd, val);
                         const dest = join(path, key);
                         copyFileSync(src, dest);
@@ -181,20 +155,6 @@ module.exports = class Ping {
                     // throw new Error(`Failed to zip JavaScripts: ${err.message}`);
                 }
             }
-            if (css) {
-                try {
-                    for (const [key, val] of Object.entries(css)) {
-                        const src = isAbsolute(val) ? val : join(cwd, val);
-                        const dest = join(path, key);
-                        copyFileSync(src, dest);
-                        log.debug(`  ==> ${dest}`);
-                        localFiles.push(join(path, key));
-                    }
-                } catch (err) {
-                    // throw new Error(`Failed to zip CSS: ${err.message}`);
-                }
-            }
-
             localHash = await hash.files(localFiles);
         } catch (err) {
             throw new Error(

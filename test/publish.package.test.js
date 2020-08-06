@@ -2,6 +2,7 @@
 
 'use strict';
 
+const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
@@ -42,8 +43,10 @@ test('Uploading app assets to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        js: './fixtures/client.js',
-        css: './fixtures/styles.css',
+        entrypoints: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
         debug: true,
         token,
         version: '1.0.0',
@@ -68,7 +71,9 @@ test('Uploading JS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        js: './fixtures/client.js',
+        entrypoints: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+        },
         debug: true,
         token,
         version: '1.0.0',
@@ -93,7 +98,9 @@ test('Uploading CSS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        css: './fixtures/styles.css',
+        entrypoints: {
+            './index.css': './fixtures/styles.css',
+        },
         debug: true,
         token,
         version: '1.0.0',

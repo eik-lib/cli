@@ -41,8 +41,7 @@ module.exports = function getDefaults(cwd) {
         return {
             server: server || undefined,
             token: token || undefined, 
-            js: assets.js || undefined,
-            css: assets.css || undefined,
+            entrypoints: assets.entrypoints || undefined,
             version: assets.version || undefined,
             map: assets['import-map'] || [],
             name: assets.name || undefined,

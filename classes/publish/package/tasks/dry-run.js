@@ -7,17 +7,14 @@ const Task = require('./task');
 
 module.exports = class DryRun extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { dryRun, path, zipFile, js, css } = incoming;
+        const { dryRun, path, zipFile, entrypoints } = incoming;
         if (dryRun) {
             outgoing.files = [
                 { pathname: path, type: 'temporary directory' },
                 { pathname: zipFile, type: 'package archive' },
             ]
 
-            for (const key of Object.keys(js)) {
-                outgoing.files.push({ pathname: join(path, key), type: 'package file' })
-            }
-            for (const key of Object.keys(css)) {
+            for (const key of Object.keys(entrypoints)) {
                 outgoing.files.push({ pathname: join(path, key), type: 'package file' })
             }
         }
