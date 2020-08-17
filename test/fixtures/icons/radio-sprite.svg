@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="104" height="26">
+  <defs>
+    <circle id="radio-a" cx="13" cy="13" r="11"/>
+    <circle id="radio-b" cx="13" cy="13" r="11"/>
+    <circle id="radio-c" cx="13" cy="13" r="11"/>
+    <circle id="radio-d" cx="13" cy="13" r="11"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <g transform="translate(78)">
+      <use fill="#FFF" xlink:href="#radio-a"/>
+      <circle cx="13" cy="13" r="11.5" stroke="#DFE4E8"/>
+      <circle cx="13" cy="13" r="9" fill="#DFE4E8"/>
+    </g>
+    <g transform="translate(52)">
+      <use fill="#FFF" xlink:href="#radio-b"/>
+      <circle cx="13" cy="13" r="11.5" stroke="#DFE4E8"/>
+    </g>
+    <g transform="translate(26)">
+      <use fill="#FFF" xlink:href="#radio-c"/>
+      <circle cx="13" cy="13" r="11.5" stroke="#767676"/>
+      <circle cx="13" cy="13" r="9" fill="#767676"/>
+    </g>
+    <use fill="#FFF" xlink:href="#radio-d"/>
+    <circle cx="13" cy="13" r="11.5" stroke="#767676"/>
+  </g>
+</svg>

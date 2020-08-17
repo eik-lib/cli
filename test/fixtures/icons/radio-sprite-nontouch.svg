@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="108" height="18" viewBox="0 0 108 18">
+  <defs>
+    <rect id="radio-a" width="12" height="12" x="3" y="3" rx="6"/>
+    <rect id="radio-b" width="12" height="12" x="3" y="3" rx="6"/>
+    <rect id="radio-c" width="12" height="12" x="3" y="3" rx="6"/>
+    <rect id="radio-d" width="12" height="12" x="3" y="3" rx="6"/>
+    <rect id="radio-e" width="12" height="12" x="3.5" y="3" rx="6"/>
+    <rect id="radio-f" width="12" height="12" x="3" y="3" rx="6"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <rect width="18" height="18"/>
+    <use fill="#FFF" xlink:href="#radio-a"/>
+    <rect width="13" height="13" x="2.5" y="2.5" stroke="#767676" rx="6.5"/>
+    <g transform="translate(72)">
+      <rect width="18" height="18"/>
+      <use fill="#FFF" xlink:href="#radio-b"/>
+      <rect width="13" height="13" x="2.5" y="2.5" stroke="#DFE4E8" rx="6.5"/>
+    </g>
+    <g transform="translate(18)">
+      <rect width="18" height="18"/>
+      <use fill="#FFF" xlink:href="#radio-c"/>
+      <rect width="14" height="14" x="2" y="2" stroke="#767676" stroke-width="2" rx="7"/>
+    </g>
+    <g transform="translate(54)">
+      <rect width="18" height="18"/>
+      <use fill="#FFF" xlink:href="#radio-d"/>
+      <rect width="14" height="14" x="2" y="2" stroke="#767676" stroke-width="2" rx="7"/>
+      <rect width="9" height="9" x="4.5" y="4.5" fill="#767676" rx="4.5"/>
+    </g>
+    <g transform="translate(35)">
+      <rect width="18" height="18" x=".5"/>
+      <use fill="#FFF" xlink:href="#radio-e"/>
+      <rect width="13" height="13" x="3" y="2.5" stroke="#767676" rx="6.5"/>
+      <rect width="9" height="9" x="5" y="4.5" fill="#767676" rx="4.5"/>
+    </g>
+    <g transform="translate(90)">
+      <rect width="18" height="18"/>
+      <use fill="#FFF" xlink:href="#radio-f"/>
+      <rect width="13" height="13" x="2.5" y="2.5" stroke="#DFE4E8" rx="6.5"/>
+      <rect width="9" height="9" x="4.5" y="4.5" fill="#DFE4E8" rx="4.5"/>
+    </g>
+  </g>
+</svg>

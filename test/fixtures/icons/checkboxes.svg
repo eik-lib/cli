@@ -1,0 +1,42 @@
+<svg width="132" height="22" xmlns="http://www.w3.org/2000/svg">
++	<g fill="none" fill-rule="evenodd">
++		<path d="M0 0h22v22H0z" />
++		<rect stroke="#767676" fill="#FFF" x="3.5" y="3.5" width="15" height="15" rx="2" />
++		<g transform="translate(88)">
++			<path d="M0 0h22v22H0z" />
++			<rect stroke="#C3CCD9" fill="#FFF" x="3.5" y="3.5" width="15" height="15" rx="2" />
++		</g>
++		<path d="M22 0h22v22H22z" />
++		<g transform="translate(22)">
++			<rect fill="#FFF" id="a" x="4" y="4" width="14" height="14" rx="2" />
++			<rect stroke="#66AFE9" stroke-width="3.5" x="2.25" y="2.25" width="17.5" height="17.5" rx="2" />
++			<rect stroke="#767676" stroke-linejoin="square" x="4.5" y="4.5" width="13" height="13" rx="2" />
++			<rect stroke="#FFF" stroke-width="2" x="3" y="3" width="16" height="16" rx="2" />
++		</g>
++		<path d="M66 0h22v22H66z" />
++		<g transform="translate(66)">
++			<rect stroke="#66AFE9" stroke-width="3.5" fill="#0063FB" x="2.25" y="2.25" width="17.5" height="17.5" rx="2" />
++			<rect stroke="#FFF" stroke-width="2" x="3" y="3" width="16" height="16" rx="2" />
++		</g>
++		<g transform="translate(70 4)">
++			<path d="M0 0h14v14H0z" />
+      <path fill="#DFE4E8" fill-rule="nonzero" d="M6.226 8.567l3.677-4.4a.778.778 0 0 1 1.194.998L6.87 10.221a.778.778 0 0 1-1.15.048L3.336 7.855a.778.778 0 1 1 1.106-1.093l1.784 1.805z" />
++		</g>
++		<g transform="translate(44)">
++			<path d="M0 0h22v22H0z" />
++			<rect stroke="#0063FB" fill="#0063FB" x="3.5" y="3.5" width="15" height="15" rx="2" />
++			<g transform="translate(4 4)">
++				<path d="M0 0h14v14H0z" />
++    		<path fill="#DFE4E8" fill-rule="nonzero" d="M6.226 8.567l3.677-4.4a.778.778 0 0 1 1.194.998L6.87 10.221a.778.778 0 0 1-1.15.048L3.336 7.855a.778.778 0 1 1 1.106-1.093l1.784 1.805z" />
++		</g>
++		</g>
++		<g transform="translate(110)">
++			<path d="M0 0h22v22H0z" />
++			<rect stroke="#C3CCD9" fill="#C3CCD9" x="3.5" y="3.5" width="15" height="15" rx="2" />
++			<g transform="translate(4 4)">
++				<path d="M0 0h14v14H0z" />
+	      <path fill="#DFE4E8" fill-rule="nonzero" d="M6.226 8.567l3.677-4.4a.778.778 0 0 1 1.194.998L6.87 10.221a.778.778 0 0 1-1.15.048L3.336 7.855a.778.778 0 1 1 1.106-1.093l1.784 1.805z" />
++			</g>
++		</g>
++	</g>
++</svg>

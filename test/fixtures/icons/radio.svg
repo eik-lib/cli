@@ -1,0 +1,39 @@
+<svg width="132" height="22" xmlns="http://www.w3.org/2000/svg">
+	<g fill="none" fill-rule="evenodd">
+		<path d="M0 0h22v22H0z" />
+		<rect stroke="#767676" fill="#FFF" x="3.5" y="3.5" width="15" height="15" rx="7.5" />
+		<g transform="translate(88)">
+			<path d="M0 0h22v22H0z" />
+			<rect stroke="#C3CCD9" fill="#FFF" x="3.5" y="3.5" width="15" height="15" rx="7.5" />
+		</g>
+		<path d="M22 0h22v22H22z" />
+		<g transform="translate(22)">
+			<rect fill="#FFF" x="4" y="4" width="14" height="14" rx="7" />
+			<rect stroke="#66AFE9" stroke-width="3.5" x="2.25" y="2.25" width="17.5" height="17.5" rx="8.75" />
+			<rect stroke="#767676" stroke-linejoin="square" x="4.5" y="4.5" width="13" height="13" rx="6.5" />
+			<rect stroke="#FFF" stroke-width="2" x="3" y="3" width="16" height="16" rx="8" />
+		</g>
+		<g transform="translate(66)">
+			<path d="M0 0h22v22H0z" />
+			<rect fill="#0063FB" x="4" y="4" width="14" height="14" rx="7" />
+			<rect stroke="#66AFE9" stroke-width="3.5" x="2.25" y="2.25" width="17.5" height="17.5" rx="8.75" />
+			<rect stroke="#0063FB" stroke-linejoin="square" x="4.5" y="4.5" width="13" height="13" rx="6.5" />
+			<rect stroke="#FFF" stroke-width="2" x="3" y="3" width="16" height="16" rx="8" />
+			<rect fill="#FFF" x="8" y="8" width="6" height="6" rx="3" />
+		</g>
+		<g>
+			<g transform="translate(44)">
+				<path d="M0 0h22v22H0z" />
+				<rect stroke="#0063FB" fill="#0063FB" x="3.5" y="3.5" width="15" height="15" rx="7.5" />
+				<rect fill="#FFF" x="8" y="8" width="6" height="6" rx="3" />
+			</g>
+		</g>
+		<g>
+			<g transform="translate(110)">
+				<path d="M0 0h22v22H0z" />
+				<rect stroke="#C3CCD9" fill="#C3CCD9" x="3.5" y="3.5" width="15" height="15" rx="7.5" />
+				<rect fill="#FFF" x="8" y="8" width="6" height="6" rx="3" />
+			</g>
+		</g>
+	</g>
+</svg>
