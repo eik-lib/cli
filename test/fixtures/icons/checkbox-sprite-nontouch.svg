@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="108" height="18">
+  <defs>
+    <rect id="checkboxes-a" width="14" height="14" x="2" y="2" rx="2"/>
+    <rect id="checkboxes-b" width="14" height="14" x="2" y="2" rx="2"/>
+    <rect id="checkboxes-c" width="14" height="14" x="2" y="2" rx="2"/>
+    <rect id="checkboxes-d" width="14" height="14" x="2" y="2" rx="2"/>
+    <path id="checkboxes-e" d="M3.44 5.9l-1.1 1.12L5.8 10.5 11.28 5l-1.11-1.1L5.8 8.27z"/>
+    <rect id="checkboxes-g" width="14" height="14" x="2" y="2" rx="2"/>
+    <path id="checkboxes-h" d="M3.44 5.9l-1.1 1.12L5.8 10.5 11.28 5l-1.11-1.1L5.8 8.27z"/>
+    <rect id="checkboxes-j" width="14" height="14" x="2" y="2" rx="2"/>
+    <path id="checkboxes-k" d="M3.44 5.9l-1.1 1.12L5.8 10.5 11.28 5l-1.11-1.1L5.8 8.27z"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <path d="M0 0h18v18H0z"/>
+    <use fill="#FFF" xlink:href="#checkboxes-a"/>
+    <rect width="15" height="15" x="1.5" y="1.5" stroke="#767676" rx="2"/>
+    <g transform="translate(72)">
+      <path d="M0 0h18v18H0z"/>
+      <use fill="#FFF" xlink:href="#checkboxes-b"/>
+      <rect width="15" height="15" x="1.5" y="1.5" stroke="#DFE4E8" rx="2"/>
+    </g>
+    <g transform="translate(18)">
+      <path d="M0 0h18v18H0z"/>
+      <use fill="#FFF" xlink:href="#checkboxes-c"/>
+      <rect width="16" height="16" x="1" y="1" stroke="#767676" stroke-width="2" rx="2"/>
+    </g>
+    <g transform="translate(54)">
+      <path d="M0 0h18v18H0z"/>
+      <use fill="#FFF" xlink:href="#checkboxes-d"/>
+      <rect width="16" height="16" x="1" y="1" stroke="#767676" stroke-width="2" rx="2"/>
+      <g transform="translate(2 2)">
+        <path d="M0 0h14v14H0z"/>
+        <mask id="checkboxes-f" fill="#fff">
+          <use xlink:href="#checkboxes-e"/>
+        </mask>
+        <use fill="#767676" fill-rule="nonzero" xlink:href="#checkboxes-e"/>
+        <g fill="#767676" mask="url(#checkboxes-f)">
+          <rect width="14" height="14" rx="4"/>
+        </g>
+      </g>
+    </g>
+    <g transform="translate(36)">
+      <path d="M0 0h18v18H0z"/>
+      <use fill="#FFF" xlink:href="#checkboxes-g"/>
+      <rect width="15" height="15" x="1.5" y="1.5" stroke="#767676" rx="2"/>
+      <g transform="translate(2 2)">
+        <path d="M0 0h14v14H0z"/>
+        <mask id="checkboxes-i" fill="#fff">
+          <use xlink:href="#checkboxes-h"/>
+        </mask>
+        <use fill="#767676" fill-rule="nonzero" xlink:href="#checkboxes-h"/>
+        <g fill="#767676" mask="url(#checkboxes-i)">
+          <rect width="14" height="14" rx="4"/>
+        </g>
+      </g>
+    </g>
+    <g transform="translate(90)">
+      <path d="M0 0h18v18H0z"/>
+      <use fill="#FFF" xlink:href="#checkboxes-j"/>
+      <rect width="15" height="15" x="1.5" y="1.5" stroke="#DFE4E8" rx="2"/>
+      <g transform="translate(2 2)">
+        <path d="M0 0h14v14H0z"/>
+        <mask id="checkboxes-l" fill="#fff">
+          <use xlink:href="#checkboxes-k"/>
+        </mask>
+        <use fill="#767676" fill-rule="nonzero" xlink:href="#checkboxes-k"/>
+        <g fill="#DFE4E8" mask="url(#checkboxes-l)">
+          <rect width="14" height="14" rx="4"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
