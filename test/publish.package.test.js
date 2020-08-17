@@ -109,8 +109,35 @@ test('Uploading CSS app assets only to an asset server', async t => {
     const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
-    t.equals(result.version, '1.0.0', 'Command should return corrrect version');
+    t.equals(result.version, '1.0.0', 'Command should return correct version');
     t.equals(result.files.length, 2, 'Command should return files array');
+    t.match(l.logs.debug, 'Running package command');
+    t.match(l.logs.debug, 'Uploading zip file to server');
+    t.match(l.logs.debug, 'Cleaning up');
+});
+
+test('Uploading a directory of assets to an asset server', async t => {
+    const { address, token } = t.context;
+    const l = mockLogger();
+
+    const publishApp = new cli.publish.Package({
+        logger: l.logger,
+        cwd: __dirname,
+        server: address,
+        name: 'my-app',
+        entrypoints: {
+            './icons': './fixtures/icons/**/*',
+        },
+        debug: true,
+        token,
+        version: '1.0.0',
+    });
+
+    const result = await publishApp.run();
+    t.equals(result.type, 'pkg', 'Command should return correct type');
+    t.equals(result.name, 'my-app', 'Command should return correct name');
+    t.equals(result.version, '1.0.0', 'Command should return correct version');
+    t.equals(result.files.length, 7, 'Command should return files array');
     t.match(l.logs.debug, 'Running package command');
     t.match(l.logs.debug, 'Uploading zip file to server');
     t.match(l.logs.debug, 'Cleaning up');

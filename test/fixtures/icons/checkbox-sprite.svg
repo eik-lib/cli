@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="104" height="26">
+  <defs>
+    <rect id="checkboxes-a" width="20" height="20" rx="4"/>
+    <path id="checkboxes-b" d="M4.42 7.6L3 9.03l4.45 4.47 7.05-7.07L13.08 5l-5.63 5.64z"/>
+    <rect id="checkboxes-d" width="20" height="20" x="3" y="3" rx="4"/>
+    <rect id="checkboxes-e" width="20" height="20" x="3" y="3" rx="4"/>
+    <path id="checkboxes-f" d="M4.42 7.6L3 9.03l4.45 4.47 7.05-7.07L13.08 5l-5.63 5.64z"/>
+    <rect id="checkboxes-h" width="20" height="20" x="3" y="3" rx="4"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <g transform="translate(81 3)">
+      <use fill="#FFF" xlink:href="#checkboxes-a"/>
+      <rect width="21" height="21" x="-.5" y="-.5" stroke="#DFE4E8" rx="4"/>
+      <g transform="translate(1 1)">
+        <path d="M0 0h18v18H0z"/>
+        <mask id="checkboxes-c" fill="#fff">
+          <use xlink:href="#checkboxes-b"/>
+        </mask>
+        <use fill="#767676" fill-rule="nonzero" xlink:href="#checkboxes-b"/>
+        <g fill="#DFE4E8" mask="url(#checkboxes-c)">
+          <rect width="18" height="18" rx="4"/>
+        </g>
+      </g>
+    </g>
+    <g transform="translate(52)">
+      <use fill="#FFF" xlink:href="#checkboxes-d"/>
+      <rect width="21" height="21" x="2.5" y="2.5" stroke="#DFE4E8" rx="4"/>
+    </g>
+    <g transform="translate(26)">
+      <use fill="#FFF" xlink:href="#checkboxes-e"/>
+      <rect width="21" height="21" x="2.5" y="2.5" stroke="#767676" rx="4"/>
+      <g transform="translate(4 4)">
+        <path d="M0 0h18v18H0z"/>
+        <mask id="checkboxes-g" fill="#fff">
+          <use xlink:href="#checkboxes-f"/>
+        </mask>
+        <use fill="#767676" fill-rule="nonzero" xlink:href="#checkboxes-f"/>
+        <g fill="#767676" mask="url(#checkboxes-g)">
+          <rect width="18" height="18" rx="4"/>
+        </g>
+      </g>
+    </g>
+    <use fill="#FFF" xlink:href="#checkboxes-h"/>
+    <rect width="21" height="21" x="2.5" y="2.5" stroke="#767676" rx="4"/>
+  </g>
+</svg>

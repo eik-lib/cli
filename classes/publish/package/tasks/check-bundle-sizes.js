@@ -1,9 +1,12 @@
+/* eslint-disable no-await-in-loop */
+
 'use strict';
 
 const { join, isAbsolute } = require('path');
 const bytes = require('bytes');
 const fs = require('fs');
 const gzipSize = require('gzip-size');
+const glob = require('glob');
 const Task = require('./task');
 
 module.exports = class CheckBundleSizes extends Task {
@@ -14,11 +17,24 @@ module.exports = class CheckBundleSizes extends Task {
             if (entrypoints) {
                 for (const [key, val] of Object.entries(entrypoints)) {
                     const path = isAbsolute(val) ? val : join(cwd, val);
-                    this.log.debug(
-                        `  ==> entrypoint size (${key} => ${val}): ${bytes(
-                            gzipSize.sync(fs.readFileSync(path, 'utf8')),
-                        )}`,
+
+                    const files = await new Promise((resolve, reject) =>
+                        glob(path, (err, f) => {
+                            if (err) {
+                                reject(err);
+                                return;
+                            }
+                            resolve(f);
+                        }),
                     );
+
+                    for (const file of files) {
+                        this.log.debug(
+                            `  ==> entrypoint size (${key} => ${file}): ${bytes(
+                                gzipSize.sync(fs.readFileSync(file, 'utf8')),
+                            )}`,
+                        );
+                    }
                 }
             }
         } catch (err) {
