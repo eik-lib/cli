@@ -436,3 +436,14 @@ test('entrypoints: glob matching dest path to file source, root path 4', async (
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
 });
+
+test('entrypoints: folder without *', async (t) => {
+    const cwd = join(__dirname, 'tmp');
+    const path = join(cwd, '.eik');
+    const src = join(__dirname, './fixtures/icons/checkbox-sprite.svg');
+    const dest = join(path, './icons/checkbox-sprite.svg');
+
+    const map = await entrypoints({ '/icons': '../fixtures/icons/*' }, path, { cwd });
+
+    t.equal(map.get(src), dest, 'File source should point to destination');
+});
