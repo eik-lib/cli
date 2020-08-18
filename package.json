@@ -16,7 +16,7 @@
     "utils"
   ],
   "scripts": {
-    "test": "HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 0 test/*.test.js test/**/*.test.js",
+    "test": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.js test/**/*.test.js",
     "lint:format": "eslint --fix .",
     "lint": "eslint ."
   },
