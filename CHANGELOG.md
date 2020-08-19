@@ -1,3 +1,10 @@
+# [1.2.0-next.5](https://github.com/eik-lib/cli/compare/v1.2.0-next.4...v1.2.0-next.5) (2020-08-19)
+
+
+### Bug Fixes
+
+* include formatters when publishing ([62985f6](https://github.com/eik-lib/cli/commit/62985f609051fce628d91df807a814042007bcdb))
+
 # [1.2.0-next.4](https://github.com/eik-lib/cli/compare/v1.2.0-next.3...v1.2.0-next.4) (2020-08-19)
 
 
