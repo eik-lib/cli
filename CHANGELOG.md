@@ -1,3 +1,10 @@
+# [1.2.0-next.6](https://github.com/eik-lib/cli/compare/v1.2.0-next.5...v1.2.0-next.6) (2020-08-19)
+
+
+### Bug Fixes
+
+* fix and test cleanup task ([77f07da](https://github.com/eik-lib/cli/commit/77f07dab1ad91648fa30232f57f386aa2ec3d3f9))
+
 # [1.2.0-next.5](https://github.com/eik-lib/cli/compare/v1.2.0-next.4...v1.2.0-next.5) (2020-08-19)
 
 
