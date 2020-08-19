@@ -10,6 +10,7 @@ const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
 const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
+const { entrypoints: mapEntrypoints } = require('../utils');
 
 class ValidationError extends Error {
     constructor(message, err) {
@@ -95,7 +96,7 @@ module.exports = class Ping {
         }
 
         log.debug(`  ==> entrypoints: ${JSON.stringify(entrypoints)}`);
-        if (!Array.isArray(entrypoints)) {
+        if (!entrypoints) {
             throw new ValidationError('Parameter "entrypoints" is not valid');
         }
 
@@ -144,9 +145,11 @@ module.exports = class Ping {
 
             if (entrypoints) {
                 try {
-                    for (const [key, val] of Object.entries(entrypoints)) {
-                        const src = isAbsolute(val) ? val : join(cwd, val);
-                        const dest = join(path, key);
+                    const mappings = await mapEntrypoints(entrypoints, path, {
+                        cwd,
+                    });
+
+                    for (const [src, dest] of mappings) {
                         copyFileSync(src, dest);
                         log.debug(`  ==> ${dest}`);
                         localFiles.push(dest);
