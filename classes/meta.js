@@ -33,6 +33,7 @@ module.exports = class Meta {
             const typeFetches = [];
             for (const type of types) {
                 const url = new URL(join(type, this.name), this.server);
+                url.search = `?t=${Date.now()}`;
                 typeFetches.push(fetch(url));
             }
 
