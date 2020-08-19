@@ -1,3 +1,18 @@
+# [1.2.0-next.4](https://github.com/eik-lib/cli/compare/v1.2.0-next.3...v1.2.0-next.4) (2020-08-19)
+
+
+### Bug Fixes
+
+* break cache and ensure the latest package is fetched from server ([94d2b9e](https://github.com/eik-lib/cli/commit/94d2b9ee7755053f5b10bafc310a22b4725a54e9))
+* update dry run command output to match new entrypoints work ([b423ba1](https://github.com/eik-lib/cli/commit/b423ba1f548261f83f8ca0cc069143b3b472642e))
+* update versions command to match new entrypoint syntax ([83dab84](https://github.com/eik-lib/cli/commit/83dab84c4be8b15eea5f50d47bb913c4f3e8e8d2))
+
+
+### Features
+
+* refactor to support entrypoints object with globbing ([5f8fe88](https://github.com/eik-lib/cli/commit/5f8fe883c21f694ebca37cb863e508794074c54a))
+* replace 'js' and 'css' eik.json keys with 'entrypoints' ([0c21253](https://github.com/eik-lib/cli/commit/0c212537ddb2b912fa47ea24f692756d403d0f10))
+
 # [1.2.0-next.3](https://github.com/eik-lib/cli/compare/v1.2.0-next.2...v1.2.0-next.3) (2020-07-09)
 
 
