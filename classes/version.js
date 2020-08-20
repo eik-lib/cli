@@ -10,7 +10,7 @@ const mkdir = require('make-dir');
 const { validators } = require('@eik/common');
 const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
-const { entrypoints: mapEntrypoints } = require('../utils');
+const { files: mapfiles } = require('../utils');
 
 class ValidationError extends Error {
     constructor(message, err) {
@@ -30,7 +30,7 @@ module.exports = class Ping {
         version,
         level = 'patch',
         cwd,
-        entrypoints,
+        files,
         map,
         out = './.eik',
     } = {}) {
@@ -40,7 +40,7 @@ module.exports = class Ping {
         this.version = version;
         this.level = level;
         this.cwd = cwd;
-        this.entrypoints = entrypoints;
+        this.files = files;
         this.map = map;
         this.out = out;
         this.path = isAbsolute(out) ? out : join(cwd, out);
@@ -54,7 +54,7 @@ module.exports = class Ping {
             version,
             level,
             cwd,
-            entrypoints,
+            files,
             map,
             path,
             out,
@@ -95,9 +95,9 @@ module.exports = class Ping {
             throw new ValidationError('Parameter "version" is not valid');
         }
 
-        log.debug(`  ==> entrypoints: ${JSON.stringify(entrypoints)}`);
-        if (!entrypoints) {
-            throw new ValidationError('Parameter "entrypoints" is not valid');
+        log.debug(`  ==> files: ${JSON.stringify(files)}`);
+        if (!files) {
+            throw new ValidationError('Parameter "files" is not valid');
         }
 
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
@@ -134,7 +134,7 @@ module.exports = class Ping {
             const eikJSON = {
                 name,
                 server,
-                entrypoints,
+                files,
                 'import-map': map,
                 out,
             };
@@ -143,9 +143,9 @@ module.exports = class Ping {
             const localFiles = [eikPathDest];
             log.debug(`  ==> ${eikPathDest}`);
 
-            if (entrypoints) {
+            if (files) {
                 try {
-                    const mappings = await mapEntrypoints(entrypoints, path, {
+                    const mappings = await mapfiles(files, path, {
                         cwd,
                     });
 

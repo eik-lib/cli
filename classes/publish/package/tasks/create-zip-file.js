@@ -7,14 +7,14 @@ const fs = require('fs');
 const { join, resolve, basename, dirname } = require('path');
 const tar = require('tar');
 const Task = require('./task');
-const { entrypoints: mapEntrypoints } = require('../../../../utils');
+const { files: mapfiles } = require('../../../../utils');
 
 const { copyFileSync, writeFileSync } = fs;
 
 module.exports = class CreateZipFile extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { entrypoints, path, name, map, server, out, cwd } = incoming;
+        const { files, path, name, map, server, out, cwd } = incoming;
 
         log.debug(`Creating zip file`);
         log.debug(`  ==> ${join(path, `eik.tgz`)}`);
@@ -29,7 +29,7 @@ module.exports = class CreateZipFile extends Task {
                     {
                         name,
                         server,
-                        entrypoints,
+                        files,
                         'import-map': map,
                         out,
                     },
@@ -42,9 +42,9 @@ module.exports = class CreateZipFile extends Task {
             throw new Error(`Failed to zip eik.json file: ${err.message}`);
         }
 
-        if (entrypoints) {
+        if (files) {
             try {
-                const mappings = await mapEntrypoints(entrypoints, path, {
+                const mappings = await mapfiles(files, path, {
                     cwd,
                 });
 

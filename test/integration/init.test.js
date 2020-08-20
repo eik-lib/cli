@@ -30,9 +30,9 @@ test('Initializing a new eik.json file', async t => {
     t.equals(assets.major, 1, 'eik.json "major" field should equal 1');
     t.equals(assets.server, '', 'eik.json "server" field should be empty');
     t.same(
-        assets.entrypoints,
+        assets.files,
         {},
-        'eik.json "entrypoints" should be an empty object',
+        'eik.json "files" should be an empty object',
     );
 });
 
@@ -67,7 +67,7 @@ test('Initializing a new eik.json file passing custom values', async t => {
         'eik.json "server" field should not be empty',
     );
     t.same(
-        assets.entrypoints,
+        assets.files,
         {},
         'eik.json "js.input" field should not be empty',
     );

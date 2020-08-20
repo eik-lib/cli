@@ -40,7 +40,7 @@ test('package integrity', async (t) => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        entrypoints: {
+        files: {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
         },

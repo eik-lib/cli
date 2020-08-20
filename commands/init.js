@@ -85,7 +85,7 @@ exports.handler = async (argv) => {
                     name,
                     major,
                     server,
-                    entrypoints: {},
+                    files: {},
                 },
                 null,
                 2,
