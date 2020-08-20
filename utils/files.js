@@ -34,25 +34,25 @@ const globP = (path) => {
     );
 }
 
-module.exports = async (entrypoints, path, options = {}) => {
+module.exports = async (files, path, options = {}) => {
     const cwd = options.cwd || process.cwd();
     const fileMap = new Map();
-    for (const [key, val] of Object.entries(entrypoints)) {
+    for (const [key, val] of Object.entries(files)) {
         const pathSrc = isAbsolute(val) ? val : join(cwd, val);
-        const files = await globP(pathSrc);
+        const fls = await globP(pathSrc);
 
-        for (const file of files) {
+        for (const file of fls) {
             const segments = key.split('/');
             const last = segments[segments.length - 1];
             if (last.includes('.')) {
-                if (files.length > 1) {
+                if (fls.length > 1) {
                     throw new Error(
                         'Cannot specify a single file destination for multiple source files',
                     );
                 }
                 fileMap.set(file, join(path, key));
             } else {
-                const commonBase = calculateParentDir(files);
+                const commonBase = calculateParentDir(fls);
                 if (commonBase !== file) {
                     const bname = file.replace(commonBase, '');
                     fileMap.set(file, join(path, key, bname));

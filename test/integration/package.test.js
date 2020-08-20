@@ -50,7 +50,7 @@ test('eik package : package, details provided by eik.json file', async (t) => {
         name: 'test-app',
         version: '1.0.0',
         server: t.context.address,
-        entrypoints: {
+        files: {
             './index.js': join(__dirname, './../fixtures/client.js'),
             './index.css': join(__dirname, './../fixtures/styles.css'),
         },
@@ -125,7 +125,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         name: 'test-app',
         version: '1.0.0',
         server: t.context.address,
-        entrypoints: {
+        files: {
             './index.js': join(__dirname, './../fixtures/client-with-bare-imports.js'),
             './index.css': join(__dirname, './../fixtures/styles.css'),
         },

@@ -19,7 +19,7 @@ class ValidationError extends Error {
 module.exports = class ValidateInput extends Task {
     process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { cwd, server, name, entrypoints, map, dryRun, version } = incoming;
+        const { cwd, server, name, files, map, dryRun, version } = incoming;
 
         log.debug('Validating input');
 
@@ -51,13 +51,13 @@ module.exports = class ValidateInput extends Task {
             throw new ValidationError('Parameter "version" is not valid', err);
         }
 
-        if (!entrypoints) {
-            throw new ValidationError('Entrypoints must be provided');
+        if (!files) {
+            throw new ValidationError('files must be provided');
         }
 
-        log.debug(`  ==> entrypoints: ${JSON.stringify(entrypoints)}`);
-        if (typeof entrypoints !== 'object') {
-            throw new ValidationError('Parameter "entrypoints" is not valid');
+        log.debug(`  ==> files: ${JSON.stringify(files)}`);
+        if (typeof files !== 'object') {
+            throw new ValidationError('Parameter "files" is not valid');
         }
 
         log.debug(`  ==> map: ${JSON.stringify(map)}`);

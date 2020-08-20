@@ -75,7 +75,7 @@ test('eik package-alias <name> <version> <alias>', async t => {
     await new cli.publish.Package({
         server: address,
         name: 'my-pack',
-        entrypoints: {
+        files: {
             './index.js': join(__dirname, '../fixtures/client.js'),
             './index.css': join(__dirname, '../fixtures/styles.css'),
         },
