@@ -6,12 +6,12 @@ const { join } = require('path');
 const { integrity, versions } = require('../../../../utils/http');
 const hash = require('../../../../utils/hash');
 const Task = require('./task');
-const { entrypoints: mapEntrypoints } = require('../../../../utils');
+const { files: mapfiles } = require('../../../../utils');
 
 module.exports = class CheckIfAlreadyPublished extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, name, version, entrypoints, path, cwd } = incoming;
+        const { server, name, version, files, path, cwd } = incoming;
 
         log.debug(`Checking for existence of package ${name} version ${version}`);
         log.debug('  ==> Fetching package metadata from server');
@@ -50,8 +50,8 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         let localHash;
         try {
             const localFiles = [join(path, './eik.json')];
-            if (entrypoints) {
-                const mappings = await mapEntrypoints(entrypoints, path, {
+            if (files) {
+                const mappings = await mapfiles(files, path, {
                     cwd,
                 });
 

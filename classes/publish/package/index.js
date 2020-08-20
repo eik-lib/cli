@@ -21,7 +21,7 @@ module.exports = class PublishApp {
         name,
         version = '1.0.0',
         map = [],
-        entrypoints,
+        files,
         dryRun = false,
         out = './.eik',
     } = {}) {
@@ -32,7 +32,7 @@ module.exports = class PublishApp {
         this.name = name;
         this.version = version;
         this.map = map;
-        this.entrypoints = entrypoints;
+        this.files = files;
         this.dryRun = dryRun;
         this.out = out;
         this.path = isAbsolute(out) ? out : join(cwd, out);
@@ -55,7 +55,7 @@ module.exports = class PublishApp {
 
         const incoming = {
             path: this.path,
-            entrypoints: this.entrypoints,
+            files: this.files,
             server: this.server,
             name: this.name,
             version: this.version,

@@ -64,7 +64,7 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, dryRun, cwd, token } = argv;
-    const {name, server, map, entrypoints, version, out} = getDefaults(cwd);
+    const {name, server, map, files, version, out} = getDefaults(cwd);
 
     try {
         try {
@@ -78,7 +78,7 @@ exports.handler = async (argv) => {
             name,
             server,
             map: Array.isArray(map) ? map : [map],
-            entrypoints,
+            files,
             version,
             cwd,
             token,
@@ -87,7 +87,7 @@ exports.handler = async (argv) => {
             out,
         };
 
-        const { files } = await new PublishPackage(options).run();
+        const { files: fls } = await new PublishPackage(options).run();
 
         if (!dryRun) {
             let url = new URL(join('pkg', name), server);
@@ -113,7 +113,7 @@ exports.handler = async (argv) => {
             process.stdout.write(`:: ${chalk.bgYellow.white.bold(' PACKAGE ')} > ${chalk.green(name)} | ${chalk.bold('dry run')}`);
             process.stdout.write('\n\n');
             process.stdout.write('   files (local temporary):\n');
-            for (const file of files) {
+            for (const file of fls) {
                 process.stdout.write(`   - ${chalk.bold('type')}: ${file.type}\n`);
                 process.stdout.write(`     ${chalk.bold('path')}: ${file.pathname}\n\n`);
             }

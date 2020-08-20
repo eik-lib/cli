@@ -43,7 +43,7 @@ test('Uploading app assets to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        entrypoints: {
+        files: {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
         },
@@ -71,7 +71,7 @@ test('Uploading JS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        entrypoints: {
+        files: {
             './index.js': join(__dirname, './fixtures/client.js'),
         },
         debug: true,
@@ -98,7 +98,7 @@ test('Uploading CSS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        entrypoints: {
+        files: {
             './index.css': './fixtures/styles.css',
         },
         debug: true,
@@ -125,7 +125,7 @@ test('Uploading a directory of assets to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        entrypoints: {
+        files: {
             './icons': './fixtures/icons/**/*',
         },
         debug: true,
@@ -152,7 +152,7 @@ test('Uploading a directory of assets to the root path to an asset server 2', as
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        entrypoints: {
+        files: {
             '/': './fixtures/icons/**/*',
         },
         debug: true,

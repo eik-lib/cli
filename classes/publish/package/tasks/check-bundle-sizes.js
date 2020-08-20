@@ -11,14 +11,14 @@ const Task = require('./task');
 
 module.exports = class CheckBundleSizes extends Task {
     async process(incoming = {}, outgoing = {}) {
-        const { entrypoints, cwd } = incoming;
+        const { files, cwd } = incoming;
         this.log.debug('Checking bundle file sizes');
         try {
-            if (entrypoints) {
-                for (const [key, val] of Object.entries(entrypoints)) {
+            if (files) {
+                for (const [key, val] of Object.entries(files)) {
                     const path = isAbsolute(val) ? val : join(cwd, val);
 
-                    const files = await new Promise((resolve, reject) =>
+                    const fls = await new Promise((resolve, reject) =>
                         glob(path, (err, f) => {
                             if (err) {
                                 reject(err);
@@ -28,7 +28,7 @@ module.exports = class CheckBundleSizes extends Task {
                         }),
                     );
 
-                    for (const file of files) {
+                    for (const file of fls) {
                         this.log.debug(
                             `  ==> entrypoint size (${key} => ${file}): ${bytes(
                                 gzipSize.sync(fs.readFileSync(file, 'utf8')),

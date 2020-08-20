@@ -8,7 +8,7 @@ const fastify = require('fastify');
 const j = require('../utils/json');
 const h = require('../utils/hash');
 const f = require('../utils/http');
-const entrypoints = require('../utils/entrypoints');
+const files = require('../utils/files');
 
 test('calculate file hash', async (t) => {
     const hash = await h.file(
@@ -315,37 +315,37 @@ test('read JSON file - string - file absolute path', async (t) => {
     t.equal(json.key, 'val', 'Key should equal val');
 });
 
-test('entrypoints: basic mapping dest path to file source', async (t) => {
+test('files: basic mapping dest path to file source', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src = join(__dirname, './fixtures/client.js');
     const dest = join(path, './index.js');
 
-    const map = await entrypoints({ './index.js': src }, path, { cwd });
+    const map = await files({ './index.js': src }, path, { cwd });
 
     t.equal(map.get(src), dest, 'File source should point to destination');
 });
 
-test('entrypoints: error thrown when glob used with specific file mapping', async (t) => {
+test('files: error thrown when glob used with specific file mapping', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src = join(__dirname, './**/client.js');
 
-    t.rejects(async () => entrypoints({ './index.js': src }, path, { cwd }));
+    t.rejects(async () => files({ './index.js': src }, path, { cwd }));
 });
 
-test('entrypoints: matching dest path to file source', async (t) => {
+test('files: matching dest path to file source', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
     const dest1 = join(path, './src/client.js');
 
-    const map = await entrypoints({ './src': '../fixtures/client.js' }, path, { cwd });
+    const map = await files({ './src': '../fixtures/client.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
 });
 
-test('entrypoints: matching dest path to file source', async (t) => {
+test('files: matching dest path to file source', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
@@ -353,13 +353,13 @@ test('entrypoints: matching dest path to file source', async (t) => {
     const dest1 = join(path, './src/client.js');
     const dest2 = join(path, './src/client-with-bare-imports.js');
 
-    const map = await entrypoints({ './src': '../fixtures/*.js' }, path, { cwd });
+    const map = await files({ './src': '../fixtures/*.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
     t.equal(map.get(src2), dest2, 'File source should point to destination');
 });
 
-test('entrypoints: glob matching dest path to file source', async (t) => {
+test('files: glob matching dest path to file source', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
@@ -367,13 +367,13 @@ test('entrypoints: glob matching dest path to file source', async (t) => {
     const dest1 = join(path, './src/fixtures/client.js');
     const dest2 = join(path, './src/integration/react/client.js');
 
-    const map = await entrypoints({ './src': '../**/client.js' }, path, { cwd });
+    const map = await files({ './src': '../**/client.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
     t.equal(map.get(src2), dest2, 'File source should point to destination');
 });
 
-test('entrypoints: glob matching dest path to file source, root path', async (t) => {
+test('files: glob matching dest path to file source, root path', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
@@ -381,13 +381,13 @@ test('entrypoints: glob matching dest path to file source, root path', async (t)
     const dest1 = join(path, './fixtures/client.js');
     const dest2 = join(path, './integration/react/client.js');
 
-    const map = await entrypoints({ './': '../**/client.js' }, path, { cwd });
+    const map = await files({ './': '../**/client.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
     t.equal(map.get(src2), dest2, 'File source should point to destination');
 });
 
-test('entrypoints: glob matching dest path to file source, root path 2', async (t) => {
+test('files: glob matching dest path to file source, root path 2', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
@@ -395,24 +395,24 @@ test('entrypoints: glob matching dest path to file source, root path 2', async (
     const dest1 = join(path, './fixtures/client.js');
     const dest2 = join(path, './integration/react/client.js');
 
-    const map = await entrypoints({ '/': '../**/client.js' }, path, { cwd });
+    const map = await files({ '/': '../**/client.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
     t.equal(map.get(src2), dest2, 'File source should point to destination');
 });
 
-test('entrypoints: glob matching dest path to file source, root path 2', async (t) => {
+test('files: glob matching dest path to file source, root path 2', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
     const dest1 = join(path, './client.js');
 
-    const map = await entrypoints({ '/': '../fixtures/*.js' }, path, { cwd });
+    const map = await files({ '/': '../fixtures/*.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
 });
 
-test('entrypoints: glob matching dest path to file source, root path 3', async (t) => {
+test('files: glob matching dest path to file source, root path 3', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
@@ -420,30 +420,30 @@ test('entrypoints: glob matching dest path to file source, root path 3', async (
     const dest1 = join(path, './client.js');
     const dest2 = join(path, './client-with-bare-imports.js');
 
-    const map = await entrypoints({ '/': '../fixtures/*.js' }, path, { cwd });
+    const map = await files({ '/': '../fixtures/*.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
     t.equal(map.get(src2), dest2, 'File source should point to destination');
 });
 
-test('entrypoints: glob matching dest path to file source, root path 4', async (t) => {
+test('files: glob matching dest path to file source, root path 4', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src1 = join(__dirname, './fixtures/client.js');
     const dest1 = join(path, './client.js');
 
-    const map = await entrypoints({ '/': '../fixtures/client.js' }, path, { cwd });
+    const map = await files({ '/': '../fixtures/client.js' }, path, { cwd });
 
     t.equal(map.get(src1), dest1, 'File source should point to destination');
 });
 
-test('entrypoints: folder without *', async (t) => {
+test('files: folder without *', async (t) => {
     const cwd = join(__dirname, 'tmp');
     const path = join(cwd, '.eik');
     const src = join(__dirname, './fixtures/icons/checkbox-sprite.svg');
     const dest = join(path, './icons/checkbox-sprite.svg');
 
-    const map = await entrypoints({ '/icons': '../fixtures/icons/*' }, path, { cwd });
+    const map = await files({ '/icons': '../fixtures/icons/*' }, path, { cwd });
 
     t.equal(map.get(src), dest, 'File source should point to destination');
 });
