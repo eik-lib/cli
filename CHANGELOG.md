@@ -1,3 +1,10 @@
+# [1.2.0-next.7](https://github.com/eik-lib/cli/compare/v1.2.0-next.6...v1.2.0-next.7) (2020-08-20)
+
+
+### Bug Fixes
+
+* rename entrypoints to files ([#155](https://github.com/eik-lib/cli/issues/155)) ([7a412ca](https://github.com/eik-lib/cli/commit/7a412ca15b50e7d4f420ed97e959269920d9d8cf))
+
 # [1.2.0-next.6](https://github.com/eik-lib/cli/compare/v1.2.0-next.5...v1.2.0-next.6) (2020-08-19)
 
 
