@@ -77,7 +77,7 @@
     "eslint-config-prettier": "6.11.0",
     "eslint-plugin-import": "2.22.0",
     "eslint-plugin-prettier": "3.1.4",
-    "fastify": "3.2.0",
+    "fastify": "3.2.1",
     "fastify-cors": "4.1.0",
     "prettier": "2.0.5",
     "puppeteer": "5.2.1",
