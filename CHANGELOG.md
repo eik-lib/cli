@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/eik-lib/cli/compare/v1.2.0...v1.2.1) (2020-09-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ora to v5 ([#141](https://github.com/eik-lib/cli/issues/141)) ([e34d3e7](https://github.com/eik-lib/cli/commit/e34d3e79e3b7a1b1946cf4935580e7168c43a46d))
+* **deps:** update dependency rollup-plugin-terser to v7 ([#143](https://github.com/eik-lib/cli/issues/143)) ([7f5f9db](https://github.com/eik-lib/cli/commit/7f5f9db1980932559f314b021139ad784dd37816))
+* **deps:** update dependency yargs-parser to v19 ([#142](https://github.com/eik-lib/cli/issues/142)) ([50c280f](https://github.com/eik-lib/cli/commit/50c280f0a7dac9925f709fe55fd2117a2b985337))
+
 # [1.2.0](https://github.com/eik-lib/cli/compare/v1.1.1...v1.2.0) (2020-09-01)
 
 
