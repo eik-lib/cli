@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/eik-lib/cli/compare/v1.2.1...v1.2.2) (2020-09-01)
+
+
+### Bug Fixes
+
+* use server value in eik.json for login ([cfddfd2](https://github.com/eik-lib/cli/commit/cfddfd2972e875a04e86aa771927b18b2b82d906)), closes [#151](https://github.com/eik-lib/cli/issues/151)
+
 ## [1.2.1](https://github.com/eik-lib/cli/compare/v1.2.0...v1.2.1) (2020-09-01)
 
 
