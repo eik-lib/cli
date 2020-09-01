@@ -1,3 +1,34 @@
+# [1.2.0](https://github.com/eik-lib/cli/compare/v1.1.1...v1.2.0) (2020-09-01)
+
+
+### Bug Fixes
+
+* adjust command output ([97efd7f](https://github.com/eik-lib/cli/commit/97efd7f8e84ea00677cc2c7e64da47e87edbd56d))
+* break cache and ensure the latest package is fetched from server ([1282ef5](https://github.com/eik-lib/cli/commit/1282ef52a76fb24f14e8bdcf842154df1c904be2))
+* create temp dir if it does't exist ([134dfeb](https://github.com/eik-lib/cli/commit/134dfeb44b3c4311f31643cd1880296f71e8b207))
+* do not check for bundle existence on dry run ([f5a3a2f](https://github.com/eik-lib/cli/commit/f5a3a2f45866391550b5ffce3ab65fcea3af13e3))
+* do not run extra tests during release ([bfe4733](https://github.com/eik-lib/cli/commit/bfe473355d4fb53949bb3366fea1402633ee6330))
+* fix and test cleanup task ([bc92e6c](https://github.com/eik-lib/cli/commit/bc92e6c2b7322a8216296069a149f140a219bfee))
+* improve package command output ([2227fa8](https://github.com/eik-lib/cli/commit/2227fa8da13db88782c700b086fff01f25fc54ac))
+* include formatters when publishing ([56ccb79](https://github.com/eik-lib/cli/commit/56ccb799f7b0353a86cd7f96119d200205951fc0))
+* lint error ([b773fd3](https://github.com/eik-lib/cli/commit/b773fd37ec4ea7bad6eb79d0ddcbdca94fe8720c))
+* rename entrypoints to files ([#155](https://github.com/eik-lib/cli/issues/155)) ([23cf463](https://github.com/eik-lib/cli/commit/23cf4637ab8961f6c020d48e750190dbf28df25b))
+* test.yml file syntax ([b0d8e7a](https://github.com/eik-lib/cli/commit/b0d8e7ac50ecdca2d55ed750656d1bb1376ecedb))
+* update dry run command output to match new entrypoints work ([9f18d1f](https://github.com/eik-lib/cli/commit/9f18d1f3ffed6c0727ed1d54002adb1e4f767aae))
+* update versions command to match new entrypoint syntax ([f30b257](https://github.com/eik-lib/cli/commit/f30b257c2d9a8746b9a4d1a37a0f2f2c36afb98d))
+
+
+### Features
+
+* add input validation ([c522b0b](https://github.com/eik-lib/cli/commit/c522b0b083126534878f90fcf942357ab716ed47))
+* add integrity command and tests ([6063a72](https://github.com/eik-lib/cli/commit/6063a729f03f0971029bd8809959363445375325))
+* add version command to support CI usage ([4f46dd0](https://github.com/eik-lib/cli/commit/4f46dd0d8e3fe112eb5acc98ff9aef2b890e178d))
+* commit eik.json file after version write ([10fb791](https://github.com/eik-lib/cli/commit/10fb791d253b1799e411b9d8d6164bb114005821))
+* refactor client to support wider use cases ([49fa5c4](https://github.com/eik-lib/cli/commit/49fa5c4f0d3acb411dbbbda98216ae05747c31d6))
+* refactor to support entrypoints object with globbing ([fc21405](https://github.com/eik-lib/cli/commit/fc214053b237ec91008850a995d3422d1199505b))
+* replace 'js' and 'css' eik.json keys with 'entrypoints' ([9f883b8](https://github.com/eik-lib/cli/commit/9f883b8595fa13240c6aa5a2c620373c9c1a1e46))
+* support npm style entrypoint mapping ([d4126e0](https://github.com/eik-lib/cli/commit/d4126e0f4c0ce4dfe1d9da81fe86b6b6d81afcb6))
+
 # [1.2.0-next.7](https://github.com/eik-lib/cli/compare/v1.2.0-next.6...v1.2.0-next.7) (2020-08-20)
 
 
