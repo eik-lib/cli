@@ -93,8 +93,13 @@ module.exports = class PublishApp {
             return outgoing;
         }
 
-        await this.checkIfAlreadyPublished.process(incoming, outgoing);
-            
+        try {
+            await this.checkIfAlreadyPublished.process(incoming, outgoing);
+        } catch(err) {
+            // exit early if already published
+            return null;
+        }
+
         await this.uploadFiles.process(incoming, outgoing);
         await this.saveMetafile.process(incoming, outgoing);
         await this.cleanup.process(incoming, outgoing);

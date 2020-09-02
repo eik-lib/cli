@@ -87,7 +87,15 @@ exports.handler = async (argv) => {
             out,
         };
 
-        const { files: fls } = await new PublishPackage(options).run();
+        const publish = await new PublishPackage(options).run();
+
+        if (!publish) {
+            spinner.warn('Version in eik.json has not changed since last publish, publishing is not necessary');
+            process.stdout.write('\n');
+            process.exit(0);
+        }
+
+        const { files: fls } = publish;
 
         if (!dryRun) {
             let url = new URL(join('pkg', name), server);
