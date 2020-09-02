@@ -9,6 +9,7 @@ const j = require('../utils/json');
 const h = require('../utils/hash');
 const f = require('../utils/http');
 const files = require('../utils/files');
+const s = require('../utils/schema');
 
 test('calculate file hash', async (t) => {
     const hash = await h.file(
@@ -446,4 +447,161 @@ test('files: folder without *', async (t) => {
     const map = await files({ '/icons': '../fixtures/icons/*' }, path, { cwd });
 
     t.equal(map.get(src), dest, 'File source should point to destination');
+});
+
+test('schemas: basic valid eik.json file', async (t) => {
+    const schema = {
+        name: 'my-app',
+        version: '1.0.0',
+        server: 'http://assets.myserver.com',
+        files: {
+            "./index.js": "/path/to/esm.js"
+        },
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, true, 'Schema should be valid');
+});
+
+test('schemas: all fields valid eik.json file', async (t) => {
+    const schema = {
+        name: 'my-app',
+        version: '1.0.0',
+        server: 'http://assets.myserver.com',
+        files: {
+            "./index.js": "/path/to/esm.js"
+        },
+        'import-map': 'http://myimportmap.com/asd/asd',
+        out: "./.eik"
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, true, 'Schema should be valid');
+});
+
+test('schemas: additional files definitions, valid eik.json file', async (t) => {
+    const schema = {
+        name: 'my-app',
+        version: '1.0.0',
+        server: 'http://assets.myserver.com',
+        files: {
+            "./index.js": "/path/to/esm.js",
+            "./index.css": "/path/to/esm.css",
+        },
+        'import-map': [
+            'http://myimportmap.com/asd/asd1',
+            'http://myimportmap.com/asd/asd2',
+        ],
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, true, 'Schema should be valid');
+});
+
+test('schemas: individual fields only, invalid result', async (t) => {
+    const schema1 = { name: 'my-app' };
+    const schema2 = { version: '1.0.0' };
+    const schema3 = { server: 'http://assets.myserver.com', };
+    const schema4 = { files: {
+        "./index.js": "/path/to/esm.js",
+        "./index.css": "/path/to/esm.css",
+    } };
+
+    const valid1 = s(schema1);
+    const valid2 = s(schema2);
+    const valid3 = s(schema3);
+    const valid4 = s(schema4);
+
+    t.equal(valid1, false, 'Schema should be invalid');
+    t.equal(valid2, false, 'Schema should be invalid');
+    t.equal(valid3, false, 'Schema should be invalid');
+    t.equal(valid4, false, 'Schema should be invalid');
+});
+
+test('schemas: empty name string, invalid eik.json file', async (t) => {
+    const schema = {
+        name: '',
+        version: '1.0.0',
+        server: 'http://assets.myserver.com',
+        files: {
+            "./index.js": "/path/to/esm.js"
+        },
+        'import-map': 'http://myimportmap.com/asd/asd',
+        out: "./.eik"
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, false, 'Schema should be invalid');
+});
+
+test('schemas: scoped name, valid eik.json file', async (t) => {
+    const schema = {
+        name: '@my-pack/something',
+        version: '1.0.0',
+        server: 'http://assets.myserver.com',
+        files: {
+            "./index.js": "/path/to/esm.js"
+        },
+        'import-map': 'http://myimportmap.com/asd/asd',
+        out: "./.eik"
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, true, 'Schema should be invalid');
+});
+
+test('schemas: server missing protocol, invalid eik.json file', async (t) => {
+    const schema = {
+        name: 'test',
+        version: '1.0.0',
+        server: '//assets.myserver.com',
+        files: {
+            "./index.js": "/path/to/esm.js"
+        },
+        'import-map': 'http://myimportmap.com/asd/asd',
+        out: "./.eik"
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, false, 'Schema should be invalid');
+});
+
+test('schemas: files definition key empty string, valid eik.json file', async (t) => {
+    const schema = {
+        name: 'test',
+        version: '1.0.0',
+        server: 'https://assets.myserver.com',
+        files: {
+            "": "/path/to/esm.js"
+        },
+        'import-map': 'http://myimportmap.com/asd/asd',
+        out: "./.eik"
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, false, 'Schema should be invalid');
+});
+
+test('schemas: files value empty string, invalid eik.json file', async (t) => {
+    const schema = {
+        name: 'test',
+        version: '1.0.0',
+        server: 'https://assets.myserver.com',
+        files: {
+            "./index.js": ""
+        },
+        'import-map': 'http://myimportmap.com/asd/asd',
+        out: "./.eik"
+    };
+
+    const valid = s(schema);
+
+    t.equal(valid, false, 'Schema should be invalid');
 });

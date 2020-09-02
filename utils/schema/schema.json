@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "server": {
+      "description": "The URL address of the Eik server.",
+      "type": "string",
+      "format": "uri"
+    },
+    "name": {
+      "description": "The name of the package.",
+      "type": "string",
+      "maxLength": 214,
+      "minLength": 1,
+      "pattern": "^(?:@[a-z0-9-*~][a-z0-9-*._~]*/)?[a-z0-9-~][a-z0-9-._~]*$"
+    },
+    "version": {
+      "description": "Version must be parseable by node-semver, which is bundled with npm as a dependency.",
+      "type": "string"
+    },
+    "files": {
+      "description": "File mapping definition for the package.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[\\./a-z_-][\\./a-z0-9_-]*$"
+      },
+      "additionalProperties": {
+        "pattern": "^[\\./a-z_-][\\./a-z0-9_-]*$"
+      }
+    },
+    "import-map": {
+      "description": "Import map files given by URL(s) that are used by the package",
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      ]
+    },
+    "out": {
+      "description": "Location of local Eik build directory (defaults to .eik)",
+      "type": "string",
+      "format": "uri-reference"
+    }
+  },
+  "required": ["server", "name", "version", "files"]
+}
