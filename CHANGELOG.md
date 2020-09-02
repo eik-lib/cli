@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/eik-lib/cli/compare/v1.2.2...v1.3.0) (2020-09-02)
+
+
+### Features
+
+* do not exit 1 on version command, sometimes exit 1 on publish ([01f5aa2](https://github.com/eik-lib/cli/commit/01f5aa275b67347bc1f5094d9328fd68c4e57171))
+
 ## [1.2.2](https://github.com/eik-lib/cli/compare/v1.2.1...v1.2.2) (2020-09-01)
 
 
