@@ -5,17 +5,17 @@
 
 const abslog = require('abslog');
 const { join } = require('path');
-const { validators } = require('@eik/common');
+const { schemas, ValidationError } = require('@eik/common');
 const fetch = require('node-fetch');
 
 module.exports = class Integrity {
-    constructor({ 
+    constructor({
         logger,
         name,
         version,
         server,
         debug = false,
-        cwd = process.cwd(), 
+        cwd = process.cwd(),
     } = {}) {
         this.log = abslog(logger);
         this.server = server;
@@ -30,47 +30,38 @@ module.exports = class Integrity {
 
         try {
             this.log.debug(`  ==> server: ${this.server}`);
-            validators.origin(this.server);
-        } catch (err) {
-            this.log.error(`Parameter "server" is not valid`);
-            return false;
-        }
+            schemas.assert.server(this.server);
 
-        try {
             this.log.debug(`  ==> name: ${this.name}`);
-            validators.name(this.name);
-        } catch (err) {
-            this.log.error(`Parameter "name" is not valid`);
-            return false;
-        }
+            schemas.assert.name(this.name);
 
-        try {
             this.log.debug(`  ==> version: ${this.version}`);
-            validators.version(this.version);
+            schemas.assert.version(this.version);
+
+            this.log.debug(`  ==> debug: ${this.debug}`);
+            if (typeof this.debug !== 'boolean') {
+                throw new ValidationError(`Parameter "debug" is not valid`);
+            }
+
+            this.log.debug(`  ==> cwd: ${this.cwd}`);
+            if (typeof this.cwd !== 'string') {
+                throw new ValidationError(`Parameter "cwd" is not valid`);
+            }
         } catch (err) {
-            this.log.error(`Parameter "version" is not valid`);
-            return false;
-        }
-
-        this.log.debug(`  ==> debug: ${this.debug}`);
-        if (typeof this.debug !== 'boolean') {
-            this.log.error(`Parameter "debug" is not valid`);
-            return false;
-        }
-
-        this.log.debug(`  ==> cwd: ${this.cwd}`);
-        if (typeof this.cwd !== 'string') {
-            this.log.error(`Parameter "cwd" is not valid`);
+            this.log.error(err.message);
             return false;
         }
 
         this.log.debug('Requesting meta information from asset server');
         try {
-            const url = new URL(join('pkg', this.name, this.version), this.server);
+            const url = new URL(
+                join('pkg', this.name, this.version),
+                this.server,
+            );
             this.log.debug(`  ==> url: ${url}`);
 
             const res = await fetch(url);
-            
+
             if (res.ok) {
                 this.log.debug(`  ==> ok: true`);
                 const data = await res.json();

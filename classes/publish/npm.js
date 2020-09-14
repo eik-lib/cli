@@ -19,7 +19,7 @@ const json = require('@rollup/plugin-json');
 const { execSync } = require('child_process');
 const { writeFileSync, existsSync, readFileSync } = require('fs');
 const { join, dirname, parse } = require('path');
-const { validators } = require('@eik/common');
+const { schemas } = require('@eik/common');
 const rimraf = require('rimraf');
 const { request } = require('../../utils/http');
 
@@ -58,13 +58,14 @@ module.exports = class PublishDependency {
 
         this.log.debug('Validating input');
         parse(this.cwd);
-        validators.origin(this.server);
+        schemas.assert.server(this.server);
+        schemas.assert.name(this.name);
+        schemas.assert.version(this.version);
+        schemas.assert.importMap(this.map);
         assert(
             this.token && typeof this.token === 'string',
             'Parameter "token" is not valid',
         );
-        validators.name(this.name);
-        assert(Array.isArray(this.map), 'Parameter "map" is not valid');
         assert(
             !this.dryRun || this.dryRun === true || this.dryRun === false,
             'Parameter "dryRun" is not valid',
