@@ -7,20 +7,10 @@ const { join, isAbsolute, parse } = require('path');
 const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
-const { validators } = require('@eik/common');
+const { schemas, ValidationError } = require('@eik/common');
 const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
 const { files: mapfiles } = require('../utils');
-
-class ValidationError extends Error {
-    constructor(message, err) {
-        let m = message;
-        if (err && err.message) m += `: ${err.message}`;
-        super(m);
-        this.name = this.constructor.name;
-        Error.captureStackTrace(this, this.constructor);
-    }
-}
 
 module.exports = class Ping {
     constructor({
@@ -62,33 +52,17 @@ module.exports = class Ping {
 
         log.debug('Validating input');
 
-        try {
-            log.debug(`  ==> cwd: ${cwd}`);
-            parse(cwd);
-        } catch (err) {
-            throw new ValidationError('Parameter "cwd" is not valid', err);
-        }
+        log.debug(`  ==> cwd: ${cwd}`);
+        parse(cwd);
 
-        try {
-            log.debug(`  ==> server: ${server}`);
-            validators.origin(server);
-        } catch (err) {
-            throw new ValidationError(`Parameter "server" is not valid`, err);
-        }
+        log.debug(`  ==> server: ${server}`);
+        schemas.assert.server(server);
 
-        try {
-            log.debug(`  ==> name: ${name}`);
-            validators.name(name);
-        } catch (err) {
-            throw new ValidationError('Parameter "name" is not valid', err);
-        }
+        log.debug(`  ==> name: ${name}`);
+        schemas.assert.name(name);
 
-        try {
-            log.debug(`  ==> version: ${version}`);
-            validators.version(version);
-        } catch (err) {
-            throw new ValidationError('Parameter "version" is not valid', err);
-        }
+        log.debug(`  ==> version: ${version}`);
+        schemas.assert.version(version);
 
         log.debug(`  ==> level: ${level}`);
         if (!['major', 'minor', 'patch'].includes(level)) {
@@ -99,7 +73,7 @@ module.exports = class Ping {
         if (!files) {
             throw new ValidationError('Parameter "files" is not valid');
         }
-
+        
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
         if (!Array.isArray(map)) {
             throw new ValidationError('Parameter "map" is not valid');
