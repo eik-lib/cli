@@ -1,8 +1,7 @@
 'use strict';
 
 const abslog = require('abslog');
-const assert = require('assert');
-const { validators } = require('@eik/common');
+const { schemas, ValidationError } = require('@eik/common');
 const { request } = require('../utils/http');
 
 module.exports = class Login {
@@ -16,17 +15,10 @@ module.exports = class Login {
         this.log.debug('Validating input');
 
         try {
-            validators.origin(this.server);
-        } catch (err) {
-            this.log.error(`Parameter "server" is not valid`);
-            return false;
-        }
-
-        try {
-            assert(
-                this.key && typeof this.key === 'string',
-                '"key" must be a string',
-            );
+            schemas.assert.server(this.server);
+            if (!this.key || typeof !this.key === 'string') {
+                throw new ValidationError('"key" must be a string');
+            }
         } catch (err) {
             this.log.error(err.message);
             return false;
