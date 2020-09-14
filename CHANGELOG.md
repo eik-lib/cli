@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/eik-lib/cli/compare/v1.3.0...v1.4.0) (2020-09-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs to v16 ([eafc778](https://github.com/eik-lib/cli/commit/eafc77893235690ab7a19217cf961c15e6c2890a))
+
+
+### Features
+
+* use validators from common package ([fcbc3c1](https://github.com/eik-lib/cli/commit/fcbc3c128f58c3820181cae7ad579518270ea969))
+
 # [1.3.0](https://github.com/eik-lib/cli/compare/v1.2.2...v1.3.0) (2020-09-02)
 
 
