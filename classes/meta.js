@@ -5,7 +5,7 @@
 
 const abslog = require('abslog');
 const { join } = require('path');
-const { validators } = require('@eik/common');
+const { schemas } = require('@eik/common');
 const fetch = require('node-fetch');
 
 const types = ['pkg', 'map', 'npm'];
@@ -22,9 +22,9 @@ module.exports = class Meta {
         this.log.debug('Validating input');
 
         try {
-            validators.origin(this.server);
+            schemas.assert.server(this.server);
         } catch (err) {
-            this.log.error(`Parameter "server" is not valid`);
+            this.log.error(err.message);
             return false;
         }
 
