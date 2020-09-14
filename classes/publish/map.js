@@ -4,7 +4,7 @@ const assert = require('assert');
 const abslog = require('abslog');
 const { join, parse, isAbsolute } = require('path');
 const { existsSync } = require('fs');
-const { validators } = require('@eik/common');
+const { schemas } = require('@eik/common');
 const { request } = require('../../utils/http');
 
 module.exports = class PublishMap {
@@ -28,16 +28,16 @@ module.exports = class PublishMap {
 
     async run() {
         this.log.debug('Running import map publish command');
-        this.log.debug('Validating input');
 
+        this.log.debug('Validating input');
         parse(this.cwd);
-        validators.origin(this.server);
+        schemas.assert.server(this.server);
         assert(
             this.token && typeof this.token === 'string',
             'Parameter "token" is not valid',
         );
-        validators.name(this.name);
-        validators.version(this.version);
+        schemas.assert.name(this.name);
+        schemas.assert.version(this.version);
         parse(this.file);
 
         this.absoluteFile = isAbsolute(this.file)

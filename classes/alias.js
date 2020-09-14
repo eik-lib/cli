@@ -3,7 +3,7 @@
 const assert = require('assert');
 const abslog = require('abslog');
 const { join } = require('path');
-const { validators } = require('@eik/common');
+const { schemas, validators } = require('@eik/common');
 const { request } = require('../utils/http');
 
 module.exports = class Alias {
@@ -31,12 +31,12 @@ module.exports = class Alias {
         };
         
         this.log.debug('Validating command input');
-        validators.origin(this.server);
-        assert(this.token && typeof this.token === 'string', `Parameter "token" is not valid`);
+        schemas.assert.server(this.server);
+        schemas.assert.name(this.name);
+        schemas.assert.version(this.version);
         validators.type(this.type);
-        validators.name(this.name);
-        validators.version(this.version);
         validators.alias(this.alias);
+        assert(this.token && typeof this.token === 'string', `Parameter "token" is not valid`);
 
         this.log.debug('Requesting alias creation from server');
         try {

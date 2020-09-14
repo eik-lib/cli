@@ -3,7 +3,7 @@
 'use strict';
 
 const { parse } = require('path');
-const { validators } = require('@eik/common');
+const { schemas: { assert } } = require('@eik/common');
 const Task = require('./task');
 
 class ValidationError extends Error {
@@ -19,7 +19,7 @@ class ValidationError extends Error {
 module.exports = class ValidateInput extends Task {
     process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { cwd, server, name, files, map, dryRun, version } = incoming;
+        const { cwd, server, name, files, map, dryRun, version, out } = incoming;
 
         log.debug('Validating input');
 
@@ -30,40 +30,23 @@ module.exports = class ValidateInput extends Task {
             throw new ValidationError('Parameter "cwd" is not valid', err);
         }
 
-        try {
-            log.debug(`  ==> server: ${server}`);
-            validators.origin(server);
-        } catch (err) {
-            throw new ValidationError(`Parameter "server" is not valid`, err);
-        }
+        log.debug(`  ==> server: ${server}`);
+        assert.server(server);
+        
+        log.debug(`  ==> name: ${name}`);
+        assert.name(name);
 
-        try {
-            log.debug(`  ==> name: ${name}`);
-            validators.name(name);
-        } catch (err) {
-            throw new ValidationError('Parameter "name" is not valid', err);
-        }
-
-        try {
-            log.debug(`  ==> version: ${version}`);
-            validators.version(version);
-        } catch (err) {
-            throw new ValidationError('Parameter "version" is not valid', err);
-        }
-
-        if (!files) {
-            throw new ValidationError('files must be provided');
-        }
-
+        log.debug(`  ==> version: ${version}`);
+        assert.version(version)
+        
         log.debug(`  ==> files: ${JSON.stringify(files)}`);
-        if (typeof files !== 'object') {
-            throw new ValidationError('Parameter "files" is not valid');
-        }
+        assert.files(files);
 
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
-        if (!Array.isArray(map)) {
-            throw new ValidationError('Parameter "map" is not valid');
-        }
+        assert.importMap(map);
+
+        log.debug(`  ==> out: ${JSON.stringify(out)}`);
+        assert.out(out);
 
         log.debug(`  ==> dryRun: ${dryRun}`);
         if (dryRun && dryRun !== true && dryRun !== false) {

@@ -27,7 +27,7 @@
   "dependencies": {
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
-    "@eik/common": "^1.0.0-alpha.7",
+    "@eik/common": "^1.2.0",
     "@hapi/joi": "^17.1.1",
     "@rollup/plugin-json": "^4.0.3",
     "abslog": "^2.4.0",
