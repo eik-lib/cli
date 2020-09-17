@@ -27,7 +27,7 @@ test('Initializing a new eik.json file', async t => {
     );
 
     t.equals(assets.name, '', 'eik.json "name" field should be empty');
-    t.equals(assets.major, 1, 'eik.json "major" field should equal 1');
+    t.equals(assets.version, '1.0.0', 'eik.json "major" field should equal 1');
     t.equals(assets.server, '', 'eik.json "server" field should be empty');
     t.same(
         assets.files,
@@ -43,7 +43,7 @@ test('Initializing a new eik.json file passing custom values', async t => {
     const publishCmd = `${eik} init 
         --cwd ${folder}
         --name custom-name
-        --major 2
+        --version 2.0.0
         --server http://localhost:4001`;
     await exec(publishCmd.split('\n').join(' '));
 
@@ -57,8 +57,8 @@ test('Initializing a new eik.json file passing custom values', async t => {
         'eik.json "name" field should not be empty',
     );
     t.equals(
-        assets.major,
-        2,
+        assets.version,
+        '2.0.0',
         'eik.json "major" field should not be empty',
     );
     t.equals(

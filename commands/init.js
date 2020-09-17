@@ -34,12 +34,10 @@ exports.builder = (yargs) => {
                 Eg. --cwd /path/to/save/to`,
             default: process.cwd(),
         },
-        major: {
-            alias: 'm',
-            describe: `Specify the semver major version field in "eik.json".
-                This should be a single integer. 
-                Eg. --major 2`,
-            default: 1,
+        version: {
+            alias: 'v',
+            describe: `Specify the semver version field in "eik.json". Eg. --version 1.0.0`,
+            default: '1.0.0',
         },
         name: {
             alias: 'n',
@@ -57,7 +55,7 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { name, major, server, cwd, debug } = argv;
+    const { name, version, server, cwd, debug } = argv;
     const pathname = join(cwd, './eik.json');
     const log = logger(spinner, debug);
     let assetFileExists = false;
@@ -83,7 +81,7 @@ exports.handler = async (argv) => {
             JSON.stringify(
                 {
                     name,
-                    major,
+                    version,
                     server,
                     files: {},
                 },
