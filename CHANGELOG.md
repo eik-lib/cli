@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/eik-lib/cli/compare/v1.4.2...v1.4.3) (2020-09-17)
+
+
+### Bug Fixes
+
+* remove major field, replace with version in init command ([c607df7](https://github.com/eik-lib/cli/commit/c607df789a2aca9ae0e99436903b816e18a53d4f))
+
 ## [1.4.2](https://github.com/eik-lib/cli/compare/v1.4.1...v1.4.2) (2020-09-17)
 
 
