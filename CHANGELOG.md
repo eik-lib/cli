@@ -1,3 +1,11 @@
+## [1.4.2](https://github.com/eik-lib/cli/compare/v1.4.1...v1.4.2) (2020-09-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency autoprefixer to v10 ([a149186](https://github.com/eik-lib/cli/commit/a149186229a353d347cf64fbb5ce5de0b7713156))
+* **deps:** update dependency postcss to v8 ([ff211a7](https://github.com/eik-lib/cli/commit/ff211a7a443e8b8ac1a7e4927d738936b7d57b5d))
+
 ## [1.4.1](https://github.com/eik-lib/cli/compare/v1.4.0...v1.4.1) (2020-09-14)
 
 
