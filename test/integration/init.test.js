@@ -27,7 +27,7 @@ test('Initializing a new eik.json file', async t => {
     );
 
     t.equals(assets.name, '', 'eik.json "name" field should be empty');
-    t.equals(assets.version, '1.0.0', 'eik.json "major" field should equal 1');
+    t.equals(assets.version, '1.0.0', 'eik.json "version" field should equal 1.0.0');
     t.equals(assets.server, '', 'eik.json "server" field should be empty');
     t.same(
         assets.files,
