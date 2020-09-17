@@ -59,7 +59,7 @@ test('Initializing a new eik.json file passing custom values', async t => {
     t.equals(
         assets.version,
         '2.0.0',
-        'eik.json "major" field should not be empty',
+        'eik.json "version" field should not be empty',
     );
     t.equals(
         assets.server,
