@@ -46,7 +46,7 @@
     "make-dir": "^3.1.0",
     "node-fetch": "^2.6.0",
     "ora": "^5.0.0",
-    "pkg-dir": "^4.2.0",
+    "pkg-dir": "^5.0.0",
     "postcss": "^8.0.0",
     "postcss-import": "^12.0.1",
     "read-pkg-up": "^7.0.1",
