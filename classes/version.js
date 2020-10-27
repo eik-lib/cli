@@ -7,7 +7,7 @@ const { join, isAbsolute, parse } = require('path');
 const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
-const { schemas, ValidationError } = require('@eik/common');
+const { schemas } = require('@eik/common');
 const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
 const { files: mapfiles } = require('../utils');
@@ -21,7 +21,7 @@ module.exports = class Ping {
         level = 'patch',
         cwd,
         files,
-        map,
+        map = [],
         out = './.eik',
     } = {}) {
         this.log = abslog(logger);
@@ -66,17 +66,17 @@ module.exports = class Ping {
 
         log.debug(`  ==> level: ${level}`);
         if (!['major', 'minor', 'patch'].includes(level)) {
-            throw new ValidationError('Parameter "version" is not valid');
+            throw new schemas.ValidationError('Parameter "version" is not valid');
         }
 
         log.debug(`  ==> files: ${JSON.stringify(files)}`);
         if (!files) {
-            throw new ValidationError('Parameter "files" is not valid');
+            throw new schemas.ValidationError('Parameter "files" is not valid');
         }
         
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
         if (!Array.isArray(map)) {
-            throw new ValidationError('Parameter "map" is not valid');
+            throw new schemas.ValidationError('Parameter "map" is not valid');
         }
 
         log.debug('Checking local package version');

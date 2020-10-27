@@ -8,6 +8,7 @@ const PublishMap = require('./publish/map');
 const PublishPackage = require('./publish/package/index');
 const PublishNPM = require('./publish/npm');
 const Integrity = require('./integrity');
+const Version = require('./version');
 
 module.exports = {
     Ping,
@@ -15,6 +16,7 @@ module.exports = {
     Meta,
     Login,
     Integrity,
+    Version,
     publish: {
         Package: PublishPackage,
         Map: PublishMap,
