@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/eik-lib/cli/compare/v1.4.4...v1.4.5) (2020-10-27)
+
+
+### Bug Fixes
+
+* expose version, fix ValidationError usage, add tests ([01b0188](https://github.com/eik-lib/cli/commit/01b01882dc52b8f7a8c0d618f4e51b9072a6764a))
+
 ## [1.4.4](https://github.com/eik-lib/cli/compare/v1.4.3...v1.4.4) (2020-10-27)
 
 
