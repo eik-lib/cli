@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/eik-lib/cli/compare/v1.4.3...v1.4.4) (2020-10-27)
+
+
+### Bug Fixes
+
+* update prod deps ([0376bb8](https://github.com/eik-lib/cli/commit/0376bb8bb0405e47ce40e86be0c1240ec832503c))
+
 ## [1.4.3](https://github.com/eik-lib/cli/compare/v1.4.2...v1.4.3) (2020-09-17)
 
 
