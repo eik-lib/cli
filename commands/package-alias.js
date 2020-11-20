@@ -36,7 +36,7 @@ exports.builder = (yargs) => {
             describe:
                 'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
             type: 'string',
-            default: semver.major(defaults.version),
+            default: defaults.version ? semver.major(defaults.version) : null,
         });
 
     yargs.options({
