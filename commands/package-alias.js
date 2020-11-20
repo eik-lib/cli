@@ -1,11 +1,12 @@
 'use strict';
 
 const ora = require('ora');
+const semver = require('semver');
 const Alias = require('../classes/alias');
 const { logger, getDefaults, getCWD } = require('../utils');
 const { Alias: AliasFormatter } = require('../formatters');
 
-exports.command = 'package-alias <name> <version> <alias>';
+exports.command = 'package-alias [name] [version] [alias]';
 
 exports.aliases = ['pkg-alias', 'pa'];
 
@@ -23,16 +24,19 @@ exports.builder = (yargs) => {
             describe:
                 'Name matching existing name for a package on Eik server',
             type: 'string',
+            default: defaults.name,
         })
         .positional('version', {
             describe:
                 'Version matching existing version for a package on Eik server',
             type: 'string',
+            default: defaults.version,
         })
         .positional('alias', {
             describe:
                 'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
             type: 'string',
+            default: semver.major(defaults.version),
         });
 
     yargs.options({
