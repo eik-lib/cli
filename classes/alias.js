@@ -38,7 +38,7 @@ module.exports = class Alias {
         validators.alias(this.alias);
         assert(this.token && typeof this.token === 'string', `Parameter "token" is not valid`);
 
-        this.log.debug('Requesting alias creation from server');
+        this.log.debug(`Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version}`);
         try {
             const { message } = await request({
                 host: this.server,
