@@ -81,7 +81,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "fastify": "3.8.0",
     "fastify-cors": "4.1.0",
-    "prettier": "2.1.2",
+    "prettier": "2.2.0",
     "puppeteer": "5.4.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
