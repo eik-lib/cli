@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/eik-lib/cli/compare/v1.4.5...v1.5.0) (2020-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency gzip-size to v6 ([09fae13](https://github.com/eik-lib/cli/commit/09fae136ed8bad7ae76a763af1bd8bee26389f94))
+* avoid failure when eik.json not present ([2cc0e91](https://github.com/eik-lib/cli/commit/2cc0e9104e43cef90db9e28dacf1db744a93b15c))
+
+
+### Features
+
+* auto detect and set values when performing package aliasing ([be17552](https://github.com/eik-lib/cli/commit/be17552a22a105fdb89ec63c690c33ae2d754f21))
+
 ## [1.4.5](https://github.com/eik-lib/cli/compare/v1.4.4...v1.4.5) (2020-10-27)
 
 
