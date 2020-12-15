@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/eik-lib/cli/compare/v1.5.0...v1.5.1) (2020-12-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency postcss-import to v14 ([8d296c3](https://github.com/eik-lib/cli/commit/8d296c3a135df512f30688153bd4f965edbbda5d))
+
 # [1.5.0](https://github.com/eik-lib/cli/compare/v1.4.5...v1.5.0) (2020-11-27)
 
 
