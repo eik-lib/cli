@@ -22,8 +22,7 @@ const calculateParentDir = (files) => {
     return res.length > 1 ? res.join('/') : '/';
 };
 
-const globP = (path) => {
-    return new Promise((res, rej) =>
+const globP = (path) => new Promise((res, rej) =>
         glob(path, (err, f) => {
             if (err) {
                 rej(err);
@@ -31,8 +30,7 @@ const globP = (path) => {
             }
             res(f);
         }),
-    );
-}
+    )
 
 module.exports = async (files, path, options = {}) => {
     const cwd = options.cwd || process.cwd();
