@@ -9,9 +9,9 @@ const mkdir = require('make-dir');
 const readPkgUp = require('read-pkg-up');
 const pkgDir = require('pkg-dir');
 const rollup = require('rollup');
-const commonjs = require('rollup-plugin-commonjs');
-const rollupReplace = require('rollup-plugin-replace');
-const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
+const rollupReplace = require('@rollup/plugin-replace');
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const { terser } = require('rollup-plugin-terser');
 const esmImportToUrl = require('rollup-plugin-esm-import-to-url');
 // eslint-disable-next-line import/no-unresolved
@@ -168,7 +168,7 @@ module.exports = class PublishDependency {
                 plugins: [
                     json(),
                     esmImportToUrl(this.importMap),
-                    resolve(),
+                    nodeResolve(),
                     commonjs({ include: /node_modules/ }),
                     rollupReplace({
                         'process.env.NODE_ENV': JSON.stringify('production'),
