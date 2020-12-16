@@ -1,3 +1,10 @@
+## [1.5.2](https://github.com/eik-lib/cli/compare/v1.5.1...v1.5.2) (2020-12-16)
+
+
+### Bug Fixes
+
+* Clean out deprecated dependencies ([fda5e49](https://github.com/eik-lib/cli/commit/fda5e492138bdfd9af46ed887b931cd981192f60))
+
 ## [1.5.1](https://github.com/eik-lib/cli/compare/v1.5.0...v1.5.1) (2020-12-15)
 
 
