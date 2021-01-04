@@ -1,6 +1,5 @@
 'use strict';
 
-const { promises: fs, constants } = require('fs');
 const { join } = require('path');
 const fetch = require('node-fetch');
 const ora = require('ora');
@@ -67,12 +66,6 @@ exports.handler = async (argv) => {
     const {name, server, map, files, version, out} = getDefaults(cwd);
 
     try {
-        try {
-            await fs.access(join(cwd, 'eik.json'), constants.F_OK);
-        } catch(err) {
-            throw new Error('No eik.json file found in the current working directory. Please run eik init');
-        }
-
         const options = { 
             logger: logger(spinner, debug),
             name,
