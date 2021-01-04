@@ -1,7 +1,6 @@
 'use strict';
 
 const { execSync } = require('child_process');
-const { promises: fs, constants } = require('fs');
 const { join } = require('path');
 const ora = require('ora');
 const VersionPackage = require('../classes/version');
