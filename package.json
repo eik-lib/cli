@@ -83,7 +83,7 @@
     "puppeteer": "5.5.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "semantic-release": "17.3.0",
+    "semantic-release": "17.3.1",
     "tap": "14.11.0"
   }
 }
