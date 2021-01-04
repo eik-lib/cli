@@ -78,6 +78,88 @@ test('eik package : package, details provided by eik.json file', async (t) => {
     t.end();
 });
 
+test('eik package : package, details provided by package.json values', async (t) => {
+    const assets = {
+        name: 'test-app',
+        version: '1.0.0',
+        eik: {
+            server: t.context.address,
+            files: {
+                './index.js': join(__dirname, './../fixtures/client.js'),
+                './index.css': join(__dirname, './../fixtures/styles.css'),
+            },
+        },
+    };
+
+    await fs.writeFile(
+        join(t.context.folder, 'package.json'),
+        JSON.stringify(assets),
+    );
+
+    const eik = join(__dirname, '../../index.js');
+    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+
+    const { error, stdout } = await exec(cmd);
+
+    const res = await fetch(
+        new URL('/pkg/test-app/1.0.0/index.js', t.context.address),
+    );
+
+    t.equal(res.ok, true);
+    t.notOk(error);
+    t.match(stdout, 'published');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
+    t.end();
+});
+
+test('eik package : package, details provided by package.json values and eik.json, eik.json wins', async (t) => {
+    const pkg = {
+        name: 'test-app-draft',
+        version: '0.0.0',
+        eik: {
+            server: 'http://fake-server',
+            files: { },
+        },
+    };
+
+    await fs.writeFile(
+        join(t.context.folder, 'package.json'),
+        JSON.stringify(pkg),
+    );
+
+    const assets = {
+        name: 'test-app',
+        version: '1.0.0',
+        server: t.context.address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
+    };
+
+    await fs.writeFile(
+        join(t.context.folder, 'eik.json'),
+        JSON.stringify(assets),
+    );
+
+    const eik = join(__dirname, '../../index.js');
+    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+
+    const { error, stdout } = await exec(cmd);
+
+    const res = await fetch(
+        new URL('/pkg/test-app/1.0.0/index.js', t.context.address),
+    );
+
+    t.equal(res.ok, true);
+    t.notOk(error);
+    t.match(stdout, 'published');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
+    t.end();
+});
+
 test('workflow: publish npm, alias npm, publish map, alias map and then publish package using map', async (t) => {
     const eik = join(__dirname, '../../index.js');
     let cmd = '';

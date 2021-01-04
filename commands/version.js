@@ -65,14 +65,6 @@ exports.handler = async (argv) => {
     const { name, version, server, files, map, out } = getDefaults(cwd);
 
     try {
-        try {
-            await fs.access(join(cwd, 'eik.json'), constants.F_OK);
-        } catch (err) {
-            throw new Error(
-                'No eik.json file found in the current working directory. Please run eik init',
-            );
-        }
-
         const log = logger(spinner, debug);
 
         const options = {

@@ -14,10 +14,24 @@ const { readFileSync, existsSync } = require('fs');
  */
 module.exports = function getDefaults(cwd) {
     try {
+        let assets = {};
+
+        // read values from package.json eik field
+        const pkgPath = join(cwd, './package.json');
+        if (existsSync(pkgPath)) {
+            const pkgFile = readFileSync(pkgPath) || '{}';
+            const pkgJSON = JSON.parse(pkgFile);
+            assets = pkgJSON.eik;
+            assets.name = pkgJSON.name;
+            assets.version = pkgJSON.version;
+        }
+
         // read eik.json in current dir
         const assetsPath = join(cwd, './eik.json');
-        const assetsFile = existsSync(assetsPath) ? readFileSync(assetsPath) : '{}';
-        const assets = JSON.parse(assetsFile);
+        if (existsSync(assetsPath)) {
+            const assetsFile = readFileSync(assetsPath) || '{}';
+            assets = { ...assets, ...JSON.parse(assetsFile) };
+        }
         
         // read .eikrc in users home directory
         const eikPath = join(homedir, '.eikrc');
@@ -31,7 +45,7 @@ module.exports = function getDefaults(cwd) {
             server = tokens.keys().next().value;
         }
         
-        // server value in eik.json always takes presedence
+        // server value in eik.json or package.json always takes presedence
         if (assets.server) {
             server = assets.server;
         }
