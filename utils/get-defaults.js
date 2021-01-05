@@ -2,7 +2,7 @@
 
 const { join } = require('path');
 const homedir = require('os').homedir();
-const { readFileSync, existsSync } = require('fs');
+const { readFileSync } = require('fs');
 
 function readJSONSync(path) {
     try {
