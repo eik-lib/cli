@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/eik-lib/cli/compare/v1.5.3...v1.6.0) (2021-01-05)
+
+
+### Features
+
+* support configuring eik using only package.json ([467c61d](https://github.com/eik-lib/cli/commit/467c61da8b8106397b4955ac2a31e7a1389775a0))
+
 ## [1.5.3](https://github.com/eik-lib/cli/compare/v1.5.2...v1.5.3) (2020-12-29)
 
 
