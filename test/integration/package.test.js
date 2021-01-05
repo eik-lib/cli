@@ -27,7 +27,7 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
-    
+
     const token = await new cli.Login({
         server: address,
         key: 'change_me',
@@ -113,13 +113,16 @@ test('eik package : package, details provided by package.json values', async (t)
     t.end();
 });
 
-test('eik package : package, details provided by package.json values and eik.json, eik.json wins', async (t) => {
+test('eik package : package, details provided by package.json values and eik.json, throws error', async (t) => {
     const pkg = {
-        name: 'test-app-draft',
-        version: '0.0.0',
+        name: 'test-app',
+        version: '1.0.0',
         eik: {
-            server: 'http://fake-server',
-            files: { },
+            server: t.context.address,
+            files: {
+                './index.js': join(__dirname, './../fixtures/client.js'),
+                './index.css': join(__dirname, './../fixtures/styles.css'),
+            },
         },
     };
 
@@ -146,24 +149,17 @@ test('eik package : package, details provided by package.json values and eik.jso
     const eik = join(__dirname, '../../index.js');
     const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
-    const { error, stdout } = await exec(cmd);
+    const { error } = await exec(cmd);
 
-    const res = await fetch(
-        new URL('/pkg/test-app/1.0.0/index.js', t.context.address),
-    );
-
-    t.equal(res.ok, true);
-    t.notOk(error);
-    t.match(stdout, 'published');
-    t.match(stdout, 'less than a minute ago');
-    t.match(stdout, 'Generic User');
+    t.ok(error);
+    t.match(error, /Eik configuration was defined in both in package.json and eik.json/);
     t.end();
 });
 
 test('workflow: publish npm, alias npm, publish map, alias map and then publish package using map', async (t) => {
     const eik = join(__dirname, '../../index.js');
     let cmd = '';
-    
+
     // publish npm dep
     cmd = `${eik} npm scroll-into-view-if-needed 2.2.24
         --token ${t.context.token} 

@@ -4,6 +4,14 @@ const { join } = require('path');
 const homedir = require('os').homedir();
 const { readFileSync, existsSync } = require('fs');
 
+function readJSONSync(path) {
+    try {
+        return JSON.parse(readFileSync(path));
+    } catch (err) {
+        return {};
+    }
+}
+
 /**
  * Sets up and returns an object containing a set of default values for the app context.
  * Default values are fetched from the app's eik.json file as well as from .eikrc, if present in the users home directory.
@@ -13,56 +21,39 @@ const { readFileSync, existsSync } = require('fs');
  * @returns {{server:string,token:string,js:string|object,css:string|object,version:string,map:Array,name:string,out:string,cwd:string}}
  */
 module.exports = function getDefaults(cwd) {
-    try {
-        let assets = {};
+    const pkgJSON = readJSONSync(join(cwd, './package.json'));
+    const eikJSON = readJSONSync(join(cwd, './eik.json'));
+    const eikrc = readJSONSync(join(homedir, './.eikrc'));
 
-        // read values from package.json eik field
-        const pkgPath = join(cwd, './package.json');
-        if (existsSync(pkgPath)) {
-            const pkgFile = readFileSync(pkgPath) || '{}';
-            const pkgJSON = JSON.parse(pkgFile);
-            assets = pkgJSON.eik;
-            assets.name = pkgJSON.name;
-            assets.version = pkgJSON.version;
-        }
+    if (eikJSON.name && pkgJSON.eik) {
+        throw new Error('Eik configuration was defined in both in package.json and eik.json. You must specify one or the other.');
+    }
 
-        // read eik.json in current dir
-        const assetsPath = join(cwd, './eik.json');
-        if (existsSync(assetsPath)) {
-            const assetsFile = readFileSync(assetsPath) || '{}';
-            assets = { ...assets, ...JSON.parse(assetsFile) };
-        }
-        
-        // read .eikrc in users home directory
-        const eikPath = join(homedir, '.eikrc');
-        const eikFile = existsSync(eikPath) ? readFileSync(eikPath) : '{}';
-        const meta = JSON.parse(eikFile);
-        const tokens = new Map(meta.tokens);
-        
-        let server;
-        // if user is logged into a single asset server
-        if (tokens.size === 1) {
-            server = tokens.keys().next().value;
-        }
-        
-        // server value in eik.json or package.json always takes presedence
-        if (assets.server) {
-            server = assets.server;
-        }
+    const assets = { name: pkgJSON.name, version: pkgJSON.version, ...pkgJSON.eik, ...eikJSON };
 
-        const token = tokens.get(server);
-        
-        return {
-            server: server || undefined,
-            token: token || undefined, 
-            files: assets.files || undefined,
-            version: assets.version || undefined,
-            map: assets['import-map'] || [],
-            name: assets.name || undefined,
-            out: assets.out || '.eik',
-            cwd,
-        }
-    } catch (err) {
-        return {}
+    const tokens = new Map(eikrc.tokens);
+
+    let server;
+    // if user is logged into a single asset server
+    if (tokens.size === 1) {
+        server = tokens.keys().next().value;
+    }
+
+    // server value in eik.json or package.json always takes presedence
+    if (assets.server) {
+        server = assets.server;
+    }
+
+    const token = tokens.get(server);
+
+    return {
+        server: server || undefined,
+        token: token || undefined,
+        files: assets.files || undefined,
+        version: assets.version || undefined,
+        map: assets['import-map'] || [],
+        name: assets.name || undefined,
+        out: assets.out || '.eik',
+        cwd,
     }
 }
