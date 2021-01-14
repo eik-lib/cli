@@ -2,9 +2,8 @@
 
 const logger = require('./logger');
 const {
-    helpers: { getDefaults },
+    helpers: { getDefaults, files },
 } = require('@eik/common');
 const getCWD = require('./get-cwd');
-const files = require('./files');
 
 module.exports = { logger, getDefaults, getCWD, files };
