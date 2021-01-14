@@ -8,7 +8,7 @@ const fastify = require('fastify');
 const j = require('../utils/json');
 const h = require('../utils/hash');
 const f = require('../utils/http');
-const files = require('../utils/files');
+const {helpers:{files}} = require('@eik/common');
 
 test('calculate file hash', async (t) => {
     const hash = await h.file(
