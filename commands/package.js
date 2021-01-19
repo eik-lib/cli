@@ -4,12 +4,12 @@ const { join } = require('path');
 const fetch = require('node-fetch');
 const ora = require('ora');
 const chalk = require('chalk');
-const PublishPackage = require('../classes/publish/package/index');
-const { logger, getDefaults, getCWD } = require('../utils');
-const { Artifact } = require('../formatters');
 const {
     helpers: { configStore },
 } = require('@eik/common');
+const PublishPackage = require('../classes/publish/package/index');
+const { logger, getDefaults, getCWD } = require('../utils');
+const { Artifact } = require('../formatters');
 
 exports.command = 'package';
 

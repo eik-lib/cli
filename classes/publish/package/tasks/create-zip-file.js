@@ -13,7 +13,7 @@ const { copyFileSync, writeFileSync } = fs;
 module.exports = class CreateZipFile extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { files, path, name, map, server, out, cwd } = incoming;
+        const { path, name, map, server, out } = incoming;
 
         log.debug(`Creating zip file`);
         log.debug(`  ==> ${join(path, `eik.tgz`)}`);
