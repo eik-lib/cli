@@ -20,9 +20,9 @@ module.exports = class Ping {
         version,
         level = 'patch',
         cwd,
-        files,
         map = [],
         out = './.eik',
+        config,
     } = {}) {
         this.log = abslog(logger);
         this.server = server;
@@ -30,7 +30,7 @@ module.exports = class Ping {
         this.version = version;
         this.level = level;
         this.cwd = cwd;
-        this.files = files;
+        this.config = config;
         this.map = map;
         this.out = out;
         this.path = isAbsolute(out) ? out : join(cwd, out);
@@ -44,11 +44,12 @@ module.exports = class Ping {
             version,
             level,
             cwd,
-            files,
             map,
             path,
             out,
+            config
         } = this;
+        const { files } = config;
 
         log.debug('Validating input');
 
@@ -119,9 +120,7 @@ module.exports = class Ping {
 
             if (files) {
                 try {
-                    const mappings = await mapfiles(files, path, {
-                        cwd,
-                    });
+                    const mappings = await config.pathsAndFilesAbsolute()
 
                     for (const [src, dest] of mappings) {
                         copyFileSync(src, dest);

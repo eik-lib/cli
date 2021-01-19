@@ -7,7 +7,6 @@ const fs = require('fs');
 const { join, resolve, basename, dirname } = require('path');
 const tar = require('tar');
 const Task = require('./task');
-const { files: mapfiles } = require('../../../../utils');
 
 const { copyFileSync, writeFileSync } = fs;
 
@@ -29,7 +28,7 @@ module.exports = class CreateZipFile extends Task {
                     {
                         name,
                         server,
-                        files,
+                        files: this.config.files,
                         'import-map': map,
                         out,
                     },
@@ -42,11 +41,9 @@ module.exports = class CreateZipFile extends Task {
             throw new Error(`Failed to zip eik.json file: ${err.message}`);
         }
 
-        if (files) {
+        if (this.config.files) {
             try {
-                const mappings = await mapfiles(files, path, {
-                    cwd,
-                });
+                const mappings = await this.config.pathsAndFilesAbsolute();
 
                 for (const [src, dest] of mappings) {
                     await fs.promises.mkdir(dirname(dest), {
