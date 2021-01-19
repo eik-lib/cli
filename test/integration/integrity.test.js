@@ -26,7 +26,7 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
-    
+
     const token = await new cli.Login({
         server: address,
         key: 'change_me',
@@ -63,14 +63,63 @@ test('eik meta : details provided by eik.json', async (t) => {
 
     let cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
     await exec(cmd);
-    
+
     cmd = `${eik} integrity --cwd ${t.context.folder}`;
     const { error, stdout } = await exec(cmd);
 
-    const integrity = JSON.parse(await fs.readFile(join(t.context.folder, './.eik/integrity.json'), 'utf8'));
+    const integrity = JSON.parse(
+        await fs.readFile(
+            join(t.context.folder, './.eik/integrity.json'),
+            'utf8',
+        ),
+    );
 
     t.notOk(error);
-    t.match(stdout, 'integrity information for package "test-app" (v1.0.0) saved to ".eik/integrity.json"');
+    t.match(
+        stdout,
+        'integrity information for package "test-app" (v1.0.0) saved to ".eik/integrity.json"',
+    );
+    t.equal(integrity.name, 'test-app');
+    t.equal(integrity.version, '1.0.0');
+    t.ok(integrity.integrity);
+    t.end();
+});
+
+test('eik meta : details provided by eik.json - npm namespace', async (t) => {
+    const assets = {
+        name: 'test-app',
+        version: '1.0.0',
+        server: t.context.address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
+    };
+    await fs.writeFile(
+        join(t.context.folder, 'eik.json'),
+        JSON.stringify(assets),
+    );
+
+    const eik = join(__dirname, '../../index.js');
+
+    let cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    await exec(cmd);
+
+    cmd = `${eik} integrity --cwd ${t.context.folder} --npm`;
+    const { error, stdout } = await exec(cmd);
+
+    const integrity = JSON.parse(
+        await fs.readFile(
+            join(t.context.folder, './.eik/integrity.json'),
+            'utf8',
+        ),
+    );
+
+    t.notOk(error);
+    t.match(
+        stdout,
+        'integrity information for package "test-app" (v1.0.0) saved to ".eik/integrity.json"',
+    );
     t.equal(integrity.name, 'test-app');
     t.equal(integrity.version, '1.0.0');
     t.ok(integrity.integrity);
