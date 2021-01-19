@@ -10,7 +10,6 @@ const mkdir = require('make-dir');
 const { schemas } = require('@eik/common');
 const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
-const { files: mapfiles } = require('../utils');
 
 module.exports = class Version {
     constructor({
@@ -47,7 +46,7 @@ module.exports = class Version {
             map,
             path,
             out,
-            config
+            config,
         } = this;
         const { files } = config;
 
@@ -67,14 +66,16 @@ module.exports = class Version {
 
         log.debug(`  ==> level: ${level}`);
         if (!['major', 'minor', 'patch'].includes(level)) {
-            throw new schemas.ValidationError('Parameter "version" is not valid');
+            throw new schemas.ValidationError(
+                'Parameter "version" is not valid',
+            );
         }
 
         log.debug(`  ==> files: ${JSON.stringify(files)}`);
         if (!files) {
             throw new schemas.ValidationError('Parameter "files" is not valid');
         }
-        
+
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
         if (!Array.isArray(map)) {
             throw new schemas.ValidationError('Parameter "map" is not valid');
@@ -120,7 +121,7 @@ module.exports = class Version {
 
             if (files) {
                 try {
-                    const mappings = await config.pathsAndFilesAbsolute()
+                    const mappings = await config.pathsAndFilesAbsolute();
 
                     for (const [src, dest] of mappings) {
                         copyFileSync(src, dest);
