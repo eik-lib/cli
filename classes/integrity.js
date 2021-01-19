@@ -16,6 +16,7 @@ module.exports = class Integrity {
         server,
         debug = false,
         cwd = process.cwd(),
+        npm = false,
     } = {}) {
         this.log = abslog(logger);
         this.server = server;
@@ -23,6 +24,7 @@ module.exports = class Integrity {
         this.version = version;
         this.debug = debug;
         this.cwd = cwd;
+        this.type = npm ? 'npm' : 'pkg';
     }
 
     async run() {
@@ -55,7 +57,7 @@ module.exports = class Integrity {
         this.log.debug('Requesting meta information from asset server');
         try {
             const url = new URL(
-                join('pkg', this.name, this.version),
+                join(this.type, this.name, this.version),
                 this.server,
             );
             this.log.debug(`  ==> url: ${url}`);

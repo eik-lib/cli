@@ -53,6 +53,11 @@ exports.builder = (yargs) => {
             describe: 'Eik directory',
             default: defaults.out,
         },
+        npm: {
+            describe: 'Use NPM namespace',
+            default: false,
+            type: 'boolean',
+        },
     });
 
     yargs.example(`eik integrity`);
@@ -64,7 +69,7 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let integrity = false;
-    const { debug, server, cwd, name, version, out } = argv;
+    const { debug, server, cwd, name, version, out, npm } = argv;
     const l = logger(spinner, debug);
 
     try {
@@ -75,6 +80,7 @@ exports.handler = async (argv) => {
             server,
             debug,
             cwd,
+            npm,
         }).run();
 
         if (integrity) {
