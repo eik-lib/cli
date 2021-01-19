@@ -2,13 +2,21 @@
 
 'use strict';
 
-const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
+const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
+
+function buildTestConfig(files) {
+    return new EikConfig({files: files || {
+        './index.js': './fixtures/client.js',
+        './index.css': './fixtures/styles.css',
+    }}, null, __dirname)
+}
+
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
@@ -43,10 +51,7 @@ test('Uploading app assets to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
-        },
+        config: buildTestConfig(),
         debug: true,
         token,
         version: '1.0.0',
@@ -71,9 +76,9 @@ test('Uploading JS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-        },
+        config: buildTestConfig({
+            './index.js': './fixtures/client.js',
+        }),
         debug: true,
         token,
         version: '1.0.0',
@@ -98,9 +103,9 @@ test('Uploading CSS app assets only to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: {
+        config: buildTestConfig({
             './index.css': './fixtures/styles.css',
-        },
+        }),
         debug: true,
         token,
         version: '1.0.0',
@@ -125,9 +130,9 @@ test('Uploading a directory of assets to an asset server', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: {
+        config: buildTestConfig({
             './icons': './fixtures/icons/**/*',
-        },
+        }),
         debug: true,
         token,
         version: '1.0.0',
@@ -152,9 +157,9 @@ test('Uploading a directory of assets to the root path to an asset server 2', as
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: {
+        config: buildTestConfig({
             '/': './fixtures/icons/**/*',
-        },
+        }),
         debug: true,
         token,
         version: '1.0.0',
