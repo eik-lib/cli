@@ -7,10 +7,18 @@ const fs = require('fs').promises;
 const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
+const { EikConfig } = require('@eik/common');
 const fastify = require('fastify');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
+
+function buildTestConfig(files) {
+    return new EikConfig({files: files || {
+        './index.js': './fixtures/client.js',
+        './index.css': './fixtures/styles.css',
+    }}, null, __dirname)
+}
 
 beforeEach(async (done, t) => {
     const server = fastify({ logger: false });
@@ -45,10 +53,7 @@ test('Creating a package alias', async t => {
     await new cli.publish.Package({
         server: address,
         name: 'my-pack',
-        files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
-        },
+        config: buildTestConfig(),
         token,
         cwd,
     }).run();
