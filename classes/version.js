@@ -12,7 +12,7 @@ const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
 const { files: mapfiles } = require('../utils');
 
-module.exports = class Ping {
+module.exports = class Version {
     constructor({
         logger,
         server,
