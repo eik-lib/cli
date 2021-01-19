@@ -14,8 +14,8 @@ const fetch = require('node-fetch');
  * 
  * @throws Error
  */
-module.exports = async (server, name, major) => {
-    const url = new URL(`${join('pkg', name)}?t=${Date.now()}`, server);
+module.exports = async (server, type, name, major) => {
+    const url = new URL(`${join(type, name)}?t=${Date.now()}`, server);
     const res = await fetch(url);
     if (!res.ok) {
         if (res.status === 404) {

@@ -9,12 +9,12 @@ const Task = require('./task');
 module.exports = class FetchVersion extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, name, major, level } = incoming;
+        const { server, name, major, level, type } = incoming;
         log.debug(
             'Calculating latest version for package. Fetching previous version information from server.',
         );
         try {
-            const version = await latestVersion(server, name, major);
+            const version = await latestVersion(server, type, name, major);
 
             if (!version) {
                 incoming.version = null;

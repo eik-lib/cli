@@ -24,6 +24,7 @@ module.exports = class PublishApp {
         config,
         dryRun = false,
         out = './.eik',
+        npm = false,
     } = {}) {
         this.log = abslog(logger);
         this.cwd = cwd;
@@ -35,6 +36,7 @@ module.exports = class PublishApp {
         this.dryRun = dryRun;
         this.out = out;
         this.config = config;
+        this.npm = npm;
         this.path = isAbsolute(out) ? out : join(cwd, out);
         this.validateInput = new ValidateInput(this.log);
         this.createTempDirectory = new CreateTempDirectory(this.log);
@@ -67,10 +69,11 @@ module.exports = class PublishApp {
             token: this.token,
             dryRun: this.dryRun,
             out: this.out,
+            type: this.npm ? 'npm' : 'pkg',
         };
 
         const outgoing = {
-            type: 'pkg',
+            type: this.npm ? 'npm' : 'pkg',
             server: this.server,
             name: this.name,
             level: this.level,
