@@ -14,8 +14,8 @@ const fetch = require('node-fetch');
  * 
  * @throws Error
  */
-module.exports = async (server, name, version) => {
-    const url = new URL(join('pkg', name, version), server);
+module.exports = async (server, type, name, version) => {
+    const url = new URL(join(type, name, version), server);
     url.search = `?t=${Date.now()}`;
 
     const res = await fetch(url);

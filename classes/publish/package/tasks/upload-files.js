@@ -9,14 +9,14 @@ const Task = require('./task');
 module.exports = class UploadFiles extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, token, name, zipFile, version } = incoming;
+        const { server, token, name, zipFile, version, type } = incoming;
         log.debug('Uploading zip file to server');
         try {
             const { message } = await request({
                 method: 'PUT',
                 host: server,
                 pathname: join(
-                    'pkg',
+                    type,
                     encodeURIComponent(name),
                     version,
                 ),

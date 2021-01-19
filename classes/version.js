@@ -15,6 +15,7 @@ module.exports = class Version {
     constructor({
         logger,
         server,
+        type = 'pkg',
         name,
         version,
         level = 'patch',
@@ -25,6 +26,7 @@ module.exports = class Version {
     } = {}) {
         this.log = abslog(logger);
         this.server = server;
+        this.type = type;
         this.name = name;
         this.version = version;
         this.level = level;
@@ -39,6 +41,7 @@ module.exports = class Version {
         const {
             log,
             server,
+            type,
             name,
             version,
             level,
@@ -87,7 +90,7 @@ module.exports = class Version {
 
         let integrityHash;
         try {
-            integrityHash = await integrity(server, name, version);
+            integrityHash = await integrity(server, type, name, version);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,

@@ -13,8 +13,8 @@ const fetch = require('node-fetch');
  * 
  * @throws Error
  */
-module.exports = async (server, name) => {
-    const pkg = join('pkg', name);
+module.exports = async (server, type, name) => {
+    const pkg = join(type, name);
     const url = new URL(pkg, server);
     url.search = `?t=${Date.now()}`;
 

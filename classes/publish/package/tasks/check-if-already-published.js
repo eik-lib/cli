@@ -11,14 +11,14 @@ const { files: mapfiles } = require('../../../../utils');
 module.exports = class CheckIfAlreadyPublished extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, name, version, files, path, cwd } = incoming;
+        const { server, name, version, files, path, cwd, type } = incoming;
 
         log.debug(`Checking for existence of package ${name} version ${version}`);
         log.debug('  ==> Fetching package metadata from server');
 
         // TODO: version needs to be the previous version. How can we get this?
         try {
-            if (await integrity(server, name, version)) {
+            if (await integrity(server, type, name, version)) {
                 throw new Error(
                     `${name} version ${version} already exists on the Eik server. Publishing is not necessary.`,
                 );
@@ -32,7 +32,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         
         let pkgVersions;
         try {
-            pkgVersions = await versions(server, name);
+            pkgVersions = await versions(server, type, name);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,

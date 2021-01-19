@@ -45,6 +45,11 @@ exports.builder = (yargs) => {
             default: false,
             type: 'boolean',
         },
+        npm: {
+            describe: 'Assigns package to the NPM namespace',
+            default: false,
+            type: 'boolean',
+        },
         token: {
             describe:
                 `Provide a jwt token to be used to authenticate with the Eik server.
@@ -65,7 +70,7 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, dryRun, cwd, token } = argv;
+    const { debug, dryRun, cwd, token, npm } = argv;
     const config = configStore.findInDirectory(cwd);
     const {name, server, map, version, out} = config;
 
@@ -82,6 +87,7 @@ exports.handler = async (argv) => {
             dryRun,
             debug,
             out,
+            npm,
         };
 
         const publish = await new PublishPackage(options).run();
