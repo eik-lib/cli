@@ -90,6 +90,8 @@ exports.handler = async (argv) => {
             npm,
         };
 
+        const type = npm ? 'npm' : 'pkg';
+
         const publish = await new PublishPackage(options).run();
 
         if (!publish) {
@@ -101,11 +103,11 @@ exports.handler = async (argv) => {
         const { files: fls } = publish;
 
         if (!dryRun) {
-            let url = new URL(join('pkg', name), server);
+            let url = new URL(join(type, name), server);
             let res = await fetch(url);
             const pkgMeta = await res.json();
 
-            url = new URL(join('pkg', name, version), server);
+            url = new URL(join(type, name, version), server);
             res = await fetch(url);
             const pkgVersionMeta = await res.json();
 
@@ -121,7 +123,7 @@ exports.handler = async (argv) => {
             spinner.text = '';
             spinner.stopAndPersist();
 
-            process.stdout.write(`:: ${chalk.bgYellow.white.bold(' PACKAGE ')} > ${chalk.green(name)} | ${chalk.bold('dry run')}`);
+            process.stdout.write(`:: ${chalk.bgYellow.white.bold(npm ? ' NPM ' : ' PACKAGE ')} > ${chalk.green(name)} | ${chalk.bold('dry run')}`);
             process.stdout.write('\n\n');
             process.stdout.write('   files (local temporary):\n');
             for (const file of fls) {
