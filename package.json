@@ -27,7 +27,7 @@
   "dependencies": {
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
-    "@eik/common": "../common",
+    "@eik/common": "git+ssh://git@github.com/gingermusketeer/common.git#add-common-config-handling-from-cli",
     "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.1.0",
