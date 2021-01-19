@@ -7,6 +7,9 @@ const chalk = require('chalk');
 const PublishPackage = require('../classes/publish/package/index');
 const { logger, getDefaults, getCWD } = require('../utils');
 const { Artifact } = require('../formatters');
+const {
+    helpers: { configStore },
+} = require('@eik/common');
 
 exports.command = 'package';
 
@@ -63,7 +66,8 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, dryRun, cwd, token } = argv;
-    const {name, server, map, files, version, out} = getDefaults(cwd);
+    const config = configStore.findInDirectory(cwd);
+    const {name, server, map, version, out} = config;
 
     try {
         const options = { 
@@ -71,7 +75,7 @@ exports.handler = async (argv) => {
             name,
             server,
             map: Array.isArray(map) ? map : [map],
-            files,
+            config,
             version,
             cwd,
             token,
