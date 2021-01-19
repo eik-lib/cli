@@ -21,7 +21,7 @@ module.exports = class PublishApp {
         name,
         version = '1.0.0',
         map = [],
-        files,
+        config,
         dryRun = false,
         out = './.eik',
     } = {}) {
@@ -32,13 +32,13 @@ module.exports = class PublishApp {
         this.name = name;
         this.version = version;
         this.map = map;
-        this.files = files;
         this.dryRun = dryRun;
         this.out = out;
+        this.config = config;
         this.path = isAbsolute(out) ? out : join(cwd, out);
         this.validateInput = new ValidateInput(this.log);
         this.createTempDirectory = new CreateTempDirectory(this.log);
-        this.createZipFile = new CreateZipFile(this.log);
+        this.createZipFile = new CreateZipFile(this.log, config);
         this.checkBundleSizes = new CheckBundleSizes(this.log);
         this.runDryRun = new DryRun(this.log);
         this.checkIfAlreadyPublished = new CheckIfAlreadyPublished(this.log);
@@ -55,7 +55,7 @@ module.exports = class PublishApp {
 
         const incoming = {
             path: this.path,
-            files: this.files,
+            files: this.config.files,
             server: this.server,
             name: this.name,
             version: this.version,
@@ -95,7 +95,7 @@ module.exports = class PublishApp {
 
         try {
             await this.checkIfAlreadyPublished.process(incoming, outgoing);
-        } catch(err) {
+        } catch (err) {
             // exit early if already published
             return null;
         }

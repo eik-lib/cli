@@ -2,12 +2,19 @@
 
 'use strict';
 
-const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
+const { EikConfig } = require('@eik/common');
 const cli = require('..');
+
+function buildTestConfig(files) {
+    return new EikConfig({files: files || {
+        './index.js': './fixtures/client.js',
+        './index.css': './fixtures/styles.css',
+    }}, null, __dirname)
+}
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
@@ -35,16 +42,14 @@ afterEach(async (done, t) => {
 
 test('Current version unpublished - rejects with error', async t => {
     const { address } = t.context;
+    const config  = buildTestConfig();
 
     try {
         await new cli.Version({
             cwd: __dirname,
             server: address,
             name: 'my-app',
-            files: {
-                './index.js': join(__dirname, './fixtures/client.js'),
-                './index.css': join(__dirname, './fixtures/styles.css'),
-            },
+            config,
             version: '1.0.0',
         }).run();
     } catch (err) {
@@ -54,15 +59,13 @@ test('Current version unpublished - rejects with error', async t => {
 
 test('Current version published - files the same - rejects with error', async t => {
     const { address, token } = t.context;
+    const config  = buildTestConfig();
 
     await new cli.publish.Package({
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
-        },
+        config,
         token,
         version: '1.0.0',
     }).run();
@@ -72,10 +75,7 @@ test('Current version published - files the same - rejects with error', async t 
             cwd: __dirname,
             server: address,
             name: 'my-app',
-            files: {
-                './index.js': join(__dirname, './fixtures/client.js'),
-                './index.css': join(__dirname, './fixtures/styles.css'),
-            },
+            config,
             version: '1.0.0',
         }).run();
     } catch (err) {
@@ -90,10 +90,7 @@ test('Current version published - files changed - bumps version', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
-        },
+        config: buildTestConfig(),
         token,
         version: '1.0.0',
     }).run();
@@ -102,7 +99,7 @@ test('Current version published - files changed - bumps version', async t => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        files: { './index.js': join(__dirname, './fixtures/client.js') },
+        config: buildTestConfig({ './index.js': './fixtures/client.js' }),
         version: '1.0.0',
     }).run();
 

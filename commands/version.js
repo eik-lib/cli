@@ -3,6 +3,9 @@
 const { execSync } = require('child_process');
 const { join } = require('path');
 const ora = require('ora');
+const {
+    helpers: { configStore },
+} = require('@eik/common');
 const VersionPackage = require('../classes/version');
 const { logger, getDefaults, getCWD } = require('../utils');
 const json = require('../utils/json');
@@ -61,7 +64,8 @@ exports.builder = (yargs) => {
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { level, debug, dryRun, cwd, token } = argv;
-    const { name, version, server, files, map, out } = getDefaults(cwd);
+    const config = configStore.findInDirectory(cwd);
+    const { name, version, server, map, out } = config;
 
     try {
         const log = logger(spinner, debug);
@@ -76,9 +80,9 @@ exports.handler = async (argv) => {
             dryRun,
             debug,
             level,
-            files,
             map: Array.isArray(map) ? map : [map],
             out,
+            config,
         };
 
         const newVersion = await new VersionPackage(options).run();
