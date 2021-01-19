@@ -1,4 +1,4 @@
-# Eik V3 CLI
+# Eik CLI
 
 ## Installation
 
