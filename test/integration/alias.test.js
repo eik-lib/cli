@@ -10,6 +10,7 @@ const { join } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
+const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const cli = require('../..');
 
@@ -71,14 +72,16 @@ afterEach(async (done, t) => {
 
 test('eik package-alias <name> <version> <alias>', async t => {
     const { address, token, folder: cwd } = t.context;
-
-    await new cli.publish.Package({
-        server: address,
-        name: 'my-pack',
+    const config = new EikConfig({
         files: {
             './index.js': join(__dirname, '../fixtures/client.js'),
             './index.css': join(__dirname, '../fixtures/styles.css'),
-        },
+        }
+    }, null, cwd)
+    await new cli.publish.Package({
+        server: address,
+        name: 'my-pack',
+        config,
         token,
         cwd,
         version: '1.0.0',
