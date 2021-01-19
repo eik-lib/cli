@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/eik-lib/cli/compare/v1.6.0...v1.7.0) (2021-01-19)
+
+
+### Features
+
+* Update link to use branch for common module ([df7d61d](https://github.com/eik-lib/cli/commit/df7d61dbc5b17efc8bb350283442064031982eb6))
+
 # [1.6.0](https://github.com/eik-lib/cli/compare/v1.5.3...v1.6.0) (2021-01-05)
 
 
