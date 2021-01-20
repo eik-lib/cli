@@ -36,12 +36,23 @@ beforeEach(async (done, t) => {
         key: 'change_me',
     }).run();
 
-    const publishCmd = `${eik} npm scroll-into-view-if-needed 2.2.24
-        --token ${token}
-        --server ${address}
-        --cwd ${folder}`;
+    const assets = {
+        name: 'scroll-into-view-if-needed',
+        version: '2.2.24',
+        server: address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
+    };
 
-    await exec(publishCmd.split('\n').join(' '));
+    await fs.writeFile(
+        join(folder, 'eik.json'),
+        JSON.stringify(assets),
+    );
+
+    const cmd = `${eik} package --token ${token} --cwd ${folder} --npm`;
+    await exec(cmd);
 
     const map = {
         imports: {
