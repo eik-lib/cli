@@ -194,10 +194,23 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     let cmd = '';
 
     // publish npm dep
-    cmd = `${eik} npm scroll-into-view-if-needed 2.2.24
-        --token ${t.context.token} 
-        --server ${t.context.address}`;
-    await exec(cmd.split('\n').join(' '));
+    let assets = {
+        name: 'scroll-into-view-if-needed',
+        version: '2.2.24',
+        server: t.context.address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
+    };
+
+    await fs.writeFile(
+        join(t.context.folder, 'eik.json'),
+        JSON.stringify(assets),
+    );
+
+    cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    await exec(cmd);
 
     // alias npm dependency
     cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
@@ -232,7 +245,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
-    const assets = {
+    assets = {
         name: 'test-app',
         version: '1.0.0',
         server: t.context.address,

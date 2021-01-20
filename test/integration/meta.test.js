@@ -33,8 +33,23 @@ beforeEach(async (done, t) => {
         key: 'change_me',
     }).run();
 
-    const depcmd = `${eik} dep scroll-into-view-if-needed 2.2.24 -t ${token} -s ${address} -c ${folder}`;
-    await exec(depcmd);
+    const assets = {
+        name: 'scroll-into-view-if-needed',
+        version: '2.2.24',
+        server: address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
+    };
+
+    await fs.writeFile(
+        join(folder, 'eik.json'),
+        JSON.stringify(assets),
+    );
+
+    const cmd = `${eik} package --token ${token} --cwd ${folder} --npm`;
+    await exec(cmd);
 
     t.context.server = server;
     t.context.address = address;
