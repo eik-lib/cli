@@ -1,3 +1,15 @@
+# [1.8.0](https://github.com/eik-lib/cli/compare/v1.7.0...v1.8.0) (2021-01-21)
+
+
+### Bug Fixes
+
+* correct formatting of package output for npm namespace ([b058499](https://github.com/eik-lib/cli/commit/b05849992262f72cd8c496607ffcbc14cc9d4a99))
+
+
+### Features
+
+* add support for npm flag in package command ([9907877](https://github.com/eik-lib/cli/commit/9907877b8869d8a2125759f1da99eb8de328410f))
+
 # [1.7.0](https://github.com/eik-lib/cli/compare/v1.6.0...v1.7.0) (2021-01-19)
 
 
