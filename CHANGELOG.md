@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/eik-lib/cli/compare/v1.8.0...v1.8.1) (2021-01-21)
+
+
+### Bug Fixes
+
+* correct cli help docs ([cc71b42](https://github.com/eik-lib/cli/commit/cc71b42c791835fa1d5b21d692ef0d8cc3987b8f))
+
 # [1.8.0](https://github.com/eik-lib/cli/compare/v1.7.0...v1.8.0) (2021-01-21)
 
 
