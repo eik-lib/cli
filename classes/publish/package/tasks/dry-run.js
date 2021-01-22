@@ -3,7 +3,6 @@
 'use strict';
 
 const Task = require('./task');
-const { files: mapfiles } = require('../../../../utils');
 
 module.exports = class DryRun extends Task {
     async process(incoming = {}, outgoing = {}) {
@@ -14,7 +13,7 @@ module.exports = class DryRun extends Task {
                 { pathname: zipFile, type: 'package archive' },
             ]
 
-            const fls = await mapfiles(files, path, { cwd });
+            const fls = await this.config.pathsAndFilesAbsolute();
 
             for (const [, dest] of fls) {
                 outgoing.files.push({ pathname: dest, type: 'package file' });
