@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/eik-lib/cli/compare/v1.8.1...v1.8.2) (2021-01-22)
+
+
+### Bug Fixes
+
+* missing function error ([2bf90d6](https://github.com/eik-lib/cli/commit/2bf90d6c57004caddc657c1c7bac0f1e470aceef))
+
 ## [1.8.1](https://github.com/eik-lib/cli/compare/v1.8.0...v1.8.1) (2021-01-21)
 
 
