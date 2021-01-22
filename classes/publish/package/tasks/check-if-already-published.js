@@ -10,9 +10,11 @@ const Task = require('./task');
 module.exports = class CheckIfAlreadyPublished extends Task {
     async process(incoming = {}, outgoing = {}) {
         const { log } = this;
-        const { server, name, version, files, path, cwd, type } = incoming;
+        const { server, name, version, files, path, type } = incoming;
 
-        log.debug(`Checking for existence of package ${name} version ${version}`);
+        log.debug(
+            `Checking for existence of package ${name} version ${version}`,
+        );
         log.debug('  ==> Fetching package metadata from server');
 
         // TODO: version needs to be the previous version. How can we get this?
@@ -23,12 +25,12 @@ module.exports = class CheckIfAlreadyPublished extends Task {
                 );
             }
             log.debug(`  ==> Package version ${version} does not yet exist`);
-        } catch(err) {
+        } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
             );
         }
-        
+
         let pkgVersions;
         try {
             pkgVersions = await versions(server, type, name);
@@ -50,7 +52,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         try {
             const localFiles = [join(path, './eik.json')];
             if (files) {
-                const mappings = await this.config.pathsAndFilesAbsolute()
+                const mappings = await this.config.pathsAndFilesAbsolute();
 
                 for (const [, dest] of mappings) {
                     localFiles.push(dest);
@@ -71,7 +73,9 @@ module.exports = class CheckIfAlreadyPublished extends Task {
                     `Version ${v.version} of this package already contains these files, publishing is not necessary.`,
                 );
             }
-            log.debug('  ==> New files do not match existing files, continue with publishing');
+            log.debug(
+                '  ==> New files do not match existing files, continue with publishing',
+            );
         }
 
         outgoing.integrity = localHash;
