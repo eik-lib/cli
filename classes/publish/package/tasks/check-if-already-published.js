@@ -6,7 +6,6 @@ const { join } = require('path');
 const { integrity, versions } = require('../../../../utils/http');
 const hash = require('../../../../utils/hash');
 const Task = require('./task');
-const { files: mapfiles } = require('../../../../utils');
 
 module.exports = class CheckIfAlreadyPublished extends Task {
     async process(incoming = {}, outgoing = {}) {
@@ -51,9 +50,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         try {
             const localFiles = [join(path, './eik.json')];
             if (files) {
-                const mappings = await mapfiles(files, path, {
-                    cwd,
-                });
+                const mappings = await this.config.pathsAndFilesAbsolute()
 
                 for (const [, dest] of mappings) {
                     localFiles.push(dest);
