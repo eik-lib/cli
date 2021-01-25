@@ -19,7 +19,8 @@ module.exports = {
       	    'semantic-release-slack-bot',
             {
                 notifyOnSuccess: true,
-                notifyOnFail: false
+                notifyOnFail: false,
+                packageName: '@eik/cli',
             }
         ],
         '@semantic-release/git',
