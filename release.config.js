@@ -15,6 +15,13 @@ module.exports = {
                 assets: 'release/*.tgz',
             },
         ],
+   	[
+      	    'semantic-release-slack-bot',
+            {
+                notifyOnSuccess: true,
+                notifyOnFail: false
+            }
+        ],
         '@semantic-release/git',
     ],
     preset: 'angular',
