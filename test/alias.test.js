@@ -4,7 +4,7 @@
 
 const os = require('os');
 const fs = require('fs').promises;
-const { join } = require('path');
+const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
 const { EikConfig } = require('@eik/common');
@@ -33,7 +33,7 @@ beforeEach(async (done, t) => {
     });
     const token = await login.run();
 
-    const cwd = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
+    const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     t.context.server = server;
     t.context.address = address;

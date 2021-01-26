@@ -2,6 +2,9 @@
 
 'use strict';
 
+const fs = require('fs');
+const os = require('os');
+const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
@@ -29,9 +32,12 @@ beforeEach(async (done, t) => {
     });
     const token = await login.run();
 
+    const cwd = await fs.mkdtempSync(join(os.tmpdir(), basename(__filename)));
+
     t.context.server = server;
     t.context.address = address;
     t.context.token = token;
+    t.context.cwd = cwd;
     done();
 });
 
@@ -41,12 +47,12 @@ afterEach(async (done, t) => {
 });
 
 test('Current version unpublished - rejects with error', async t => {
-    const { address } = t.context;
+    const { address, cwd } = t.context;
     const config  = buildTestConfig();
 
     try {
         await new cli.Version({
-            cwd: __dirname,
+            cwd,
             server: address,
             name: 'my-app',
             config,
@@ -58,11 +64,11 @@ test('Current version unpublished - rejects with error', async t => {
 });
 
 test('Current version published - files the same - rejects with error', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const config  = buildTestConfig();
 
     await new cli.publish.Package({
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config,
@@ -72,7 +78,7 @@ test('Current version published - files the same - rejects with error', async t 
 
     try {
         await new cli.Version({
-            cwd: __dirname,
+            cwd,
             server: address,
             name: 'my-app',
             config,
@@ -84,10 +90,10 @@ test('Current version published - files the same - rejects with error', async t 
 });
 
 test('Current version published - files changed - bumps version', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
 
     await new cli.publish.Package({
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig(),
@@ -96,7 +102,7 @@ test('Current version published - files changed - bumps version', async t => {
     }).run();
 
     const newVersion = await new cli.Version({
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig({ './index.js': './fixtures/client.js' }),

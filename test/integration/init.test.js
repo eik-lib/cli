@@ -3,7 +3,7 @@
 const fs = require('fs').promises;
 const os = require('os');
 const { test } = require('tap');
-const { join } = require('path');
+const { join, basename } = require('path');
 const { readFileSync } = require('fs');
 const cp = require('child_process');
 
@@ -17,7 +17,7 @@ function exec(cmd) {
 
 test('Initializing a new eik.json file', async t => {
     const eik = join(__dirname, '../../index.js');
-    const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
+    const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     const publishCmd = `${eik} init --cwd ${folder}`;
     await exec(publishCmd);
@@ -38,7 +38,7 @@ test('Initializing a new eik.json file', async t => {
 
 test('Initializing a new eik.json file passing custom values', async t => {
     const eik = join(__dirname, '../../index.js');
-    const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
+    const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     const publishCmd = `${eik} init 
         --cwd ${folder}

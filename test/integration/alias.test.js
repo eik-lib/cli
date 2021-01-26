@@ -6,7 +6,7 @@ const fastify = require('fastify');
 const fs = require('fs').promises;
 const os = require('os');
 const cp = require('child_process');
-const { join } = require('path');
+const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
@@ -28,7 +28,7 @@ beforeEach(async (done, t) => {
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
-    const folder = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
+    const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
     const eik = join(__dirname, '../../index.js');
 
     const token = await new cli.Login({

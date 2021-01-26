@@ -4,7 +4,7 @@
 
 const fs = require('fs').promises;
 const os = require('os');
-const { join } = require('path');
+const { join, basename } = require('path');
 const puppeteer = require('puppeteer');
 const fetch = require('node-fetch');
 const { test, beforeEach, afterEach } = require('tap');
@@ -24,7 +24,7 @@ beforeEach(async (done, t) => {
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
-    const cwd = await fs.mkdtemp(join(os.tmpdir(), 'foo-'));
+    const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     const token = await new Login({
         server: address,
