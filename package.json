@@ -45,7 +45,7 @@
     "pkg-dir": "5.0.0",
     "read-pkg-up": "7.0.1",
     "rimraf": "3.0.2",
-    "rollup": "2.38.0",
+    "rollup": "2.38.1",
     "rollup-plugin-esm-import-to-url": "2.1.0",
     "rollup-plugin-terser": "7.0.2",
     "semver": "7.3.4",
