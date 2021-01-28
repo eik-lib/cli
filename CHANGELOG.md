@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/eik-lib/cli/compare/v1.8.2...v1.8.3) (2021-01-28)
+
+
+### Bug Fixes
+
+* Remove unused dependencies ([c7d4ba9](https://github.com/eik-lib/cli/commit/c7d4ba977f75120124f1380df0eb3cc643b14c58))
+
 ## [1.8.2](https://github.com/eik-lib/cli/compare/v1.8.1...v1.8.2) (2021-01-22)
 
 
