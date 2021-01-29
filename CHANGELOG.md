@@ -1,3 +1,10 @@
+## [1.8.5](https://github.com/eik-lib/cli/compare/v1.8.4...v1.8.5) (2021-01-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @rollup/plugin-node-resolve to v11.1.1 ([01ef4b8](https://github.com/eik-lib/cli/commit/01ef4b8640af7ca91c3e9c671ab42df45f763cba))
+
 ## [1.8.4](https://github.com/eik-lib/cli/compare/v1.8.3...v1.8.4) (2021-01-28)
 
 
