@@ -1,3 +1,10 @@
+## [1.8.6](https://github.com/eik-lib/cli/compare/v1.8.5...v1.8.6) (2021-01-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency rollup to v2.38.2 ([e0a813b](https://github.com/eik-lib/cli/commit/e0a813badf04a77c6a64c0c4dfcc52c7eeaf523f))
+
 ## [1.8.5](https://github.com/eik-lib/cli/compare/v1.8.4...v1.8.5) (2021-01-29)
 
 
