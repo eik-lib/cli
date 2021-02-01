@@ -2,12 +2,23 @@
 
 'use strict';
 
+const os = require('os');
+const fs = require('fs').promises;
+const { join, basename } = require('path');
 const fastify = require('fastify');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
+const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
+
+function buildTestConfig(files) {
+    return new EikConfig({files: files || {
+        './index.js': './fixtures/client.js',
+        './index.css': './fixtures/styles.css',
+    }}, null, __dirname)
+}
 
 beforeEach(async (done, t) => {
     const server = fastify({ logger: false });
@@ -22,9 +33,12 @@ beforeEach(async (done, t) => {
     });
     const token = await login.run();
     
+    const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+
     t.context.server = server
     t.context.address = address;
     t.context.token = token;
+    t.context.cwd = cwd;
     done();
 });
 
@@ -34,14 +48,17 @@ afterEach(async (done, t) => {
 });
 
 test('Retrieving meta information about a package from an asset server', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.NPM({
+    await new cli.publish.Package({
         server: address,
         name: 'lit-html',
         version: '1.1.2',
         token,
+        npm: true,
+        cwd,
+        config: buildTestConfig(),
     }).run();
 
     const result = await new cli.Meta({
@@ -50,6 +67,7 @@ test('Retrieving meta information about a package from an asset server', async t
         name: 'lit-html',
         debug: true,
         token,
+        cwd,
     }).run();
 
     t.ok(result, 'Command should return truthy');

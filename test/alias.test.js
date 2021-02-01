@@ -83,13 +83,17 @@ test('Creating an npm alias', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.NPM({
+    await new cli.publish.Package({
         server: address,
         name: 'lit-html',
         version: '1.1.2',
         debug: true,
         token,
         cwd,
+        npm: true,
+        config: buildTestConfig({
+            './index.js': './fixtures/client.js',
+        }),
     }).run();
 
     const result = await new cli.Alias({

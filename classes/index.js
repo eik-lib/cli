@@ -6,7 +6,6 @@ const Meta = require('./meta');
 const Login = require('./login');
 const PublishMap = require('./publish/map');
 const PublishPackage = require('./publish/package/index');
-const PublishNPM = require('./publish/npm');
 const Integrity = require('./integrity');
 const Version = require('./version');
 
@@ -20,6 +19,5 @@ module.exports = {
     publish: {
         Package: PublishPackage,
         Map: PublishMap,
-        NPM: PublishNPM,
     },
 };
