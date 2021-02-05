@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "test": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.js test/**/*.test.js",
+    "test:ci": "npm run test -- --jobs=1",
     "lint:format": "eslint --fix .",
     "lint": "eslint ."
   },
