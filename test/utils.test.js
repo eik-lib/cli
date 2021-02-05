@@ -1,8 +1,9 @@
 'use strict';
 
+const os = require('os');
+const { join, basename } = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const { join } = require('path');
 const { test } = require('tap');
 const fastify = require('fastify');
 const j = require('../utils/json');
@@ -222,7 +223,7 @@ test('fetch remote hash for a given version', async (t) => {
 });
 
 test('write JSON file - object - file relative to cwd', async (t) => {
-    const cwd = join(__dirname, 'tmp');
+    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
     await j.write(
         { version: '1.0.0', integrity: [] },
         { cwd, filename: '.eikrc' },
@@ -235,7 +236,7 @@ test('write JSON file - object - file relative to cwd', async (t) => {
 });
 
 test('write JSON file - object - file absolute path', async (t) => {
-    const cwd = join(__dirname, 'tmp');
+    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
     await j.write({ prop: 'val' }, { filename: join(cwd, 'test.json') });
     const eikrc = fs.readFileSync(join(cwd, 'test.json'));
     const { prop } = JSON.parse(eikrc);
@@ -255,7 +256,7 @@ test('write JSON file - string - file relative path', async (t) => {
 });
 
 test('write JSON file - string - file absolute path', async (t) => {
-    const cwd = join(__dirname, 'tmp');
+    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
     await j.write({ prop: 'val' }, join(cwd, 'test3.json'));
     const eikrc = fs.readFileSync(join(cwd, 'test3.json'));
     const { prop } = JSON.parse(eikrc);
@@ -264,7 +265,7 @@ test('write JSON file - string - file absolute path', async (t) => {
 });
 
 test('read JSON file - object - file relative path', async (t) => {
-    const cwd = join(__dirname, 'tmp');
+    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
     fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
     const json = await j.read({ cwd, filename: './test3.json' });
 
@@ -272,7 +273,7 @@ test('read JSON file - object - file relative path', async (t) => {
 });
 
 test('read JSON file - object - file absolute path', async (t) => {
-    const cwd = join(__dirname, 'tmp');
+    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
     fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
     const json = await j.read({ filename: join(cwd, './test3.json') });
 
@@ -290,7 +291,7 @@ test('read JSON file - string - file relative path', async (t) => {
 });
 
 test('read JSON file - string - file absolute path', async (t) => {
-    const cwd = join(__dirname, 'tmp');
+    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
     fs.writeFileSync(
         join(cwd, './test-read-json-2.json'),
         JSON.stringify({ key: 'val' }),
