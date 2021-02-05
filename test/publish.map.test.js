@@ -2,6 +2,9 @@
 
 'use strict';
 
+const os = require('os');
+const fs = require('fs').promises;
+const { join, basename } = require('path');
 const fastify = require('fastify');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
@@ -22,9 +25,12 @@ beforeEach(async (done, t) => {
     });
     const token = await login.run();
     
+    const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+
     t.context.server = server
     t.context.address = address;
     t.context.token = token;
+    t.context.cwd = cwd;
     done();
 });
 
@@ -34,16 +40,16 @@ afterEach(async (done, t) => {
 });
 
 test('Uploading import map to an asset server', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
     const publishMap = new cli.publish.Map({
         logger: l.logger,
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-map',
         version: '1.0.0',
-        file: './fixtures/import-map.json',
+        file: join(__dirname, './fixtures/import-map.json'),
         debug: true,
         token,
     });

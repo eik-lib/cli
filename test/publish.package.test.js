@@ -2,6 +2,9 @@
 
 'use strict';
 
+const os = require('os');
+const fs = require('fs').promises;
+const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
@@ -31,9 +34,12 @@ beforeEach(async (done, t) => {
     });
     const token = await login.run();
     
+    const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+
     t.context.server = server;
     t.context.address = address;
     t.context.token = token;
+    t.context.cwd = cwd;
     done();
 });
 
@@ -43,12 +49,12 @@ afterEach(async (done, t) => {
 });
 
 test('Uploading app assets to an asset server', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
     const publishApp = new cli.publish.Package({
         logger: l.logger,
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig(),
@@ -68,12 +74,12 @@ test('Uploading app assets to an asset server', async t => {
 });
 
 test('Uploading app assets to an asset server under npm namespace', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
     const publishApp = new cli.publish.Package({
         logger: l.logger,
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig(),
@@ -94,12 +100,12 @@ test('Uploading app assets to an asset server under npm namespace', async t => {
 });
 
 test('Uploading JS app assets only to an asset server', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
     const publishApp = new cli.publish.Package({
         logger: l.logger,
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig({
@@ -121,12 +127,12 @@ test('Uploading JS app assets only to an asset server', async t => {
 });
 
 test('Uploading CSS app assets only to an asset server', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
     const publishApp = new cli.publish.Package({
         logger: l.logger,
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig({
@@ -148,12 +154,12 @@ test('Uploading CSS app assets only to an asset server', async t => {
 });
 
 test('Uploading a directory of assets to an asset server', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
     const publishApp = new cli.publish.Package({
         logger: l.logger,
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig({
@@ -175,12 +181,12 @@ test('Uploading a directory of assets to an asset server', async t => {
 });
 
 test('Uploading a directory of assets to the root path to an asset server 2', async t => {
-    const { address, token } = t.context;
+    const { address, token, cwd } = t.context;
     const l = mockLogger();
 
     const publishApp = new cli.publish.Package({
         logger: l.logger,
-        cwd: __dirname,
+        cwd,
         server: address,
         name: 'my-app',
         config: buildTestConfig({
