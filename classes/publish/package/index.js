@@ -84,6 +84,7 @@ module.exports = class PublishApp {
             author: {},
             org: '',
             version: this.version,
+            response: {},
         };
 
         await this.validateInput.process(incoming, outgoing);
