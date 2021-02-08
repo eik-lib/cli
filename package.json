@@ -70,7 +70,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "semantic-release": "17.3.7",
-    "semantic-release-slack-bot": "^2.1.0",
+    "semantic-release-slack-bot": "2.1.0",
     "tap": "14.11.0"
   }
 }
