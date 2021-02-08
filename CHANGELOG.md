@@ -1,3 +1,10 @@
+## [1.8.9](https://github.com/eik-lib/cli/compare/v1.8.8...v1.8.9) (2021-02-08)
+
+
+### Bug Fixes
+
+* Standardize stored integrity file between publish and integrity command ([4d16da2](https://github.com/eik-lib/cli/commit/4d16da2b2488437074223095b189f5f8a23650d8))
+
 ## [1.8.8](https://github.com/eik-lib/cli/compare/v1.8.7...v1.8.8) (2021-02-05)
 
 
