@@ -30,6 +30,7 @@ module.exports = class UploadFiles extends Task {
             outgoing.org = message.org;
             outgoing.files = message.files;
             outgoing.version = version;
+            outgoing.response = message;
 
         } catch (err) {
             log.error('Unable to upload zip file to server');
