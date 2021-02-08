@@ -46,10 +46,7 @@ beforeEach(async (done, t) => {
         },
     };
 
-    await fs.writeFile(
-        join(folder, 'eik.json'),
-        JSON.stringify(assets),
-    );
+    await fs.writeFile(join(folder, 'eik.json'), JSON.stringify(assets));
 
     const cmd = `${eik} package --token ${token} --cwd ${folder} --npm`;
     await exec(cmd);
@@ -81,14 +78,18 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('eik package-alias <name> <version> <alias>', async t => {
+test('eik package-alias <name> <version> <alias>', async (t) => {
     const { address, token, folder: cwd } = t.context;
-    const config = new EikConfig({
-        files: {
-            './index.js': join(__dirname, '../fixtures/client.js'),
-            './index.css': join(__dirname, '../fixtures/styles.css'),
-        }
-    }, null, cwd)
+    const config = new EikConfig(
+        {
+            files: {
+                './index.js': join(__dirname, '../fixtures/client.js'),
+                './index.css': join(__dirname, '../fixtures/styles.css'),
+            },
+        },
+        null,
+        cwd,
+    );
     await new cli.publish.Package({
         server: address,
         name: 'my-pack',
@@ -106,9 +107,7 @@ test('eik package-alias <name> <version> <alias>', async t => {
 
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
-    const res = await fetch(
-        new URL('/pkg/my-pack/v1/index.js', address),
-    );
+    const res = await fetch(new URL('/pkg/my-pack/v1/index.js', address));
 
     t.equal(res.ok, true);
     t.notOk(error);
@@ -129,7 +128,10 @@ test('eik npm-alias <name> <version> <alias> --token --server : no eik.json or .
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
     const res = await fetch(
-        new URL('/npm/scroll-into-view-if-needed/v2/index.js', t.context.address),
+        new URL(
+            '/npm/scroll-into-view-if-needed/v2/index.js',
+            t.context.address,
+        ),
     );
 
     t.equal(res.ok, true);
@@ -145,7 +147,12 @@ test('eik npm-alias <name> <version> <alias> --token --server : no eik.json or .
 test('eik npm-alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
+        version: '1.0.0',
         server: t.context.address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
     };
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),
@@ -157,7 +164,10 @@ test('eik npm-alias <name> <version> <alias> : publish details provided by eik.j
     const { error, stdout } = await exec(cmd);
 
     const res = await fetch(
-        new URL('/npm/scroll-into-view-if-needed/v2/index.js', t.context.address),
+        new URL(
+            '/npm/scroll-into-view-if-needed/v2/index.js',
+            t.context.address,
+        ),
     );
 
     t.equal(res.ok, true);
@@ -179,9 +189,7 @@ test('eik map-alias <name> <version> <alias> --token --server : no eik.json or .
 
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
-    const res = await fetch(
-        new URL('/map/test-map/v1', t.context.address),
-    );
+    const res = await fetch(new URL('/map/test-map/v1', t.context.address));
 
     t.equal(res.ok, true);
 
@@ -197,7 +205,12 @@ test('eik map-alias <name> <version> <alias> --token --server : no eik.json or .
 test('eik map-alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
+        version: '1.0.0',
         server: t.context.address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
     };
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),
@@ -208,9 +221,7 @@ test('eik map-alias <name> <version> <alias> : publish details provided by eik.j
 
     const { error, stdout } = await exec(cmd);
 
-    const res = await fetch(
-        new URL('/map/test-map/v1', t.context.address),
-    );
+    const res = await fetch(new URL('/map/test-map/v1', t.context.address));
 
     t.equal(res.ok, true);
 
