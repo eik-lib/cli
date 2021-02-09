@@ -5,13 +5,14 @@ const abslog = require('abslog');
 const { join } = require('path');
 const { schemas, validators } = require('@eik/common');
 const { request } = require('../utils/http');
+const { typeSlug } = require('../utils');
 
 module.exports = class Alias {
     constructor({ logger, server, token, type, name, version, alias } = {}) {
         this.log = abslog(logger);
         this.server = server;
         this.token = token;
-        this.type = type;
+        this.type = typeSlug(type);
         this.name = name;
         this.alias = alias;
         this.version = version;

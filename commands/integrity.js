@@ -6,6 +6,9 @@
 
 const { join } = require('path');
 const ora = require('ora');
+const {
+    helpers: { configStore },
+} = require('@eik/common');
 const Integrity = require('../classes/integrity');
 const { logger, getDefaults, getCWD } = require('../utils');
 const json = require('../utils/json');
@@ -19,18 +22,6 @@ exports.describe = `Retrieve file integrity information for package name and ver
 exports.builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
-
-    yargs.positional('name', {
-        describe: 'Name of package. Defaults to value defined in eik.json',
-        type: 'string',
-        default: defaults.name,
-    });
-
-    yargs.positional('version', {
-        describe: 'Semver version of package. Defaults to value defined in eik.json',
-        type: 'string',
-        default: defaults.version,
-    });
 
     yargs.options({
         server: {
@@ -48,29 +39,19 @@ exports.builder = (yargs) => {
             describe: 'Alter current working directory.',
             default: defaults.cwd,
         },
-        out: {
-            alias: 'o',
-            describe: 'Eik directory',
-            default: defaults.out,
-        },
-        npm: {
-            describe: 'Use NPM namespace',
-            default: false,
-            type: 'boolean',
-        },
     });
 
     yargs.example(`eik integrity`);
-    yargs.example(`eik integrity my-package 1.0.0`);
     yargs.example(`eik integrity --debug`);
-    yargs.example(`eik integrity --server https://assets.myeikserver.com`);
 };
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let integrity = false;
-    const { debug, server, cwd, name, version, out, npm } = argv;
+    const { debug, cwd } = argv;
     const l = logger(spinner, debug);
+    const config = configStore.findInDirectory(cwd);
+    const { name, server, version, type, out } = config;
 
     try {
         integrity = await new Integrity({ 
@@ -80,7 +61,7 @@ exports.handler = async (argv) => {
             server,
             debug,
             cwd,
-            npm,
+            type,
         }).run();
 
         if (integrity) {

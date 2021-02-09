@@ -7,6 +7,7 @@ const abslog = require('abslog');
 const { join } = require('path');
 const { schemas, ValidationError } = require('@eik/common');
 const fetch = require('node-fetch');
+const { typeSlug } = require('../utils');
 
 module.exports = class Integrity {
     constructor({
@@ -14,9 +15,9 @@ module.exports = class Integrity {
         name,
         version,
         server,
+        type,
         debug = false,
         cwd = process.cwd(),
-        npm = false,
     } = {}) {
         this.log = abslog(logger);
         this.server = server;
@@ -24,7 +25,7 @@ module.exports = class Integrity {
         this.version = version;
         this.debug = debug;
         this.cwd = cwd;
-        this.type = npm ? 'npm' : 'pkg';
+        this.type = type;
     }
 
     async run() {
@@ -40,6 +41,9 @@ module.exports = class Integrity {
             this.log.debug(`  ==> version: ${this.version}`);
             schemas.assert.version(this.version);
 
+            this.log.debug(`  ==> type: ${this.type}`);
+            schemas.assert.type(this.type || null);
+
             this.log.debug(`  ==> debug: ${this.debug}`);
             if (typeof this.debug !== 'boolean') {
                 throw new ValidationError(`Parameter "debug" is not valid`);
@@ -50,14 +54,13 @@ module.exports = class Integrity {
                 throw new ValidationError(`Parameter "cwd" is not valid`);
             }
         } catch (err) {
-            this.log.error(err.message);
-            return false;
+            throw new Error(`Unable to validate input to command: ${err.message}`)
         }
 
         this.log.debug('Requesting meta information from asset server');
         try {
             const url = new URL(
-                join(this.type, this.name, this.version),
+                join(typeSlug(this.type), this.name, this.version),
                 this.server,
             );
             this.log.debug(`  ==> url: ${url}`);
@@ -95,9 +98,7 @@ module.exports = class Integrity {
 
             throw new Error('Server Error');
         } catch (err) {
-            this.log.error('Unable to retrieve meta information for package');
-            this.log.warn(err.message);
-            return false;
+            throw new Error(`Unable to retrieve meta information for package: ${err.message}`);
         }
     }
 };

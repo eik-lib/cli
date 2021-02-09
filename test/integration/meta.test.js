@@ -36,6 +36,7 @@ beforeEach(async (done, t) => {
     const assets = {
         name: 'scroll-into-view-if-needed',
         version: '2.2.24',
+        type: 'npm',
         server: address,
         files: {
             './index.js': join(__dirname, './../fixtures/client.js'),
@@ -45,7 +46,7 @@ beforeEach(async (done, t) => {
 
     await fs.writeFile(join(folder, 'eik.json'), JSON.stringify(assets));
 
-    const cmd = `${eik} package --token ${token} --cwd ${folder} --npm`;
+    const cmd = `${eik} package --token ${token} --cwd ${folder}`;
     await exec(cmd);
 
     t.context.server = server;

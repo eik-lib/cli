@@ -65,6 +65,7 @@ test('eik meta : details provided by eik.json', async (t) => {
     await exec(cmd);
 
     cmd = `${eik} integrity --cwd ${t.context.folder}`;
+    
     const { error, stdout } = await exec(cmd);
 
     const integrity = JSON.parse(
@@ -87,8 +88,9 @@ test('eik meta : details provided by eik.json', async (t) => {
 
 test('eik meta : details provided by eik.json - npm namespace', async (t) => {
     const assets = {
-        name: 'test-app',
+        name: 'test-app-npm',
         version: '1.0.0',
+        type: 'npm',
         server: t.context.address,
         files: {
             './index.js': join(__dirname, './../fixtures/client.js'),
@@ -102,10 +104,10 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
 
     const eik = join(__dirname, '../../index.js');
 
-    let cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    let cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
     await exec(cmd);
 
-    cmd = `${eik} integrity --cwd ${t.context.folder} --npm`;
+    cmd = `${eik} integrity --cwd ${t.context.folder}`;
     const { error, stdout } = await exec(cmd);
 
     const integrity = JSON.parse(
@@ -118,9 +120,9 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
     t.notOk(error);
     t.match(
         stdout,
-        'integrity information for package "test-app" (v1.0.0) saved to ".eik/integrity.json"',
+        'integrity information for package "test-app-npm" (v1.0.0) saved to ".eik/integrity.json"',
     );
-    t.equal(integrity.name, 'test-app');
+    t.equal(integrity.name, 'test-app-npm');
     t.equal(integrity.version, '1.0.0');
     t.ok(integrity.integrity);
     t.end();

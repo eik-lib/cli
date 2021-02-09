@@ -9,15 +9,7 @@ const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
-const { EikConfig } = require('@eik/common');
 const cli = require('..');
-
-function buildTestConfig(files) {
-    return new EikConfig({files: files || {
-        './index.js': './fixtures/client.js',
-        './index.css': './fixtures/styles.css',
-    }}, null, __dirname)
-}
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
@@ -48,14 +40,16 @@ afterEach(async (done, t) => {
 
 test('Current version unpublished - rejects with error', async t => {
     const { address, cwd } = t.context;
-    const config  = buildTestConfig();
 
     try {
         await new cli.Version({
             cwd,
             server: address,
             name: 'my-app',
-            config,
+            files: {
+                './index.js': join(__dirname, './fixtures/client.js'),
+                './index.css': join(__dirname, './fixtures/styles.css'),
+            },
             version: '1.0.0',
         }).run();
     } catch (err) {
@@ -65,25 +59,22 @@ test('Current version unpublished - rejects with error', async t => {
 
 test('Current version published - files the same - rejects with error', async t => {
     const { address, token, cwd } = t.context;
-    const config  = buildTestConfig();
-
-    await new cli.publish.Package({
+    const config  = {
         cwd,
         server: address,
         name: 'my-app',
-        config,
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
         token,
         version: '1.0.0',
-    }).run();
+    };
+
+    await new cli.publish.Package(config).run();
 
     try {
-        await new cli.Version({
-            cwd,
-            server: address,
-            name: 'my-app',
-            config,
-            version: '1.0.0',
-        }).run();
+        await new cli.Version(config).run();
     } catch (err) {
         t.equals(err.message, 'The current version of this package already contains these files, version change is not needed.');
     }
@@ -91,22 +82,23 @@ test('Current version published - files the same - rejects with error', async t 
 
 test('Current version published - files changed - bumps version', async t => {
     const { address, token, cwd } = t.context;
-
-    await new cli.publish.Package({
+    const config  = {
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig(),
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
         token,
         version: '1.0.0',
-    }).run();
+    };
+
+    await new cli.publish.Package(config).run();
 
     const newVersion = await new cli.Version({
-        cwd,
-        server: address,
-        name: 'my-app',
-        config: buildTestConfig({ './index.js': './fixtures/client.js' }),
-        version: '1.0.0',
+        ...config,
+        files: { './index.js': join(__dirname, './fixtures/client.js') },
     }).run();
 
     t.equals(newVersion, '1.0.1');

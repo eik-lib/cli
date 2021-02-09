@@ -82,6 +82,7 @@ test('eik package : package, details provided by eik.json file - npm namespace',
     const assets = {
         name: 'test-app',
         version: '1.0.0',
+        type: 'npm',
         server: t.context.address,
         files: {
             './index.js': join(__dirname, './../fixtures/client.js'),
@@ -106,6 +107,40 @@ test('eik package : package, details provided by eik.json file - npm namespace',
     t.equal(res.ok, true);
     t.notOk(error);
     t.match(stdout, 'NPM');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
+    t.end();
+});
+
+test('eik package : package, details provided by eik.json file - explicit package namespace', async (t) => {
+    const assets = {
+        name: 'test-app',
+        version: '1.0.0',
+        type: 'package',
+        server: t.context.address,
+        files: {
+            './index.js': join(__dirname, './../fixtures/client.js'),
+            './index.css': join(__dirname, './../fixtures/styles.css'),
+        },
+    };
+
+    await fs.writeFile(
+        join(t.context.folder, 'eik.json'),
+        JSON.stringify(assets),
+    );
+
+    const eik = join(__dirname, '../../index.js');
+    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+
+    const { error, stdout } = await exec(cmd);
+
+    const res = await fetch(
+        new URL('/pkg/test-app/1.0.0/index.js', t.context.address),
+    );
+
+    t.equal(res.ok, true);
+    t.notOk(error);
+    t.match(stdout, 'PACKAGE');
     t.match(stdout, 'less than a minute ago');
     t.match(stdout, 'Generic User');
     t.end();

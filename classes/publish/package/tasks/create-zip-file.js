@@ -11,9 +11,9 @@ const Task = require('./task');
 const { copyFileSync, writeFileSync } = fs;
 
 module.exports = class CreateZipFile extends Task {
-    async process(incoming = {}, outgoing = {}) {
-        const { log } = this;
-        const { path, name, map, server, out } = incoming;
+    async process() {
+        const { log, path } = this;
+        const { name, map, server, out, files } = this.config;
 
         log.debug(`Creating zip file`);
         log.debug(`  ==> ${join(path, `eik.tgz`)}`);
@@ -28,7 +28,7 @@ module.exports = class CreateZipFile extends Task {
                     {
                         name,
                         server,
-                        files: this.config.files,
+                        files,
                         'import-map': map,
                         out,
                     },
@@ -41,7 +41,7 @@ module.exports = class CreateZipFile extends Task {
             throw new Error(`Failed to zip eik.json file: ${err.message}`);
         }
 
-        if (this.config.files) {
+        if (files) {
             try {
                 const mappings = await this.config.pathsAndFilesAbsolute();
 
@@ -60,21 +60,21 @@ module.exports = class CreateZipFile extends Task {
         }
 
         try {
-            // eslint-disable-next-line no-param-reassign
-            incoming.zipFile = resolve(`${path}/eik.tgz`);
+            const zipFile = resolve(`${path}/eik.tgz`);
 
             await tar.c(
                 {
                     gzip: true,
-                    file: incoming.zipFile,
+                    file: zipFile,
                     cwd: path,
                 },
                 filesToZip,
             );
+
+            return zipFile;
         } catch (err) {
             throw new Error(`Unable to create zip file: ${err.message}`);
         }
 
-        return outgoing;
     }
 };

@@ -8,7 +8,13 @@ const {
     helpers: { configStore },
 } = require('@eik/common');
 const PublishPackage = require('../classes/publish/package/index');
-const { logger, getDefaults, getCWD } = require('../utils');
+const {
+    logger,
+    getDefaults,
+    getCWD,
+    typeSlug,
+    typeTitle,
+} = require('../utils');
 const { Artifact } = require('../formatters');
 
 exports.command = 'package';
@@ -45,14 +51,8 @@ exports.builder = (yargs) => {
             default: false,
             type: 'boolean',
         },
-        npm: {
-            describe: 'Assigns package to the NPM namespace',
-            default: false,
-            type: 'boolean',
-        },
         token: {
-            describe:
-                `Provide a jwt token to be used to authenticate with the Eik server.
+            describe: `Provide a jwt token to be used to authenticate with the Eik server.
                 Automatically determined if authenticated (via eik login)`,
             type: 'string',
             alias: 't',
@@ -70,32 +70,32 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, dryRun, cwd, token, npm } = argv;
+    const { debug, dryRun, cwd, token } = argv;
     const config = configStore.findInDirectory(cwd);
-    const {name, server, map, version, out} = config;
+    const { name, server, version, type, map, out, files } = config;
 
     try {
-        const options = { 
+        const options = {
             logger: logger(spinner, debug),
-            name,
-            server,
-            map: Array.isArray(map) ? map : [map],
-            config,
-            version,
             cwd,
             token,
             dryRun,
             debug,
+            name,
+            server,
+            version,
+            type,
+            map,
             out,
-            npm,
+            files,
         };
-
-        const type = npm ? 'npm' : 'pkg';
 
         const publish = await new PublishPackage(options).run();
 
         if (!publish) {
-            spinner.warn('Version in eik.json has not changed since last publish, publishing is not necessary');
+            spinner.warn(
+                'Version in eik.json has not changed since last publish, publishing is not necessary',
+            );
             process.stdout.write('\n');
             process.exit(0);
         }
@@ -103,16 +103,16 @@ exports.handler = async (argv) => {
         const { files: fls } = publish;
 
         if (!dryRun) {
-            let url = new URL(join(type, name), server);
+            let url = new URL(join(typeSlug(type), name), server);
             let res = await fetch(url);
             const pkgMeta = await res.json();
 
-            url = new URL(join(type, name, version), server);
+            url = new URL(join(typeSlug(type), name, version), server);
             res = await fetch(url);
             const pkgVersionMeta = await res.json();
 
             const artifact = new Artifact(pkgMeta);
-            artifact.versions = [ pkgVersionMeta ];
+            artifact.versions = [pkgVersionMeta];
 
             spinner.text = '';
             spinner.stopAndPersist();
@@ -123,19 +123,34 @@ exports.handler = async (argv) => {
             spinner.text = '';
             spinner.stopAndPersist();
 
-            process.stdout.write(`:: ${chalk.bgYellow.white.bold(npm ? ' NPM ' : ' PACKAGE ')} > ${chalk.green(name)} | ${chalk.bold('dry run')}`);
+            process.stdout.write(
+                `:: ${chalk.bgYellow.white.bold(
+                    typeTitle(type),
+                )} > ${chalk.green(name)} | ${chalk.bold('dry run')}`,
+            );
             process.stdout.write('\n\n');
             process.stdout.write('   files (local temporary):\n');
             for (const file of fls) {
-                process.stdout.write(`   - ${chalk.bold('type')}: ${file.type}\n`);
-                process.stdout.write(`     ${chalk.bold('path')}: ${file.pathname}\n\n`);
+                process.stdout.write(
+                    `   - ${chalk.bold('type')}: ${file.type}\n`,
+                );
+                process.stdout.write(
+                    `     ${chalk.bold('path')}: ${file.pathname}\n\n`,
+                );
             }
-            process.stdout.write(`   ${chalk.bold('No files were published to remote server')}\n\n`);
+            process.stdout.write(
+                `   ${chalk.bold(
+                    'No files were published to remote server',
+                )}\n\n`,
+            );
         }
     } catch (err) {
         spinner.warn(err.message);
         spinner.text = '';
         spinner.stopAndPersist();
+        if (debug) {
+            console.error(err);
+        }
         process.exit(1);
     }
 };

@@ -10,14 +10,14 @@ const glob = require('glob');
 const Task = require('./task');
 
 module.exports = class CheckBundleSizes extends Task {
-    async process(incoming = {}, outgoing = {}) {
-        const { files, cwd } = incoming;
+    async process() {
+        const { cwd } = this;
+        const { files } = this.config;
         this.log.debug('Checking bundle file sizes');
         try {
             if (files) {
                 for (const [key, val] of Object.entries(files)) {
                     const path = isAbsolute(val) ? val : join(cwd, val);
-
                     const fls = await new Promise((resolve, reject) =>
                         glob(path, (err, f) => {
                             if (err) {
@@ -40,7 +40,5 @@ module.exports = class CheckBundleSizes extends Task {
         } catch (err) {
             throw new Error(`Failed to check bundle sizes: ${err.message}`);
         }
-
-        return outgoing;
     }
 };

@@ -2,19 +2,12 @@
 
 'use strict';
 
+const { join } = require('path');
 const fastify = require('fastify');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
-const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const cli = require('..');
-
-function buildTestConfig(files) {
-    return new EikConfig({files: files || {
-        './index.js': './fixtures/client.js',
-        './index.css': './fixtures/styles.css',
-    }}, null, __dirname)
-}
 
 beforeEach(async (done, t) => {
     const server = fastify({ logger: false });
@@ -47,15 +40,19 @@ test('package integrity', async (t) => {
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        config: buildTestConfig(),
         token,
         version: '1.0.0',
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        }
     }).run();
 
     const result = await new cli.Integrity({
         server: address,
         name: 'my-app',
         version: '1.0.0',
+        type: 'package',
     }).run();
 
     t.equal(result.name, 'my-app');

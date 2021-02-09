@@ -8,18 +8,9 @@ const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
-const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
-
-function buildTestConfig(files) {
-    return new EikConfig({files: files || {
-        './index.js': './fixtures/client.js',
-        './index.css': './fixtures/styles.css',
-    }}, null, __dirname)
-}
-
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
@@ -27,13 +18,13 @@ beforeEach(async (done, t) => {
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
-    
+
     const login = new cli.Login({
         server: address,
         key: 'change_me',
     });
     const token = await login.run();
-    
+
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     t.context.server = server;
@@ -48,7 +39,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Uploading app assets to an asset server', async t => {
+test('Uploading app assets to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -57,10 +48,13 @@ test('Uploading app assets to an asset server', async t => {
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig(),
         debug: true,
         token,
         version: '1.0.0',
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        }
     });
 
     const result = await publishApp.run();
@@ -73,7 +67,7 @@ test('Uploading app assets to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading app assets to an asset server under npm namespace', async t => {
+test('Uploading app assets to an asset server under npm namespace', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -82,11 +76,14 @@ test('Uploading app assets to an asset server under npm namespace', async t => {
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig(),
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
+        type: 'npm',
         debug: true,
         token,
         version: '1.0.0',
-        npm: true,
     });
 
     const result = await publishApp.run();
@@ -99,7 +96,7 @@ test('Uploading app assets to an asset server under npm namespace', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading JS app assets only to an asset server', async t => {
+test('Uploading JS app assets only to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -108,9 +105,9 @@ test('Uploading JS app assets only to an asset server', async t => {
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            './index.js': './fixtures/client.js',
-        }),
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+        },
         debug: true,
         token,
         version: '1.0.0',
@@ -126,7 +123,7 @@ test('Uploading JS app assets only to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading CSS app assets only to an asset server', async t => {
+test('Uploading CSS app assets only to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -135,9 +132,9 @@ test('Uploading CSS app assets only to an asset server', async t => {
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            './index.css': './fixtures/styles.css',
-        }),
+        files: {
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
         debug: true,
         token,
         version: '1.0.0',
@@ -153,7 +150,7 @@ test('Uploading CSS app assets only to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading a directory of assets to an asset server', async t => {
+test('Uploading a directory of assets to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -162,9 +159,9 @@ test('Uploading a directory of assets to an asset server', async t => {
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            './icons': './fixtures/icons/**/*',
-        }),
+        files: {
+            './icons': join(__dirname, './fixtures/icons/**/*'),
+        },
         debug: true,
         token,
         version: '1.0.0',
@@ -180,7 +177,7 @@ test('Uploading a directory of assets to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading a directory of assets to the root path to an asset server 2', async t => {
+test('Uploading a directory of assets to the root path to an asset server 2', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -189,9 +186,9 @@ test('Uploading a directory of assets to the root path to an asset server 2', as
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            '/': './fixtures/icons/**/*',
-        }),
+        files: {
+            '/': join(__dirname, './fixtures/icons/**/*'),
+        },
         debug: true,
         token,
         version: '1.0.0',

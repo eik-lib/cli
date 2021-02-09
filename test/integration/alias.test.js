@@ -10,7 +10,6 @@ const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
-const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const cli = require('../..');
 
@@ -39,6 +38,7 @@ beforeEach(async (done, t) => {
     const assets = {
         name: 'scroll-into-view-if-needed',
         version: '2.2.24',
+        type: 'npm',
         server: address,
         files: {
             './index.js': join(__dirname, './../fixtures/client.js'),
@@ -48,7 +48,7 @@ beforeEach(async (done, t) => {
 
     await fs.writeFile(join(folder, 'eik.json'), JSON.stringify(assets));
 
-    const cmd = `${eik} package --token ${token} --cwd ${folder} --npm`;
+    const cmd = `${eik} package --token ${token} --cwd ${folder}`;
     await exec(cmd);
 
     const map = {
@@ -80,32 +80,29 @@ afterEach(async (done, t) => {
 
 test('eik package-alias <name> <version> <alias>', async (t) => {
     const { address, token, folder: cwd } = t.context;
-    const config = new EikConfig(
-        {
-            files: {
-                './index.js': join(__dirname, '../fixtures/client.js'),
-                './index.css': join(__dirname, '../fixtures/styles.css'),
-            },
-        },
-        null,
-        cwd,
-    );
-    await new cli.publish.Package({
+    const eik = join(__dirname, '../../index.js');
+
+    const assets = {
         server: address,
         name: 'my-pack',
-        config,
-        token,
-        cwd,
         version: '1.0.0',
-    }).run();
+        files: {
+            './index.js': join(__dirname, '../fixtures/client.js'),
+            './index.css': join(__dirname, '../fixtures/styles.css'),
+        },
+    };
 
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package-alias my-pack 1.0.0 1
+    await fs.writeFile(join(cwd, 'eik.json'), JSON.stringify(assets));
+
+    const cmd1 = `${eik} package --token ${token} --cwd ${cwd}`;
+    await exec(cmd1);
+
+    const cmd2 = `${eik} package-alias my-pack 1.0.0 1
         --token ${token}
         --server ${address}
         --cwd ${cwd}`;
 
-    const { error, stdout } = await exec(cmd.split('\n').join(' '));
+    const { error, stdout } = await exec(cmd2.split('\n').join(' '));
 
     const res = await fetch(new URL('/pkg/my-pack/v1/index.js', address));
 
