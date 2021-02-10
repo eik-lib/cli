@@ -21,12 +21,7 @@ exports.command = 'publish';
 
 exports.aliases = ['pkg', 'package', 'pub'];
 
-exports.describe = `Publish an app package to an Eik server by a given semver level.
-    Bundles and publishes JavaScript and CSS at given local paths creating a new version based off the previous version and the given semver level.
-    Specifying semver level is optional and defaults to "patch", specifying "major" locks version to the given semver major.
-    If a package has never previously been published, the first version generated will be equal to specified major version or 1.0.0 if no major is specified.
-    Local paths to asset files can be defined in an "eik.json" file using "js.input" and "css.input" fields or can be provided directly to the CLI command using the flags --js and --css.
-    URLs to import maps can be provided to map "bare" imports found in asset files, to do so either use the field "map" in "eik.json" or the --map CLI flag.`;
+exports.describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
 
 exports.builder = (yargs) => {
     const cwd = getCWD();
