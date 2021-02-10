@@ -29,7 +29,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "2.0.0",
+    "@eik/common": "2.0.1",
     "abslog": "2.4.0",
     "boxen": "5.0.0",
     "bytes": "3.1.0",
@@ -53,8 +53,8 @@
     "yargs-parser": "20.2.4"
   },
   "devDependencies": {
-    "@eik/core": "1.2.7",
-    "@eik/service": "1.2.33",
+    "@eik/core": "1.2.8",
+    "@eik/service": "1.2.35",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/commit-analyzer": "8.0.1",
     "@semantic-release/git": "9.0.0",
@@ -69,10 +69,10 @@
     "fastify": "3.11.0",
     "fastify-cors": "5.2.0",
     "prettier": "2.2.1",
-    "puppeteer": "7.0.1",
+    "puppeteer": "7.0.4",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "semantic-release": "17.3.7",
+    "semantic-release": "17.3.8",
     "semantic-release-slack-bot": "2.1.0",
     "tap": "14.11.0"
   }
