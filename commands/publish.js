@@ -17,9 +17,9 @@ const {
 } = require('../utils');
 const { Artifact } = require('../formatters');
 
-exports.command = 'package';
+exports.command = 'publish';
 
-exports.aliases = ['pkg', 'publish'];
+exports.aliases = ['pkg', 'package', 'pub'];
 
 exports.describe = `Publish an app package to an Eik server by a given semver level.
     Bundles and publishes JavaScript and CSS at given local paths creating a new version based off the previous version and the given semver level.
@@ -61,9 +61,9 @@ exports.builder = (yargs) => {
 
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
-    yargs.example(`eik package`);
     yargs.example(`eik publish`);
-    yargs.example(`eik publish --dry-run`);
+    yargs.example(`eik package`);
+    yargs.example(`eik pub --dry-run`);
     yargs.example(`eik pkg --token ######`);
     yargs.example(`eik pkg --debug`);
 };
@@ -73,6 +73,14 @@ exports.handler = async (argv) => {
     const { debug, dryRun, cwd, token } = argv;
     const config = configStore.findInDirectory(cwd);
     const { name, server, version, type, map, out, files } = config;
+
+    if (type === 'map') {
+        spinner.warn(
+            '"type" is set to "map", which is not supported by the publish command. Please use the "eik map" command instead',
+        );
+        process.stdout.write('\n');
+        process.exit(0);
+    }
 
     try {
         const options = {
@@ -148,9 +156,6 @@ exports.handler = async (argv) => {
         spinner.warn(err.message);
         spinner.text = '';
         spinner.stopAndPersist();
-        if (debug) {
-            console.error(err);
-        }
         process.exit(1);
     }
 };
