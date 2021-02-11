@@ -28,10 +28,10 @@ beforeEach(async (done, t) => {
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
     const eik = join(__dirname, '../../index.js');
 
-    const token = await new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
-    }).run();
+    });
 
     const assets = {
         name: 'scroll-into-view-if-needed',

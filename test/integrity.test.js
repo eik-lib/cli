@@ -16,11 +16,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
 
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
 
     t.context.server = server;
     t.context.address = address;
@@ -36,7 +35,7 @@ afterEach(async (done, t) => {
 test('package integrity', async (t) => {
     const { address, token } = t.context;
 
-    await new cli.publish.Package({
+    await cli.publish({
         cwd: __dirname,
         server: address,
         name: 'my-app',
@@ -46,14 +45,14 @@ test('package integrity', async (t) => {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
         }
-    }).run();
+    });
 
-    const result = await new cli.Integrity({
+    const result = await cli.integrity({
         server: address,
         name: 'my-app',
         version: '1.0.0',
         type: 'package',
-    }).run();
+    });
 
     t.equal(result.name, 'my-app');
     t.equal(result.version, '1.0.0');

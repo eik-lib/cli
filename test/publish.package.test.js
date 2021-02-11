@@ -19,11 +19,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
 
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
 
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
@@ -43,7 +42,7 @@ test('Uploading app assets to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
@@ -57,7 +56,6 @@ test('Uploading app assets to an asset server', async (t) => {
         }
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -71,7 +69,7 @@ test('Uploading app assets to an asset server under npm namespace', async (t) =>
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
@@ -86,7 +84,6 @@ test('Uploading app assets to an asset server under npm namespace', async (t) =>
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'npm', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -100,7 +97,7 @@ test('Uploading JS app assets only to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
@@ -113,7 +110,6 @@ test('Uploading JS app assets only to an asset server', async (t) => {
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -127,7 +123,7 @@ test('Uploading CSS app assets only to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
@@ -140,7 +136,6 @@ test('Uploading CSS app assets only to an asset server', async (t) => {
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -154,7 +149,7 @@ test('Uploading a directory of assets to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
@@ -167,7 +162,6 @@ test('Uploading a directory of assets to an asset server', async (t) => {
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -181,7 +175,7 @@ test('Uploading a directory of assets to the root path to an asset server 2', as
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
@@ -194,7 +188,6 @@ test('Uploading a directory of assets to the root path to an asset server 2', as
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');

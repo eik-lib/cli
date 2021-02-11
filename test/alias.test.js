@@ -19,11 +19,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
 
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
 
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
@@ -42,7 +41,7 @@ afterEach(async (done, t) => {
 test('Creating a package alias', async t => {
     const { address, token, cwd } = t.context;
 
-    await new cli.publish.Package({
+    await cli.publish({
         server: address,
         name: 'my-pack',
         version: '1.0.0',
@@ -52,9 +51,9 @@ test('Creating a package alias', async t => {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
         }
-    }).run();
+    });
 
-    const result = await new cli.Alias({
+    const result = await cli.alias({
         server: address,
         type: 'package',
         name: 'my-pack',
@@ -62,7 +61,7 @@ test('Creating a package alias', async t => {
         alias: '1',
         token,
         cwd,
-    }).run();
+    });
 
     t.match(result.server, '127.0.0.1', 'server property should return "127.0.0.1"');
     t.equals(result.type, 'pkg', 'type property should return "pkg"');
@@ -79,7 +78,7 @@ test('Creating an npm alias', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.Package({
+    await cli.publish({
         server: address,
         name: 'lit-html',
         version: '1.1.2',
@@ -90,9 +89,9 @@ test('Creating an npm alias', async (t) => {
         files : {
             './index.js': join(__dirname, './fixtures/client.js'),
         },
-    }).run();
+    });
 
-    const result = await new cli.Alias({
+    const result = await cli.alias({
         logger: l.logger,
         server: address,
         type: 'npm',
@@ -102,7 +101,7 @@ test('Creating an npm alias', async (t) => {
         debug: true,
         token,
         cwd,
-    }).run();
+    });
 
     t.match(
         result.server,
@@ -127,7 +126,7 @@ test('Creating a map alias', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.Map({
+    await cli.map({
         server: address,
         name: 'my-map',
         version: '1.0.0',
@@ -135,9 +134,9 @@ test('Creating a map alias', async (t) => {
         debug: true,
         token,
         cwd,
-    }).run();
+    });
 
-    const result = await new cli.Alias({
+    const result = await cli.alias({
         logger: l.logger,
         server: address,
         type: 'map',
@@ -147,7 +146,7 @@ test('Creating a map alias', async (t) => {
         debug: true,
         token,
         cwd,
-    }).run();
+    });
 
     t.match(
         result.server,

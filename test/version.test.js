@@ -18,11 +18,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
 
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
 
     const cwd = await fs.mkdtempSync(join(os.tmpdir(), basename(__filename)));
 
@@ -42,7 +41,7 @@ test('Current version unpublished - rejects with error', async t => {
     const { address, cwd } = t.context;
 
     try {
-        await new cli.Version({
+        await cli.version({
             cwd,
             server: address,
             name: 'my-app',
@@ -51,7 +50,7 @@ test('Current version unpublished - rejects with error', async t => {
                 './index.css': join(__dirname, './fixtures/styles.css'),
             },
             version: '1.0.0',
-        }).run();
+        });
     } catch (err) {
         t.equals(err.message, 'The current version of this package has not yet been published, version change is not needed.');
     }
@@ -71,10 +70,10 @@ test('Current version published - files the same - rejects with error', async t 
         version: '1.0.0',
     };
 
-    await new cli.publish.Package(config).run();
+    await cli.publish(config);
 
     try {
-        await new cli.Version(config).run();
+        await cli.version(config);
     } catch (err) {
         t.equals(err.message, 'The current version of this package already contains these files, version change is not needed.');
     }
@@ -94,12 +93,12 @@ test('Current version published - files changed - bumps version', async t => {
         version: '1.0.0',
     };
 
-    await new cli.publish.Package(config).run();
+    await cli.publish(config);
 
-    const newVersion = await new cli.Version({
+    const newVersion = await cli.version({
         ...config,
         files: { './index.js': join(__dirname, './fixtures/client.js') },
-    }).run();
+    });
 
     t.equals(newVersion, '1.0.1');
 });

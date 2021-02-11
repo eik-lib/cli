@@ -19,11 +19,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
     
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
     
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
@@ -43,7 +42,7 @@ test('Retrieving meta information about a package from an asset server', async t
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.Package({
+    await cli.publish({
         server: address,
         name: 'lit-html',
         version: '1.1.2',
@@ -54,16 +53,16 @@ test('Retrieving meta information about a package from an asset server', async t
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
         }
-    }).run();
+    });
 
-    const result = await new cli.Meta({
+    const result = await cli.meta({
         logger: l.logger,
         server: address,
         name: 'lit-html',
         debug: true,
         token,
         cwd,
-    }).run();
+    });
 
     t.ok(result, 'Command should return truthy');
     t.ok(result.npm, 'Command should be npm scoped');

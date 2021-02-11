@@ -27,10 +27,10 @@ beforeEach(async (done, t) => {
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
-    const token = await new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
-    }).run();
+    });
 
     t.context.server = server;
     t.context.address = address;

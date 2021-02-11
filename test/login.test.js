@@ -29,13 +29,11 @@ test('Logging in to an asset server', async t => {
     const { address } = t.context;
     const l = mockLogger();
     
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
         logger: l.logger,
     });
-
-    const token = await login.run();
 
     t.equal(token.length, 187, 'Command should return a token');
     t.equal(l.logs.info, 'Login successful', 'Logs should indicate success');
@@ -45,13 +43,11 @@ test('Logging in to an asset server', async t => {
     const { address } = t.context;
     const l = mockLogger();
     
-    const login = new cli.Login({
+    const result = await cli.login({
         server: address,
         key: 'incorrectkey',
         logger: l.logger,
     });
-
-    const result = await login.run();
 
     t.equal(result, false, 'Command should return false on failure');
     t.equal(l.logs.info, 'Login unsuccessful. Invalid credentials.', 'Logs should indicate failure');

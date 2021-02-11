@@ -19,11 +19,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
     
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
     
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
@@ -43,7 +42,7 @@ test('Uploading import map to an asset server', async t => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishMap = new cli.publish.Map({
+    const result = await cli.map({
         logger: l.logger,
         cwd,
         server: address,
@@ -54,7 +53,6 @@ test('Uploading import map to an asset server', async t => {
         token,
     });
 
-    const result = await publishMap.run();
     t.same(result, {
         name: 'my-map',
         version: '1.0.0',
