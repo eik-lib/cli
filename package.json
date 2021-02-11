@@ -29,7 +29,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "2.0.2",
+    "@eik/common": "2.0.3",
     "abslog": "2.4.0",
     "boxen": "5.0.0",
     "bytes": "3.1.0",
@@ -53,8 +53,8 @@
     "yargs-parser": "20.2.4"
   },
   "devDependencies": {
-    "@eik/core": "1.2.8",
-    "@eik/service": "1.2.35",
+    "@eik/core": "1.2.9",
+    "@eik/service": "1.2.36",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/commit-analyzer": "8.0.1",
     "@semantic-release/git": "9.0.0",
