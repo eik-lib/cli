@@ -47,7 +47,7 @@
     "tar": "6.1.0",
     "temp-dir": "2.0.0",
     "yargs": "16.2.0",
-    "yargs-parser": "20.2.4"
+    "yargs-parser": "20.2.5"
   },
   "devDependencies": {
     "@eik/core": "1.2.7",
