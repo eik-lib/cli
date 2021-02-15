@@ -1,3 +1,10 @@
+## [1.8.11](https://github.com/eik-lib/cli/compare/v1.8.10...v1.8.11) (2021-02-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency form-data to v3.0.1 ([3992b80](https://github.com/eik-lib/cli/commit/3992b804f3a3c117d9208d0da070ae2eeb103c94))
+
 ## [1.8.10](https://github.com/eik-lib/cli/compare/v1.8.9...v1.8.10) (2021-02-13)
 
 
