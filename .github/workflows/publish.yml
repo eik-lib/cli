@@ -12,37 +12,48 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v2
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - name: npm install
+      - name: Install Dependencies
         run: |
           npm install
-      - name: npm lint
+        env:
+          CI: true
+      - name: Lint Files
         run: |
-          npm run lint
-      - name: npm test
+          npm run lint:check
+        env:
+          CI: true
+      - name: Check File Formatting
+        run: |
+          npm run format:check
+        env:
+          CI: true
+      - name: Run Tests
         run: |
           npm run test:ci
+        env:
+          CI: true
 
   release:
     name: Release
     runs-on: ubuntu-latest
     needs: [test]
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v2
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - name: npm install
+      - name: Install Dependencies
         run: |
           npm install
-      - name: npx semantic-release
+      - name: Run Semantic Release
         run: |
           npx semantic-release
         env:
