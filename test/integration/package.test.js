@@ -220,7 +220,10 @@ test('eik package : package, details provided by package.json values and eik.jso
     const { error } = await exec(cmd);
 
     t.ok(error);
-    t.match(error, /Eik configuration was defined in both in package.json and eik.json/);
+    t.match(
+        error,
+        /Eik configuration was defined in both in package.json and eik.json/,
+    );
     t.end();
 });
 
@@ -285,10 +288,13 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client-with-bare-imports.js'),
+            './index.js': join(
+                __dirname,
+                './../fixtures/client-with-bare-imports.js',
+            ),
             './index.css': join(__dirname, './../fixtures/styles.css'),
         },
-        'import-map': [new URL('/map/my-map/v1', t.context.address).href]
+        'import-map': [new URL('/map/my-map/v1', t.context.address).href],
     };
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),

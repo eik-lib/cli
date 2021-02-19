@@ -18,15 +18,15 @@ beforeEach(async (done, t) => {
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
-    
+
     const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    
+
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
-    t.context.server = server
+    t.context.server = server;
     t.context.address = address;
     t.context.token = token;
     t.context.cwd = cwd;
@@ -38,7 +38,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Retrieving meta information about a package from an asset server', async t => {
+test('Retrieving meta information about a package from an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -52,7 +52,7 @@ test('Retrieving meta information about a package from an asset server', async t
         files: {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
-        }
+        },
     });
 
     const result = await cli.meta({
@@ -67,5 +67,9 @@ test('Retrieving meta information about a package from an asset server', async t
     t.ok(result, 'Command should return truthy');
     t.ok(result.npm, 'Command should be npm scoped');
     t.equal(result.npm.name, 'lit-html', 'Log output should show package name');
-    t.equal(result.npm.versions[0].version, '1.1.2', 'Log output should show package version');
+    t.equal(
+        result.npm.versions[0].version,
+        '1.1.2',
+        'Log output should show package version',
+    );
 });

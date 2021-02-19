@@ -9,7 +9,8 @@
         "*.json",
         "*.yml",
         ".travis.yml",
-        ".eslintrc"
+        ".eslintrc",
+        "release.config.js"
       ],
       "options": {
         "tabWidth": 2

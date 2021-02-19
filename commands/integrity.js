@@ -54,7 +54,7 @@ exports.handler = async (argv) => {
     const { name, server, version, type, out } = config;
 
     try {
-        integrity = await new Integrity({ 
+        integrity = await new Integrity({
             logger: l,
             name,
             version,
@@ -67,7 +67,9 @@ exports.handler = async (argv) => {
         if (integrity) {
             const filename = join(out, 'integrity.json');
             await json.write(integrity, { cwd, filename });
-            spinner.succeed(`integrity information for package "${name}" (v${version}) saved to "${filename}"`);
+            spinner.succeed(
+                `integrity information for package "${name}" (v${version}) saved to "${filename}"`,
+            );
             process.stdout.write('\n');
         }
     } catch (err) {

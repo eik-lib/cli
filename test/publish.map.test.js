@@ -18,15 +18,15 @@ beforeEach(async (done, t) => {
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
-    
+
     const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    
+
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
-    t.context.server = server
+    t.context.server = server;
     t.context.address = address;
     t.context.token = token;
     t.context.cwd = cwd;
@@ -38,7 +38,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Uploading import map to an asset server', async t => {
+test('Uploading import map to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
@@ -53,12 +53,16 @@ test('Uploading import map to an asset server', async t => {
         token,
     });
 
-    t.same(result, {
-        name: 'my-map',
-        version: '1.0.0',
-        server: address,
-        type: 'map',
-    }, 'Command should return an object');
+    t.same(
+        result,
+        {
+            name: 'my-map',
+            version: '1.0.0',
+            server: address,
+            type: 'map',
+        },
+        'Command should return an object',
+    );
     t.match(
         l.logs.debug,
         'Uploading import map "my-map" version "1.0.0" to asset server',

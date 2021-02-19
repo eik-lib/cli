@@ -14,7 +14,9 @@ module.exports = class SaveMetaFile extends Task {
         try {
             await json.write(response, { cwd, filename: filepath });
         } catch (err) {
-            throw new Error(`Unable to save integrity file [${filepath}]: ${err.message}`);
+            throw new Error(
+                `Unable to save integrity file [${filepath}]: ${err.message}`,
+            );
         }
     }
 };

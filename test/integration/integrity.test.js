@@ -65,7 +65,7 @@ test('eik meta : details provided by eik.json', async (t) => {
     await exec(cmd);
 
     cmd = `${eik} integrity --cwd ${t.context.folder}`;
-    
+
     const { error, stdout } = await exec(cmd);
 
     const integrity = JSON.parse(

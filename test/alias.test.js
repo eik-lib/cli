@@ -38,7 +38,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Creating a package alias', async t => {
+test('Creating a package alias', async (t) => {
     const { address, token, cwd } = t.context;
 
     await cli.publish({
@@ -50,7 +50,7 @@ test('Creating a package alias', async t => {
         files: {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
-        }
+        },
     });
 
     const result = await cli.alias({
@@ -63,7 +63,11 @@ test('Creating a package alias', async t => {
         cwd,
     });
 
-    t.match(result.server, '127.0.0.1', 'server property should return "127.0.0.1"');
+    t.match(
+        result.server,
+        '127.0.0.1',
+        'server property should return "127.0.0.1"',
+    );
     t.equals(result.type, 'pkg', 'type property should return "pkg"');
     t.equals(result.name, 'my-pack', 'name property should return "my-pack"');
     t.equals(result.alias, '1', 'alias property should return 1');
@@ -71,7 +75,11 @@ test('Creating a package alias', async t => {
     t.equals(result.update, false, 'update property should return false');
     t.equals(result.files.length, 3, 'files property should be 3');
     t.equals(result.org, 'local', 'org property should return an organisation');
-    t.match(result.integrity, '==', 'integrity property should contain an integrity string');
+    t.match(
+        result.integrity,
+        '==',
+        'integrity property should contain an integrity string',
+    );
 });
 
 test('Creating an npm alias', async (t) => {
@@ -86,7 +94,7 @@ test('Creating an npm alias', async (t) => {
         token,
         cwd,
         type: 'npm',
-        files : {
+        files: {
             './index.js': join(__dirname, './fixtures/client.js'),
         },
     });

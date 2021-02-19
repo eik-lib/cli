@@ -37,7 +37,7 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Current version unpublished - rejects with error', async t => {
+test('Current version unpublished - rejects with error', async (t) => {
     const { address, cwd } = t.context;
 
     try {
@@ -52,13 +52,16 @@ test('Current version unpublished - rejects with error', async t => {
             version: '1.0.0',
         });
     } catch (err) {
-        t.equals(err.message, 'The current version of this package has not yet been published, version change is not needed.');
+        t.equals(
+            err.message,
+            'The current version of this package has not yet been published, version change is not needed.',
+        );
     }
 });
 
-test('Current version published - files the same - rejects with error', async t => {
+test('Current version published - files the same - rejects with error', async (t) => {
     const { address, token, cwd } = t.context;
-    const config  = {
+    const config = {
         cwd,
         server: address,
         name: 'my-app',
@@ -75,13 +78,16 @@ test('Current version published - files the same - rejects with error', async t 
     try {
         await cli.version(config);
     } catch (err) {
-        t.equals(err.message, 'The current version of this package already contains these files, version change is not needed.');
+        t.equals(
+            err.message,
+            'The current version of this package already contains these files, version change is not needed.',
+        );
     }
 });
 
-test('Current version published - files changed - bumps version', async t => {
+test('Current version published - files changed - bumps version', async (t) => {
     const { address, token, cwd } = t.context;
-    const config  = {
+    const config = {
         cwd,
         server: address,
         name: 'my-app',

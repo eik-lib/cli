@@ -25,15 +25,19 @@ module.exports = class Version {
         out = './.eik',
         files,
     } = {}) {
-        const config = new EikConfig({
-            server,
-            type,
-            name,
-            version,
-            'import-map': map,
-            out,
-            files,
-        }, null, cwd);
+        const config = new EikConfig(
+            {
+                server,
+                type,
+                name,
+                version,
+                'import-map': map,
+                out,
+                files,
+            },
+            null,
+            cwd,
+        );
 
         this.log = abslog(logger);
         this.config = config;
@@ -42,12 +46,17 @@ module.exports = class Version {
     }
 
     async run() {
-        const { name, server, type, version, cwd, out, files, map } = this.config;
         const {
-            log,
-            level,
-            path,
-        } = this;
+            name,
+            server,
+            type,
+            version,
+            cwd,
+            out,
+            files,
+            map,
+        } = this.config;
+        const { log, level, path } = this;
         log.debug('Validating input');
 
         log.debug(`  ==> config object`);
@@ -79,7 +88,12 @@ module.exports = class Version {
 
         let integrityHash;
         try {
-            integrityHash = await integrity(server, typeSlug(type), name, version);
+            integrityHash = await integrity(
+                server,
+                typeSlug(type),
+                name,
+                version,
+            );
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,

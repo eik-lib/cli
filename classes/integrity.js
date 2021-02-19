@@ -54,7 +54,9 @@ module.exports = class Integrity {
                 throw new ValidationError(`Parameter "cwd" is not valid`);
             }
         } catch (err) {
-            throw new Error(`Unable to validate input to command: ${err.message}`)
+            throw new Error(
+                `Unable to validate input to command: ${err.message}`,
+            );
         }
 
         this.log.debug('Requesting meta information from asset server');
@@ -98,7 +100,9 @@ module.exports = class Integrity {
 
             throw new Error('Server Error');
         } catch (err) {
-            throw new Error(`Unable to retrieve meta information for package: ${err.message}`);
+            throw new Error(
+                `Unable to retrieve meta information for package: ${err.message}`,
+            );
         }
     }
 };

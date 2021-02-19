@@ -53,7 +53,7 @@ test('Uploading app assets to an asset server', async (t) => {
         files: {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
-        }
+        },
     });
 
     t.equals(result.type, 'pkg', 'Command should return correct type');

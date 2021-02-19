@@ -8,9 +8,7 @@ const boxen = require('boxen');
 const { join } = require('path');
 const { readFileSync } = require('fs');
 
-const { version } = JSON.parse(
-    readFileSync(join(__dirname, './package.json')),
-);
+const { version } = JSON.parse(readFileSync(join(__dirname, './package.json')));
 const greeting = chalk.white.bold(`Eik CLI (v${version})`);
 
 const boxenOptions = {
@@ -31,8 +29,12 @@ yargs
     .example('eik login --server https://assets.myserver.com --key ######')
     .example('eik publish')
     .example('eik meta my-app --server https://assets.myserver.com')
-    .example('eik npm-alias lit-html 1.0.0 1 --server https://assets.myserver.com --token ######')
-    .example('eik map my-map 1.0.0 ./import-map.json --server https://assets.myserver.com --token ######')
+    .example(
+        'eik npm-alias lit-html 1.0.0 1 --server https://assets.myserver.com --token ######',
+    )
+    .example(
+        'eik map my-map 1.0.0 ./import-map.json --server https://assets.myserver.com --token ######',
+    )
     .example('eik map-alias my-map 1.0.0 1')
     .commandDir('commands')
     .demandCommand()

@@ -65,13 +65,12 @@ exports.handler = async (argv) => {
         l.warn(err.message);
         process.exit(1);
     }
-    
+
     if (meta) {
         for (const m of Object.values(meta)) {
             const artifact = new Artifact(m);
             artifact.format(server);
             process.stdout.write(`\n`);
         }
-
     }
 };

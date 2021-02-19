@@ -2,7 +2,7 @@
 
 'use strict';
 
-const {join} = require('path');
+const { join } = require('path');
 const chalk = require('chalk');
 const Version = require('./version');
 
@@ -15,21 +15,16 @@ function colorType(type) {
     if (type === 'npm') {
         return chalk.white.bgRed.bold(' NPM ');
     }
-    
+
     if (type === 'pkg') {
         return chalk.white.bgYellow.bold(' PACKAGE ');
     }
 
-    return chalk.white.bgBlue.bold(' IMPORT MAP ')
+    return chalk.white.bgBlue.bold(' IMPORT MAP ');
 }
 
 class Artifact {
-    constructor({
-        type = '',
-        name = '',
-        org = '',
-        versions = [],
-    } = {}) {
+    constructor({ type = '', name = '', org = '', versions = [] } = {}) {
         this.type = type;
         this.name = name;
         this.org = org;
@@ -55,15 +50,15 @@ class Artifact {
     get org() {
         return this[_org];
     }
-    
+
     set org(org) {
         this[_org] = org;
     }
-    
+
     get versions() {
         return this[_versions];
     }
-    
+
     set versions(versions) {
         const v = [];
         for (const version of versions) {
@@ -72,7 +67,7 @@ class Artifact {
         this[_versions] = v;
     }
 
-    format (baseURL = '') {
+    format(baseURL = '') {
         const write = process.stdout.write.bind(process.stdout);
         const url = new URL(join(this.type, this.name), baseURL);
 

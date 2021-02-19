@@ -28,15 +28,19 @@ module.exports = class Publish {
         out = './.eik',
         files = {},
     } = {}) {
-        const config = new EikConfig({
-            server,
-            type,
-            name,
-            version,
-            'import-map': map,
-            out,
-            files,
-        }, [[server, token]], cwd);
+        const config = new EikConfig(
+            {
+                server,
+                type,
+                name,
+                version,
+                'import-map': map,
+                out,
+                files,
+            },
+            [[server, token]],
+            cwd,
+        );
         config.validate();
 
         this.log = abslog(logger);

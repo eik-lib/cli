@@ -75,6 +75,5 @@ module.exports = class CreateZipFile extends Task {
         } catch (err) {
             throw new Error(`Unable to create zip file: ${err.message}`);
         }
-
     }
 };

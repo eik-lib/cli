@@ -5,12 +5,12 @@ const fetch = require('node-fetch');
 
 /**
  * Fetches package versions by name from a given Eik asset server.
- * 
+ *
  * @param {string} server - Eik asset server URL to perform lookup against
  * @param {string} name - Package name to lookup
- * 
+ *
  * @returns {Promise<Array<Array<number,{version:string,integrity:string}>>>}
- * 
+ *
  * @throws Error
  */
 module.exports = async (server, type, name) => {

@@ -17,7 +17,7 @@ class ValidationError extends Error {
 
 module.exports = class ValidateInput extends Task {
     process() {
-        const { log,  } = this;
+        const { log } = this;
         const { cwd, dryRun } = this.config;
 
         log.debug('Validating input');

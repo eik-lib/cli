@@ -1,6 +1,6 @@
 name: Run Lint and Tests
 
-on: 
+on:
   push:
     branches-ignore:
       - master

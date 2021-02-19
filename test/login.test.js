@@ -15,7 +15,7 @@ beforeEach(async (done, t) => {
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
-    t.context.server = server
+    t.context.server = server;
     t.context.address = address;
     done();
 });
@@ -25,10 +25,10 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Logging in to an asset server', async t => {
+test('Logging in to an asset server', async (t) => {
     const { address } = t.context;
     const l = mockLogger();
-    
+
     const token = await cli.login({
         server: address,
         key: 'change_me',
@@ -39,10 +39,10 @@ test('Logging in to an asset server', async t => {
     t.equal(l.logs.info, 'Login successful', 'Logs should indicate success');
 });
 
-test('Logging in to an asset server', async t => {
+test('Logging in to an asset server', async (t) => {
     const { address } = t.context;
     const l = mockLogger();
-    
+
     const result = await cli.login({
         server: address,
         key: 'incorrectkey',
@@ -50,5 +50,9 @@ test('Logging in to an asset server', async t => {
     });
 
     t.equal(result, false, 'Command should return false on failure');
-    t.equal(l.logs.info, 'Login unsuccessful. Invalid credentials.', 'Logs should indicate failure');
+    t.equal(
+        l.logs.info,
+        'Login unsuccessful. Invalid credentials.',
+        'Logs should indicate failure',
+    );
 });

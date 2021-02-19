@@ -30,25 +30,26 @@ module.exports = class Alias {
             org: '',
             integrity: '',
         };
-        
+
         this.log.debug('Validating command input');
         schemas.assert.server(this.server);
         schemas.assert.name(this.name);
         schemas.assert.version(this.version);
         validators.type(this.type);
         validators.alias(this.alias);
-        assert(this.token && typeof this.token === 'string', `Parameter "token" is not valid`);
+        assert(
+            this.token && typeof this.token === 'string',
+            `Parameter "token" is not valid`,
+        );
 
-        this.log.debug(`Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version}`);
+        this.log.debug(
+            `Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version}`,
+        );
         try {
             const { message } = await request({
                 host: this.server,
                 method: 'PUT',
-                pathname: join(
-                    this.type,
-                    this.name,
-                    `v${this.alias}`,
-                ),
+                pathname: join(this.type, this.name, `v${this.alias}`),
                 data: { version: this.version },
                 token: this.token,
             });
@@ -64,17 +65,15 @@ module.exports = class Alias {
             let status = err.statusCode;
 
             if (status === 409) {
-                this.log.debug('Alias already exists on server, performing update');
+                this.log.debug(
+                    'Alias already exists on server, performing update',
+                );
 
                 try {
                     const { message: msg } = await request({
                         host: this.server,
                         method: 'POST',
-                        pathname: join(
-                            this.type,
-                            this.name,
-                            `v${this.alias}`,
-                        ),
+                        pathname: join(this.type, this.name, `v${this.alias}`),
                         data: { version: this.version },
                         token: this.token,
                     });
@@ -112,7 +111,9 @@ module.exports = class Alias {
                         'Client attempted to send an unsupported file format to server',
                     );
                 case 502:
-                    throw new Error('Server was unable to write file to storage');
+                    throw new Error(
+                        'Server was unable to write file to storage',
+                    );
                 default:
                     throw new Error('Server failure');
             }

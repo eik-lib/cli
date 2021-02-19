@@ -9,4 +9,4 @@ module.exports = class Task {
         this.path = options.path;
         this.config = options.config;
     }
-}
+};

@@ -20,13 +20,11 @@ exports.builder = (yargs) => {
 
     yargs
         .positional('name', {
-            describe:
-                'Name matching NPM package name.',
+            describe: 'Name matching NPM package name.',
             type: 'string',
         })
         .positional('version', {
-            describe:
-                'Version matching NPM package version.',
+            describe: 'Version matching NPM package version.',
             type: 'string',
         })
         .positional('alias', {
@@ -63,7 +61,9 @@ exports.builder = (yargs) => {
 
     yargs.example(`eik npm lit-html 1.0.0 1`);
     yargs.example(`eik npm lit-html 1.3.5 1 --debug`);
-    yargs.example(`eik npm lit-html 5.3.2 5 --server https://assets.myeikserver.com`);
+    yargs.example(
+        `eik npm lit-html 5.3.2 5 --server https://assets.myeikserver.com`,
+    );
 };
 
 exports.handler = async (argv) => {
@@ -81,7 +81,9 @@ exports.handler = async (argv) => {
         }).run();
 
         const createdOrUpdated = data.update ? 'Updated' : 'Created';
-        log.info(`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`);
+        log.info(
+            `${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+        );
         success = true;
     } catch (err) {
         log.warn(err.message);

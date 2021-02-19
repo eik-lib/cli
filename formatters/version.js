@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {join} = require('path');
+const { join } = require('path');
 const chalk = require('chalk');
 const formatDistance = require('date-fns/formatDistance');
 const File = require('./file');
@@ -37,7 +37,7 @@ class Version {
         const write = process.stdout.write.bind(process.stdout);
         const url = new URL(baseURL);
         const bURL = new URL(join(url.pathname, this.version), url.origin);
-        
+
         write(`   - ${chalk.green(this.version)}\n`);
         write(`     ${chalk.bold('url:')} ${chalk.cyan(bURL.href)}\n`);
         write(`     ${chalk.bold('integrity:')} ${this.integrity}\n`);
@@ -54,7 +54,7 @@ class Version {
             const d = formatDistance(
                 new Date(this.created * 1000),
                 new Date(),
-                { addSuffix: true }
+                { addSuffix: true },
             );
             write(`     ${chalk.bold('published')} ${chalk.yellow(d)}`);
         }

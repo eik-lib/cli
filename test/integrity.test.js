@@ -44,7 +44,7 @@ test('package integrity', async (t) => {
         files: {
             './index.js': join(__dirname, './fixtures/client.js'),
             './index.css': join(__dirname, './fixtures/styles.css'),
-        }
+        },
     });
 
     const result = await cli.integrity({
@@ -57,9 +57,5 @@ test('package integrity', async (t) => {
     t.equal(result.name, 'my-app');
     t.equal(result.version, '1.0.0');
     t.ok(result.integrity);
-    t.same(Object.keys(result.files), [
-        '/eik.json',
-        '/index.js',
-        '/index.css'
-    ]);
+    t.same(Object.keys(result.files), ['/eik.json', '/index.js', '/index.css']);
 });
