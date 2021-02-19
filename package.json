@@ -17,7 +17,7 @@
     "formatters"
   ],
   "scripts": {
-    "test": "npm run test:unit && npm run test:tasks && npm run test:integration",
+    "test": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 --test-regex=.test.js --test-ignore=node_modules",
     "test:integration": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/integration/**/*.test.js",
     "test:unit": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.js",
     "test:tasks": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/tasks/*.test.js",
