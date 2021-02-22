@@ -50,7 +50,7 @@
     "yargs-parser": "20.2.5"
   },
   "devDependencies": {
-    "@eik/core": "1.2.10",
+    "@eik/core": "1.2.11",
     "@eik/service": "1.2.38",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/commit-analyzer": "8.0.1",
