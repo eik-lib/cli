@@ -15,7 +15,9 @@ exports.describe = `Creates a new default "eik.json" file and saves it to the cu
 exports.builder = (yargs) => {
     yargs.example('eik init');
     yargs.example('eik init --cwd /path/to/dir');
-    yargs.example('eik init --server https://assets.myserver.com --major 2 --name my-app --js ./scripts.js --css ./styles.css');
+    yargs.example(
+        'eik init --server https://assets.myserver.com --major 2 --name my-app --js ./scripts.js --css ./styles.css',
+    );
     yargs.example('eik init --debug');
 
     yargs.options({
@@ -61,18 +63,22 @@ exports.handler = async (argv) => {
     let assetFileExists = false;
 
     try {
-        log.debug(`Checking for existing "eik.json" file in directory (${cwd})`);
+        log.debug(
+            `Checking for existing "eik.json" file in directory (${cwd})`,
+        );
         try {
             const st = fs.statSync(pathname);
             if (st.isFile()) {
                 assetFileExists = true;
             }
-        } catch(err) {
+        } catch (err) {
             // noop
         }
-        
+
         if (assetFileExists) {
-            throw new Error(`An "eik.json" file already exists in directory. File will not be written`);
+            throw new Error(
+                `An "eik.json" file already exists in directory. File will not be written`,
+            );
         }
 
         log.debug(`Writing "eik.json" to directory (${cwd})`);

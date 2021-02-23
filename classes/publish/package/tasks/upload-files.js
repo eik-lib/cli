@@ -4,34 +4,30 @@
 
 const { join } = require('path');
 const { request } = require('../../../../utils/http');
+const { typeSlug } = require('../../../../utils');
 const Task = require('./task');
 
 module.exports = class UploadFiles extends Task {
-    async process(incoming = {}, outgoing = {}) {
+    async process(zipFile) {
         const { log } = this;
-        const { server, token, name, zipFile, version, type } = incoming;
+        const { server, name, version, type, token } = this.config;
         log.debug('Uploading zip file to server');
         try {
+            const pathname = join(
+                typeSlug(type),
+                encodeURIComponent(name),
+                version,
+            );
+
             const { message } = await request({
                 method: 'PUT',
                 host: server,
-                pathname: join(
-                    type,
-                    encodeURIComponent(name),
-                    version,
-                ),
+                pathname,
                 file: zipFile,
                 token,
             });
 
-            outgoing.created = message.created;
-            outgoing.author = message.author;
-            outgoing.integrity = message.integrity;
-            outgoing.org = message.org;
-            outgoing.files = message.files;
-            outgoing.version = version;
-            outgoing.response = message;
-
+            return message;
         } catch (err) {
             log.error('Unable to upload zip file to server');
             switch (err.statusCode) {
@@ -41,6 +37,8 @@ module.exports = class UploadFiles extends Task {
                     );
                 case 401:
                     throw new Error('Client unauthorized with server');
+                case 404:
+                    throw new Error('Client could not find server route');
                 case 409:
                     throw new Error(
                         `Package with name "${name}" and version "${version}" already exists on server`,
@@ -57,6 +55,5 @@ module.exports = class UploadFiles extends Task {
                     throw new Error('Server failed');
             }
         }
-        return outgoing;
     }
 };

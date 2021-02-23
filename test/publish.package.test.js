@@ -8,18 +8,9 @@ const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const fastify = require('fastify');
 const EikService = require('@eik/service');
-const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
-
-function buildTestConfig(files) {
-    return new EikConfig({files: files || {
-        './index.js': './fixtures/client.js',
-        './index.css': './fixtures/styles.css',
-    }}, null, __dirname)
-}
-
 
 beforeEach(async (done, t) => {
     const memSink = new sink.MEM();
@@ -27,13 +18,12 @@ beforeEach(async (done, t) => {
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
     const address = await server.listen();
-    
-    const login = new cli.Login({
+
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
-    
+
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     t.context.server = server;
@@ -48,22 +38,24 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Uploading app assets to an asset server', async t => {
+test('Uploading app assets to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig(),
         debug: true,
         token,
         version: '1.0.0',
+        files: {
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
+        },
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -73,23 +65,25 @@ test('Uploading app assets to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading app assets to an asset server under npm namespace', async t => {
+test('Uploading app assets to an asset server under npm namespace', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig(),
+        files: {
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
+        },
+        type: 'npm',
         debug: true,
         token,
         version: '1.0.0',
-        npm: true,
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'npm', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -99,24 +93,23 @@ test('Uploading app assets to an asset server under npm namespace', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading JS app assets only to an asset server', async t => {
+test('Uploading JS app assets only to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            './index.js': './fixtures/client.js',
-        }),
+        files: {
+            'index.js': join(__dirname, './fixtures/client.js'),
+        },
         debug: true,
         token,
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -126,24 +119,23 @@ test('Uploading JS app assets only to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading CSS app assets only to an asset server', async t => {
+test('Uploading CSS app assets only to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            './index.css': './fixtures/styles.css',
-        }),
+        files: {
+            'index.css': join(__dirname, './fixtures/styles.css'),
+        },
         debug: true,
         token,
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -153,24 +145,23 @@ test('Uploading CSS app assets only to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading a directory of assets to an asset server', async t => {
+test('Uploading a directory of assets to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            './icons': './fixtures/icons/**/*',
-        }),
+        files: {
+            icons: join(__dirname, './fixtures/icons/**/*'),
+        },
         debug: true,
         token,
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');
@@ -180,24 +171,21 @@ test('Uploading a directory of assets to an asset server', async t => {
     t.match(l.logs.debug, 'Cleaning up');
 });
 
-test('Uploading a directory of assets to the root path to an asset server 2', async t => {
+test('Uploading a directory of assets to the root path to an asset server 2', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    const publishApp = new cli.publish.Package({
+    const result = await cli.publish({
         logger: l.logger,
         cwd,
         server: address,
         name: 'my-app',
-        config: buildTestConfig({
-            '/': './fixtures/icons/**/*',
-        }),
+        files: join(__dirname, './fixtures/icons/**/*'),
         debug: true,
         token,
         version: '1.0.0',
     });
 
-    const result = await publishApp.run();
     t.equals(result.type, 'pkg', 'Command should return correct type');
     t.equals(result.name, 'my-app', 'Command should return correct name');
     t.equals(result.version, '1.0.0', 'Command should return correct version');

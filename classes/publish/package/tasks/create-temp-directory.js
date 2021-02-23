@@ -14,9 +14,8 @@ class IOError extends Error {
 }
 
 module.exports = class CreateTempDir extends Task {
-    async process(incoming = {}, outgoing = {}) {
-        const { log } = this;
-        const { path } = incoming;
+    async process() {
+        const { log, path } = this;
 
         log.debug(`Creating temporary directory`);
         log.debug(`  ==> ${path}`);
@@ -26,7 +25,5 @@ module.exports = class CreateTempDir extends Task {
         } catch (err) {
             throw new IOError('Unable to create temp dir', err);
         }
-
-        return outgoing;
     }
 };

@@ -15,28 +15,26 @@ function exec(cmd) {
     });
 }
 
-test('Initializing a new eik.json file', async t => {
+test('Initializing a new eik.json file', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     const publishCmd = `${eik} init --cwd ${folder}`;
     await exec(publishCmd);
 
-    const assets = JSON.parse(
-        readFileSync(join(folder, 'eik.json')),
-    );
+    const assets = JSON.parse(readFileSync(join(folder, 'eik.json')));
 
     t.equals(assets.name, '', 'eik.json "name" field should be empty');
-    t.equals(assets.version, '1.0.0', 'eik.json "version" field should equal 1.0.0');
-    t.equals(assets.server, '', 'eik.json "server" field should be empty');
-    t.same(
-        assets.files,
-        {},
-        'eik.json "files" should be an empty object',
+    t.equals(
+        assets.version,
+        '1.0.0',
+        'eik.json "version" field should equal 1.0.0',
     );
+    t.equals(assets.server, '', 'eik.json "server" field should be empty');
+    t.same(assets.files, {}, 'eik.json "files" should be an empty object');
 });
 
-test('Initializing a new eik.json file passing custom values', async t => {
+test('Initializing a new eik.json file passing custom values', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
@@ -47,9 +45,7 @@ test('Initializing a new eik.json file passing custom values', async t => {
         --server http://localhost:4001`;
     await exec(publishCmd.split('\n').join(' '));
 
-    const assets = JSON.parse(
-        readFileSync(join(folder, 'eik.json')),
-    );
+    const assets = JSON.parse(readFileSync(join(folder, 'eik.json')));
 
     t.equals(
         assets.name,
@@ -66,9 +62,5 @@ test('Initializing a new eik.json file passing custom values', async t => {
         'http://localhost:4001',
         'eik.json "server" field should not be empty',
     );
-    t.same(
-        assets.files,
-        {},
-        'eik.json "js.input" field should not be empty',
-    );
+    t.same(assets.files, {}, 'eik.json "js.input" field should not be empty');
 });

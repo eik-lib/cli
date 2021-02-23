@@ -46,15 +46,7 @@ exports.builder = (yargs) => {
             default: false,
             type: 'boolean',
         },
-        token: {
-            describe: `Provide a jwt token to be used to authenticate with the Eik server.
-                Automatically determined if authenticated (via eik login)`,
-            type: 'string',
-            alias: 't',
-        },
     });
-
-    yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik version`);
     yargs.example(`eik version minor`);
@@ -63,9 +55,9 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { level, debug, dryRun, cwd, token } = argv;
+    const { level, debug, dryRun, cwd } = argv;
     const config = configStore.findInDirectory(cwd);
-    const { name, version, server, map, out } = config;
+    const { name, version, server, map, out, files } = config;
 
     try {
         const log = logger(spinner, debug);
@@ -76,13 +68,10 @@ exports.handler = async (argv) => {
             server,
             version,
             cwd,
-            token,
-            dryRun,
-            debug,
             level,
-            map: Array.isArray(map) ? map : [map],
+            map,
             out,
-            config,
+            files,
         };
 
         const newVersion = await new VersionPackage(options).run();
