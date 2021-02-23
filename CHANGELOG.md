@@ -1,3 +1,22 @@
+# [2.0.0-next.1](https://github.com/eik-lib/cli/compare/v1.8.11...v2.0.0-next.1) (2021-02-23)
+
+
+### Bug Fixes
+
+* update common package and refactor to use new mapping function ([992f015](https://github.com/eik-lib/cli/commit/992f0154342a6a27205ad14a815d06ae38551a0b))
+* update common package to fix docs. Update docs ([772486f](https://github.com/eik-lib/cli/commit/772486f9b118511f3aa128f4ed343a6c3587d8a2))
+* update dependencies to fix issue with @eik/common ([40b6f98](https://github.com/eik-lib/cli/commit/40b6f981fbb8f44a6f042281d145e67463feb9b8))
+
+
+* feat!: support eik config type field, rework class inputs ([2c3cb92](https://github.com/eik-lib/cli/commit/2c3cb92da566d107ad6d1b3cfde451fec938aec8))
+* chore!: update dependency @eik/common ([53092c2](https://github.com/eik-lib/cli/commit/53092c2a2e0e84a557c64950274fad5066900010))
+
+
+### BREAKING CHANGES
+
+* This includes a major refactor of the various Node.js APIs though it also includes some breaking changes to the cli commands as well. The Eik.json or package.json type field is now used when publishing to determine whether to publish to pkg or npm namespace. --npm cli flags have been removed.
+* Eik.json config is now being validated whenever it is loaded from or saved to eik.json
+
 ## [1.8.11](https://github.com/eik-lib/cli/compare/v1.8.10...v1.8.11) (2021-02-15)
 
 
