@@ -244,14 +244,14 @@ test('when a non recursive glob is specified', async (t) => {
     const pattern = 'fixtures/*';
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-    const nested = files.filter(file => file.pathname.includes('icons'));
+    const nested = files.filter((file) => file.pathname.includes('icons'));
 
     t.equals(
         files[2].pathname,
         '/client.js',
         'client.js should be packaged at /',
     );
-    t.equal(nested.length, 0, 'no nested files should be present')
+    t.equal(nested.length, 0, 'no nested files should be present');
 });
 
 test('when a file is specified with a leading path', async (t) => {
@@ -268,7 +268,7 @@ test('when a file is specified with a leading path', async (t) => {
 
 test('when a file is specified as an object and mapped with a leading path', async (t) => {
     const { address, token, cwd } = t.context;
-    const pattern = {'path/to/esm.js': 'fixtures/client.js'};
+    const pattern = { 'path/to/esm.js': 'fixtures/client.js' };
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equals(

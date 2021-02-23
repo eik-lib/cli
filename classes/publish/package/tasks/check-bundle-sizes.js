@@ -14,7 +14,9 @@ module.exports = class CheckBundleSizes extends Task {
             for (const mapping of await this.config.mappings()) {
                 const file = mapping.source.absolute;
                 this.log.debug(
-                    `  ==> entrypoint size (${mapping.source.destination} => ${file}): ${bytes(
+                    `  ==> entrypoint size (${
+                        mapping.source.destination
+                    } => ${file}): ${bytes(
                         gzipSize.sync(fs.readFileSync(file, 'utf8')),
                     )}`,
                 );

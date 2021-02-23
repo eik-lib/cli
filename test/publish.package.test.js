@@ -155,7 +155,7 @@ test('Uploading a directory of assets to an asset server', async (t) => {
         server: address,
         name: 'my-app',
         files: {
-            'icons': join(__dirname, './fixtures/icons/**/*'),
+            icons: join(__dirname, './fixtures/icons/**/*'),
         },
         debug: true,
         token,

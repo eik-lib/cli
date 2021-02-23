@@ -17,10 +17,7 @@ module.exports = class DryRun extends Task {
         const mappings = await this.config.mappings();
 
         for (const mapping of mappings) {
-            const destination = join(
-                path,
-                mapping.destination.filePathname,
-            );
+            const destination = join(path, mapping.destination.filePathname);
             files.push({ pathname: destination, type: 'package file' });
         }
 
