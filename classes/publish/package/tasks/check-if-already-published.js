@@ -52,10 +52,14 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         try {
             const localFiles = [join(path, './eik.json')];
             if (files) {
-                const mappings = await this.config.pathsAndFilesAbsolute();
+                const mappings = await this.config.mappings();
 
-                for (const [, dest] of mappings) {
-                    localFiles.push(dest);
+                for (const mapping of mappings) {
+                    const destination = join(
+                        path,
+                        mapping.destination.filePathname,
+                    );
+                    localFiles.push(destination);
                 }
             }
             localHash = await hash.files(localFiles);

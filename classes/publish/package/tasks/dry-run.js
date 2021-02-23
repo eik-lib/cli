@@ -2,6 +2,7 @@
 
 'use strict';
 
+const { join } = require('path');
 const Task = require('./task');
 
 module.exports = class DryRun extends Task {
@@ -13,10 +14,14 @@ module.exports = class DryRun extends Task {
             { pathname: zipFile, type: 'package archive' },
         ];
 
-        const fls = await this.config.pathsAndFilesAbsolute();
+        const mappings = await this.config.mappings();
 
-        for (const [, dest] of fls) {
-            files.push({ pathname: dest, type: 'package file' });
+        for (const mapping of mappings) {
+            const destination = join(
+                path,
+                mapping.destination.filePathname,
+            );
+            files.push({ pathname: destination, type: 'package file' });
         }
 
         return files;

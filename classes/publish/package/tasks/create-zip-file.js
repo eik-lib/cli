@@ -43,14 +43,18 @@ module.exports = class CreateZipFile extends Task {
 
         if (files) {
             try {
-                const mappings = await this.config.pathsAndFilesAbsolute();
+                const mappings = await this.config.mappings();
 
-                for (const [src, dest] of mappings) {
-                    await fs.promises.mkdir(dirname(dest), {
+                for (const mapping of mappings) {
+                    const destination = join(
+                        path,
+                        mapping.destination.filePathname,
+                    );
+                    await fs.promises.mkdir(dirname(destination), {
                         recursive: true,
                     });
-                    copyFileSync(src, dest);
-                    filesToZip.push(dest.replace(path, '.'));
+                    copyFileSync(mapping.source.absolute, destination);
+                    filesToZip.push(destination.replace(path, '.'));
                 }
             } catch (err) {
                 throw new Error(

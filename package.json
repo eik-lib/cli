@@ -32,7 +32,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "2.0.3",
+    "@eik/common": "^4.0.0-next.2",
     "abslog": "2.4.0",
     "boxen": "5.0.0",
     "bytes": "3.1.0",

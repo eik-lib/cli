@@ -127,12 +127,16 @@ module.exports = class Version {
 
             if (files) {
                 try {
-                    const mappings = await this.config.pathsAndFilesAbsolute();
+                    const mappings = await this.config.mappings();
 
-                    for (const [src, dest] of mappings) {
-                        copyFileSync(src, dest);
-                        log.debug(`  ==> ${dest}`);
-                        localFiles.push(dest);
+                    for (const mapping of mappings) {
+                        const destination = join(
+                            path,
+                            mapping.destination.filePathname,
+                        );
+                        copyFileSync(mapping.source.absolute, destination);
+                        log.debug(`  ==> ${destination}`);
+                        localFiles.push(destination);
                     }
                 } catch (err) {
                     // throw new Error(`Failed to zip JavaScripts: ${err.message}`);
