@@ -50,8 +50,8 @@ test('eik meta : details provided by eik.json', async (t) => {
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
     await fs.writeFile(
@@ -93,8 +93,8 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
         type: 'npm',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
     await fs.writeFile(

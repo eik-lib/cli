@@ -51,8 +51,8 @@ test('eik package : package, details provided by eik.json file', async (t) => {
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -85,8 +85,8 @@ test('eik package : package, details provided by eik.json file - npm namespace',
         type: 'npm',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -119,8 +119,8 @@ test('eik package : package, details provided by eik.json file - explicit packag
         type: 'package',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -153,8 +153,8 @@ test('eik package : package, details provided by package.json values', async (t)
         eik: {
             server: t.context.address,
             files: {
-                './index.js': join(__dirname, './../fixtures/client.js'),
-                './index.css': join(__dirname, './../fixtures/styles.css'),
+                'index.js': join(__dirname, './../fixtures/client.js'),
+                'index.css': join(__dirname, './../fixtures/styles.css'),
             },
         },
     };
@@ -188,8 +188,8 @@ test('eik package : package, details provided by package.json values and eik.jso
         eik: {
             server: t.context.address,
             files: {
-                './index.js': join(__dirname, './../fixtures/client.js'),
-                './index.css': join(__dirname, './../fixtures/styles.css'),
+                'index.js': join(__dirname, './../fixtures/client.js'),
+                'index.css': join(__dirname, './../fixtures/styles.css'),
             },
         },
     };
@@ -204,8 +204,8 @@ test('eik package : package, details provided by package.json values and eik.jso
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -237,8 +237,8 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         version: '2.2.24',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -288,11 +288,11 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(
+            'index.js': join(
                 __dirname,
                 './../fixtures/client-with-bare-imports.js',
             ),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
         'import-map': [new URL('/map/my-map/v1', t.context.address).href],
     };

@@ -51,8 +51,8 @@ test('eik map : publish, details provided by eik.json file', async (t) => {
         version: '2.2.24',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
     await fs.writeFile(

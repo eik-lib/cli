@@ -95,7 +95,7 @@ test('Creating an npm alias', async (t) => {
         cwd,
         type: 'npm',
         files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
+            'index.js': join(__dirname, './fixtures/client.js'),
         },
     });
 

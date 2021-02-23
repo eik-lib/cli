@@ -41,8 +41,8 @@ beforeEach(async (done, t) => {
         type: 'npm',
         server: address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -87,8 +87,8 @@ test('eik package-alias <name> <version> <alias>', async (t) => {
         name: 'my-pack',
         version: '1.0.0',
         files: {
-            './index.js': join(__dirname, '../fixtures/client.js'),
-            './index.css': join(__dirname, '../fixtures/styles.css'),
+            'index.js': join(__dirname, '../fixtures/client.js'),
+            'index.css': join(__dirname, '../fixtures/styles.css'),
         },
     };
 
@@ -147,8 +147,8 @@ test('eik npm-alias <name> <version> <alias> : publish details provided by eik.j
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
     await fs.writeFile(
@@ -205,8 +205,8 @@ test('eik map-alias <name> <version> <alias> : publish details provided by eik.j
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
     await fs.writeFile(

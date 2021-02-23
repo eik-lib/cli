@@ -50,8 +50,8 @@ test('Retrieving meta information about a package from an asset server', async (
         type: 'npm',
         cwd,
         files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
         },
     });
 

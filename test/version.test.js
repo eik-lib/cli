@@ -46,8 +46,8 @@ test('Current version unpublished - rejects with error', async (t) => {
             server: address,
             name: 'my-app',
             files: {
-                './index.js': join(__dirname, './fixtures/client.js'),
-                './index.css': join(__dirname, './fixtures/styles.css'),
+                'index.js': join(__dirname, './fixtures/client.js'),
+                'index.css': join(__dirname, './fixtures/styles.css'),
             },
             version: '1.0.0',
         });
@@ -66,8 +66,8 @@ test('Current version published - files the same - rejects with error', async (t
         server: address,
         name: 'my-app',
         files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
         },
         token,
         version: '1.0.0',
@@ -92,8 +92,8 @@ test('Current version published - files changed - bumps version', async (t) => {
         server: address,
         name: 'my-app',
         files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
         },
         token,
         version: '1.0.0',
@@ -103,7 +103,7 @@ test('Current version published - files changed - bumps version', async (t) => {
 
     const newVersion = await cli.version({
         ...config,
-        files: { './index.js': join(__dirname, './fixtures/client.js') },
+        files: { 'index.js': join(__dirname, './fixtures/client.js') },
     });
 
     t.equals(newVersion, '1.0.1');

@@ -51,8 +51,8 @@ test('Uploading app assets to an asset server', async (t) => {
         token,
         version: '1.0.0',
         files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
         },
     });
 
@@ -75,8 +75,8 @@ test('Uploading app assets to an asset server under npm namespace', async (t) =>
         server: address,
         name: 'my-app',
         files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
-            './index.css': join(__dirname, './fixtures/styles.css'),
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
         },
         type: 'npm',
         debug: true,
@@ -103,7 +103,7 @@ test('Uploading JS app assets only to an asset server', async (t) => {
         server: address,
         name: 'my-app',
         files: {
-            './index.js': join(__dirname, './fixtures/client.js'),
+            'index.js': join(__dirname, './fixtures/client.js'),
         },
         debug: true,
         token,
@@ -129,7 +129,7 @@ test('Uploading CSS app assets only to an asset server', async (t) => {
         server: address,
         name: 'my-app',
         files: {
-            './index.css': join(__dirname, './fixtures/styles.css'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
         },
         debug: true,
         token,
@@ -155,7 +155,7 @@ test('Uploading a directory of assets to an asset server', async (t) => {
         server: address,
         name: 'my-app',
         files: {
-            './icons': join(__dirname, './fixtures/icons/**/*'),
+            'icons': join(__dirname, './fixtures/icons/**/*'),
         },
         debug: true,
         token,
@@ -180,9 +180,7 @@ test('Uploading a directory of assets to the root path to an asset server 2', as
         cwd,
         server: address,
         name: 'my-app',
-        files: {
-            '/': join(__dirname, './fixtures/icons/**/*'),
-        },
+        files: join(__dirname, './fixtures/icons/**/*'),
         debug: true,
         token,
         version: '1.0.0',
