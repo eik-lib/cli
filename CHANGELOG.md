@@ -1,3 +1,10 @@
+# [2.0.0-next.2](https://github.com/eik-lib/cli/compare/v2.0.0-next.1...v2.0.0-next.2) (2021-02-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency form-data to v4 ([9f32c59](https://github.com/eik-lib/cli/commit/9f32c5966054f5b15b1966eb25b744f1cd2acd77))
+
 # [2.0.0-next.1](https://github.com/eik-lib/cli/compare/v1.8.11...v2.0.0-next.1) (2021-02-23)
 
 
