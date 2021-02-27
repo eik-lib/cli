@@ -16,13 +16,13 @@ module.exports = {
             },
         ],
         [
-              'semantic-release-slack-bot',
+            'semantic-release-slack-bot',
             {
                 notifyOnSuccess: true,
                 notifyOnFail: false,
                 packageName: '@eik/cli',
                 onSuccessTemplate: {
-                    text: "$package_name is now available as version $npm_package_version - $repo_url"
+                    text: '$package_name is now available as version $npm_package_version - $repo_url',
                 },
             }
         ],
