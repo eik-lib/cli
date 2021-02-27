@@ -15,8 +15,8 @@ module.exports = {
                 assets: 'release/*.tgz',
             },
         ],
-   	    [
-      	    'semantic-release-slack-bot',
+        [
+              'semantic-release-slack-bot',
             {
                 notifyOnSuccess: true,
                 notifyOnFail: false,
