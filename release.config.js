@@ -15,12 +15,15 @@ module.exports = {
                 assets: 'release/*.tgz',
             },
         ],
-   	[
-      	    'semantic-release-slack-bot',
+        [
+            'semantic-release-slack-bot',
             {
                 notifyOnSuccess: true,
                 notifyOnFail: false,
                 packageName: '@eik/cli',
+                onSuccessTemplate: {
+                    text: '$package_name is now available as version $npm_package_version - $repo_url',
+                },
             }
         ],
         '@semantic-release/git',
