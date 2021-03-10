@@ -1,3 +1,10 @@
+## [1.8.15](https://github.com/eik-lib/cli/compare/v1.8.14...v1.8.15) (2021-03-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs-parser to v20.2.7 ([2feed62](https://github.com/eik-lib/cli/commit/2feed625227383d280df77f279c6df20b0d918dc))
+
 ## [1.8.14](https://github.com/eik-lib/cli/compare/v1.8.13...v1.8.14) (2021-03-05)
 
 
