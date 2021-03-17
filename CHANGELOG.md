@@ -1,3 +1,10 @@
+## [1.8.16](https://github.com/eik-lib/cli/compare/v1.8.15...v1.8.16) (2021-03-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ora to v5.4.0 ([1a9f046](https://github.com/eik-lib/cli/commit/1a9f0463e814af0f85bfd9cc71acf334c3ef8c20))
+
 ## [1.8.15](https://github.com/eik-lib/cli/compare/v1.8.14...v1.8.15) (2021-03-10)
 
 
