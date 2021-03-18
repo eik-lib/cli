@@ -119,7 +119,9 @@ module.exports = class Publish {
             integrity = await this.checkIfAlreadyPublished.process();
         } catch (err) {
             // exit early if already published
-            this.log.debug(`Determined that files have already been published. Additional information: ${err.message}`);
+            this.log.debug(
+                `Determined that files have already been published. Additional information: ${err.message}`,
+            );
             return null;
         }
 
