@@ -1,3 +1,10 @@
+# [2.0.0-next.3](https://github.com/eik-lib/cli/compare/v2.0.0-next.2...v2.0.0-next.3) (2021-03-18)
+
+
+### Bug Fixes
+
+* improve debug log output when checking if bundle exists ([8d004ab](https://github.com/eik-lib/cli/commit/8d004ab6bd29ce12dd835e285ea821fd773649a6))
+
 # [2.0.0-next.2](https://github.com/eik-lib/cli/compare/v2.0.0-next.1...v2.0.0-next.2) (2021-02-23)
 
 
