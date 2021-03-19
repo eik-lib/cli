@@ -82,6 +82,49 @@ test('Creating a package alias', async (t) => {
     );
 });
 
+test('Creating a package alias: omitting alias should calculate alias from version', async (t) => {
+    const { address, token, cwd } = t.context;
+
+    await cli.publish({
+        server: address,
+        name: 'my-pack',
+        version: '2.4.1',
+        token,
+        cwd,
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
+    });
+
+    const result = await cli.alias({
+        server: address,
+        type: 'package',
+        name: 'my-pack',
+        version: '2.4.1',
+        token,
+        cwd,
+    });
+
+    t.match(
+        result.server,
+        '127.0.0.1',
+        'server property should return "127.0.0.1"',
+    );
+    t.equals(result.type, 'pkg', 'type property should return "pkg"');
+    t.equals(result.name, 'my-pack', 'name property should return "my-pack"');
+    t.equals(result.alias, '2', 'alias property should return 2');
+    t.equals(result.version, '2.4.1', 'version property should return 1.0.0');
+    t.equals(result.update, false, 'update property should return false');
+    t.equals(result.files.length, 3, 'files property should be 3');
+    t.equals(result.org, 'local', 'org property should return an organisation');
+    t.match(
+        result.integrity,
+        '==',
+        'integrity property should contain an integrity string',
+    );
+});
+
 test('Creating an npm alias', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();

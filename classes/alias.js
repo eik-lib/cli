@@ -3,6 +3,7 @@
 const assert = require('assert');
 const abslog = require('abslog');
 const { join } = require('path');
+const semver = require('semver');
 const { schemas, validators } = require('@eik/common');
 const { request } = require('../utils/http');
 const { typeSlug } = require('../utils');
@@ -14,7 +15,7 @@ module.exports = class Alias {
         this.token = token;
         this.type = typeSlug(type);
         this.name = name;
-        this.alias = alias;
+        this.alias = alias || String(semver.major(version));
         this.version = version;
     }
 
