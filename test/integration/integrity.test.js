@@ -125,5 +125,8 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
     t.equal(integrity.name, 'test-app-npm');
     t.equal(integrity.version, '1.0.0');
     t.ok(integrity.integrity);
+    t.equal(integrity.files.length, 3);
+    t.equal(integrity.files[0].pathname, '/eik.json');
+    t.ok(integrity.files[0].integrity);
     t.end();
 });

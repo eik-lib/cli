@@ -57,5 +57,10 @@ test('package integrity', async (t) => {
     t.equal(result.name, 'my-app');
     t.equal(result.version, '1.0.0');
     t.ok(result.integrity);
-    t.same(Object.keys(result.files), ['/eik.json', '/index.js', '/index.css']);
+    t.equal(result.files[0].pathname, '/eik.json');
+    t.ok(result.files[0].integrity);
+    t.equal(result.files[1].pathname, '/index.js');
+    t.ok(result.files[1].integrity);
+    t.equal(result.files[2].pathname, '/index.css');
+    t.ok(result.files[2].integrity);
 });
