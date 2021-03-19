@@ -1,3 +1,13 @@
+# [2.0.0-next.4](https://github.com/eik-lib/cli/compare/v2.0.0-next.3...v2.0.0-next.4) (2021-03-19)
+
+
+* refactor!: align structure of integrity json ([437bc78](https://github.com/eik-lib/cli/commit/437bc789128480d23b70585ad9c66a1e90dbf1e0))
+
+
+### BREAKING CHANGES
+
+* The structure of integrity.json changes with PR which would be breaking for anyone depending on it.
+
 # [2.0.0-next.3](https://github.com/eik-lib/cli/compare/v2.0.0-next.2...v2.0.0-next.3) (2021-03-18)
 
 
