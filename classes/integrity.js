@@ -71,19 +71,7 @@ module.exports = class Integrity {
 
             if (res.ok) {
                 this.log.debug(`  ==> ok: true`);
-                const data = await res.json();
-
-                const files = {};
-                for (const file of data.files) {
-                    files[file.pathname] = file.integrity;
-                }
-
-                return {
-                    name: data.name,
-                    version: data.version,
-                    integrity: data.integrity,
-                    files,
-                };
+                return await res.json();
             }
 
             this.log.debug(`  ==> ok: false`);
