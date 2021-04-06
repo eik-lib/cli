@@ -1,3 +1,10 @@
+## [1.8.18](https://github.com/eik-lib/cli/compare/v1.8.17...v1.8.18) (2021-04-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency boxen to v5.0.1 ([d76195a](https://github.com/eik-lib/cli/commit/d76195a3160da4c54f384c29301eca2dbd054e45))
+
 ## [1.8.17](https://github.com/eik-lib/cli/compare/v1.8.16...v1.8.17) (2021-03-23)
 
 
