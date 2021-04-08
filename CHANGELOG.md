@@ -1,3 +1,10 @@
+# [2.0.0-next.5](https://github.com/eik-lib/cli/compare/v2.0.0-next.4...v2.0.0-next.5) (2021-04-08)
+
+
+### Bug Fixes
+
+* remove restrictions to publishing when files are same as previous version ([a5c0a14](https://github.com/eik-lib/cli/commit/a5c0a14ef093fef90d131a184e12d073d0845f64))
+
 # [2.0.0-next.4](https://github.com/eik-lib/cli/compare/v2.0.0-next.3...v2.0.0-next.4) (2021-03-19)
 
 
