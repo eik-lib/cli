@@ -114,17 +114,6 @@ module.exports = class Publish {
             };
         }
 
-        let integrity;
-        try {
-            integrity = await this.checkIfAlreadyPublished.process();
-        } catch (err) {
-            // exit early if already published
-            this.log.debug(
-                `Determined that files have already been published. Additional information: ${err.message}`,
-            );
-            return null;
-        }
-
         const response = await this.uploadFiles.process(zipFile);
         await this.saveMetafile.process(response);
         await this.cleanup.process();
@@ -139,7 +128,6 @@ module.exports = class Publish {
             author: {},
             org: '',
             version: this.config.version,
-            integrity,
             ...response,
         };
     }
