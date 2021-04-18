@@ -1,3 +1,22 @@
+# [2.0.0-next.6](https://github.com/eik-lib/cli/compare/v2.0.0-next.5...v2.0.0-next.6) (2021-04-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency boxen to v5.0.1 ([d76195a](https://github.com/eik-lib/cli/commit/d76195a3160da4c54f384c29301eca2dbd054e45))
+* **deps:** update dependency date-fns to v2.18.0 ([304b46f](https://github.com/eik-lib/cli/commit/304b46f0d29dab0cc419491274a438241c7aa47d))
+* **deps:** update dependency date-fns to v2.19.0 ([4d3e939](https://github.com/eik-lib/cli/commit/4d3e939baaf0e4a9409d12077d9bc25c85539def))
+* **deps:** update dependency date-fns to v2.20.0 ([daf20ac](https://github.com/eik-lib/cli/commit/daf20ac6d39e0e31e9180770d62f7bf72f074f53))
+* **deps:** update dependency date-fns to v2.20.1 ([11ed791](https://github.com/eik-lib/cli/commit/11ed7915ffeda881938d27e5f615a74169f1a316))
+* **deps:** update dependency date-fns to v2.20.2 ([5db0190](https://github.com/eik-lib/cli/commit/5db0190f2896ec4e052e8d15cf3186497e97950f))
+* **deps:** update dependency date-fns to v2.20.3 ([c5acb88](https://github.com/eik-lib/cli/commit/c5acb889b4aca3bf8528123c44786dbe3c9c9281))
+* **deps:** update dependency date-fns to v2.21.0 ([44b11ab](https://github.com/eik-lib/cli/commit/44b11ab86829cff5139db5230e6d8da462230db2))
+* **deps:** update dependency date-fns to v2.21.1 ([e5abe56](https://github.com/eik-lib/cli/commit/e5abe5655ff860d44ef5d77d511971153f2fbf68))
+* **deps:** update dependency ora to v5.4.0 ([1a9f046](https://github.com/eik-lib/cli/commit/1a9f0463e814af0f85bfd9cc71acf334c3ef8c20))
+* **deps:** update dependency semver to v7.3.5 ([345594d](https://github.com/eik-lib/cli/commit/345594d30f6bc6e7822d91a974d87a8773baee72))
+* **deps:** update dependency yargs-parser to v20.2.6 ([fcd89da](https://github.com/eik-lib/cli/commit/fcd89da27946176bb6f6e6f3efedd788bf54e3f5))
+* **deps:** update dependency yargs-parser to v20.2.7 ([2feed62](https://github.com/eik-lib/cli/commit/2feed625227383d280df77f279c6df20b0d918dc))
+
 # [2.0.0-next.5](https://github.com/eik-lib/cli/compare/v2.0.0-next.4...v2.0.0-next.5) (2021-04-08)
 ## [1.8.24](https://github.com/eik-lib/cli/compare/v1.8.23...v1.8.24) (2021-04-15)
 
