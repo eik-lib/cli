@@ -1,4 +1,5 @@
 # [2.0.0-next.5](https://github.com/eik-lib/cli/compare/v2.0.0-next.4...v2.0.0-next.5) (2021-04-08)
+## [1.8.24](https://github.com/eik-lib/cli/compare/v1.8.23...v1.8.24) (2021-04-15)
 
 
 ### Bug Fixes
@@ -16,6 +17,44 @@
 * The structure of integrity.json changes with PR which would be breaking for anyone depending on it.
 
 # [2.0.0-next.3](https://github.com/eik-lib/cli/compare/v2.0.0-next.2...v2.0.0-next.3) (2021-03-18)
+* **deps:** update dependency date-fns to v2.21.1 ([e5abe56](https://github.com/eik-lib/cli/commit/e5abe5655ff860d44ef5d77d511971153f2fbf68))
+
+## [1.8.23](https://github.com/eik-lib/cli/compare/v1.8.22...v1.8.23) (2021-04-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.21.0 ([44b11ab](https://github.com/eik-lib/cli/commit/44b11ab86829cff5139db5230e6d8da462230db2))
+
+## [1.8.22](https://github.com/eik-lib/cli/compare/v1.8.21...v1.8.22) (2021-04-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.20.3 ([c5acb88](https://github.com/eik-lib/cli/commit/c5acb889b4aca3bf8528123c44786dbe3c9c9281))
+
+## [1.8.21](https://github.com/eik-lib/cli/compare/v1.8.20...v1.8.21) (2021-04-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.20.2 ([5db0190](https://github.com/eik-lib/cli/commit/5db0190f2896ec4e052e8d15cf3186497e97950f))
+
+## [1.8.20](https://github.com/eik-lib/cli/compare/v1.8.19...v1.8.20) (2021-04-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.20.1 ([11ed791](https://github.com/eik-lib/cli/commit/11ed7915ffeda881938d27e5f615a74169f1a316))
+
+## [1.8.19](https://github.com/eik-lib/cli/compare/v1.8.18...v1.8.19) (2021-04-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.20.0 ([daf20ac](https://github.com/eik-lib/cli/commit/daf20ac6d39e0e31e9180770d62f7bf72f074f53))
+
+## [1.8.18](https://github.com/eik-lib/cli/compare/v1.8.17...v1.8.18) (2021-04-06)
 
 
 ### Bug Fixes
@@ -23,6 +62,9 @@
 * improve debug log output when checking if bundle exists ([8d004ab](https://github.com/eik-lib/cli/commit/8d004ab6bd29ce12dd835e285ea821fd773649a6))
 
 # [2.0.0-next.2](https://github.com/eik-lib/cli/compare/v2.0.0-next.1...v2.0.0-next.2) (2021-02-23)
+* **deps:** update dependency boxen to v5.0.1 ([d76195a](https://github.com/eik-lib/cli/commit/d76195a3160da4c54f384c29301eca2dbd054e45))
+
+## [1.8.17](https://github.com/eik-lib/cli/compare/v1.8.16...v1.8.17) (2021-03-23)
 
 
 ### Bug Fixes
@@ -30,6 +72,9 @@
 * **deps:** update dependency form-data to v4 ([9f32c59](https://github.com/eik-lib/cli/commit/9f32c5966054f5b15b1966eb25b744f1cd2acd77))
 
 # [2.0.0-next.1](https://github.com/eik-lib/cli/compare/v1.8.11...v2.0.0-next.1) (2021-02-23)
+* **deps:** update dependency semver to v7.3.5 ([345594d](https://github.com/eik-lib/cli/commit/345594d30f6bc6e7822d91a974d87a8773baee72))
+
+## [1.8.16](https://github.com/eik-lib/cli/compare/v1.8.15...v1.8.16) (2021-03-17)
 
 
 ### Bug Fixes
@@ -47,6 +92,35 @@
 
 * This includes a major refactor of the various Node.js APIs though it also includes some breaking changes to the cli commands as well. The Eik.json or package.json type field is now used when publishing to determine whether to publish to pkg or npm namespace. --npm cli flags have been removed.
 * Eik.json config is now being validated whenever it is loaded from or saved to eik.json
+* **deps:** update dependency ora to v5.4.0 ([1a9f046](https://github.com/eik-lib/cli/commit/1a9f0463e814af0f85bfd9cc71acf334c3ef8c20))
+
+## [1.8.15](https://github.com/eik-lib/cli/compare/v1.8.14...v1.8.15) (2021-03-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs-parser to v20.2.7 ([2feed62](https://github.com/eik-lib/cli/commit/2feed625227383d280df77f279c6df20b0d918dc))
+
+## [1.8.14](https://github.com/eik-lib/cli/compare/v1.8.13...v1.8.14) (2021-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.19.0 ([4d3e939](https://github.com/eik-lib/cli/commit/4d3e939baaf0e4a9409d12077d9bc25c85539def))
+
+## [1.8.13](https://github.com/eik-lib/cli/compare/v1.8.12...v1.8.13) (2021-03-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.18.0 ([304b46f](https://github.com/eik-lib/cli/commit/304b46f0d29dab0cc419491274a438241c7aa47d))
+
+## [1.8.12](https://github.com/eik-lib/cli/compare/v1.8.11...v1.8.12) (2021-02-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs-parser to v20.2.6 ([fcd89da](https://github.com/eik-lib/cli/commit/fcd89da27946176bb6f6e6f3efedd788bf54e3f5))
 
 ## [1.8.11](https://github.com/eik-lib/cli/compare/v1.8.10...v1.8.11) (2021-02-15)
 
