@@ -15,7 +15,7 @@ exports.describe = `Upload an import map file to the server under a given name a
     A name/version combination must be unique and a version must be semver compliant.
     Subsquent published versions must increase. Eg. 1.0.0 1.0.1, 1.1.0, 2.0.0 etc.`;
 
-exports.builder = yargs => {
+exports.builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -52,7 +52,8 @@ exports.builder = yargs => {
             type: 'boolean',
         },
         token: {
-            describe: 'Provide a jwt token to be used to authenticate with the Eik server.',
+            describe:
+                'Provide a jwt token to be used to authenticate with the Eik server.',
             default: '',
             alias: 't',
         },
@@ -62,10 +63,12 @@ exports.builder = yargs => {
 
     yargs.example(`eik map my-map 1.0.0 ./import-map.json`);
     yargs.example(`eik map my-map 2.1.0 ./import-map.json --debug`);
-    yargs.example(`eik map my-map 2.1.1 ./import-map.json --server https://assets.myeikserver.com`);
+    yargs.example(
+        `eik map my-map 2.1.1 ./import-map.json --server https://assets.myeikserver.com`,
+    );
 };
 
-exports.handler = async argv => {
+exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, server, name, version } = argv;
 
@@ -82,10 +85,10 @@ exports.handler = async argv => {
         res = await fetch(url);
 
         log.info(`Published import map "${name}" at version "${version}"`);
-        
+
         spinner.text = '';
         spinner.stopAndPersist();
-        
+
         const artifact = new Artifact(pkgMeta);
         const versions = new Map(pkgMeta.versions);
         artifact.versions = Array.from(versions.values());

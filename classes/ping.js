@@ -24,7 +24,7 @@ module.exports = class Ping {
         try {
             const result = await fetch(this.server);
 
-            if(!result.ok) {
+            if (!result.ok) {
                 const err = new Error('Ping unsuccessful');
                 err.statusCode = result.status;
                 throw err;

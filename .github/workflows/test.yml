@@ -1,6 +1,6 @@
 name: Run Lint and Tests
 
-on: 
+on:
   push:
     branches-ignore:
       - master
@@ -20,17 +20,22 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install
+      - name: Install Dependencies
         run: |
           npm install
         env:
           CI: true
-      - name: npm lint
+      - name: Lint Files
         run: |
-          npm run lint
+          npm run lint:check
         env:
           CI: true
-      - name: npm test
+      - name: Check File Formatting
+        run: |
+          npm run format:check
+        env:
+          CI: true
+      - name: Run Tests
         run: |
           npm run test:ci
         env:

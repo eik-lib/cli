@@ -2,24 +2,25 @@
 
 'use strict';
 
+const { join } = require('path');
 const Task = require('./task');
 
 module.exports = class DryRun extends Task {
-    async process(incoming = {}, outgoing = {}) {
-        const { dryRun, path, zipFile } = incoming;
-        if (dryRun) {
-            outgoing.files = [
-                { pathname: path, type: 'temporary directory' },
-                { pathname: zipFile, type: 'package archive' },
-            ];
+    async process(zipFile) {
+        const { path } = this;
 
-            const fls = await this.config.pathsAndFilesAbsolute();
+        const files = [
+            { pathname: path, type: 'temporary directory' },
+            { pathname: zipFile, type: 'package archive' },
+        ];
 
-            for (const [, dest] of fls) {
-                outgoing.files.push({ pathname: dest, type: 'package file' });
-            }
+        const mappings = await this.config.mappings();
+
+        for (const mapping of mappings) {
+            const destination = join(path, mapping.destination.filePathname);
+            files.push({ pathname: destination, type: 'package file' });
         }
 
-        return outgoing;
+        return files;
     }
 };

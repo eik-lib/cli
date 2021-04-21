@@ -2,13 +2,12 @@
 
 'use strict';
 
-import scrollIntoView from 'scroll-into-view-if-needed'
-
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 const main = () => {
     // eslint-disable-next-line no-undef
-    const node = document.getElementById('hero')
-    
+    const node = document.getElementById('hero');
+
     scrollIntoView(node, {
         scrollMode: 'if-needed',
         block: 'nearest',

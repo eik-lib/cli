@@ -10,19 +10,11 @@ const { createReadStream } = require('fs');
  * @param {{method:string,host:string,pathname:string,data:object,file:string,map:string,token:string}} options
  *
  * @returns {Promise<{status:number,message:object|string}>} - Promise that resolves to an object with properties status and message
- * 
+ *
  * @throws Error
  */
 async function request(options) {
-    const {
-        method = 'POST',
-        host,
-        pathname,
-        data,
-        file,
-        map,
-        token,
-    } = options;
+    const { method = 'POST', host, pathname, data, file, map, token } = options;
     const form = new FormData();
     const headers = {};
 

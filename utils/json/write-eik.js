@@ -8,27 +8,28 @@ const { join } = require('path');
  *
  * @param {object} data - data to write to eik.json file
  * @param {{cwd: string, filename: string}} options - additional options
- * 
+ *
  * @returns {Promise<undefined>}
- * 
+ *
  * @example json.writeEik({ key: 'value' });
  * @example json.writeEik({ key: 'value' }, { cwd: '/path/to/cwd' });
  * @example json.writeEik({ key: 'value' }, { cwd: '/path/to/cwd', filename: 'eik.json' });
  */
 module.exports = async (data = {}, options) => {
-    const {
-        cwd = process.cwd(),
-        filename = 'eik.json',
-    } = options;
+    const { cwd = process.cwd(), filename = 'eik.json' } = options;
     const eikpath = join(cwd, filename);
     const eik = await fs.readFile(eikpath);
     const eikjson = JSON.parse(eik);
 
     await fs.writeFile(
         eikpath,
-        JSON.stringify({
-            ...eikjson,
-            ...data,
-        }, null, 2),
+        JSON.stringify(
+            {
+                ...eikjson,
+                ...data,
+            },
+            null,
+            2,
+        ),
     );
 };

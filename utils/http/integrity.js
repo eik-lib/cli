@@ -5,13 +5,13 @@ const fetch = require('node-fetch');
 
 /**
  * Fetches package integrity string by name and version from a given Eik asset server.
- * 
+ *
  * @param {string} server - Eik asset server URL to perform lookup against
  * @param {string} name - Package name to lookup
  * @param {string} version - Semver major version to lock fetch to
- * 
+ *
  * @returns {Promise<string>} - Package integrity string
- * 
+ *
  * @throws Error
  */
 module.exports = async (server, type, name, version) => {

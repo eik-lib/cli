@@ -2,7 +2,7 @@
 
 'use strict';
 
-const {join} = require('path');
+const { join } = require('path');
 const chalk = require('chalk');
 const File = require('./file');
 
@@ -10,12 +10,12 @@ function colorType(type) {
     if (type === 'npm') {
         return chalk.white.bgRed.bold(' NPM ');
     }
-    
+
     if (type === 'pkg') {
         return chalk.white.bgYellow.bold(' PACKAGE ');
     }
 
-    return chalk.white.bgBlue.bold(' IMPORT MAP ')
+    return chalk.white.bgBlue.bold(' IMPORT MAP ');
 }
 
 class Alias {
@@ -39,12 +39,15 @@ class Alias {
         this.integrity = integrity;
     }
 
-    format (baseURL = '') {
+    format(baseURL = '') {
         const write = process.stdout.write.bind(process.stdout);
-        const url = new URL(join(this.type, this.name, `v${this.alias}`), baseURL);
+        const url = new URL(
+            join(this.type, this.name, `v${this.alias}`),
+            baseURL,
+        );
 
         write(`:: `);
-        
+
         write(`${colorType(this.type)} > ${chalk.green(this.name)} | `);
         write(`${chalk.bold('org:')} ${this.org} | `);
         write(`${chalk.bold('version:')} ${this.version} | `);
@@ -73,7 +76,6 @@ class Alias {
             write(`\n`);
         }
         write(`\n`);
-        
     }
 }
 

@@ -10,14 +10,35 @@ const Integrity = require('./integrity');
 const Version = require('./version');
 
 module.exports = {
-    Ping,
-    Alias,
-    Meta,
-    Login,
-    Integrity,
-    Version,
-    publish: {
-        Package: PublishPackage,
-        Map: PublishMap,
+    ping(opts) {
+        return new Ping(opts).run();
+    },
+
+    alias(opts) {
+        return new Alias(opts).run();
+    },
+
+    meta(opts) {
+        return new Meta(opts).run();
+    },
+
+    login(opts) {
+        return new Login(opts).run();
+    },
+
+    integrity(opts) {
+        return new Integrity(opts).run();
+    },
+
+    version(opts) {
+        return new Version(opts).run();
+    },
+
+    publish(opts) {
+        return new PublishPackage(opts).run();
+    },
+
+    map(opts) {
+        return new PublishMap(opts).run();
     },
 };

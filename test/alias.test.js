@@ -7,18 +7,10 @@ const fs = require('fs').promises;
 const { join, basename } = require('path');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
-const { EikConfig } = require('@eik/common');
 const fastify = require('fastify');
 const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
-
-function buildTestConfig(files) {
-    return new EikConfig({files: files || {
-        './index.js': './fixtures/client.js',
-        './index.css': './fixtures/styles.css',
-    }}, null, __dirname)
-}
 
 beforeEach(async (done, t) => {
     const server = fastify({ logger: false });
@@ -27,11 +19,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
 
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
 
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
@@ -47,28 +38,36 @@ afterEach(async (done, t) => {
     done();
 });
 
-test('Creating a package alias', async t => {
+test('Creating a package alias', async (t) => {
     const { address, token, cwd } = t.context;
 
-    await new cli.publish.Package({
+    await cli.publish({
         server: address,
         name: 'my-pack',
-        config: buildTestConfig(),
+        version: '1.0.0',
         token,
         cwd,
-    }).run();
+        files: {
+            './index.js': join(__dirname, './fixtures/client.js'),
+            './index.css': join(__dirname, './fixtures/styles.css'),
+        },
+    });
 
-    const result = await new cli.Alias({
+    const result = await cli.alias({
         server: address,
-        type: 'pkg',
+        type: 'package',
         name: 'my-pack',
         version: '1.0.0',
         alias: '1',
         token,
         cwd,
-    }).run();
+    });
 
-    t.match(result.server, '127.0.0.1', 'server property should return "127.0.0.1"');
+    t.match(
+        result.server,
+        '127.0.0.1',
+        'server property should return "127.0.0.1"',
+    );
     t.equals(result.type, 'pkg', 'type property should return "pkg"');
     t.equals(result.name, 'my-pack', 'name property should return "my-pack"');
     t.equals(result.alias, '1', 'alias property should return 1');
@@ -76,27 +75,31 @@ test('Creating a package alias', async t => {
     t.equals(result.update, false, 'update property should return false');
     t.equals(result.files.length, 3, 'files property should be 3');
     t.equals(result.org, 'local', 'org property should return an organisation');
-    t.match(result.integrity, '==', 'integrity property should contain an integrity string');
+    t.match(
+        result.integrity,
+        '==',
+        'integrity property should contain an integrity string',
+    );
 });
 
 test('Creating an npm alias', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.Package({
+    await cli.publish({
         server: address,
         name: 'lit-html',
         version: '1.1.2',
         debug: true,
         token,
         cwd,
-        npm: true,
-        config: buildTestConfig({
-            './index.js': './fixtures/client.js',
-        }),
-    }).run();
+        type: 'npm',
+        files: {
+            'index.js': join(__dirname, './fixtures/client.js'),
+        },
+    });
 
-    const result = await new cli.Alias({
+    const result = await cli.alias({
         logger: l.logger,
         server: address,
         type: 'npm',
@@ -106,7 +109,7 @@ test('Creating an npm alias', async (t) => {
         debug: true,
         token,
         cwd,
-    }).run();
+    });
 
     t.match(
         result.server,
@@ -131,7 +134,7 @@ test('Creating a map alias', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
 
-    await new cli.publish.Map({
+    await cli.map({
         server: address,
         name: 'my-map',
         version: '1.0.0',
@@ -139,9 +142,9 @@ test('Creating a map alias', async (t) => {
         debug: true,
         token,
         cwd,
-    }).run();
+    });
 
-    const result = await new cli.Alias({
+    const result = await cli.alias({
         logger: l.logger,
         server: address,
         type: 'map',
@@ -151,7 +154,7 @@ test('Creating a map alias', async (t) => {
         debug: true,
         token,
         cwd,
-    }).run();
+    });
 
     t.match(
         result.server,

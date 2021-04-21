@@ -33,14 +33,10 @@ afterEach((done, t) => {
 });
 
 test('basic cleanup', async (t) => {
-    const cleanup = new CleanupTask();
-    const incoming = { path: t.context.path };
-    const outgoing = {};
-    
-    const result = await cleanup.process(incoming, outgoing);
-    
+    const cleanup = new CleanupTask({ path: t.context.path });
+    await cleanup.process();
+
     const files = await fs.readdir(t.context.path);
-    t.equal(result, outgoing);
     t.equal(files.length, 1);
     t.equal(files[0], 'integrity.json');
 });

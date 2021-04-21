@@ -20,18 +20,15 @@ exports.builder = (yargs) => {
 
     yargs
         .positional('name', {
-            describe:
-                `Import map name for import map that is to be aliased`,
+            describe: `Import map name for import map that is to be aliased`,
             type: 'string',
         })
         .positional('version', {
-            describe:
-                `Import map version for import map that is to be aliased`,
+            describe: `Import map version for import map that is to be aliased`,
             type: 'string',
         })
         .positional('alias', {
-            describe:
-                `Alias for a semver version. Should be the semver major component of version.`,
+            describe: `Alias for a semver version. Should be the semver major component of version.`,
             type: 'string',
         });
 
@@ -64,7 +61,9 @@ exports.builder = (yargs) => {
     yargs.example(`eik map-alias my-map 1.0.0 1`);
     yargs.example(`eik map-alias my-map 1.7.3 1`);
     yargs.example(`eik map-alias my-map 6.3.1 6`);
-    yargs.example(`eik map-alias my-map 6.3.1 6 --server https://assets.myeikserver.com`);
+    yargs.example(
+        `eik map-alias my-map 6.3.1 6 --server https://assets.myeikserver.com`,
+    );
     yargs.example(`eik map-alias my-map 4.2.2 4 --debug`);
 };
 
@@ -87,7 +86,9 @@ exports.handler = async (argv) => {
         data.files = [];
 
         const createdOrUpdated = data.update ? 'Updated' : 'Created';
-        log.info(`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`);
+        log.info(
+            `${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+        );
         success = true;
     } catch (err) {
         log.warn(err.message);

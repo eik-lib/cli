@@ -1,14 +1,14 @@
 {
-    "name": "min-finn",
-    "version": "1.1.1",
-    "integrity": "sha512-kQUp0XWPggtVF8jZc4tj8EwzoV65xudDwlZpaTieThKqZzbLVFGENmZTeH/Tkq5K4Yjfr5BWEkSvC3pHqOLXeg==",
-    "files": {
-      "/eik.json": "sha512-a5geoQWt06LlXf5ZxKFTX+hFd0BmnDHh14iMu5fNVEIqfWO1M8NtZ9kq7uNwH1F0hFrSIJWCssJ8srJWrldCdg==",
-      "/esm.js": "sha512-50E7o5TgWZELaxQ5NkAAZq7Wd+SkmiTCIGnysseOq9E+xt4c/c/jgxwWDlt0K0vM/GEjuO04uQT6he3GYbkQug==",
-      "/esm.js.map": "sha512-IfXaxcFuKtsPvIOu+jiB2+r2Kq5VrzQ4vpqkBP60Oabbx+UGbse52EX0chZrPsCIov8WpOZVVvskyM3eNXIxMg==",
-      "/ie11.js": "sha512-jRYsZuVvGKpYJlsEqixgO82IwsPgJ+K4sGZZb1hAYyRSCO0CiVtBfCmCohvkhtS4rfiis8V8+nN8o2Xb6Wq2Tw==",
-      "/ie11.js.map": "sha512-tm9lfCOI/OCCpCtGvNpkaAeeFvIxZvTFl/TShxENliuUF11VfhXaMnPPcT/CbWknRuIUX56aN0eB/OT/Sr7vHQ==",
-      "/index.css": "sha512-uF61V2oNvP37XXsjmdnKNDStUbDHYJprZkHwAOCpn99ZgGD3VmVmucsVxS5Ln2fiyvHxSO6+ilOrx6szRivBDQ==",
-      "/index.css.map": "sha512-MQV7knWxHUxktoK9kV/2cQQDb7vt91+G9fkvk5iwA9QLwEEa0I0lBb8UU7mXf4fSAzTrZe3IX1Tp/veZZ+FFVQ=="
-    }
+  "name": "min-finn",
+  "version": "1.1.1",
+  "integrity": "sha512-kQUp0XWPggtVF8jZc4tj8EwzoV65xudDwlZpaTieThKqZzbLVFGENmZTeH/Tkq5K4Yjfr5BWEkSvC3pHqOLXeg==",
+  "files": {
+    "/eik.json": "sha512-a5geoQWt06LlXf5ZxKFTX+hFd0BmnDHh14iMu5fNVEIqfWO1M8NtZ9kq7uNwH1F0hFrSIJWCssJ8srJWrldCdg==",
+    "/esm.js": "sha512-50E7o5TgWZELaxQ5NkAAZq7Wd+SkmiTCIGnysseOq9E+xt4c/c/jgxwWDlt0K0vM/GEjuO04uQT6he3GYbkQug==",
+    "/esm.js.map": "sha512-IfXaxcFuKtsPvIOu+jiB2+r2Kq5VrzQ4vpqkBP60Oabbx+UGbse52EX0chZrPsCIov8WpOZVVvskyM3eNXIxMg==",
+    "/ie11.js": "sha512-jRYsZuVvGKpYJlsEqixgO82IwsPgJ+K4sGZZb1hAYyRSCO0CiVtBfCmCohvkhtS4rfiis8V8+nN8o2Xb6Wq2Tw==",
+    "/ie11.js.map": "sha512-tm9lfCOI/OCCpCtGvNpkaAeeFvIxZvTFl/TShxENliuUF11VfhXaMnPPcT/CbWknRuIUX56aN0eB/OT/Sr7vHQ==",
+    "/index.css": "sha512-uF61V2oNvP37XXsjmdnKNDStUbDHYJprZkHwAOCpn99ZgGD3VmVmucsVxS5Ln2fiyvHxSO6+ilOrx6szRivBDQ==",
+    "/index.css.map": "sha512-MQV7knWxHUxktoK9kV/2cQQDb7vt91+G9fkvk5iwA9QLwEEa0I0lBb8UU7mXf4fSAzTrZe3IX1Tp/veZZ+FFVQ=="
   }
+}

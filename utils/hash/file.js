@@ -9,10 +9,10 @@ const fs = require('fs');
  * @param {string} path - path to file to hash
  *
  * @returns {Promise<string>} - integrity hash
- * 
+ *
  * @example hash.file('/path/to/file.js');
  */
-module.exports = async path => {
+module.exports = async (path) => {
     const integrity = await ssri.fromStream(fs.createReadStream(path));
     return integrity.toString();
-}
+};

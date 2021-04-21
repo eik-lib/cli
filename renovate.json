@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "config:base",
-    "group:linters"
-  ],
+  "extends": ["config:base", "group:linters"],
   "packageRules": [
     {
       "depTypeList": ["dependencies"],

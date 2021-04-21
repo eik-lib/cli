@@ -6,9 +6,8 @@ const rimraf = require('rimraf');
 const Task = require('./task');
 
 module.exports = class Cleanup extends Task {
-    async process(incoming = {}, outgoing = {}) {
-        const { path } = incoming;
-        const { log } = this;
+    async process() {
+        const { log, path } = this;
         log.debug('Cleaning up');
 
         if (fs.existsSync(path)) {
@@ -16,7 +15,5 @@ module.exports = class Cleanup extends Task {
                 .filter((file) => file !== 'integrity.json')
                 .forEach((file) => rimraf.sync(join(path, file)));
         }
-
-        return outgoing;
     }
 };

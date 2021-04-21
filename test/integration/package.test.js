@@ -28,10 +28,10 @@ beforeEach(async (done, t) => {
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
-    const token = await new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
-    }).run();
+    });
 
     t.context.server = server;
     t.context.address = address;
@@ -51,8 +51,8 @@ test('eik package : package, details provided by eik.json file', async (t) => {
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -82,10 +82,11 @@ test('eik package : package, details provided by eik.json file - npm namespace',
     const assets = {
         name: 'test-app',
         version: '1.0.0',
+        type: 'npm',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -111,6 +112,40 @@ test('eik package : package, details provided by eik.json file - npm namespace',
     t.end();
 });
 
+test('eik package : package, details provided by eik.json file - explicit package namespace', async (t) => {
+    const assets = {
+        name: 'test-app',
+        version: '1.0.0',
+        type: 'package',
+        server: t.context.address,
+        files: {
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
+        },
+    };
+
+    await fs.writeFile(
+        join(t.context.folder, 'eik.json'),
+        JSON.stringify(assets),
+    );
+
+    const eik = join(__dirname, '../../index.js');
+    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+
+    const { error, stdout } = await exec(cmd);
+
+    const res = await fetch(
+        new URL('/pkg/test-app/1.0.0/index.js', t.context.address),
+    );
+
+    t.equal(res.ok, true);
+    t.notOk(error);
+    t.match(stdout, 'PACKAGE');
+    t.match(stdout, 'less than a minute ago');
+    t.match(stdout, 'Generic User');
+    t.end();
+});
+
 test('eik package : package, details provided by package.json values', async (t) => {
     const assets = {
         name: 'test-app',
@@ -118,8 +153,8 @@ test('eik package : package, details provided by package.json values', async (t)
         eik: {
             server: t.context.address,
             files: {
-                './index.js': join(__dirname, './../fixtures/client.js'),
-                './index.css': join(__dirname, './../fixtures/styles.css'),
+                'index.js': join(__dirname, './../fixtures/client.js'),
+                'index.css': join(__dirname, './../fixtures/styles.css'),
             },
         },
     };
@@ -153,8 +188,8 @@ test('eik package : package, details provided by package.json values and eik.jso
         eik: {
             server: t.context.address,
             files: {
-                './index.js': join(__dirname, './../fixtures/client.js'),
-                './index.css': join(__dirname, './../fixtures/styles.css'),
+                'index.js': join(__dirname, './../fixtures/client.js'),
+                'index.css': join(__dirname, './../fixtures/styles.css'),
             },
         },
     };
@@ -169,8 +204,8 @@ test('eik package : package, details provided by package.json values and eik.jso
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -185,7 +220,10 @@ test('eik package : package, details provided by package.json values and eik.jso
     const { error } = await exec(cmd);
 
     t.ok(error);
-    t.match(error, /Eik configuration was defined in both in package.json and eik.json/);
+    t.match(
+        error,
+        /Eik configuration was defined in both in package.json and eik.json/,
+    );
     t.end();
 });
 
@@ -199,8 +237,8 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         version: '2.2.24',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, './../fixtures/client.js'),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
     };
 
@@ -250,10 +288,13 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         version: '1.0.0',
         server: t.context.address,
         files: {
-            './index.js': join(__dirname, './../fixtures/client-with-bare-imports.js'),
-            './index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(
+                __dirname,
+                './../fixtures/client-with-bare-imports.js',
+            ),
+            'index.css': join(__dirname, './../fixtures/styles.css'),
         },
-        'import-map': [new URL('/map/my-map/v1', t.context.address).href]
+        'import-map': [new URL('/map/my-map/v1', t.context.address).href],
     };
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),

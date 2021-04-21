@@ -5,21 +5,21 @@
 const { join } = require('path');
 const { integrity, versions } = require('../../../../utils/http');
 const hash = require('../../../../utils/hash');
+const { typeSlug } = require('../../../../utils');
 const Task = require('./task');
 
 module.exports = class CheckIfAlreadyPublished extends Task {
-    async process(incoming = {}, outgoing = {}) {
-        const { log } = this;
-        const { server, name, version, files, path, type } = incoming;
+    async process() {
+        const { log, path } = this;
+        const { server, name, version, files, type } = this.config;
 
         log.debug(
             `Checking for existence of package ${name} version ${version}`,
         );
         log.debug('  ==> Fetching package metadata from server');
 
-        // TODO: version needs to be the previous version. How can we get this?
         try {
-            if (await integrity(server, type, name, version)) {
+            if (await integrity(server, typeSlug(type), name, version)) {
                 throw new Error(
                     `${name} version ${version} already exists on the Eik server. Publishing is not necessary.`,
                 );
@@ -33,7 +33,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
 
         let pkgVersions;
         try {
-            pkgVersions = await versions(server, type, name);
+            pkgVersions = await versions(server, typeSlug(type), name);
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
@@ -42,7 +42,7 @@ module.exports = class CheckIfAlreadyPublished extends Task {
 
         if (!pkgVersions) {
             log.debug('  ==> Package has never been published');
-            return outgoing;
+            return null;
         }
 
         log.debug(`  ==> However, previous versions of package do exist`);
@@ -52,10 +52,14 @@ module.exports = class CheckIfAlreadyPublished extends Task {
         try {
             const localFiles = [join(path, './eik.json')];
             if (files) {
-                const mappings = await this.config.pathsAndFilesAbsolute();
+                const mappings = await this.config.mappings();
 
-                for (const [, dest] of mappings) {
-                    localFiles.push(dest);
+                for (const mapping of mappings) {
+                    const destination = join(
+                        path,
+                        mapping.destination.filePathname,
+                    );
+                    localFiles.push(destination);
                 }
             }
             localHash = await hash.files(localFiles);
@@ -78,8 +82,6 @@ module.exports = class CheckIfAlreadyPublished extends Task {
             );
         }
 
-        outgoing.integrity = localHash;
-
-        return outgoing;
+        return localHash;
     }
 };
