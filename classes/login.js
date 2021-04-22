@@ -29,7 +29,7 @@ module.exports = class Login {
             const { message } = await request({
                 host: this.server,
                 method: 'POST',
-                pathname: '/auth/login',
+                pathname: 'auth/login',
                 data: { key: this.key },
             });
 
