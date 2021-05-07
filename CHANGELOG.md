@@ -1,3 +1,10 @@
+## [1.8.27](https://github.com/eik-lib/cli/compare/v1.8.26...v1.8.27) (2021-05-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency glob to v7.1.7 ([acb24db](https://github.com/eik-lib/cli/commit/acb24db2315e012616333fdc060c9d74be673914))
+
 ## [1.8.26](https://github.com/eik-lib/cli/compare/v1.8.25...v1.8.26) (2021-05-05)
 
 
