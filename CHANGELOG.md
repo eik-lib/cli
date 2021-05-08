@@ -1,3 +1,10 @@
+## [1.8.28](https://github.com/eik-lib/cli/compare/v1.8.27...v1.8.28) (2021-05-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.21.3 ([38eb54f](https://github.com/eik-lib/cli/commit/38eb54fb6a974d42774e274dc8374a814ff40d12))
+
 ## [1.8.27](https://github.com/eik-lib/cli/compare/v1.8.26...v1.8.27) (2021-05-07)
 
 
