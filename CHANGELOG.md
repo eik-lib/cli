@@ -1,3 +1,10 @@
+## [1.8.34](https://github.com/eik-lib/cli/compare/v1.8.33...v1.8.34) (2021-07-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.1 ([18b1f82](https://github.com/eik-lib/cli/commit/18b1f827e1d6b41d29126414861ea25bc353effe))
+
 ## [1.8.33](https://github.com/eik-lib/cli/compare/v1.8.32...v1.8.33) (2021-07-23)
 
 
