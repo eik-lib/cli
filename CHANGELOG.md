@@ -1,3 +1,10 @@
+## [1.8.36](https://github.com/eik-lib/cli/compare/v1.8.35...v1.8.36) (2021-07-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency chalk to v4.1.2 ([0566362](https://github.com/eik-lib/cli/commit/0566362f42ed17f977eaa4f1fbe1f8d141943c59))
+
 ## [1.8.35](https://github.com/eik-lib/cli/compare/v1.8.34...v1.8.35) (2021-07-27)
 
 
