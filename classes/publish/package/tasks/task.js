@@ -3,8 +3,10 @@
 const abslog = require('abslog');
 
 module.exports = class Task {
-    constructor(logger, config) {
-        this.log = abslog(logger);
-        this.config = config;
+    constructor(options) {
+        this.cwd = options.cwd;
+        this.log = abslog(options.logger);
+        this.path = options.path;
+        this.config = options.config;
     }
-}
+};

@@ -3,7 +3,7 @@
 /**
  * Creates a logger object that wraps an instance of the "ora" module in order to provide consistent command line logging that includes a spinner
  *
- * @param {object} spinner 
+ * @param {object} spinner
  * @param {boolean} debug
  */
 const logger = (spinner, debug = false) => ({

@@ -2,7 +2,7 @@
   "name": "@eik/cli",
   "version": "1.8.42",
   "description": "Cli tool for publishing assets",
-  "main": "index.js",
+  "main": "./classes/index.js",
   "bin": {
     "eik": "index.js"
   },
@@ -17,23 +17,29 @@
     "formatters"
   ],
   "scripts": {
-    "test": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.js test/**/*.test.js",
-    "test:ci": "npm run test -- --jobs=1",
-    "lint:format": "eslint --fix .",
-    "lint": "eslint ."
+    "test": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 --test-regex=.test.js --test-ignore=node_modules",
+    "test:integration": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/integration/**/*.test.js",
+    "test:unit": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.js",
+    "test:tasks": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/tasks/*.test.js",
+    "test:ci": "npm run test:unit  -- --jobs=1 && npm run test:tasks -- --jobs=1 && npm run test:integration -- --jobs=1",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format:check": "prettier -c .",
+    "format:fix": "prettier -w .",
+    "fix": "npm run lint:fix && npm run format:fix"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "1.6.0",
+    "@eik/common": "^4.0.0-next.3",
     "abslog": "2.4.0",
     "boxen": "5.0.1",
     "bytes": "3.1.0",
     "chalk": "4.1.2",
     "copy": "0.3.2",
     "date-fns": "2.23.0",
-    "form-data": "3.0.1",
+    "form-data": "4.0.0",
     "glob": "7.1.7",
     "gzip-size": "6.0.0",
     "make-dir": "3.1.0",
@@ -65,6 +71,7 @@
     "eslint-plugin-prettier": "3.4.0",
     "fastify": "3.20.1",
     "fastify-cors": "5.2.0",
+    "fs-extra": "^9.1.0",
     "prettier": "2.3.2",
     "puppeteer": "7.1.0",
     "react": "17.0.2",

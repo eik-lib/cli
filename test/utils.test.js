@@ -11,9 +11,7 @@ const h = require('../utils/hash');
 const f = require('../utils/http');
 
 test('calculate file hash', async (t) => {
-    const hash = await h.file(
-        join(__dirname, 'fixtures', 'client.js'),
-    );
+    const hash = await h.file(join(__dirname, 'fixtures', 'client.js'));
     t.equal(
         hash,
         'sha512-7y37q0qk5mDqzHrGvJAR9J8kPX+orJhuO+KrCTKw11ZKRI/5udUuKt2Zb/thH5H39OQYrvnHTLbZS9ShG/lGCg==',
@@ -28,15 +26,11 @@ test('calculate files hash', async (t) => {
         join(__dirname, 'fixtures', 'import-map.json'),
     ]);
 
-    const fileHash1 = await h.file(
-        join(__dirname, 'fixtures', 'client.js'),
-    );
+    const fileHash1 = await h.file(join(__dirname, 'fixtures', 'client.js'));
     const fileHash2 = await h.file(
         join(__dirname, 'fixtures', 'import-map.json'),
     );
-    const fileHash3 = await h.file(
-        join(__dirname, 'fixtures', 'styles.css'),
-    );
+    const fileHash3 = await h.file(join(__dirname, 'fixtures', 'styles.css'));
 
     const hasher = crypto.createHash('sha512');
     hasher.update(fileHash1);
@@ -51,12 +45,8 @@ test('calculate files hash', async (t) => {
 });
 
 test('compare hashes - true', async (t) => {
-    const fileHash1 = await h.file(
-        join(__dirname, 'fixtures', 'client.js'),
-    );
-    const fileHash2 = await h.file(
-        join(__dirname, 'fixtures', 'client.js'),
-    );
+    const fileHash1 = await h.file(join(__dirname, 'fixtures', 'client.js'));
+    const fileHash2 = await h.file(join(__dirname, 'fixtures', 'client.js'));
 
     t.equal(
         h.compare(fileHash1, fileHash2),
@@ -66,9 +56,7 @@ test('compare hashes - true', async (t) => {
 });
 
 test('compare hashes - false', async (t) => {
-    const fileHash1 = await h.file(
-        join(__dirname, 'fixtures', 'client.js'),
-    );
+    const fileHash1 = await h.file(join(__dirname, 'fixtures', 'client.js'));
     const fileHash2 = await h.file(
         join(__dirname, 'fixtures', 'import-map.json'),
     );
@@ -83,11 +71,11 @@ test('compare hashes - false', async (t) => {
 test('fetch latest version for a given published bundle', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => ({
-            versions: [
-                [1, { version: '1.3.2' }],
-                [2, { version: '2.1.8' }],
-            ],
-        }));
+        versions: [
+            [1, { version: '1.3.2' }],
+            [2, { version: '2.1.8' }],
+        ],
+    }));
     const address = await server.listen();
 
     const version = await f.latestVersion(address, 'pkg', 'foo');
@@ -100,11 +88,11 @@ test('fetch latest version for a given published bundle', async (t) => {
 test('fetch latest version, filtered by major, for a given published bundle', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => ({
-            versions: [
-                [1, { version: '1.3.2' }],
-                [2, { version: '2.1.8' }],
-            ],
-        }));
+        versions: [
+            [1, { version: '1.3.2' }],
+            [2, { version: '2.1.8' }],
+        ],
+    }));
     const address = await server.listen();
 
     const version = await f.latestVersion(address, 'pkg', 'foo', 1);
@@ -165,11 +153,11 @@ test('fetch latest version, invalid versions returned by server', async (t) => {
 test('fetch latest version, invalid versions keys returned by server', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => ({
-            versions: [
-                ['not a number', 1],
-                ['also not a number', 2],
-            ],
-        }));
+        versions: [
+            ['not a number', 1],
+            ['also not a number', 2],
+        ],
+    }));
     const address = await server.listen();
 
     t.rejects(
@@ -183,9 +171,9 @@ test('fetch latest version, invalid versions keys returned by server', async (t)
 test('fetch latest version, no bundles yet published', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => ({
-            latest: {},
-            versions: [],
-        }));
+        latest: {},
+        versions: [],
+    }));
     const address = await server.listen();
 
     const version = await f.latestVersion(address, 'pkg', 'foo');
@@ -198,19 +186,19 @@ test('fetch latest version, no bundles yet published', async (t) => {
 test('fetch remote hash for a given version', async (t) => {
     const server = fastify();
     server.get('/pkg/foo/1.0.0', async () => ({
-            integrity:
-                'sha512-36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==',
-            files: [
-                {
-                    integrity:
-                        'sha512-T2qS6EBvOIu10bhUas3FhD39KkwIiXxplJ13q2EdXcA7nlYljlLKaymKhqz49f7qrEKhdISc4q5N+bk0Y1Y/NA==',
-                },
-                {
-                    integrity:
-                        'sha512-0K6U6pmI04xIBGE+KgfSRNMY0gBmKAwjWzZ+DM/tkicZSG+Uz5erTFw1Zru/0wXUPs256glMX24n0f1Q4z62tw==',
-                },
-            ],
-        }));
+        integrity:
+            'sha512-36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==',
+        files: [
+            {
+                integrity:
+                    'sha512-T2qS6EBvOIu10bhUas3FhD39KkwIiXxplJ13q2EdXcA7nlYljlLKaymKhqz49f7qrEKhdISc4q5N+bk0Y1Y/NA==',
+            },
+            {
+                integrity:
+                    'sha512-0K6U6pmI04xIBGE+KgfSRNMY0gBmKAwjWzZ+DM/tkicZSG+Uz5erTFw1Zru/0wXUPs256glMX24n0f1Q4z62tw==',
+            },
+        ],
+    }));
     const address = await server.listen();
     const result = await f.integrity(address, 'pkg', 'foo', '1.0.0');
 
@@ -223,7 +211,9 @@ test('fetch remote hash for a given version', async (t) => {
 });
 
 test('write JSON file - object - file relative to cwd', async (t) => {
-    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
+    const cwd = await fs.promises.mkdtemp(
+        join(os.tmpdir(), basename(__filename)),
+    );
     await j.write(
         { version: '1.0.0', integrity: [] },
         { cwd, filename: '.eikrc' },
@@ -236,7 +226,9 @@ test('write JSON file - object - file relative to cwd', async (t) => {
 });
 
 test('write JSON file - object - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
+    const cwd = await fs.promises.mkdtemp(
+        join(os.tmpdir(), basename(__filename)),
+    );
     await j.write({ prop: 'val' }, { filename: join(cwd, 'test.json') });
     const eikrc = fs.readFileSync(join(cwd, 'test.json'));
     const { prop } = JSON.parse(eikrc);
@@ -256,7 +248,9 @@ test('write JSON file - string - file relative path', async (t) => {
 });
 
 test('write JSON file - string - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
+    const cwd = await fs.promises.mkdtemp(
+        join(os.tmpdir(), basename(__filename)),
+    );
     await j.write({ prop: 'val' }, join(cwd, 'test3.json'));
     const eikrc = fs.readFileSync(join(cwd, 'test3.json'));
     const { prop } = JSON.parse(eikrc);
@@ -265,7 +259,9 @@ test('write JSON file - string - file absolute path', async (t) => {
 });
 
 test('read JSON file - object - file relative path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
+    const cwd = await fs.promises.mkdtemp(
+        join(os.tmpdir(), basename(__filename)),
+    );
     fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
     const json = await j.read({ cwd, filename: './test3.json' });
 
@@ -273,7 +269,9 @@ test('read JSON file - object - file relative path', async (t) => {
 });
 
 test('read JSON file - object - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
+    const cwd = await fs.promises.mkdtemp(
+        join(os.tmpdir(), basename(__filename)),
+    );
     fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
     const json = await j.read({ filename: join(cwd, './test3.json') });
 
@@ -291,7 +289,9 @@ test('read JSON file - string - file relative path', async (t) => {
 });
 
 test('read JSON file - string - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(join(os.tmpdir(), basename(__filename)));
+    const cwd = await fs.promises.mkdtemp(
+        join(os.tmpdir(), basename(__filename)),
+    );
     fs.writeFileSync(
         join(cwd, './test-read-json-2.json'),
         JSON.stringify({ key: 'val' }),

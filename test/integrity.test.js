@@ -2,19 +2,12 @@
 
 'use strict';
 
+const { join } = require('path');
 const fastify = require('fastify');
 const { test, beforeEach, afterEach } = require('tap');
 const EikService = require('@eik/service');
-const { EikConfig } = require('@eik/common');
 const { sink } = require('@eik/core');
 const cli = require('..');
-
-function buildTestConfig(files) {
-    return new EikConfig({files: files || {
-        './index.js': './fixtures/client.js',
-        './index.css': './fixtures/styles.css',
-    }}, null, __dirname)
-}
 
 beforeEach(async (done, t) => {
     const server = fastify({ logger: false });
@@ -23,11 +16,10 @@ beforeEach(async (done, t) => {
     server.register(service.api());
     const address = await server.listen();
 
-    const login = new cli.Login({
+    const token = await cli.login({
         server: address,
         key: 'change_me',
     });
-    const token = await login.run();
 
     t.context.server = server;
     t.context.address = address;
@@ -43,27 +35,32 @@ afterEach(async (done, t) => {
 test('package integrity', async (t) => {
     const { address, token } = t.context;
 
-    await new cli.publish.Package({
+    await cli.publish({
         cwd: __dirname,
         server: address,
         name: 'my-app',
-        config: buildTestConfig(),
         token,
         version: '1.0.0',
-    }).run();
+        files: {
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
+        },
+    });
 
-    const result = await new cli.Integrity({
+    const result = await cli.integrity({
         server: address,
         name: 'my-app',
         version: '1.0.0',
-    }).run();
+        type: 'package',
+    });
 
     t.equal(result.name, 'my-app');
     t.equal(result.version, '1.0.0');
     t.ok(result.integrity);
-    t.same(Object.keys(result.files), [
-        '/eik.json',
-        '/index.js',
-        '/index.css'
-    ]);
+    t.equal(result.files[0].pathname, '/eik.json');
+    t.ok(result.files[0].integrity);
+    t.equal(result.files[1].pathname, '/index.js');
+    t.ok(result.files[1].integrity);
+    t.equal(result.files[2].pathname, '/index.css');
+    t.ok(result.files[2].integrity);
 });

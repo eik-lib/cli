@@ -21,8 +21,7 @@ exports.builder = (yargs) => {
 
     yargs
         .positional('name', {
-            describe:
-                'Name matching existing name for a package on Eik server',
+            describe: 'Name matching existing name for a package on Eik server',
             type: 'string',
             default: defaults.name,
         })
@@ -68,7 +67,9 @@ exports.builder = (yargs) => {
     yargs.example(`eik package-alias my-app 1.0.0 1`);
     yargs.example(`eik package-alias my-app 1.7.3 1`);
     yargs.example(`eik package-alias my-app 6.3.1 6`);
-    yargs.example(`eik package-alias my-app 6.3.1 6 --server https://assets.myeikserver.com`);
+    yargs.example(
+        `eik package-alias my-app 6.3.1 6 --server https://assets.myeikserver.com`,
+    );
     yargs.example(`eik package-alias my-app 4.2.2 4 --debug`);
 };
 
@@ -89,7 +90,9 @@ exports.handler = async (argv) => {
         af = new AliasFormatter(data);
 
         const createdOrUpdated = data.update ? 'Updated' : 'Created';
-        log.info(`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`);
+        log.info(
+            `${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+        );
         success = true;
     } catch (err) {
         log.warn(err.message);

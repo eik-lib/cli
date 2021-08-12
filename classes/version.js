@@ -7,65 +7,55 @@ const { join, isAbsolute, parse } = require('path');
 const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
-const { schemas } = require('@eik/common');
+const { schemas, EikConfig } = require('@eik/common');
 const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
+const { typeSlug } = require('../utils');
 
 module.exports = class Version {
     constructor({
         logger,
         server,
-        type = 'pkg',
+        type = 'package',
         name,
         version,
         level = 'patch',
         cwd,
         map = [],
         out = './.eik',
-        config,
+        files,
     } = {}) {
+        const config = new EikConfig(
+            {
+                server,
+                type,
+                name,
+                version,
+                'import-map': map,
+                out,
+                files,
+            },
+            null,
+            cwd,
+        );
+
         this.log = abslog(logger);
-        this.server = server;
-        this.type = type;
-        this.name = name;
-        this.version = version;
-        this.level = level;
-        this.cwd = cwd;
         this.config = config;
-        this.map = map;
-        this.out = out;
-        this.path = isAbsolute(out) ? out : join(cwd, out);
+        this.path = isAbsolute(config.out) ? config.out : join(cwd, config.out);
+        this.level = level;
     }
 
     async run() {
-        const {
-            log,
-            server,
-            type,
-            name,
-            version,
-            level,
-            cwd,
-            map,
-            path,
-            out,
-            config,
-        } = this;
-        const { files } = config;
-
+        const { name, server, type, version, cwd, out, files, map } =
+            this.config;
+        const { log, level, path } = this;
         log.debug('Validating input');
+
+        log.debug(`  ==> config object`);
+        this.config.validate();
 
         log.debug(`  ==> cwd: ${cwd}`);
         parse(cwd);
-
-        log.debug(`  ==> server: ${server}`);
-        schemas.assert.server(server);
-
-        log.debug(`  ==> name: ${name}`);
-        schemas.assert.name(name);
-
-        log.debug(`  ==> version: ${version}`);
-        schemas.assert.version(version);
 
         log.debug(`  ==> level: ${level}`);
         if (!['major', 'minor', 'patch'].includes(level)) {
@@ -90,7 +80,12 @@ module.exports = class Version {
 
         let integrityHash;
         try {
-            integrityHash = await integrity(server, type, name, version);
+            integrityHash = await integrity(
+                server,
+                typeSlug(type),
+                name,
+                version,
+            );
         } catch (err) {
             throw new Error(
                 `Unable to fetch package metadata from server: ${err.message}`,
@@ -124,12 +119,16 @@ module.exports = class Version {
 
             if (files) {
                 try {
-                    const mappings = await config.pathsAndFilesAbsolute();
+                    const mappings = await this.config.mappings();
 
-                    for (const [src, dest] of mappings) {
-                        copyFileSync(src, dest);
-                        log.debug(`  ==> ${dest}`);
-                        localFiles.push(dest);
+                    for (const mapping of mappings) {
+                        const destination = join(
+                            path,
+                            mapping.destination.filePathname,
+                        );
+                        copyFileSync(mapping.source.absolute, destination);
+                        log.debug(`  ==> ${destination}`);
+                        localFiles.push(destination);
                     }
                 } catch (err) {
                     // throw new Error(`Failed to zip JavaScripts: ${err.message}`);
