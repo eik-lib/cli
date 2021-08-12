@@ -46,16 +46,8 @@ module.exports = class Version {
     }
 
     async run() {
-        const {
-            name,
-            server,
-            type,
-            version,
-            cwd,
-            out,
-            files,
-            map,
-        } = this.config;
+        const { name, server, type, version, cwd, out, files, map } =
+            this.config;
         const { log, level, path } = this;
         log.debug('Validating input');
 

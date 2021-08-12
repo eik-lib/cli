@@ -26,32 +26,28 @@ module.exports = {
             pattern: 'master',
             notifyOnSuccess: true,
             onSuccessTemplate: {
-              text:
-                '$package_name $npm_package_version is now available - $repo_url',
+              text: '$package_name $npm_package_version is now available - $repo_url',
             },
           },
           {
             pattern: 'alpha',
             notifyOnSuccess: true,
             onSuccessTemplate: {
-              text:
-                '$package_name $npm_package_version (pre-release) is now available - $repo_url',
+              text: '$package_name $npm_package_version (pre-release) is now available - $repo_url',
             },
           },
           {
             pattern: 'beta',
             notifyOnSuccess: true,
             onSuccessTemplate: {
-              text:
-                '$package_name $npm_package_version (pre-release) is now available - $repo_url',
+              text: '$package_name $npm_package_version (pre-release) is now available - $repo_url',
             },
           },
           {
             pattern: 'next',
             notifyOnSuccess: true,
             onSuccessTemplate: {
-              text:
-                '$package_name $npm_package_version (pre-release) is now available - $repo_url',
+              text: '$package_name $npm_package_version (pre-release) is now available - $repo_url',
             },
           },
         ],
