@@ -1,6 +1,6 @@
 {
   "name": "@eik/cli",
-  "version": "2.0.0-next.6",
+  "version": "2.0.0-next.7",
   "description": "Cli tool for publishing assets",
   "main": "./classes/index.js",
   "bin": {

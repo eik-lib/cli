@@ -1,3 +1,26 @@
+# [2.0.0-next.7](https://github.com/eik-lib/cli/compare/v2.0.0-next.6...v2.0.0-next.7) (2021-08-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency chalk to v4.1.1 ([e0231f4](https://github.com/eik-lib/cli/commit/e0231f4b854f7b57838356aecf207ef3bda8544e))
+* **deps:** update dependency chalk to v4.1.2 ([0566362](https://github.com/eik-lib/cli/commit/0566362f42ed17f977eaa4f1fbe1f8d141943c59))
+* **deps:** update dependency date-fns to v2.21.2 ([dae6452](https://github.com/eik-lib/cli/commit/dae645291675494190c1b6b2e372d1519f751806))
+* **deps:** update dependency date-fns to v2.21.3 ([38eb54f](https://github.com/eik-lib/cli/commit/38eb54fb6a974d42774e274dc8374a814ff40d12))
+* **deps:** update dependency date-fns to v2.22.0 ([e158b6d](https://github.com/eik-lib/cli/commit/e158b6de1d246c9be52300ed974a9f3a7b62303c))
+* **deps:** update dependency date-fns to v2.22.1 ([9be0dad](https://github.com/eik-lib/cli/commit/9be0dad1e59d5f9afd2b9c114db04c72c93bc0c6))
+* **deps:** update dependency date-fns to v2.23.0 ([c6442fa](https://github.com/eik-lib/cli/commit/c6442fa988814451b6ce3a1741e6ca4f29152f09))
+* **deps:** update dependency glob to v7.1.7 ([acb24db](https://github.com/eik-lib/cli/commit/acb24db2315e012616333fdc060c9d74be673914))
+* **deps:** update dependency ora to v5.4.1 ([1ffb2fb](https://github.com/eik-lib/cli/commit/1ffb2fb0097473373281781c27dc6b1b069c3bb5))
+* **deps:** update dependency tar to v6.1.1 ([18b1f82](https://github.com/eik-lib/cli/commit/18b1f827e1d6b41d29126414861ea25bc353effe))
+* **deps:** update dependency tar to v6.1.2 ([b3b5460](https://github.com/eik-lib/cli/commit/b3b5460f9b03945f2881a5c3914e48df08dee8cc))
+* **deps:** update dependency tar to v6.1.3 ([71a91ab](https://github.com/eik-lib/cli/commit/71a91ab33d1206b43654b56838c2a29a838250fd))
+* **deps:** update dependency tar to v6.1.4 ([e28219c](https://github.com/eik-lib/cli/commit/e28219cb02806d7d207c2596501a51a8fe0b54fe))
+* **deps:** update dependency tar to v6.1.5 ([51c55e1](https://github.com/eik-lib/cli/commit/51c55e1ef7ad7531c22a09e5f3345ae4e2283162))
+* **deps:** update dependency tar to v6.1.6 ([3be2ad7](https://github.com/eik-lib/cli/commit/3be2ad747680247e33fa07a5c2a238e228a95297))
+* **deps:** update dependency tar to v6.1.7 ([89a3649](https://github.com/eik-lib/cli/commit/89a3649f4a4553740423e87c4f994a56ffc81180))
+* **deps:** update dependency yargs-parser to v20.2.9 ([cecc640](https://github.com/eik-lib/cli/commit/cecc6402ff5a44d85de3c174e76c19186427c064))
+
 ## [1.8.41](https://github.com/eik-lib/cli/compare/v1.8.40...v1.8.41) (2021-08-10)
 
 
