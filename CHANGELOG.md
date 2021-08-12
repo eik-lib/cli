@@ -1,9 +1,109 @@
-# [2.0.0-next.6](https://github.com/eik-lib/cli/compare/v2.0.0-next.5...v2.0.0-next.6) (2021-04-18)
+## [1.8.41](https://github.com/eik-lib/cli/compare/v1.8.40...v1.8.41) (2021-08-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.7 ([89a3649](https://github.com/eik-lib/cli/commit/89a3649f4a4553740423e87c4f994a56ffc81180))
+
+## [1.8.40](https://github.com/eik-lib/cli/compare/v1.8.39...v1.8.40) (2021-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.6 ([3be2ad7](https://github.com/eik-lib/cli/commit/3be2ad747680247e33fa07a5c2a238e228a95297))
+
+## [1.8.39](https://github.com/eik-lib/cli/compare/v1.8.38...v1.8.39) (2021-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.5 ([51c55e1](https://github.com/eik-lib/cli/commit/51c55e1ef7ad7531c22a09e5f3345ae4e2283162))
+
+## [1.8.38](https://github.com/eik-lib/cli/compare/v1.8.37...v1.8.38) (2021-08-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.4 ([e28219c](https://github.com/eik-lib/cli/commit/e28219cb02806d7d207c2596501a51a8fe0b54fe))
+
+## [1.8.37](https://github.com/eik-lib/cli/compare/v1.8.36...v1.8.37) (2021-08-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.3 ([71a91ab](https://github.com/eik-lib/cli/commit/71a91ab33d1206b43654b56838c2a29a838250fd))
+
+## [1.8.36](https://github.com/eik-lib/cli/compare/v1.8.35...v1.8.36) (2021-07-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency chalk to v4.1.2 ([0566362](https://github.com/eik-lib/cli/commit/0566362f42ed17f977eaa4f1fbe1f8d141943c59))
+
+## [1.8.35](https://github.com/eik-lib/cli/compare/v1.8.34...v1.8.35) (2021-07-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.2 ([b3b5460](https://github.com/eik-lib/cli/commit/b3b5460f9b03945f2881a5c3914e48df08dee8cc))
+
+## [1.8.34](https://github.com/eik-lib/cli/compare/v1.8.33...v1.8.34) (2021-07-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.1.1 ([18b1f82](https://github.com/eik-lib/cli/commit/18b1f827e1d6b41d29126414861ea25bc353effe))
+
+## [1.8.33](https://github.com/eik-lib/cli/compare/v1.8.32...v1.8.33) (2021-07-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.23.0 ([c6442fa](https://github.com/eik-lib/cli/commit/c6442fa988814451b6ce3a1741e6ca4f29152f09))
+
+## [1.8.32](https://github.com/eik-lib/cli/compare/v1.8.31...v1.8.32) (2021-06-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs-parser to v20.2.9 ([cecc640](https://github.com/eik-lib/cli/commit/cecc6402ff5a44d85de3c174e76c19186427c064))
+
+## [1.8.31](https://github.com/eik-lib/cli/compare/v1.8.30...v1.8.31) (2021-06-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ora to v5.4.1 ([1ffb2fb](https://github.com/eik-lib/cli/commit/1ffb2fb0097473373281781c27dc6b1b069c3bb5))
+
+## [2.0.0-next.6](https://github.com/eik-lib/cli/compare/v2.0.0-next.5...v2.0.0-next.6) (2021-04-18)
+
+## [1.8.30](https://github.com/eik-lib/cli/compare/v1.8.29...v1.8.30) (2021-05-28)
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.22.1 ([9be0dad](https://github.com/eik-lib/cli/commit/9be0dad1e59d5f9afd2b9c114db04c72c93bc0c6))
+
+## [1.8.29](https://github.com/eik-lib/cli/compare/v1.8.28...v1.8.29) (2021-05-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.22.0 ([e158b6d](https://github.com/eik-lib/cli/commit/e158b6de1d246c9be52300ed974a9f3a7b62303c))
+
+## [1.8.28](https://github.com/eik-lib/cli/compare/v1.8.27...v1.8.28) (2021-05-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.21.3 ([38eb54f](https://github.com/eik-lib/cli/commit/38eb54fb6a974d42774e274dc8374a814ff40d12))
+
+## [1.8.27](https://github.com/eik-lib/cli/compare/v1.8.26...v1.8.27) (2021-05-07)
 
 
 ### Bug Fixes
 
 * **deps:** update dependency boxen to v5.0.1 ([d76195a](https://github.com/eik-lib/cli/commit/d76195a3160da4c54f384c29301eca2dbd054e45))
+* **deps:** update dependency glob to v7.1.7 ([acb24db](https://github.com/eik-lib/cli/commit/acb24db2315e012616333fdc060c9d74be673914))
 * **deps:** update dependency date-fns to v2.18.0 ([304b46f](https://github.com/eik-lib/cli/commit/304b46f0d29dab0cc419491274a438241c7aa47d))
 * **deps:** update dependency date-fns to v2.19.0 ([4d3e939](https://github.com/eik-lib/cli/commit/4d3e939baaf0e4a9409d12077d9bc25c85539def))
 * **deps:** update dependency date-fns to v2.20.0 ([daf20ac](https://github.com/eik-lib/cli/commit/daf20ac6d39e0e31e9180770d62f7bf72f074f53))
@@ -18,18 +118,22 @@
 * **deps:** update dependency yargs-parser to v20.2.7 ([2feed62](https://github.com/eik-lib/cli/commit/2feed625227383d280df77f279c6df20b0d918dc))
 
 # [2.0.0-next.5](https://github.com/eik-lib/cli/compare/v2.0.0-next.4...v2.0.0-next.5) (2021-04-08)
-## [1.8.24](https://github.com/eik-lib/cli/compare/v1.8.23...v1.8.24) (2021-04-15)
+## [1.8.26](https://github.com/eik-lib/cli/compare/v1.8.25...v1.8.26) (2021-05-05)
 
 
 ### Bug Fixes
 
 * remove restrictions to publishing when files are same as previous version ([a5c0a14](https://github.com/eik-lib/cli/commit/a5c0a14ef093fef90d131a184e12d073d0845f64))
+* **deps:** update dependency date-fns to v2.21.2 ([dae6452](https://github.com/eik-lib/cli/commit/dae645291675494190c1b6b2e372d1519f751806))
 
-# [2.0.0-next.4](https://github.com/eik-lib/cli/compare/v2.0.0-next.3...v2.0.0-next.4) (2021-03-19)
+## [2.0.0-next.4](https://github.com/eik-lib/cli/compare/v2.0.0-next.3...v2.0.0-next.4) (2021-03-19)
 
+## [1.8.25](https://github.com/eik-lib/cli/compare/v1.8.24...v1.8.25) (2021-04-21)
 
 * refactor!: align structure of integrity json ([437bc78](https://github.com/eik-lib/cli/commit/437bc789128480d23b70585ad9c66a1e90dbf1e0))
+### Bug Fixes
 
+* **deps:** update dependency chalk to v4.1.1 ([e0231f4](https://github.com/eik-lib/cli/commit/e0231f4b854f7b57838356aecf207ef3bda8544e))
 
 ### BREAKING CHANGES
 
