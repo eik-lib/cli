@@ -1,3 +1,27 @@
+# [2.0.0](https://github.com/eik-lib/cli/compare/v1.8.42...v2.0.0) (2021-08-12)
+
+
+### Bug Fixes
+
+* improve debug log output when checking if bundle exists ([8d004ab](https://github.com/eik-lib/cli/commit/8d004ab6bd29ce12dd835e285ea821fd773649a6))
+* remove restrictions to publishing when files are same as previous version ([a5c0a14](https://github.com/eik-lib/cli/commit/a5c0a14ef093fef90d131a184e12d073d0845f64))
+* update common package and refactor to use new mapping function ([992f015](https://github.com/eik-lib/cli/commit/992f0154342a6a27205ad14a815d06ae38551a0b))
+* **deps:** update dependency form-data to v4 ([9f32c59](https://github.com/eik-lib/cli/commit/9f32c5966054f5b15b1966eb25b744f1cd2acd77))
+* update common package to fix docs. Update docs ([772486f](https://github.com/eik-lib/cli/commit/772486f9b118511f3aa128f4ed343a6c3587d8a2))
+* update dependencies to fix issue with @eik/common ([40b6f98](https://github.com/eik-lib/cli/commit/40b6f981fbb8f44a6f042281d145e67463feb9b8))
+
+
+* refactor!: align structure of integrity json ([437bc78](https://github.com/eik-lib/cli/commit/437bc789128480d23b70585ad9c66a1e90dbf1e0))
+* feat!: support eik config type field, rework class inputs ([2c3cb92](https://github.com/eik-lib/cli/commit/2c3cb92da566d107ad6d1b3cfde451fec938aec8))
+* chore!: update dependency @eik/common ([53092c2](https://github.com/eik-lib/cli/commit/53092c2a2e0e84a557c64950274fad5066900010))
+
+
+### BREAKING CHANGES
+
+* The structure of integrity.json changes with PR which would be breaking for anyone depending on it.
+* This includes a major refactor of the various Node.js APIs though it also includes some breaking changes to the cli commands as well. The Eik.json or package.json type field is now used when publishing to determine whether to publish to pkg or npm namespace. --npm cli flags have been removed.
+* Eik.json config is now being validated whenever it is loaded from or saved to eik.json
+
 ## [2.0.0-next.7](https://github.com/eik-lib/cli/compare/v2.0.0-next.6...v2.0.0-next.7) (2021-08-12)
 
 ## [1.8.42](https://github.com/eik-lib/cli/compare/v1.8.41...v1.8.42) (2021-08-11)
