@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/eik-lib/cli/compare/v2.0.3...v2.0.4) (2021-09-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency boxen to v5.1.0 ([bb3d4e0](https://github.com/eik-lib/cli/commit/bb3d4e07244a896b8e89e777b7772d9a1d391ae2))
+
 ## [2.0.3](https://github.com/eik-lib/cli/compare/v2.0.2...v2.0.3) (2021-09-06)
 
 
