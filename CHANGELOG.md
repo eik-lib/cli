@@ -1,3 +1,10 @@
+## [2.0.12](https://github.com/eik-lib/cli/compare/v2.0.11...v2.0.12) (2021-10-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v2.25.0 ([32f949d](https://github.com/eik-lib/cli/commit/32f949d121b92b71362ebb1ada61664f73a29892))
+
 ## [2.0.11](https://github.com/eik-lib/cli/compare/v2.0.10...v2.0.11) (2021-09-23)
 
 
