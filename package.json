@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@eik/core": "1.2.23",
-    "@eik/service": "1.2.95",
+    "@eik/service": "1.2.96",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/commit-analyzer": "8.0.1",
     "@semantic-release/git": "9.0.1",
