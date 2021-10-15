@@ -1,3 +1,10 @@
+## [2.0.13](https://github.com/eik-lib/cli/compare/v2.0.12...v2.0.13) (2021-10-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency read-pkg-up to v9 ([279ef83](https://github.com/eik-lib/cli/commit/279ef8390f6990683a494c6b0934f1463ddfb322))
+
 ## [2.0.12](https://github.com/eik-lib/cli/compare/v2.0.11...v2.0.12) (2021-10-05)
 
 
