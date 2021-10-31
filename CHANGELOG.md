@@ -1,3 +1,10 @@
+## [2.0.14](https://github.com/eik-lib/cli/compare/v2.0.13...v2.0.14) (2021-10-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency node-fetch to v2.6.6 ([6fc96ea](https://github.com/eik-lib/cli/commit/6fc96eac37b45afaefb9630ac6a49be759565d20))
+
 ## [2.0.13](https://github.com/eik-lib/cli/compare/v2.0.12...v2.0.13) (2021-10-15)
 
 
