@@ -1,3 +1,10 @@
+## [2.0.15](https://github.com/eik-lib/cli/compare/v2.0.14...v2.0.15) (2021-11-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency bytes to v3.1.1 ([06abec8](https://github.com/eik-lib/cli/commit/06abec8ca8d144ea82d63fc0425ccfcbfe4e338d))
+
 ## [2.0.14](https://github.com/eik-lib/cli/compare/v2.0.13...v2.0.14) (2021-10-31)
 
 
