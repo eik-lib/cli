@@ -24,13 +24,13 @@ test('Initializing a new eik.json file', async (t) => {
 
     const assets = JSON.parse(readFileSync(join(folder, 'eik.json')));
 
-    t.equals(assets.name, '', 'eik.json "name" field should be empty');
-    t.equals(
+    t.equal(assets.name, '', 'eik.json "name" field should be empty');
+    t.equal(
         assets.version,
         '1.0.0',
         'eik.json "version" field should equal 1.0.0',
     );
-    t.equals(assets.server, '', 'eik.json "server" field should be empty');
+    t.equal(assets.server, '', 'eik.json "server" field should be empty');
     t.same(assets.files, {}, 'eik.json "files" should be an empty object');
 });
 
@@ -47,17 +47,17 @@ test('Initializing a new eik.json file passing custom values', async (t) => {
 
     const assets = JSON.parse(readFileSync(join(folder, 'eik.json')));
 
-    t.equals(
+    t.equal(
         assets.name,
         'custom-name',
         'eik.json "name" field should not be empty',
     );
-    t.equals(
+    t.equal(
         assets.version,
         '2.0.0',
         'eik.json "version" field should not be empty',
     );
-    t.equals(
+    t.equal(
         assets.server,
         'http://localhost:4001',
         'eik.json "server" field should not be empty',

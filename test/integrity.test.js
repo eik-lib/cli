@@ -9,7 +9,7 @@ const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
 const cli = require('..');
 
-beforeEach(async (done, t) => {
+beforeEach(async (t) => {
     const server = fastify({ logger: false });
     const memSink = new sink.MEM();
     const service = new EikService({ customSink: memSink });
@@ -24,12 +24,10 @@ beforeEach(async (done, t) => {
     t.context.server = server;
     t.context.address = address;
     t.context.token = token;
-    done();
 });
 
-afterEach(async (done, t) => {
+afterEach(async (t) => {
     await t.context.server.close();
-    done();
 });
 
 test('package integrity', async (t) => {

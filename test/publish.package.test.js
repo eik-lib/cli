@@ -12,7 +12,7 @@ const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
 
-beforeEach(async (done, t) => {
+beforeEach(async (t) => {
     const memSink = new sink.MEM();
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
@@ -30,12 +30,10 @@ beforeEach(async (done, t) => {
     t.context.address = address;
     t.context.token = token;
     t.context.cwd = cwd;
-    done();
 });
 
-afterEach(async (done, t) => {
+afterEach(async (t) => {
     await t.context.server.close();
-    done();
 });
 
 test('Uploading app assets to an asset server', async (t) => {
@@ -56,10 +54,10 @@ test('Uploading app assets to an asset server', async (t) => {
         },
     });
 
-    t.equals(result.type, 'pkg', 'Command should return correct type');
-    t.equals(result.name, 'my-app', 'Command should return correct name');
-    t.equals(result.version, '1.0.0', 'Command should return correct version');
-    t.equals(result.files.length, 3, 'Command should return files array');
+    t.equal(result.type, 'pkg', 'Command should return correct type');
+    t.equal(result.name, 'my-app', 'Command should return correct name');
+    t.equal(result.version, '1.0.0', 'Command should return correct version');
+    t.equal(result.files.length, 3, 'Command should return files array');
     t.match(l.logs.debug, 'Running package command');
     t.match(l.logs.debug, 'Uploading zip file to server');
     t.match(l.logs.debug, 'Cleaning up');
@@ -84,10 +82,10 @@ test('Uploading app assets to an asset server under npm namespace', async (t) =>
         version: '1.0.0',
     });
 
-    t.equals(result.type, 'npm', 'Command should return correct type');
-    t.equals(result.name, 'my-app', 'Command should return correct name');
-    t.equals(result.version, '1.0.0', 'Command should return correct version');
-    t.equals(result.files.length, 3, 'Command should return files array');
+    t.equal(result.type, 'npm', 'Command should return correct type');
+    t.equal(result.name, 'my-app', 'Command should return correct name');
+    t.equal(result.version, '1.0.0', 'Command should return correct version');
+    t.equal(result.files.length, 3, 'Command should return files array');
     t.match(l.logs.debug, 'Running package command');
     t.match(l.logs.debug, 'Uploading zip file to server');
     t.match(l.logs.debug, 'Cleaning up');
@@ -110,10 +108,10 @@ test('Uploading JS app assets only to an asset server', async (t) => {
         version: '1.0.0',
     });
 
-    t.equals(result.type, 'pkg', 'Command should return correct type');
-    t.equals(result.name, 'my-app', 'Command should return correct name');
-    t.equals(result.version, '1.0.0', 'Command should return correct version');
-    t.equals(result.files.length, 2, 'Command should return files array');
+    t.equal(result.type, 'pkg', 'Command should return correct type');
+    t.equal(result.name, 'my-app', 'Command should return correct name');
+    t.equal(result.version, '1.0.0', 'Command should return correct version');
+    t.equal(result.files.length, 2, 'Command should return files array');
     t.match(l.logs.debug, 'Running package command');
     t.match(l.logs.debug, 'Uploading zip file to server');
     t.match(l.logs.debug, 'Cleaning up');
@@ -136,10 +134,10 @@ test('Uploading CSS app assets only to an asset server', async (t) => {
         version: '1.0.0',
     });
 
-    t.equals(result.type, 'pkg', 'Command should return correct type');
-    t.equals(result.name, 'my-app', 'Command should return correct name');
-    t.equals(result.version, '1.0.0', 'Command should return correct version');
-    t.equals(result.files.length, 2, 'Command should return files array');
+    t.equal(result.type, 'pkg', 'Command should return correct type');
+    t.equal(result.name, 'my-app', 'Command should return correct name');
+    t.equal(result.version, '1.0.0', 'Command should return correct version');
+    t.equal(result.files.length, 2, 'Command should return files array');
     t.match(l.logs.debug, 'Running package command');
     t.match(l.logs.debug, 'Uploading zip file to server');
     t.match(l.logs.debug, 'Cleaning up');
@@ -162,10 +160,10 @@ test('Uploading a directory of assets to an asset server', async (t) => {
         version: '1.0.0',
     });
 
-    t.equals(result.type, 'pkg', 'Command should return correct type');
-    t.equals(result.name, 'my-app', 'Command should return correct name');
-    t.equals(result.version, '1.0.0', 'Command should return correct version');
-    t.equals(result.files.length, 7, 'Command should return files array');
+    t.equal(result.type, 'pkg', 'Command should return correct type');
+    t.equal(result.name, 'my-app', 'Command should return correct name');
+    t.equal(result.version, '1.0.0', 'Command should return correct version');
+    t.equal(result.files.length, 7, 'Command should return files array');
     t.match(l.logs.debug, 'Running package command');
     t.match(l.logs.debug, 'Uploading zip file to server');
     t.match(l.logs.debug, 'Cleaning up');
@@ -186,10 +184,10 @@ test('Uploading a directory of assets to the root path to an asset server 2', as
         version: '1.0.0',
     });
 
-    t.equals(result.type, 'pkg', 'Command should return correct type');
-    t.equals(result.name, 'my-app', 'Command should return correct name');
-    t.equals(result.version, '1.0.0', 'Command should return correct version');
-    t.equals(result.files.length, 7, 'Command should return files array');
+    t.equal(result.type, 'pkg', 'Command should return correct type');
+    t.equal(result.name, 'my-app', 'Command should return correct name');
+    t.equal(result.version, '1.0.0', 'Command should return correct version');
+    t.equal(result.files.length, 7, 'Command should return files array');
     t.match(l.logs.debug, 'Running package command');
     t.match(l.logs.debug, 'Uploading zip file to server');
     t.match(l.logs.debug, 'Cleaning up');

@@ -19,7 +19,7 @@ function exec(cmd) {
     });
 }
 
-beforeEach(async (done, t) => {
+beforeEach(async (t) => {
     const memSink = new sink.MEM();
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
@@ -53,12 +53,10 @@ beforeEach(async (done, t) => {
     t.context.address = address;
     t.context.folder = folder;
     t.context.token = token;
-    done();
 });
 
-afterEach(async (done, t) => {
+afterEach(async (t) => {
     await t.context.server.close();
-    done();
 });
 
 test('eik meta', async (t) => {

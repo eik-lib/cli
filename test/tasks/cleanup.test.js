@@ -8,7 +8,7 @@ const { test, beforeEach, afterEach } = require('tap');
 const rimraf = require('rimraf');
 const CleanupTask = require('../../classes/publish/package/tasks/cleanup');
 
-beforeEach(async (done, t) => {
+beforeEach(async (t) => {
     const path = join(__dirname, '.eik');
     await fs.mkdir(path);
     await fs.copyFile(
@@ -24,12 +24,10 @@ beforeEach(async (done, t) => {
         join(__dirname, './.eik/integrity.json'),
     );
     t.context.path = path;
-    done();
 });
 
-afterEach((done, t) => {
+afterEach((t) => {
     rimraf.sync(t.context.path);
-    done();
 });
 
 test('basic cleanup', async (t) => {
