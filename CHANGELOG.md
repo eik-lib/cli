@@ -1,3 +1,10 @@
+## [2.0.18](https://github.com/eik-lib/cli/compare/v2.0.17...v2.0.18) (2021-11-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency yargs to v17.3.0 ([2a27ae2](https://github.com/eik-lib/cli/commit/2a27ae2e9a64258aa36c7eed96fb2b2cb2220234))
+
 ## [2.0.17](https://github.com/eik-lib/cli/compare/v2.0.16...v2.0.17) (2021-11-30)
 
 
