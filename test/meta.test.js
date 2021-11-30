@@ -12,7 +12,7 @@ const { sink } = require('@eik/core');
 const { mockLogger } = require('./utils');
 const cli = require('..');
 
-beforeEach(async (done, t) => {
+beforeEach(async (t) => {
     const server = fastify({ logger: false });
     const memSink = new sink.MEM();
     const service = new EikService({ customSink: memSink });
@@ -30,12 +30,10 @@ beforeEach(async (done, t) => {
     t.context.address = address;
     t.context.token = token;
     t.context.cwd = cwd;
-    done();
 });
 
-afterEach(async (done, t) => {
+afterEach(async (t) => {
     await t.context.server.close();
-    done();
 });
 
 test('Retrieving meta information about a package from an asset server', async (t) => {

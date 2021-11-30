@@ -11,7 +11,7 @@ const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
 const cli = require('..');
 
-beforeEach(async (done, t) => {
+beforeEach(async (t) => {
     const memSink = new sink.MEM();
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
@@ -29,12 +29,10 @@ beforeEach(async (done, t) => {
     t.context.address = address;
     t.context.token = token;
     t.context.cwd = cwd;
-    done();
 });
 
-afterEach(async (done, t) => {
+afterEach(async (t) => {
     await t.context.server.close();
-    done();
 });
 
 test('Current version unpublished - rejects with error', async (t) => {
@@ -52,7 +50,7 @@ test('Current version unpublished - rejects with error', async (t) => {
             version: '1.0.0',
         });
     } catch (err) {
-        t.equals(
+        t.equal(
             err.message,
             'The current version of this package has not yet been published, version change is not needed.',
         );
@@ -78,7 +76,7 @@ test('Current version published - files the same - rejects with error', async (t
     try {
         await cli.version(config);
     } catch (err) {
-        t.equals(
+        t.equal(
             err.message,
             'The current version of this package already contains these files, version change is not needed.',
         );
@@ -106,5 +104,5 @@ test('Current version published - files changed - bumps version', async (t) => {
         files: { 'index.js': join(__dirname, './fixtures/client.js') },
     });
 
-    t.equals(newVersion, '1.0.1');
+    t.equal(newVersion, '1.0.1');
 });
