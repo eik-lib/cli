@@ -1,3 +1,10 @@
+## [2.0.22](https://github.com/eik-lib/cli/compare/v2.0.21...v2.0.22) (2022-01-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency bytes to v3.1.2 ([aa642b7](https://github.com/eik-lib/cli/commit/aa642b73fbce70633cda0bbe69ed503152980ed0))
+
 ## [2.0.21](https://github.com/eik-lib/cli/compare/v2.0.20...v2.0.21) (2022-01-16)
 
 
