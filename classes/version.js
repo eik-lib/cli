@@ -7,10 +7,13 @@ const { join, isAbsolute, parse } = require('path');
 const abslog = require('abslog');
 const semver = require('semver');
 const mkdir = require('make-dir');
-const { schemas, EikConfig } = require('@eik/common');
+
+const { EikConfig } = require('@eik/common-config-loader');
+const schemas = require('@eik/common-schemas');
+
+const { typeSlug } = require('@eik/common-utils');
 const { integrity } = require('../utils/http');
 const hash = require('../utils/hash');
-const { typeSlug } = require('../utils');
 
 module.exports = class Version {
     constructor({

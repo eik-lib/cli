@@ -5,9 +5,10 @@
 'use strict';
 
 const ora = require('ora');
+const { getDefaults } = require('@eik/common-config-loader');
 const Meta = require('../classes/meta');
 const { Artifact } = require('../formatters');
-const { logger, getDefaults, getCWD } = require('../utils');
+const { logger, getCWD } = require('../utils');
 
 exports.command = 'meta <name>';
 

@@ -3,9 +3,9 @@
 'use strict';
 
 const { join } = require('path');
+const { typeSlug } = require('@eik/common-utils');
 const { integrity, versions } = require('../../../../utils/http');
 const hash = require('../../../../utils/hash');
-const { typeSlug } = require('../../../../utils');
 const Task = require('./task');
 
 module.exports = class CheckIfAlreadyPublished extends Task {

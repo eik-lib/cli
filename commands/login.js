@@ -1,10 +1,11 @@
 'use strict';
 
 const homedir = require('os').homedir();
+const { getDefaults } = require('@eik/common-config-loader');
 const readline = require('readline');
 const ora = require('ora');
 const Login = require('../classes/login');
-const { logger, getDefaults, getCWD } = require('../utils');
+const { logger, getCWD } = require('../utils');
 const json = require('../utils/json');
 
 exports.command = 'login';

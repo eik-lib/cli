@@ -5,7 +5,7 @@
 
 const abslog = require('abslog');
 const { join } = require('path');
-const { schemas } = require('@eik/common');
+const schemas = require('@eik/common-schemas');
 const fetch = require('node-fetch');
 
 const types = ['pkg', 'map', 'npm'];

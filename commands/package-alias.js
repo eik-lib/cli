@@ -2,8 +2,9 @@
 
 const ora = require('ora');
 const semver = require('semver');
+const { getDefaults } = require('@eik/common-config-loader');
 const Alias = require('../classes/alias');
-const { logger, getDefaults, getCWD } = require('../utils');
+const { logger, getCWD } = require('../utils');
 const { Alias: AliasFormatter } = require('../formatters');
 
 exports.command = 'package-alias [name] [version] [alias]';

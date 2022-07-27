@@ -3,8 +3,8 @@
 'use strict';
 
 const { join } = require('path');
+const { typeSlug } = require('@eik/common-utils');
 const { request } = require('../../../../utils/http');
-const { typeSlug } = require('../../../../utils');
 const Task = require('./task');
 
 module.exports = class UploadFiles extends Task {

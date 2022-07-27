@@ -1,8 +1,9 @@
 'use strict';
 
 const ora = require('ora');
+const { getDefaults } = require('@eik/common-config-loader');
 const Ping = require('../classes/ping');
-const { logger, getDefaults, getCWD } = require('../utils');
+const { logger, getCWD } = require('../utils');
 
 exports.command = 'ping [server]';
 

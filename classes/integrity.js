@@ -5,10 +5,13 @@
 
 const abslog = require('abslog');
 const { join } = require('path');
-const { schemas, ValidationError } = require('@eik/common');
-const fetch = require('node-fetch');
-const { typeSlug } = require('../utils');
 
+const schemas = require('@eik/common-schemas');
+
+const { typeSlug } = require('@eik/common-utils');
+const fetch = require('node-fetch');
+
+const { ValidationError } = schemas;
 module.exports = class Integrity {
     constructor({
         logger,

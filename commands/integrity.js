@@ -6,11 +6,9 @@
 
 const { join } = require('path');
 const ora = require('ora');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
+const { configStore, getDefaults } = require('@eik/common-config-loader');
 const Integrity = require('../classes/integrity');
-const { logger, getDefaults, getCWD } = require('../utils');
+const { logger, getCWD } = require('../utils');
 const json = require('../utils/json');
 
 exports.command = 'integrity [name] [version]';
