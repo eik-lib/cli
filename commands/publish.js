@@ -60,11 +60,6 @@ exports.builder = (yargs) => {
             type: 'string',
             normalize: true,
         },
-        version: {
-            describe:
-                'If you wish to overwrite the version specified in the Eik configuration',
-            type: 'string',
-        },
     });
 
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
@@ -78,14 +73,7 @@ exports.builder = (yargs) => {
 
 exports.handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const {
-        debug,
-        dryRun,
-        cwd,
-        token,
-        type: typeFromArgs,
-        version: versionFromArgs,
-    } = argv;
+    const { debug, dryRun, cwd, token, type: typeFromArgs } = argv;
     const config = configStore.findInDirectory(cwd);
     const { name, server, version, type, map, out, files } = config;
 
@@ -101,7 +89,7 @@ exports.handler = async (argv) => {
                 debug,
                 name,
                 server,
-                version: versionFromArgs || version,
+                version,
                 type,
                 map,
                 out,
@@ -168,7 +156,7 @@ exports.handler = async (argv) => {
             await new PublishMap({
                 logger: log,
                 name,
-                version: versionFromArgs || version,
+                version,
                 server,
                 file: files,
                 ...argv,
