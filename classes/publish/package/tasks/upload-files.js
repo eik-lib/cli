@@ -30,6 +30,7 @@ module.exports = class UploadFiles extends Task {
             return message;
         } catch (err) {
             log.error('Unable to upload zip file to server');
+
             switch (err.statusCode) {
                 case 400:
                     throw new Error(
@@ -52,7 +53,7 @@ module.exports = class UploadFiles extends Task {
                         'Server was unable to write file to storage',
                     );
                 default:
-                    throw new Error('Server failed');
+                    throw new Error(err.message);
             }
         }
     }
