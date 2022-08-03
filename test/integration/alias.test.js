@@ -28,6 +28,9 @@ beforeEach(async (t) => {
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+    await fs.mkdir(join(folder, '/map'));
+    const mapFolder = join(folder, '/map');
+
     const eik = join(__dirname, '../../index.js');
 
     const token = await cli.login({
@@ -51,6 +54,8 @@ beforeEach(async (t) => {
     const cmd = `${eik} package --token ${token} --cwd ${folder}`;
     await exec(cmd);
 
+    // Write map into own folder
+
     const map = {
         imports: {
             'scroll-into-view-if-needed': new URL(
@@ -59,11 +64,23 @@ beforeEach(async (t) => {
             ).href,
         },
     };
-    await fs.writeFile(join(folder, 'import-map.json'), JSON.stringify(map));
-    const mapCmd = `${eik} map test-map 1.0.0 import-map.json
-        --token ${token}
-        --server ${address}
-        --cwd ${folder}`;
+    await fs.writeFile(
+        join(mapFolder, '/import-map.json'),
+        JSON.stringify(map),
+    );
+    await fs.writeFile(
+        join(mapFolder, '/eik.json'),
+        JSON.stringify({
+            name: 'test-map',
+            type: 'map',
+            server: 'http://localhost',
+            version: '1.0.0',
+            files: './import-map.json',
+        }),
+    );
+
+    const mapCmd = `${eik} publish --token ${token} --server ${address} --cwd ${mapFolder}`;
+
     await exec(mapCmd.split('\n').join(' '));
 
     t.context.server = server;
@@ -177,10 +194,7 @@ test('eik npm-alias <name> <version> <alias> : publish details provided by eik.j
 
 test('eik map-alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} map-alias test-map 1.0.0 1
-        --token ${t.context.token}
-        --server ${t.context.address}
-        --cwd ${t.context.folder}`;
+    const cmd = `${eik} map-alias test-map 1.0.0 1 --token ${t.context.token} --server ${t.context.address} --cwd ${t.context.folder}/map`;
 
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
@@ -212,7 +226,8 @@ test('eik map-alias <name> <version> <alias> : publish details provided by eik.j
         JSON.stringify(assets),
     );
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} map-alias test-map 1.0.0 1 --token ${t.context.token} --cwd ${t.context.folder}`;
+
+    const cmd = `${eik} map-alias test-map 1.0.0 1 --server ${t.context.address} --token ${t.context.token} --cwd ${t.context.folder}/map`;
 
     const { error, stdout } = await exec(cmd);
 
