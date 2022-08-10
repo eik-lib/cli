@@ -40,8 +40,8 @@ beforeEach(async (t) => {
 
     const assets = {
         name: 'scroll-into-view-if-needed',
-        version: '2.2.24',
         type: 'npm',
+        version: '2.2.24',
         server: address,
         files: {
             'index.js': join(__dirname, './../fixtures/client.js'),
@@ -51,7 +51,7 @@ beforeEach(async (t) => {
 
     await fs.writeFile(join(folder, 'eik.json'), JSON.stringify(assets));
 
-    const cmd = `${eik} package --token ${token} --cwd ${folder}`;
+    const cmd = `${eik} publish --token ${token} --cwd ${folder}`;
     await exec(cmd);
 
     // Write map into own folder
@@ -93,12 +93,13 @@ afterEach(async (t) => {
     await t.context.server.close();
 });
 
-test('eik package-alias <name> <version> <alias>', async (t) => {
+test('eik alias <name> <version> <alias>', async (t) => {
     const { address, token, folder: cwd } = t.context;
     const eik = join(__dirname, '../../index.js');
 
     const assets = {
         server: address,
+        type: 'package',
         name: 'my-pack',
         version: '1.0.0',
         files: {
@@ -109,13 +110,10 @@ test('eik package-alias <name> <version> <alias>', async (t) => {
 
     await fs.writeFile(join(cwd, 'eik.json'), JSON.stringify(assets));
 
-    const cmd1 = `${eik} package --token ${token} --cwd ${cwd}`;
+    const cmd1 = `${eik} publish --token ${token} --cwd ${cwd}`;
     await exec(cmd1);
 
-    const cmd2 = `${eik} package-alias my-pack 1.0.0 1
-        --token ${token}
-        --server ${address}
-        --cwd ${cwd}`;
+    const cmd2 = `${eik} alias my-pack 1.0.0 1 --token ${token} --server ${address} --cwd ${cwd}`;
 
     const { error, stdout } = await exec(cmd2.split('\n').join(' '));
 
@@ -130,12 +128,9 @@ test('eik package-alias <name> <version> <alias>', async (t) => {
     t.match(stdout, 'NEW');
 });
 
-test('eik npm-alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
+test('eik alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
-        --token ${t.context.token}
-        --server ${t.context.address}
-        --cwd ${t.context.folder}`;
+    const cmd = `${eik} alias scroll-into-view-if-needed 2.2.24 2 --token ${t.context.token} --server ${t.context.address} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
@@ -156,9 +151,10 @@ test('eik npm-alias <name> <version> <alias> --token --server : no eik.json or .
     t.end();
 });
 
-test('eik npm-alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
+test('eik alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
+        type: 'npm',
         version: '1.0.0',
         server: t.context.address,
         files: {
@@ -171,7 +167,7 @@ test('eik npm-alias <name> <version> <alias> : publish details provided by eik.j
         JSON.stringify(assets),
     );
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2 --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `${eik} alias scroll-into-view-if-needed 2.2.24 2 --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -192,9 +188,9 @@ test('eik npm-alias <name> <version> <alias> : publish details provided by eik.j
     t.end();
 });
 
-test('eik map-alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
+test('eik alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} map-alias test-map 1.0.0 1 --token ${t.context.token} --server ${t.context.address} --cwd ${t.context.folder}/map`;
+    const cmd = `${eik} alias test-map 1.0.0 1 --token ${t.context.token} --server ${t.context.address} --cwd ${t.context.folder}/map`;
 
     const { error, stdout } = await exec(cmd.split('\n').join(' '));
 
@@ -211,9 +207,10 @@ test('eik map-alias <name> <version> <alias> --token --server : no eik.json or .
     t.end();
 });
 
-test('eik map-alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
+test('eik alias <name> <version> <alias> : publish details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
+        type: 'map',
         version: '1.0.0',
         server: t.context.address,
         files: {
@@ -227,7 +224,7 @@ test('eik map-alias <name> <version> <alias> : publish details provided by eik.j
     );
     const eik = join(__dirname, '../../index.js');
 
-    const cmd = `${eik} map-alias test-map 1.0.0 1 --server ${t.context.address} --token ${t.context.token} --cwd ${t.context.folder}/map`;
+    const cmd = `${eik} alias test-map 1.0.0 1 --server ${t.context.address} --token ${t.context.token} --cwd ${t.context.folder}/map`;
 
     const { error, stdout } = await exec(cmd);
 
