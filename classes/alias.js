@@ -59,7 +59,9 @@ module.exports = class Alias {
 
             data.org = message.org || '';
             data.integrity = message.integrity || '';
-            data.version = message.version || this.version;
+            // We'll use message.version when the cache has been properly purged
+            // data.version = message.version || this.version;
+            data.version = this.version;
             data.name = message.name || this.name;
             data.files = message.files || [];
 
@@ -68,10 +70,6 @@ module.exports = class Alias {
             let status = err.statusCode;
 
             if (status === 409) {
-                this.log.debug(
-                    'Alias already exists on server, performing update',
-                );
-
                 try {
                     const { message: msg } = await request({
                         host: this.server,
@@ -83,7 +81,9 @@ module.exports = class Alias {
 
                     data.org = msg.org || '';
                     data.integrity = msg.integrity || '';
-                    data.version = msg.version || this.version;
+                    // We'll use msg.version when the cache has been properly purged
+                    // data.version = msg.version || this.version;
+                    data.version = this.version;
                     data.name = msg.name || this.name;
                     data.files = msg.files || [];
                     data.update = true;

@@ -55,6 +55,12 @@ class Alias {
 
         if (this.update) {
             write(`${chalk.bgMagenta.white(' UPDATED \n\n')}`);
+
+            write(
+                `${chalk.yellow.bold(
+                    '! It may take up to 40 minutes before this alias updates due to caching.',
+                )}\n\n`,
+            );
         } else {
             write(`${chalk.bgGreen.white(' NEW ')}\n\n`);
         }
