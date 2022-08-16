@@ -52,7 +52,7 @@ exports.builder = (yargs) => {
             default: defaults.cwd,
         },
         debug: {
-            describe: 'Logs additional messages',
+            describe: 'Log additional messages',
             default: false,
             type: 'boolean',
         },
