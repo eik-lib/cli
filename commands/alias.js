@@ -43,7 +43,7 @@ exports.builder = (yargs) => {
     yargs.options({
         server: {
             alias: 's',
-            describe: 'Specify location of asset server.',
+            describe: 'Specify location of Eik server.',
             default: defaults.server,
         },
         cwd: {
