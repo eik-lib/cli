@@ -18,7 +18,7 @@ exports.aliases = [
 ];
 
 exports.describe = `Create a semver major alias for a package or an import map as identified by its name and version.
-    A package or import map with the given name and version must already exist on asset server
+    A package or import map with the given name and version must already exist on the Eik server
     Alias should be the semver major part of the import map version.
     Eg. For a package or import map of version 5.4.3, you should use 5 as the alias`;
 
