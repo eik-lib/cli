@@ -11,7 +11,7 @@ const { test, beforeEach, afterEach } = require('tap');
 const fetch = require('node-fetch');
 const EikService = require('@eik/service');
 const { sink } = require('@eik/core');
-const cli = require('../..');
+const cli = require('../../classes');
 
 function exec(cmd) {
     return new Promise((resolve) => {
@@ -44,7 +44,7 @@ afterEach(async (t) => {
     await t.context.server.close();
 });
 
-test('eik package : package, details provided by eik.json file', async (t) => {
+test('eik publish : package, details provided by eik.json file', async (t) => {
     const assets = {
         name: 'test-app',
         version: '1.0.0',
@@ -61,7 +61,7 @@ test('eik package : package, details provided by eik.json file', async (t) => {
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -77,11 +77,11 @@ test('eik package : package, details provided by eik.json file', async (t) => {
     t.end();
 });
 
-test('eik package : package, details provided by eik.json file - npm namespace', async (t) => {
+test('eik publish : npm, details provided by eik.json file - npm namespace', async (t) => {
     const assets = {
         name: 'test-app',
-        version: '1.0.0',
         type: 'npm',
+        version: '1.0.0',
         server: t.context.address,
         files: {
             'index.js': join(__dirname, './../fixtures/client.js'),
@@ -95,7 +95,7 @@ test('eik package : package, details provided by eik.json file - npm namespace',
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder} --npm`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -111,7 +111,7 @@ test('eik package : package, details provided by eik.json file - npm namespace',
     t.end();
 });
 
-test('eik package : package, details provided by eik.json file - explicit package namespace', async (t) => {
+test('eik publish : package, details provided by eik.json file - explicit package namespace', async (t) => {
     const assets = {
         name: 'test-app',
         version: '1.0.0',
@@ -129,7 +129,7 @@ test('eik package : package, details provided by eik.json file - explicit packag
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder} --npm`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -145,7 +145,7 @@ test('eik package : package, details provided by eik.json file - explicit packag
     t.end();
 });
 
-test('eik package : package, details provided by package.json values', async (t) => {
+test('eik publish : package, details provided by package.json values', async (t) => {
     const assets = {
         name: 'test-app',
         version: '1.0.0',
@@ -164,7 +164,7 @@ test('eik package : package, details provided by package.json values', async (t)
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -180,7 +180,7 @@ test('eik package : package, details provided by package.json values', async (t)
     t.end();
 });
 
-test('eik package : package, details provided by package.json values and eik.json, throws error', async (t) => {
+test('eik publish : package, details provided by package.json values and eik.json, throws error', async (t) => {
     const pkg = {
         name: 'test-app',
         version: '1.0.0',
@@ -214,7 +214,7 @@ test('eik package : package, details provided by package.json values and eik.jso
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error } = await exec(cmd);
 
@@ -233,6 +233,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     // publish npm dep
     let assets = {
         name: 'scroll-into-view-if-needed',
+        type: 'npm',
         version: '2.2.24',
         server: t.context.address,
         files: {
@@ -250,9 +251,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     await exec(cmd);
 
     // alias npm dependency
-    cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
-        --token ${t.context.token} 
-        --server ${t.context.address}`;
+    cmd = `${eik} alias scroll-into-view-if-needed 2.2.24 2 --token ${t.context.token} --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
     // create import map file locally
@@ -274,7 +273,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     await exec(cmd.split('\n').join(' '));
 
     // alias import map
-    cmd = `${eik} map-alias my-map 1.0.0 1 --token ${t.context.token} --server ${t.context.address}`;
+    cmd = `${eik} alias my-map 1.0.0 1 --token ${t.context.token} --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
     assets = {

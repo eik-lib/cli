@@ -41,6 +41,7 @@ test('Creating a package alias', async (t) => {
 
     await cli.publish({
         server: address,
+        type: 'package',
         name: 'my-pack',
         version: '1.0.0',
         token,
@@ -86,12 +87,12 @@ test('Creating an npm alias', async (t) => {
 
     await cli.publish({
         server: address,
+        type: 'npm',
         name: 'lit-html',
         version: '1.1.2',
         debug: true,
         token,
         cwd,
-        type: 'npm',
         files: {
             'index.js': join(__dirname, './fixtures/client.js'),
         },
@@ -134,6 +135,7 @@ test('Creating a map alias', async (t) => {
 
     await cli.map({
         server: address,
+        type: 'map',
         name: 'my-map',
         version: '1.0.0',
         file: join(__dirname, 'fixtures/import-map.json'),
