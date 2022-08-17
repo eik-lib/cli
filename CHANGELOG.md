@@ -1,3 +1,13 @@
+# [3.0.0-next.1](https://github.com/eik-lib/cli/compare/v2.0.22...v3.0.0-next.1) (2022-08-17)
+
+
+* feat(publish)!: include map publishing in "publish" command ([7968274](https://github.com/eik-lib/cli/commit/796827442b28bb9852af63137275535fae737c21))
+
+
+### BREAKING CHANGES
+
+* the map command has been removed in favour of a single publish command
+
 ## [2.0.22](https://github.com/eik-lib/cli/compare/v2.0.21...v2.0.22) (2022-01-28)
 
 

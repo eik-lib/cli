@@ -4,8 +4,6 @@ const abslog = require('abslog');
 const schemas = require('@eik/common-schemas');
 const { request } = require('../utils/http');
 
-const { ValidationError } = schemas;
-
 module.exports = class Login {
     constructor({ logger, server, key } = {}) {
         this.log = abslog(logger);
@@ -19,7 +17,7 @@ module.exports = class Login {
         try {
             schemas.assert.server(this.server);
             if (!this.key || typeof !this.key === 'string') {
-                throw new ValidationError('"key" must be a string');
+                throw new schemas.ValidationError('"key" must be a string');
             }
         } catch (err) {
             this.log.error(err.message);

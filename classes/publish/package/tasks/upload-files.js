@@ -53,7 +53,9 @@ module.exports = class UploadFiles extends Task {
                         'Server was unable to write file to storage',
                     );
                 default:
-                    throw new Error(err.message);
+                    throw new Error(
+                        `Upload to server failed, server responded with: ${err.message}`,
+                    );
             }
         }
     }

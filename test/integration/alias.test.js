@@ -28,8 +28,8 @@ beforeEach(async (t) => {
     server.register(service.api());
     const address = await server.listen();
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
-    await fs.mkdir(join(folder, '/map'));
     const mapFolder = join(folder, '/map');
+    await fs.mkdir(mapFolder);
 
     const eik = join(__dirname, '../../index.js');
 
