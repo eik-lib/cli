@@ -1,3 +1,20 @@
+# [3.0.0-next.2](https://github.com/eik-lib/cli/compare/v3.0.0-next.1...v3.0.0-next.2) (2022-08-17)
+
+
+### Bug Fixes
+
+* incorrect version number displayed on alias when updating with a cache layer infront ([8c468d6](https://github.com/eik-lib/cli/commit/8c468d670f6f10f25ae4decdab7a6950a1093d6a))
+
+
+### Features
+
+* **!:** new alias command for all types of packages ([e482880](https://github.com/eik-lib/cli/commit/e48288002e9e8942f71d8f8dd0583395152aff49))
+
+
+### BREAKING CHANGES
+
+* **!:** New alias command that is to be used for creating package, npm and import map aliases. Old alias commands have been removed.
+
 # [3.0.0-next.1](https://github.com/eik-lib/cli/compare/v2.0.22...v3.0.0-next.1) (2022-08-17)
 
 
