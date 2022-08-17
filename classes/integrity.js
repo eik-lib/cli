@@ -10,8 +10,6 @@ const schemas = require('@eik/common-schemas');
 
 const { typeSlug } = require('@eik/common-utils');
 const fetch = require('node-fetch');
-
-const { ValidationError } = schemas;
 module.exports = class Integrity {
     constructor({
         logger,
@@ -49,12 +47,16 @@ module.exports = class Integrity {
 
             this.log.debug(`  ==> debug: ${this.debug}`);
             if (typeof this.debug !== 'boolean') {
-                throw new ValidationError(`Parameter "debug" is not valid`);
+                throw new schemas.ValidationError(
+                    `Parameter "debug" is not valid`,
+                );
             }
 
             this.log.debug(`  ==> cwd: ${this.cwd}`);
             if (typeof this.cwd !== 'string') {
-                throw new ValidationError(`Parameter "cwd" is not valid`);
+                throw new schemas.ValidationError(
+                    `Parameter "cwd" is not valid`,
+                );
             }
         } catch (err) {
             throw new Error(
