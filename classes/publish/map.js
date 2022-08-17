@@ -4,7 +4,7 @@ const assert = require('assert');
 const abslog = require('abslog');
 const { join, parse, isAbsolute } = require('path');
 const { existsSync } = require('fs');
-const { schemas } = require('@eik/common');
+const schemas = require('@eik/common-schemas');
 const { request } = require('../../utils/http');
 
 module.exports = class PublishMap {

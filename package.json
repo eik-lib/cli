@@ -32,7 +32,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "^3.0.0",
+    "@eik/common-config-loader": "^4.0.0-next.8",
+    "@eik/common-schemas": "^4.0.0-next.8",
+    "@eik/common-utils": "^4.0.0-next.8",
+    "@eik/common-validators": "^4.0.0-next.8",
     "abslog": "2.4.0",
     "boxen": "5.1.2",
     "bytes": "3.1.2",

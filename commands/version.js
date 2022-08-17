@@ -3,11 +3,9 @@
 const { execSync } = require('child_process');
 const { join } = require('path');
 const ora = require('ora');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
+const { configStore, getDefaults } = require('@eik/common-config-loader');
 const VersionPackage = require('../classes/version');
-const { logger, getDefaults, getCWD } = require('../utils');
+const { logger, getCWD } = require('../utils');
 const json = require('../utils/json');
 
 exports.command = 'version [level]';

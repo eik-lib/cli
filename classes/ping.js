@@ -2,7 +2,7 @@
 
 const fetch = require('node-fetch');
 const abslog = require('abslog');
-const { schemas } = require('@eik/common');
+const schemas = require('@eik/common-schemas');
 
 module.exports = class Ping {
     constructor({ logger, server } = {}) {

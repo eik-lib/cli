@@ -44,20 +44,19 @@ afterEach(async (t) => {
 });
 
 test('eik map : publish, details provided by eik.json file', async (t) => {
-    const assets = {
-        name: 'scroll-into-view-if-needed',
-        version: '2.2.24',
-        server: t.context.address,
-        files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
-        },
-    };
+    // Write Eik configuration file
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),
-        JSON.stringify(assets),
+        JSON.stringify({
+            name: 'test-map',
+            type: 'map',
+            version: '1.0.0',
+            server: t.context.address,
+            files: 'import-map.json',
+        }),
     );
 
+    // Write Eik import map
     const map = {
         imports: {
             'scroll-into-view-if-needed': new URL(
@@ -66,13 +65,15 @@ test('eik map : publish, details provided by eik.json file', async (t) => {
             ).href,
         },
     };
+
     await fs.writeFile(
         join(t.context.folder, 'import-map.json'),
         JSON.stringify(map),
     );
 
+    // Publish Import map
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} map test-map 1.0.0 import-map.json --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 

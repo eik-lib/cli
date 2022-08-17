@@ -2,8 +2,8 @@
 
 const abslog = require('abslog');
 const { join, isAbsolute } = require('path');
-const { EikConfig } = require('@eik/common');
-const { typeSlug } = require('../../../utils');
+const { EikConfig } = require('@eik/common-config-loader');
+const { typeSlug } = require('@eik/common-utils');
 const ValidateInput = require('./tasks/validate-input');
 const CreateTempDirectory = require('./tasks/create-temp-directory');
 const CreateZipFile = require('./tasks/create-zip-file');

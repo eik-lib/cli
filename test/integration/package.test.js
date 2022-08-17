@@ -3,6 +3,7 @@
 /* eslint-disable no-param-reassign */
 const fastify = require('fastify');
 const fs = require('fs').promises;
+
 const os = require('os');
 const cp = require('child_process');
 const { join, basename } = require('path');
@@ -245,7 +246,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         JSON.stringify(assets),
     );
 
-    cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    cmd = `${eik} publish --token ${t.context.token} --cwd ${t.context.folder} --npm`;
     await exec(cmd);
 
     // alias npm dependency
@@ -269,16 +270,11 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     );
 
     // upload import map file
-    cmd = `${eik} map my-map 1.0.0 ./import-map.json
-        --cwd ${t.context.folder}
-        --token ${t.context.token}
-        --server ${t.context.address}`;
+    cmd = `${eik} --cwd ${t.context.folder} --token ${t.context.token} --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
     // alias import map
-    cmd = `${eik} map-alias my-map 1.0.0 1
-        --token ${t.context.token} 
-        --server ${t.context.address}`;
+    cmd = `${eik} map-alias my-map 1.0.0 1 --token ${t.context.token} --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
     assets = {

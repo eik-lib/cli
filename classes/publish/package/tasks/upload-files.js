@@ -3,8 +3,8 @@
 'use strict';
 
 const { join } = require('path');
+const { typeSlug } = require('@eik/common-utils');
 const { request } = require('../../../../utils/http');
-const { typeSlug } = require('../../../../utils');
 const Task = require('./task');
 
 module.exports = class UploadFiles extends Task {
@@ -30,6 +30,7 @@ module.exports = class UploadFiles extends Task {
             return message;
         } catch (err) {
             log.error('Unable to upload zip file to server');
+
             switch (err.statusCode) {
                 case 400:
                     throw new Error(
@@ -52,7 +53,9 @@ module.exports = class UploadFiles extends Task {
                         'Server was unable to write file to storage',
                     );
                 default:
-                    throw new Error('Server failed');
+                    throw new Error(
+                        `Upload to server failed, server responded with: ${err.message}`,
+                    );
             }
         }
     }
