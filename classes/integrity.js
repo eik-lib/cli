@@ -10,6 +10,7 @@ const schemas = require('@eik/common-schemas');
 
 const { typeSlug } = require('@eik/common-utils');
 const fetch = require('node-fetch');
+
 module.exports = class Integrity {
     constructor({
         logger,
