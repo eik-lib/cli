@@ -4,9 +4,7 @@ const { join } = require('path');
 const fetch = require('node-fetch');
 const ora = require('ora');
 const chalk = require('chalk');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
+const { configStore } = require('@eik/common-config-loader');
 const PublishPackage = require('../classes/publish/package/index');
 const {
     logger,

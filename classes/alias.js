@@ -3,7 +3,8 @@
 const assert = require('assert');
 const abslog = require('abslog');
 const { join } = require('path');
-const { schemas, validators } = require('@eik/common');
+const validators = require('@eik/common-validators');
+const schemas = require('@eik/common-schemas');
 const { request } = require('../utils/http');
 const { typeSlug } = require('../utils');
 

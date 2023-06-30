@@ -2,7 +2,7 @@
 
 const abslog = require('abslog');
 const { join, isAbsolute } = require('path');
-const { EikConfig } = require('@eik/common');
+const { EikConfig } = require('@eik/common-config-loader');
 const { typeSlug } = require('../../../utils');
 const ValidateInput = require('./tasks/validate-input');
 const CreateTempDirectory = require('./tasks/create-temp-directory');

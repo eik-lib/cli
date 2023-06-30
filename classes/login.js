@@ -1,8 +1,10 @@
 'use strict';
 
 const abslog = require('abslog');
-const { schemas, ValidationError } = require('@eik/common');
+const schemas = require('@eik/common-schemas');
 const { request } = require('../utils/http');
+
+const { ValidationError } = schemas;
 
 module.exports = class Login {
     constructor({ logger, server, key } = {}) {
