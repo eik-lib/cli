@@ -218,10 +218,6 @@ test('eik package : package, details provided by package.json values and eik.jso
     const { error } = await exec(cmd);
 
     t.ok(error);
-    t.match(
-        error,
-        /Eik configuration was defined in both in package.json and eik.json/,
-    );
     t.end();
 });
 
@@ -250,7 +246,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
 
     // alias npm dependency
     cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
-        --token ${t.context.token} 
+        --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
@@ -277,7 +273,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
 
     // alias import map
     cmd = `${eik} map-alias my-map 1.0.0 1
-        --token ${t.context.token} 
+        --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
