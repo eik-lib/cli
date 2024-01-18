@@ -43,7 +43,7 @@ module.exports = class Alias {
         );
 
         this.log.debug(
-            `Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version}`,
+            `Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version} on ${this.server}`,
         );
         try {
             const { message } = await request({
