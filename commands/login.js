@@ -78,7 +78,7 @@ exports.handler = async (argv) => {
 
     if (!k) {
         await new Promise((resolve) => {
-            rl.question('Enter login key > ', (input) => {
+            rl.question(`Enter login key for ${s} > `, (input) => {
                 k = input;
                 resolve();
             });
