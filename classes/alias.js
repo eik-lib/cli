@@ -43,13 +43,15 @@ module.exports = class Alias {
         );
 
         this.log.debug(
-            `Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version}`,
+            `Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version} on ${this.server}`,
         );
+
+        const pathname = join(this.type, this.name, `v${this.alias}`);
         try {
             const { message } = await request({
                 host: this.server,
                 method: 'PUT',
-                pathname: join(this.type, this.name, `v${this.alias}`),
+                pathname,
                 data: { version: this.version },
                 token: this.token,
             });
@@ -73,7 +75,7 @@ module.exports = class Alias {
                     const { message: msg } = await request({
                         host: this.server,
                         method: 'POST',
-                        pathname: join(this.type, this.name, `v${this.alias}`),
+                        pathname,
                         data: { version: this.version },
                         token: this.token,
                     });
@@ -100,7 +102,7 @@ module.exports = class Alias {
                     throw new Error('Client unauthorized with server');
                 case 404:
                     throw new Error(
-                        'The server was unable to locate the required resource',
+                        `The server was unable to locate ${pathname}. Ensure you have the correct package type (eik package-alias vs eik npm-alias), name and that the version exists on the server.`,
                     );
                 case 409:
                     throw new Error(

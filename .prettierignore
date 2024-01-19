@@ -11,3 +11,4 @@ tmp/**/*
 *.iml
 *.log
 .vscode
+renovate.json
