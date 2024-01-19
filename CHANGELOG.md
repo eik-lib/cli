@@ -1,3 +1,11 @@
+## [2.0.23](https://github.com/eik-lib/cli/compare/v2.0.22...v2.0.23) (2024-01-19)
+
+
+### Bug Fixes
+
+* log a more helpful 404 ([763ffda](https://github.com/eik-lib/cli/commit/763ffda93b5247acc7af328094ecd634d1b25b51))
+* print which server you're logging into ([6ec8333](https://github.com/eik-lib/cli/commit/6ec8333eb8bc6c9b535aeb55d1f2226e093286b5))
+
 ## [2.0.22](https://github.com/eik-lib/cli/compare/v2.0.21...v2.0.22) (2022-01-28)
 
 
