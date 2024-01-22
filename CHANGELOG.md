@@ -1,3 +1,10 @@
+## [2.0.26](https://github.com/eik-lib/cli/compare/v2.0.25...v2.0.26) (2024-01-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency glob to v7.2.3 ([6e2df77](https://github.com/eik-lib/cli/commit/6e2df7700d72f10a5cc252a968ba70f5ee6fc131))
+
 ## [2.0.25](https://github.com/eik-lib/cli/compare/v2.0.24...v2.0.25) (2024-01-20)
 
 
