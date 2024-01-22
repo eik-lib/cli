@@ -1,3 +1,10 @@
+## [2.0.27](https://github.com/eik-lib/cli/compare/v2.0.26...v2.0.27) (2024-01-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency semver to v7.5.4 ([71b807a](https://github.com/eik-lib/cli/commit/71b807aa80961aa6d3257963323c36938d611bfd))
+
 ## [2.0.26](https://github.com/eik-lib/cli/compare/v2.0.25...v2.0.26) (2024-01-22)
 
 
