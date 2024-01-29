@@ -38,7 +38,7 @@
     "bytes": "3.1.2",
     "chalk": "4.1.2",
     "copy": "0.3.2",
-    "date-fns": "2.28.0",
+    "date-fns": "2.30.0",
     "form-data": "4.0.0",
     "glob": "7.2.3",
     "gzip-size": "6.0.0",
