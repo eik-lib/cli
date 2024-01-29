@@ -1,3 +1,10 @@
+## [2.0.28](https://github.com/eik-lib/cli/compare/v2.0.27...v2.0.28) (2024-01-29)
+
+
+### Bug Fixes
+
+* **deps:** replace dependency read-pkg-up with read-package-up ([480c0cd](https://github.com/eik-lib/cli/commit/480c0cd06eab6293c6fd7cf3092b03096fb06d3f))
+
 ## [2.0.27](https://github.com/eik-lib/cli/compare/v2.0.26...v2.0.27) (2024-01-22)
 
 
