@@ -67,7 +67,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "fastify": "3.29.5",
     "fastify-cors": "6.0.3",
-    "fs-extra": "10.0.0",
+    "fs-extra": "10.1.0",
     "prettier": "2.5.1",
     "puppeteer": "13.1.2",
     "react": "17.0.2",
