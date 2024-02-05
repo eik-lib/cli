@@ -43,7 +43,7 @@
     "glob": "7.2.3",
     "gzip-size": "6.0.0",
     "make-dir": "3.1.0",
-    "node-fetch": "2.6.7",
+    "node-fetch": "2.7.0",
     "ora": "5.4.1",
     "pkg-dir": "6.0.1",
     "read-package-up": "11.0.0",
