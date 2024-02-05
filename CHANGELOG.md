@@ -1,3 +1,10 @@
+## [2.0.31](https://github.com/eik-lib/cli/compare/v2.0.30...v2.0.31) (2024-02-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v6.2.0 ([f1b98e4](https://github.com/eik-lib/cli/commit/f1b98e40035749b6d9a6e39906b99ed7e8e571d5))
+
 ## [2.0.30](https://github.com/eik-lib/cli/compare/v2.0.29...v2.0.30) (2024-02-05)
 
 
