@@ -1,3 +1,10 @@
+## [2.0.35](https://github.com/eik-lib/cli/compare/v2.0.34...v2.0.35) (2024-04-23)
+
+
+### Bug Fixes
+
+* update dependencies ([f269dfe](https://github.com/eik-lib/cli/commit/f269dfec6bf6321287b137c309e6f09430c7d3bb))
+
 ## [2.0.34](https://github.com/eik-lib/cli/compare/v2.0.33...v2.0.34) (2024-04-11)
 
 
