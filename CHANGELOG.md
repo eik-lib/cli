@@ -1,3 +1,10 @@
+## [2.0.36](https://github.com/eik-lib/cli/compare/v2.0.35...v2.0.36) (2024-04-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency abslog to v2.4.2 ([429a659](https://github.com/eik-lib/cli/commit/429a659ece9e50ddd766ac9bceb3fdf98e01060c))
+
 ## [2.0.35](https://github.com/eik-lib/cli/compare/v2.0.34...v2.0.35) (2024-04-23)
 
 
