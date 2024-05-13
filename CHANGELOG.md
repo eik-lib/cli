@@ -1,3 +1,10 @@
+## [2.0.38](https://github.com/eik-lib/cli/compare/v2.0.37...v2.0.38) (2024-05-13)
+
+
+### Bug Fixes
+
+* include message from base error for unexpected status codes ([#549](https://github.com/eik-lib/cli/issues/549)) ([d5637df](https://github.com/eik-lib/cli/commit/d5637dff5acca4bc8f2cc91799c9c96555e9bf1b))
+
 ## [2.0.37](https://github.com/eik-lib/cli/compare/v2.0.36...v2.0.37) (2024-05-06)
 
 
