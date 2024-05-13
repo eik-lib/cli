@@ -3,7 +3,7 @@ name: Release and Publish
 on:
   push:
     branches:
-      - master
+      - main
       - alpha
       - beta
       - next
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Install Dependencies
         run: npm install

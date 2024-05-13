@@ -3,7 +3,7 @@ name: Run Lint and Tests
 on:
   push:
     branches-ignore:
-      - master
+      - main
       - alpha
       - beta
 
@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        node-version: [16.x]
+        node-version: [20.x]
 
     steps:
       - uses: actions/checkout@v4

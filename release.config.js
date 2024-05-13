@@ -23,7 +23,7 @@ module.exports = {
         packageName: '@eik/cli',
         branchesConfig: [
           {
-            pattern: 'master',
+            pattern: 'main',
             notifyOnSuccess: true,
             onSuccessTemplate: {
               text: '$package_name $npm_package_version is now available - $repo_url',
@@ -57,7 +57,7 @@ module.exports = {
   ],
   preset: 'angular',
   branches: [
-    { name: 'master' },
+    { name: 'main' },
     { name: 'alpha', prerelease: true },
     { name: 'beta', prerelease: true },
     { name: 'next', prerelease: true },
