@@ -33,26 +33,26 @@ module.exports = class UploadFiles extends Task {
             switch (err.statusCode) {
                 case 400:
                     throw new Error(
-                        'Client attempted to send an invalid URL parameter',
+                        `${err.statusCode}: Client attempted to send an invalid URL parameter`,
                     );
                 case 401:
-                    throw new Error('Client unauthorized with server');
+                    throw new Error(`${err.statusCode}: Client unauthorized with server`);
                 case 404:
-                    throw new Error('Client could not find server route');
+                    throw new Error(`${err.statusCode}: Client could not find server route`);
                 case 409:
                     throw new Error(
                         `Package with name "${name}" and version "${version}" already exists on server`,
                     );
                 case 415:
                     throw new Error(
-                        'Client attempted to send an unsupported file format to server',
+                        `${err.statusCode}: Client attempted to send an unsupported file format to server`,
                     );
                 case 502:
                     throw new Error(
-                        'Server was unable to write file to storage',
+                        `${err.statusCode}: Server was unable to write file to storage, ${err.message}`,
                     );
                 default:
-                    throw new Error('Server failed');
+                    throw new Error(`${err.statusCode}: Server failed, ${err.message}`);
             }
         }
     }
