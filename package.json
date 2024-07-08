@@ -22,7 +22,7 @@
     "test:unit": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.js",
     "test:tasks": "HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/tasks/*.test.js",
     "test:ci": "npm run test:unit  -- --jobs=1 && npm run test:tasks -- --jobs=1 && npm run test:integration -- --jobs=1",
-    "lint:check": "eslint .",
+    "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format:check": "prettier -c .",
     "format:fix": "prettier -w .",
