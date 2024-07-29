@@ -17,10 +17,10 @@
     "formatters"
   ],
   "scripts": {
-    "test": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 --test-regex=.test.js --test-ignore=node_modules",
-    "test:integration": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/integration/**/*.test.js",
-    "test:unit": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.js",
-    "test:tasks": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/tasks/*.test.js",
+    "test": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 --test-regex=.test.mjs --test-ignore=node_modules",
+    "test:integration": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/integration/**/*.test.mjs",
+    "test:unit": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/*.test.mjs",
+    "test:tasks": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --no-coverage-report --no-cov --timeout 0 test/tasks/*.test.mjs",
     "test:ci:integration": "npm run test:integration -- --jobs=1",
     "test:ci:unit": "npm run test:unit -- --jobs=1",
     "test:ci:tasks": "npm run test:tasks -- --jobs=1",

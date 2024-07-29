@@ -1,14 +1,17 @@
-/* eslint-disable no-param-reassign */
+import fastify from 'fastify';
+import { promises as fs } from 'fs';
+import os from 'os';
+import { join, basename } from 'path';
+import { test, beforeEach, afterEach } from 'tap';
+import EikService from '@eik/service';
+import { sink } from '@eik/core';
+import fsExtra from 'fs-extra';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import cli from '../classes/index.js';
 
-const os = require('os');
-const fs = require('fs').promises;
-const { join, basename } = require('path');
-const { test, beforeEach, afterEach } = require('tap');
-const fastify = require('fastify');
-const EikService = require('@eik/service');
-const { sink } = require('@eik/core');
-const { copySync } = require('fs-extra');
-const cli = require('../classes');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const config = (files, server, token, cwd) => ({
     logger: null,
@@ -37,7 +40,7 @@ beforeEach(async (t) => {
     });
 
     const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
-    copySync(join(__dirname, './fixtures'), join(cwd, 'fixtures'));
+    fsExtra.copySync(join(__dirname, './fixtures'), join(cwd, 'fixtures'));
 
     t.context.server = server;
     t.context.address = address;

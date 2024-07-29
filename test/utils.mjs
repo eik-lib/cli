@@ -1,7 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
-'use strict';
-
 const mockLogger = () => {
     const logs = {
         fatal: '',
@@ -34,4 +30,4 @@ const mockLogger = () => {
     return { logs, logger };
 };
 
-module.exports.mockLogger = mockLogger;
+export { mockLogger };

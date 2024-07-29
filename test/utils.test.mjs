@@ -1,14 +1,17 @@
-'use strict';
+import fastify from 'fastify';
+import { promises as fs } from 'fs';
+import os from 'os';
+import { join, basename } from 'path';
+import { test, beforeEach, afterEach } from 'tap';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import crypto from 'crypto';
+import j from '../utils/json/index.js';
+import h from '../utils/hash/index.js';
+import f from '../utils/http/index.js';
 
-const os = require('os');
-const { join, basename } = require('path');
-const fs = require('fs');
-const crypto = require('crypto');
-const { test } = require('tap');
-const fastify = require('fastify');
-const j = require('../utils/json');
-const h = require('../utils/hash');
-const f = require('../utils/http');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 test('calculate file hash', async (t) => {
     const hash = await h.file(join(__dirname, 'fixtures', 'client.js'));
@@ -235,14 +238,14 @@ test('fetch remote hash for a given version', async (t) => {
 });
 
 test('write JSON file - object - file relative to cwd', async (t) => {
-    const cwd = await fs.promises.mkdtemp(
+    const cwd = await fs.mkdtemp(
         join(os.tmpdir(), basename(__filename)),
     );
     await j.write(
         { version: '1.0.0', integrity: [] },
         { cwd, filename: '.eikrc' },
     );
-    const eikrc = fs.readFileSync(join(cwd, '.eikrc'));
+    const eikrc = await fs.readFile(join(cwd, '.eikrc'));
     const { version, integrity } = JSON.parse(eikrc);
 
     t.equal(version, '1.0.0', 'Version should be 1.0.0');
@@ -250,11 +253,11 @@ test('write JSON file - object - file relative to cwd', async (t) => {
 });
 
 test('write JSON file - object - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(
+    const cwd = await fs.mkdtemp(
         join(os.tmpdir(), basename(__filename)),
     );
     await j.write({ prop: 'val' }, { filename: join(cwd, 'test.json') });
-    const eikrc = fs.readFileSync(join(cwd, 'test.json'));
+    const eikrc = await fs.readFile(join(cwd, 'test.json'), { encoding: 'utf8' });
     const { prop } = JSON.parse(eikrc);
 
     t.equal(prop, 'val', 'Prop should equal val');
@@ -262,48 +265,49 @@ test('write JSON file - object - file absolute path', async (t) => {
 
 test('write JSON file - string - file relative path', async (t) => {
     await j.write({ prop: 'val' }, './test-using-relative.json');
-    const eikrc = fs.readFileSync(
+    const eikrc = await fs.readFile(
         join(__dirname, '../test-using-relative.json'),
+				{ encoding: 'utf8' },
     );
     const { prop } = JSON.parse(eikrc);
-    await fs.unlinkSync(join(__dirname, '../test-using-relative.json'));
+    await fs.unlink(join(__dirname, '../test-using-relative.json'));
 
     t.equal(prop, 'val', 'Prop should equal val');
 });
 
 test('write JSON file - string - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(
+    const cwd = await fs.mkdtemp(
         join(os.tmpdir(), basename(__filename)),
     );
     await j.write({ prop: 'val' }, join(cwd, 'test3.json'));
-    const eikrc = fs.readFileSync(join(cwd, 'test3.json'));
+    const eikrc = await fs.readFile(join(cwd, 'test3.json'), { encoding: 'utf8' });
     const { prop } = JSON.parse(eikrc);
 
     t.equal(prop, 'val', 'Prop should equal val');
 });
 
 test('read JSON file - object - file relative path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(
+    const cwd = await fs.mkdtemp(
         join(os.tmpdir(), basename(__filename)),
     );
-    fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
+    await fs.writeFile(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
     const json = await j.read({ cwd, filename: './test3.json' });
 
     t.equal(json.key, 'val', 'Key should equal val');
 });
 
 test('read JSON file - object - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(
+    const cwd = await fs.mkdtemp(
         join(os.tmpdir(), basename(__filename)),
     );
-    fs.writeFileSync(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
+    await fs.writeFile(join(cwd, 'test3.json'), JSON.stringify({ key: 'val' }));
     const json = await j.read({ filename: join(cwd, './test3.json') });
 
     t.equal(json.key, 'val', 'Key should equal val');
 });
 
 test('read JSON file - string - file relative path', async (t) => {
-    fs.writeFileSync(
+    await fs.writeFile(
         join(__dirname, '../test-read-json.json'),
         JSON.stringify({ key: 'val' }),
     );
@@ -313,10 +317,10 @@ test('read JSON file - string - file relative path', async (t) => {
 });
 
 test('read JSON file - string - file absolute path', async (t) => {
-    const cwd = await fs.promises.mkdtemp(
+    const cwd = await fs.mkdtemp(
         join(os.tmpdir(), basename(__filename)),
     );
-    fs.writeFileSync(
+    await fs.writeFile(
         join(cwd, './test-read-json-2.json'),
         JSON.stringify({ key: 'val' }),
     );
