@@ -24,7 +24,10 @@ beforeEach(async (t) => {
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     const token = await cli.login({

@@ -14,7 +14,10 @@ beforeEach(async (t) => {
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
     t.context.server = server;
     t.context.address = address;
 });

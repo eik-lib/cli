@@ -76,7 +76,10 @@ test('fetch latest version for a given published bundle', async (t) => {
             [2, { version: '2.1.8' }],
         ],
     }));
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
 
     const version = await f.latestVersion(address, 'pkg', 'foo');
 
@@ -93,7 +96,10 @@ test('fetch latest version, filtered by major, for a given published bundle', as
             [2, { version: '2.1.8' }],
         ],
     }));
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
 
     const version = await f.latestVersion(address, 'pkg', 'foo', 1);
 
@@ -104,7 +110,10 @@ test('fetch latest version, filtered by major, for a given published bundle', as
 
 test('fetch latest version for a given published bundle, non existant bundle on server', async (t) => {
     const server = fastify();
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
 
     try {
         await f.latestVersion(address, 'pkg', 'foo');
@@ -122,7 +131,10 @@ test('fetch latest version for a given published bundle, non existant bundle on 
 test('fetch latest version, filtered by major, for a given published bundle', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => '');
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
 
     try {
         await f.latestVersion(address, 'pkg', 'foo');
@@ -140,7 +152,10 @@ test('fetch latest version, filtered by major, for a given published bundle', as
 test('fetch latest version, invalid versions returned by server', async (t) => {
     const server = fastify();
     server.get('/pkg/foo', async () => ({ versions: 1 }));
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
 
     t.rejects(
         f.latestVersion(address, 'pkg', 'foo'),
@@ -158,7 +173,10 @@ test('fetch latest version, invalid versions keys returned by server', async (t)
             ['also not a number', 2],
         ],
     }));
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
 
     t.rejects(
         f.latestVersion(address, 'pkg', 'foo'),
@@ -174,7 +192,10 @@ test('fetch latest version, no bundles yet published', async (t) => {
         latest: {},
         versions: [],
     }));
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
 
     const version = await f.latestVersion(address, 'pkg', 'foo');
 
@@ -199,7 +220,10 @@ test('fetch remote hash for a given version', async (t) => {
             },
         ],
     }));
-    const address = await server.listen();
+    const address = await server.listen({
+        host: '127.0.0.1',
+        port: 0,
+    });
     const result = await f.integrity(address, 'pkg', 'foo', '1.0.0');
 
     t.equal(
