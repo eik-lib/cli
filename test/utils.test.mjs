@@ -6,23 +6,12 @@ import { test, beforeEach, afterEach } from 'tap';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import crypto from 'crypto';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-// const os = require('os');
-// const { join, basename } = require('path');
-// const fs = require('fs');
-// const crypto = require('crypto');
-// const { test } = require('tap');
-// const fastify = require('fastify');
-// const j = require('../utils/json');
-// const h = require('../utils/hash');
-// const f = require('../utils/http');
-
 import j from '../utils/json/index.js';
 import h from '../utils/hash/index.js';
 import f from '../utils/http/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 test('calculate file hash', async (t) => {
     const hash = await h.file(join(__dirname, 'fixtures', 'client.js'));
