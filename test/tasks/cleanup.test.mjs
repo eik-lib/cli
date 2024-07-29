@@ -1,12 +1,13 @@
-/* eslint-disable no-param-reassign */
+import { promises as fs } from 'fs';
+import { join } from 'path';
+import { test, beforeEach, afterEach } from 'tap';
+import rimraf from 'rimraf';
+import CleanupTask from '../../classes/publish/package/tasks/cleanup.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-'use strict';
-
-const fs = require('fs').promises;
-const { join } = require('path');
-const { test, beforeEach, afterEach } = require('tap');
-const rimraf = require('rimraf');
-const CleanupTask = require('../../classes/publish/package/tasks/cleanup');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 beforeEach(async (t) => {
     const path = join(__dirname, '.eik');

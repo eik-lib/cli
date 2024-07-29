@@ -1,15 +1,18 @@
-'use strict';
+import { promises as fs } from 'fs';
+import os from 'os';
+import { test } from 'tap';
+import { join, basename } from 'path';
+import { readFileSync } from 'fs';
+import { exec as execCallback } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const fs = require('fs').promises;
-const os = require('os');
-const { test } = require('tap');
-const { join, basename } = require('path');
-const { readFileSync } = require('fs');
-const cp = require('child_process');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 function exec(cmd) {
     return new Promise((resolve) => {
-        cp.exec(cmd, (error, stdout, stderr) => {
+			execCallback(cmd, (error, stdout, stderr) => {
             resolve({ error, stdout, stderr });
         });
     });
@@ -22,7 +25,7 @@ test('Initializing a new eik.json file', async (t) => {
     const publishCmd = `${eik} init --cwd ${folder}`;
     await exec(publishCmd);
 
-    const assets = JSON.parse(readFileSync(join(folder, 'eik.json')));
+    const assets = JSON.parse(readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }));
 
     t.equal(assets.name, '', 'eik.json "name" field should be empty');
     t.equal(
@@ -45,7 +48,7 @@ test('Initializing a new eik.json file passing custom values', async (t) => {
         --server http://localhost:4001`;
     await exec(publishCmd.split('\n').join(' '));
 
-    const assets = JSON.parse(readFileSync(join(folder, 'eik.json')));
+    const assets = JSON.parse(readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }));
 
     t.equal(
         assets.name,

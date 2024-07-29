@@ -1,15 +1,17 @@
-/* eslint-disable no-param-reassign */
+import fastify from 'fastify';
+import { promises as fs } from 'fs';
+import os from 'os';
+import { join, basename } from 'path';
+import { mockLogger } from './utils.mjs';
+import { test, beforeEach, afterEach } from 'tap';
+import EikService from '@eik/service';
+import { sink } from '@eik/core';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import cli from '../classes/index.js';
 
-'use strict';
-
-const fs = require('fs');
-const os = require('os');
-const { join, basename } = require('path');
-const { test, beforeEach, afterEach } = require('tap');
-const fastify = require('fastify');
-const EikService = require('@eik/service');
-const { sink } = require('@eik/core');
-const cli = require('..');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 beforeEach(async (t) => {
     const memSink = new sink.MEM();
@@ -26,7 +28,7 @@ beforeEach(async (t) => {
         key: 'change_me',
     });
 
-    const cwd = await fs.mkdtempSync(join(os.tmpdir(), basename(__filename)));
+    const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     t.context.server = server;
     t.context.address = address;

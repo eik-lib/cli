@@ -1,16 +1,17 @@
-/* eslint-disable no-param-reassign */
+import fastify from 'fastify';
+import { promises as fs } from 'fs';
+import os from 'os';
+import { join, basename } from 'path';
+import { mockLogger } from './utils.mjs';
+import { test, beforeEach, afterEach } from 'tap';
+import EikService from '@eik/service';
+import { sink } from '@eik/core';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import cli from '../classes/index.js';
 
-'use strict';
-
-const os = require('os');
-const fs = require('fs').promises;
-const { join, basename } = require('path');
-const fastify = require('fastify');
-const { test, beforeEach, afterEach } = require('tap');
-const EikService = require('@eik/service');
-const { sink } = require('@eik/core');
-const { mockLogger } = require('./utils');
-const cli = require('..');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 beforeEach(async (t) => {
     const memSink = new sink.MEM();

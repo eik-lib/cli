@@ -1,19 +1,21 @@
-'use strict';
+import fastify from 'fastify';
+import { promises as fs } from 'fs';
+import os from 'os';
+import { exec as execCallback } from 'child_process';
+import { join, basename } from 'path';
+import { test, beforeEach, afterEach } from 'tap';
+import EikService from '@eik/service';
+import { sink } from '@eik/core';
+import cli from '../../classes/index.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-/* eslint-disable no-param-reassign */
-const fastify = require('fastify');
-const fs = require('fs').promises;
-const os = require('os');
-const cp = require('child_process');
-const { join, basename } = require('path');
-const { test, beforeEach, afterEach } = require('tap');
-const EikService = require('@eik/service');
-const { sink } = require('@eik/core');
-const cli = require('../..');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 function exec(cmd) {
     return new Promise((resolve) => {
-        cp.exec(cmd, (error, stdout, stderr) => {
+			execCallback(cmd, (error, stdout, stderr) => {
             resolve({ error, stdout, stderr });
         });
     });
