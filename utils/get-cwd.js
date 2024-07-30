@@ -1,6 +1,6 @@
-'use strict';
+import yargs from 'yargs-parser';
 
-const av = require('yargs-parser')(process.argv.slice(2));
+const av = yargs(process.argv.slice(2));
 
 /**
  * Returns the current working directory path
@@ -9,6 +9,6 @@ const av = require('yargs-parser')(process.argv.slice(2));
  *
  * @returns {string}
  */
-module.exports = function getCWD() {
+export default function getCWD() {
     return av.cwd || av.c || process.cwd();
 };

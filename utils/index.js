@@ -1,11 +1,9 @@
-'use strict';
+import { helpers } from '@eik/common';
+import logger from './logger.js';
+import getCWD from './get-cwd.js';
+import typeSlug from './type-slug.js';
+import typeTitle from './type-title.js';
 
-const {
-    helpers: { getDefaults, files },
-} = require('@eik/common');
-const logger = require('./logger');
-const getCWD = require('./get-cwd');
-const typeSlug = require('./type-slug');
-const typeTitle = require('./type-title');
+const { getDefaults, files } = helpers;
 
-module.exports = { logger, getDefaults, getCWD, files, typeSlug, typeTitle };
+export { logger, getDefaults, getCWD, files, typeSlug, typeTitle };

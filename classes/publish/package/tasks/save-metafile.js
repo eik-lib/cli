@@ -1,10 +1,8 @@
-'use strict';
+import { join } from 'path';
+import json from '../../../../utils/json/index.js';
+import Task from './task.js';
 
-const { join } = require('path');
-const json = require('../../../../utils/json');
-const Task = require('./task');
-
-module.exports = class SaveMetaFile extends Task {
+export default class SaveMetaFile extends Task {
     async process(response) {
         const { log, cwd } = this;
         const { out } = this.config;

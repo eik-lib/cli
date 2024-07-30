@@ -1,6 +1,6 @@
-const Artifact = require('./artifact');
-const Alias = require('./alias');
-const File = require('./file');
-const Version = require('./version');
+import Artifact from './artifact.js';
+import Alias from './alias.js';
+import File from './file.js';
+import Version from './version.js';
 
-module.exports = { Artifact, Alias, Version, File };
+export { Artifact, Alias, Version, File };

@@ -1,8 +1,6 @@
-'use strict';
-
-const assert = require('assert');
-const fs = require('fs').promises;
-const { join, isAbsolute } = require('path');
+import assert from 'assert';
+import fs from 'node:fs/promises';
+import { join, isAbsolute } from 'path';
 
 /**
  * Reads a file at a given location, assumes the contents to be JSON and then deserializes into a JavaScript object
@@ -18,7 +16,7 @@ const { join, isAbsolute } = require('path');
  * @example json.read({ filename: './relative/path/to/file.json' });
  * @example json.read({ filename: './relative/path/to/file.json', cwd: '/path/to/cwd });
  */
-module.exports = async (location) => {
+export default async (location) => {
     if (typeof location !== 'string') {
         assert(
             location.filename,

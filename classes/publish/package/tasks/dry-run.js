@@ -1,11 +1,8 @@
 /* eslint-disable no-param-reassign */
+import { join } from 'path';
+import Task from './task.js';
 
-'use strict';
-
-const { join } = require('path');
-const Task = require('./task');
-
-module.exports = class DryRun extends Task {
+export default class DryRun extends Task {
     async process(zipFile) {
         const { path } = this;
 

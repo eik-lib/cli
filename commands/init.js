@@ -1,18 +1,16 @@
-'use strict';
+import { join } from 'path';
+import fs from 'fs';
+import ora from 'ora';
+import { logger } from '../utils/index.js';
 
-const { join } = require('path');
-const fs = require('fs');
-const ora = require('ora');
-const { logger } = require('../utils');
+const command = 'init';
 
-exports.command = 'init';
+const aliases = ['i'];
 
-exports.aliases = ['i'];
-
-exports.describe = `Creates a new default "eik.json" file and saves it to the current working directory
+const describe = `Creates a new default "eik.json" file and saves it to the current working directory
     Override default "eik.json" fields using command line flags --server, --name, --major, --js and --css`;
 
-exports.builder = (yargs) => {
+const builder = (yargs) => {
     yargs.example('eik init');
     yargs.example('eik init --cwd /path/to/dir');
     yargs.example(
@@ -55,7 +53,7 @@ exports.builder = (yargs) => {
     });
 };
 
-exports.handler = async (argv) => {
+const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { name, version, server, cwd, debug } = argv;
     const pathname = join(cwd, './eik.json');
@@ -103,3 +101,5 @@ exports.handler = async (argv) => {
     spinner.text = '';
     spinner.stopAndPersist();
 };
+
+export { command, aliases, describe, builder, handler };

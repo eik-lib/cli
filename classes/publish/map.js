@@ -1,13 +1,11 @@
-'use strict';
+import assert from 'assert';
+import abslog from 'abslog';
+import { join, parse, isAbsolute } from 'path';
+import { existsSync } from 'fs';
+import { schemas } from '@eik/common';
+import { request } from '../../utils/http/index.js';
 
-const assert = require('assert');
-const abslog = require('abslog');
-const { join, parse, isAbsolute } = require('path');
-const { existsSync } = require('fs');
-const { schemas } = require('@eik/common');
-const { request } = require('../../utils/http');
-
-module.exports = class PublishMap {
+export default class PublishMap {
     constructor({
         logger,
         cwd = process.cwd(),

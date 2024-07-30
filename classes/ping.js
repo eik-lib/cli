@@ -1,10 +1,8 @@
-'use strict';
+import fetch from 'node-fetch';
+import abslog from 'abslog';
+import { schemas } from '@eik/common';
 
-const fetch = require('node-fetch');
-const abslog = require('abslog');
-const { schemas } = require('@eik/common');
-
-module.exports = class Ping {
+export default class Ping {
     constructor({ logger, server } = {}) {
         this.log = abslog(logger);
         this.server = server;

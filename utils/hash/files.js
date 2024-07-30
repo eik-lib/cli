@@ -1,7 +1,5 @@
-'use strict';
-
-const ssri = require('ssri');
-const fileHash = require('./file');
+import ssri from 'ssri';
+import fileHash from './file.js';
 
 /**
  * Reads files from given paths and produces and returns an integrity hash from all files contents
@@ -12,7 +10,7 @@ const fileHash = require('./file');
  *
  * @example hash.files(['/path/to/file1.js', '/path/to/file2.js']);
  */
-module.exports = async (files) => {
+export default async (files) => {
     const hashes = await Promise.all(files.map(fileHash));
     const hasher = ssri.create();
     for (const hash of hashes.sort()) {

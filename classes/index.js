@@ -1,15 +1,15 @@
 'use strict';
 
-const Ping = require('./ping');
-const Alias = require('./alias');
-const Meta = require('./meta');
-const Login = require('./login');
-const PublishMap = require('./publish/map');
-const PublishPackage = require('./publish/package/index');
-const Integrity = require('./integrity');
-const Version = require('./version');
+import Ping from './ping.js';
+import Alias from './alias.js';
+import Meta from './meta.js';
+import Login from './login.js';
+import PublishMap from './publish/map.js';
+import PublishPackage from './publish/package/index.js';
+import Integrity from './integrity.js';
+import Version from './version.js';
 
-module.exports = {
+export default {
     ping(opts) {
         return new Ping(opts).run();
     },

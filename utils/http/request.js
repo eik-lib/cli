@@ -1,8 +1,6 @@
-'use strict';
-
-const fetch = require('node-fetch');
-const FormData = require('form-data');
-const { createReadStream } = require('fs');
+import fetch from 'node-fetch';
+import FormData from 'form-data';
+import { createReadStream } from 'fs';
 
 /**
  * HTTP Utility for making requests against an Eik server
@@ -65,4 +63,4 @@ async function request(options) {
     }
 }
 
-module.exports = request;
+export default request;

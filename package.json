@@ -3,6 +3,7 @@
   "version": "2.0.39",
   "description": "CLI tool for publishing assets to an Eik server",
   "main": "./classes/index.js",
+	"type": "module",
   "bin": {
     "eik": "index.js"
   },

@@ -1,14 +1,10 @@
-/* eslint-disable no-param-reassign */
+import { join } from 'path';
+import { integrity, versions } from '../../../../utils/http/index.js';
+import hash from '../../../../utils/hash/index.js';
+import { typeSlug } from '../../../../utils/index.js';
+import Task from './task.js';
 
-'use strict';
-
-const { join } = require('path');
-const { integrity, versions } = require('../../../../utils/http');
-const hash = require('../../../../utils/hash');
-const { typeSlug } = require('../../../../utils');
-const Task = require('./task');
-
-module.exports = class CheckIfAlreadyPublished extends Task {
+export default class CheckIfAlreadyPublished extends Task {
     async process() {
         const { log, path } = this;
         const { server, name, version, files, type } = this.config;

@@ -1,8 +1,6 @@
-'use strict';
+import abslog from 'abslog';
 
-const abslog = require('abslog');
-
-module.exports = class Task {
+export default class Task {
     constructor(options) {
         this.cwd = options.cwd;
         this.log = abslog(options.logger);

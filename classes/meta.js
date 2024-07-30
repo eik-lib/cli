@@ -1,16 +1,13 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-plusplus */
-
-'use strict';
-
-const abslog = require('abslog');
-const { join } = require('path');
-const { schemas } = require('@eik/common');
-const fetch = require('node-fetch');
+import abslog from 'abslog';
+import { join } from 'path';
+import { schemas } from '@eik/common';
+import fetch from 'node-fetch';
 
 const types = ['pkg', 'map', 'npm'];
 
-module.exports = class Meta {
+export default class Meta {
     constructor({ logger, server, name, version } = {}) {
         this.log = abslog(logger);
         this.server = server;
