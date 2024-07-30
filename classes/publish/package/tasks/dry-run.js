@@ -20,4 +20,4 @@ export default class DryRun extends Task {
 
         return files;
     }
-};
+}

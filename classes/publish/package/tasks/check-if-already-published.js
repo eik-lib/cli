@@ -80,4 +80,4 @@ export default class CheckIfAlreadyPublished extends Task {
 
         return localHash;
     }
-};
+}

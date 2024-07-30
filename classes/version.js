@@ -154,4 +154,4 @@ export default class Version {
         log.debug(`  ==> ${newVersion}`);
         return newVersion;
     }
-};
+}

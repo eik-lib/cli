@@ -12,7 +12,9 @@ import { commands } from './commands/index.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { version } = JSON.parse(readFileSync(join(__dirname, './package.json'), { encoding: 'utf-8' }));
+const { version } = JSON.parse(
+    readFileSync(join(__dirname, './package.json'), { encoding: 'utf-8' }),
+);
 const greeting = chalk.white.bold(`Eik CLI (v${version})`);
 
 const boxenOptions = {
@@ -45,4 +47,4 @@ yargs(hideBin(process.argv))
     .wrap(150)
     .version(false)
     .help()
-		.parse();
+    .parse();

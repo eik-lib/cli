@@ -129,4 +129,4 @@ export default class Publish {
             ...response,
         };
     }
-};
+}

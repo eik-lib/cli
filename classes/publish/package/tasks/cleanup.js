@@ -14,4 +14,4 @@ export default class Cleanup extends Task {
                 .forEach((file) => rimraf.sync(join(path, file)));
         }
     }
-};
+}

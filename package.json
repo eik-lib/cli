@@ -3,7 +3,7 @@
   "version": "2.0.39",
   "description": "CLI tool for publishing assets to an Eik server",
   "main": "./classes/index.js",
-	"type": "module",
+  "type": "module",
   "bin": {
     "eik": "index.js"
   },
@@ -55,6 +55,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.25.1",
     "@eik/core": "1.2.28",
     "@eik/service": "1.2.98",
     "@semantic-release/changelog": "6.0.3",

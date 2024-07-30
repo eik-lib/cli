@@ -21,4 +21,4 @@ export default class CheckBundleSizes extends Task {
             throw new Error(`Failed to check bundle sizes: ${err.message}`);
         }
     }
-};
+}

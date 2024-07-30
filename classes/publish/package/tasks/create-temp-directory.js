@@ -23,4 +23,4 @@ export default class CreateTempDir extends Task {
             throw new IOError('Unable to create temp dir', err);
         }
     }
-};
+}

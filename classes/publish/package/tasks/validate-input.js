@@ -31,4 +31,4 @@ export default class ValidateInput extends Task {
             throw new ValidationError('Parameter "dryRun" is not valid');
         }
     }
-};
+}

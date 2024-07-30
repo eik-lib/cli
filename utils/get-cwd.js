@@ -11,4 +11,4 @@ const av = yargs(process.argv.slice(2));
  */
 export default function getCWD() {
     return av.cwd || av.c || process.cwd();
-};
+}

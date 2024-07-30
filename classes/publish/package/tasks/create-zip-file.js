@@ -77,4 +77,4 @@ export default class CreateZipFile extends Task {
             throw new Error(`Unable to create zip file: ${err.message}`);
         }
     }
-};
+}

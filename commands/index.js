@@ -10,4 +10,16 @@ import * as ping from './ping.js';
 import * as publish from './publish.js';
 import * as version from './version.js';
 
-export const commands = [ init, integrity, login, mapAlias, map, meta, npmAlias, packageAlias, ping, publish, version ];
+export const commands = [
+    init,
+    integrity,
+    login,
+    mapAlias,
+    map,
+    meta,
+    npmAlias,
+    packageAlias,
+    ping,
+    publish,
+    version,
+];
