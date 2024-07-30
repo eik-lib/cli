@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 
 function exec(cmd) {
     return new Promise((resolve) => {
-			execCallback(cmd, (error, stdout, stderr) => {
+        execCallback(cmd, (error, stdout, stderr) => {
             resolve({ error, stdout, stderr });
         });
     });

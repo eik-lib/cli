@@ -12,7 +12,7 @@ const __dirname = dirname(__filename);
 
 function exec(cmd) {
     return new Promise((resolve) => {
-			execCallback(cmd, (error, stdout, stderr) => {
+        execCallback(cmd, (error, stdout, stderr) => {
             resolve({ error, stdout, stderr });
         });
     });
@@ -23,7 +23,9 @@ test('Initializing a new eik.json file', async (t) => {
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
     const publishCmd = `${eik} init --cwd ${folder}`;
     const res = await exec(publishCmd);
-    const assets = JSON.parse(readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }));
+    const assets = JSON.parse(
+        readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }),
+    );
     t.equal(assets.name, '', 'eik.json "name" field should be empty');
     t.equal(
         assets.version,
@@ -45,7 +47,9 @@ test('Initializing a new eik.json file passing custom values', async (t) => {
         --server http://localhost:4001`;
     await exec(publishCmd.split('\n').join(' '));
 
-    const assets = JSON.parse(readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }));
+    const assets = JSON.parse(
+        readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }),
+    );
 
     t.equal(
         assets.name,
