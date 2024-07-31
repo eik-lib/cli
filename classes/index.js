@@ -31,6 +31,9 @@ export default {
         return new Login(opts).run();
     },
 
+    /**
+     * @param {import('./publish/map.js').PublishMapOptions} opts
+     */
     map(opts) {
         return new PublishMap(opts).run();
     },
@@ -49,6 +52,9 @@ export default {
         return new Ping(opts).run();
     },
 
+    /**
+     * @param {import('./publish/package/index.js').PublishOptions} opts
+     */
     publish(opts) {
         return new PublishPackage(opts).run();
     },
