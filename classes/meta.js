@@ -3,7 +3,6 @@
 import abslog from 'abslog';
 import { join } from 'path';
 import { schemas } from '@eik/common';
-import fetch from 'node-fetch';
 
 const types = ['pkg', 'map', 'npm'];
 

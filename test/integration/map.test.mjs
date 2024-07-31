@@ -4,7 +4,6 @@ import os from 'os';
 import { exec as execCallback } from 'child_process';
 import { join, basename } from 'path';
 import { test, beforeEach, afterEach } from 'tap';
-import fetch from 'node-fetch';
 import EikService from '@eik/service';
 import { sink } from '@eik/core';
 import cli from '../../classes/index.js';

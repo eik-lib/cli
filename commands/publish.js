@@ -1,5 +1,4 @@
 import { join } from 'path';
-import fetch from 'node-fetch';
 import ora from 'ora';
 import chalk from 'chalk';
 import { helpers } from '@eik/common';

@@ -1,5 +1,4 @@
 import { join } from 'path';
-import fetch from 'node-fetch';
 
 /**
  * Fetches the latest version from an Eik server of a package by name, optionally restricting the lookup to a specified semver major version

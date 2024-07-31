@@ -1,7 +1,6 @@
 'use strict';
 
 import { join } from 'path';
-import fetch from 'node-fetch';
 import ora from 'ora';
 import PublishMap from '../classes/publish/map.js';
 import { logger, getDefaults, getCWD } from '../utils/index.js';

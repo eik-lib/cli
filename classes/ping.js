@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import abslog from 'abslog';
 import { schemas } from '@eik/common';
 

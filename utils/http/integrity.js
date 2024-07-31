@@ -1,5 +1,4 @@
 import { join } from 'path';
-import fetch from 'node-fetch';
 
 /**
  * Fetches package integrity string by name and version from a given Eik asset server.

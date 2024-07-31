@@ -3,7 +3,6 @@
 import abslog from 'abslog';
 import { join } from 'path';
 import eik from '@eik/common';
-import fetch from 'node-fetch';
 import { typeSlug } from '../utils/index.js';
 
 const { schemas, ValidationError } = eik;

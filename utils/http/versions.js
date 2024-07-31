@@ -1,5 +1,4 @@
 import { join } from 'path';
-import fetch from 'node-fetch';
 
 /**
  * Fetches package versions by name from a given Eik asset server.

@@ -1,6 +1,4 @@
-import fetch from 'node-fetch';
-import FormData from 'form-data';
-import { createReadStream } from 'fs';
+import { readFile } from 'node:fs/promises';
 
 /**
  * HTTP Utility for making requests against an Eik server
@@ -13,45 +11,44 @@ import { createReadStream } from 'fs';
  */
 async function request(options) {
     const { method = 'POST', host, pathname, data, file, map, token } = options;
-    const form = new FormData();
-    const headers = {};
+    const body = new FormData();
+    const headers = new Headers();
 
     if (data) {
         for (const [key, value] of Object.entries(data)) {
-            form.append(key, value);
+            body.set(key, value);
         }
     }
 
     if (file) {
-        form.append('package', createReadStream(file));
+        const fileData = await readFile(file);
+        body.set('package', new Blob([fileData]));
     }
 
     if (map) {
-        form.append('map', createReadStream(map));
+        const mapData = await readFile(map);
+        body.set('map', new Blob([mapData]));
     }
 
     if (token) {
-        headers.Authorization = `Bearer ${token}`;
+        headers.set('Authorization', `Bearer ${token}`);
     }
 
     try {
         const url = new URL(pathname, host);
         url.search = `?t=${Date.now()}`;
 
-        const res = await fetch(url, {
-            method,
-            body: form,
-            headers: { ...headers, ...form.getHeaders() },
-        });
+        const res = await fetch(url, { method, body, headers });
 
         if (!res.ok) {
             const err = new Error(
                 `Server responded with a non 200 ok status code. Response: ${res.status}`,
             );
+            // @ts-ignore
             err.statusCode = res.status;
             throw err;
         }
-        if (res.headers.get('content-type').includes('application/json')) {
+        if (res?.headers?.get('content-type')?.includes('application/json')) {
             return { message: await res.json(), status: res.status };
         }
         return { message: await res.text(), status: res.status };
