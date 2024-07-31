@@ -1,3 +1,15 @@
+# [3.0.0-next.1](https://github.com/eik-lib/cli/compare/v2.0.39...v3.0.0-next.1) (2024-07-31)
+
+
+### chore
+
+* convert codebase to ESM ([f3c4c74](https://github.com/eik-lib/cli/commit/f3c4c746cc3ac283d0f8e493682af34086831f51))
+
+
+### BREAKING CHANGES
+
+* JavaScript API is now ESM only and no longer supports CJS
+
 ## [2.0.39](https://github.com/eik-lib/cli/compare/v2.0.38...v2.0.39) (2024-07-29)
 
 
