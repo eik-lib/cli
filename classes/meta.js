@@ -6,14 +6,28 @@ import { schemas } from '@eik/common';
 
 const types = ['pkg', 'map', 'npm'];
 
+/**
+ * @typedef {object} MetaOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {string} name
+ * @property {string} version
+ */
+
 export default class Meta {
-    constructor({ logger, server, name, version } = {}) {
+    /**
+     * @param {MetaOptions} options
+     */
+    constructor({ logger, server, name, version }) {
         this.log = abslog(logger);
         this.server = server;
         this.name = name;
         this.version = version;
     }
 
+    /**
+     * @returns {Promise<unknown | false>}
+     */
     async run() {
         this.log.debug('Validating input');
 

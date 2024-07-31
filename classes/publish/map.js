@@ -5,7 +5,29 @@ import { existsSync } from 'fs';
 import { schemas } from '@eik/common';
 import { request } from '../../utils/http/index.js';
 
+/**
+ * @typedef {object} PublishMapOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {string} [cwd]
+ * @property {string} token
+ * @property {string} file
+ * @property {string} name
+ * @property {string} version
+ */
+
+/**
+ * @typedef {object} PublishMapResult
+ * @property {string} server
+ * @property {string} name
+ * @property {string} version
+ * @property {string} type
+ */
+
 export default class PublishMap {
+    /**
+     * @param {PublishMapOptions} options
+     */
     constructor({
         logger,
         cwd = process.cwd(),
@@ -14,7 +36,7 @@ export default class PublishMap {
         file,
         name,
         version,
-    } = {}) {
+    }) {
         this.log = abslog(logger);
         this.cwd = cwd;
         this.server = server;
@@ -24,6 +46,9 @@ export default class PublishMap {
         this.file = file;
     }
 
+    /**
+     * @returns {Promise<PublishMapResult>}
+     */
     async run() {
         this.log.debug('Running import map publish command');
 

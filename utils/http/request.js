@@ -1,11 +1,22 @@
 import { readFile } from 'node:fs/promises';
 
 /**
+ * @typedef {object} RequestOptions
+ * @property {string} [method="POST"]
+ * @property {string} host
+ * @property {string} pathname
+ * @property {unknown} [data]
+ * @property {string} [file]
+ * @property {string} [map]
+ * @property {string} [token]
+ */
+
+/**
  * HTTP Utility for making requests against an Eik server
  *
- * @param {{method:string,host:string,pathname:string,data:object,file:string,map:string,token:string}} options
+ * @param {RequestOptions} options
  *
- * @returns {Promise<{status:number,message:object|string}>} - Promise that resolves to an object with properties status and message
+ * @returns {Promise<{ status:number; message: object | string }>} - Promise that resolves to an object with properties status and message
  *
  * @throws Error
  */

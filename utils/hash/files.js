@@ -4,7 +4,7 @@ import fileHash from './file.js';
 /**
  * Reads files from given paths and produces and returns an integrity hash from all files contents
  *
- * @param {[string]} files - an array of file paths
+ * @param {string[]} files - an array of file paths
  *
  * @returns {Promise<string>} - integrity string
  *
