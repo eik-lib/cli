@@ -1,20 +1,18 @@
-'use strict';
+import ora from 'ora';
+import Alias from '../classes/alias.js';
+import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { Alias as AliasFormatter } from '../formatters/index.js';
 
-const ora = require('ora');
-const Alias = require('../classes/alias');
-const { logger, getDefaults, getCWD } = require('../utils');
-const { Alias: AliasFormatter } = require('../formatters');
+export const command = 'map-alias <name> <version> <alias>';
 
-exports.command = 'map-alias <name> <version> <alias>';
+export const aliases = ['ma'];
 
-exports.aliases = ['ma'];
-
-exports.describe = `Create a semver major alias for an import map as identified by its name and version.
+export const describe = `Create a semver major alias for an import map as identified by its name and version.
     An import map with the given name and version must already exist on asset server
     Alias should be the semver major part of the import map version.
     Eg. For an import map of version 5.4.3, you should use 5 as the alias`;
 
-exports.builder = (yargs) => {
+export const builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -67,7 +65,7 @@ exports.builder = (yargs) => {
     yargs.example(`eik map-alias my-map 4.2.2 4 --debug`);
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
     const { debug, name, version, server } = argv;

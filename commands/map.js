@@ -1,21 +1,18 @@
-'use strict';
+import { join } from 'path';
+import ora from 'ora';
+import PublishMap from '../classes/publish/map.js';
+import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { Artifact } from '../formatters/index.js';
 
-const { join } = require('path');
-const fetch = require('node-fetch');
-const ora = require('ora');
-const PublishMap = require('../classes/publish/map');
-const { logger, getDefaults, getCWD } = require('../utils');
-const { Artifact } = require('../formatters');
+export const command = 'map <name> <version> <file>';
 
-exports.command = 'map <name> <version> <file>';
+export const aliases = ['m'];
 
-exports.aliases = ['m'];
-
-exports.describe = `Upload an import map file to the server under a given name and version.
+export const describe = `Upload an import map file to the server under a given name and version.
     A name/version combination must be unique and a version must be semver compliant.
     Subsquent published versions must increase. Eg. 1.0.0 1.0.1, 1.1.0, 2.0.0 etc.`;
 
-exports.builder = (yargs) => {
+export const builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -68,7 +65,7 @@ exports.builder = (yargs) => {
     );
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, server, name, version } = argv;
 

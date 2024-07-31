@@ -1,13 +1,11 @@
-'use strict';
+import assert from 'assert';
+import abslog from 'abslog';
+import { join } from 'path';
+import { schemas, validators } from '@eik/common';
+import { request } from '../utils/http/index.js';
+import { typeSlug } from '../utils/index.js';
 
-const assert = require('assert');
-const abslog = require('abslog');
-const { join } = require('path');
-const { schemas, validators } = require('@eik/common');
-const { request } = require('../utils/http');
-const { typeSlug } = require('../utils');
-
-module.exports = class Alias {
+export default class Alias {
     constructor({ logger, server, token, type, name, version, alias } = {}) {
         this.log = abslog(logger);
         this.server = server;
@@ -121,4 +119,4 @@ module.exports = class Alias {
             }
         }
     }
-};
+}

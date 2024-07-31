@@ -1,10 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-
-'use strict';
-
-const { join } = require('path');
-const chalk = require('chalk');
-const Version = require('./version');
+import { join } from 'path';
+import chalk from 'chalk';
+import Version from './version.js';
 
 const _name = Symbol('name');
 const _type = Symbol('type');
@@ -86,4 +83,4 @@ class Artifact {
     }
 }
 
-module.exports = Artifact;
+export default Artifact;

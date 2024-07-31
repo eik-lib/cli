@@ -1,20 +1,18 @@
-'use strict';
+import abslog from 'abslog';
+import { join, isAbsolute } from 'path';
+import { EikConfig } from '@eik/common';
+import { typeSlug } from '../../../utils/index.js';
+import ValidateInput from './tasks/validate-input.js';
+import CreateTempDirectory from './tasks/create-temp-directory.js';
+import CreateZipFile from './tasks/create-zip-file.js';
+import CheckBundleSizes from './tasks/check-bundle-sizes.js';
+import DryRun from './tasks/dry-run.js';
+import CheckIfAlreadyPublished from './tasks/check-if-already-published.js';
+import UploadFiles from './tasks/upload-files.js';
+import SaveMetafile from './tasks/save-metafile.js';
+import Cleanup from './tasks/cleanup.js';
 
-const abslog = require('abslog');
-const { join, isAbsolute } = require('path');
-const { EikConfig } = require('@eik/common');
-const { typeSlug } = require('../../../utils');
-const ValidateInput = require('./tasks/validate-input');
-const CreateTempDirectory = require('./tasks/create-temp-directory');
-const CreateZipFile = require('./tasks/create-zip-file');
-const CheckBundleSizes = require('./tasks/check-bundle-sizes');
-const DryRun = require('./tasks/dry-run');
-const CheckIfAlreadyPublished = require('./tasks/check-if-already-published');
-const UploadFiles = require('./tasks/upload-files');
-const SaveMetafile = require('./tasks/save-metafile');
-const Cleanup = require('./tasks/cleanup');
-
-module.exports = class Publish {
+export default class Publish {
     constructor({
         logger,
         cwd = process.cwd(),
@@ -131,4 +129,4 @@ module.exports = class Publish {
             ...response,
         };
     }
-};
+}

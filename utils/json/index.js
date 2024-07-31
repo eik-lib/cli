@@ -1,5 +1,5 @@
-const read = require('./read');
-const write = require('./write');
-const writeEik = require('./write-eik');
+import read from './read.js';
+import write from './write.js';
+import writeEik from './write-eik.js';
 
-module.exports = { read, write, writeEik };
+export default { read, write, writeEik };

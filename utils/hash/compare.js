@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Compares 2 hash strings for comparison. Returns `true` if hashes are identical, false otherwise.
  *
@@ -10,4 +8,4 @@
  *
  * @example hash.compare('a1b22c23d24e25f4g33a123b23c34', 'a1b22c23d24e25f4g33a123b23c34');
  */
-module.exports = (hash1, hash2) => hash1 === hash2;
+export default (hash1, hash2) => hash1 === hash2;

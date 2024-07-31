@@ -2,13 +2,10 @@
 /* eslint-disable prefer-template */
 /* eslint-disable one-var */
 /* eslint-disable no-underscore-dangle */
-
-'use strict';
-
-const { join } = require('path');
-const chalk = require('chalk');
-const formatDistance = require('date-fns/formatDistance');
-const File = require('./file');
+import { join } from 'path';
+import chalk from 'chalk';
+import formatDistance from 'date-fns/formatDistance/index.js';
+import File from './file.js';
 
 class Version {
     constructor({
@@ -65,4 +62,4 @@ class Version {
     }
 }
 
-module.exports = Version;
+export default Version;

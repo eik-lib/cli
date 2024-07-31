@@ -1,22 +1,20 @@
-'use strict';
+import { execSync } from 'child_process';
+import { join } from 'path';
+import ora from 'ora';
+import { helpers } from '@eik/common';
+import VersionPackage from '../classes/version.js';
+import { logger, getDefaults, getCWD } from '../utils/index.js';
+import json from '../utils/json/index.js';
 
-const { execSync } = require('child_process');
-const { join } = require('path');
-const ora = require('ora');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
-const VersionPackage = require('../classes/version');
-const { logger, getDefaults, getCWD } = require('../utils');
-const json = require('../utils/json');
+const { configStore } = helpers;
 
-exports.command = 'version [level]';
+export const command = 'version [level]';
 
-exports.aliases = ['v'];
+export const aliases = ['v'];
 
-exports.describe = `Compares local files with files on server and increments "version" field in eik.json if necessary.`;
+export const describe = `Compares local files with files on server and increments "version" field in eik.json if necessary.`;
 
-exports.builder = (yargs) => {
+export const builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -53,7 +51,7 @@ exports.builder = (yargs) => {
     yargs.example(`eik v`);
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { level, debug, dryRun, cwd } = argv;
     const config = configStore.findInDirectory(cwd);

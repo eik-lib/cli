@@ -1,7 +1,5 @@
-'use strict';
-
-const ssri = require('ssri');
-const fs = require('fs');
+import ssri from 'ssri';
+import fs from 'fs';
 
 /**
  * Reads a file from a given path and produces and returns an integrity hash from its contents
@@ -12,7 +10,7 @@ const fs = require('fs');
  *
  * @example hash.file('/path/to/file.js');
  */
-module.exports = async (path) => {
+export default async (path) => {
     const integrity = await ssri.fromStream(fs.createReadStream(path));
     return integrity.toString();
 };

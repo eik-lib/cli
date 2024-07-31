@@ -1,25 +1,22 @@
 /* eslint-disable prefer-template */
 /* eslint-disable no-restricted-properties */
 /* eslint-disable one-var */
+import { join } from 'path';
+import ora from 'ora';
+import { helpers } from '@eik/common';
+import Integrity from '../classes/integrity.js';
+import { logger, getDefaults, getCWD } from '../utils/index.js';
+import json from '../utils/json/index.js';
 
-'use strict';
+const { configStore } = helpers;
 
-const { join } = require('path');
-const ora = require('ora');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
-const Integrity = require('../classes/integrity');
-const { logger, getDefaults, getCWD } = require('../utils');
-const json = require('../utils/json');
+export const command = 'integrity [name] [version]';
 
-exports.command = 'integrity [name] [version]';
+export const aliases = ['int'];
 
-exports.aliases = ['int'];
+export const describe = `Retrieve file integrity information for package name and version defined in eik.json, then populate integrity.json file with this information`;
 
-exports.describe = `Retrieve file integrity information for package name and version defined in eik.json, then populate integrity.json file with this information`;
-
-exports.builder = (yargs) => {
+export const builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -45,7 +42,7 @@ exports.builder = (yargs) => {
     yargs.example(`eik integrity --debug`);
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let integrity = false;
     const { debug, cwd } = argv;

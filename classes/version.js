@@ -1,18 +1,15 @@
 /* eslint-disable max-classes-per-file */
+import { copyFileSync, writeFileSync } from 'fs';
+import { join, isAbsolute, parse } from 'path';
+import abslog from 'abslog';
+import semver from 'semver';
+import mkdir from 'make-dir';
+import { schemas, EikConfig } from '@eik/common';
+import { integrity } from '../utils/http/index.js';
+import hash from '../utils/hash/index.js';
+import { typeSlug } from '../utils/index.js';
 
-'use strict';
-
-const { copyFileSync, writeFileSync } = require('fs');
-const { join, isAbsolute, parse } = require('path');
-const abslog = require('abslog');
-const semver = require('semver');
-const mkdir = require('make-dir');
-const { schemas, EikConfig } = require('@eik/common');
-const { integrity } = require('../utils/http');
-const hash = require('../utils/hash');
-const { typeSlug } = require('../utils');
-
-module.exports = class Version {
+export default class Version {
     constructor({
         logger,
         server,
@@ -157,4 +154,4 @@ module.exports = class Version {
         log.debug(`  ==> ${newVersion}`);
         return newVersion;
     }
-};
+}

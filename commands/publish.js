@@ -1,29 +1,26 @@
-'use strict';
-
-const { join } = require('path');
-const fetch = require('node-fetch');
-const ora = require('ora');
-const chalk = require('chalk');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
-const PublishPackage = require('../classes/publish/package/index');
-const {
+import { join } from 'path';
+import ora from 'ora';
+import chalk from 'chalk';
+import { helpers } from '@eik/common';
+import PublishPackage from '../classes/publish/package/index.js';
+import {
     logger,
     getDefaults,
     getCWD,
     typeSlug,
     typeTitle,
-} = require('../utils');
-const { Artifact } = require('../formatters');
+} from '../utils/index.js';
+import { Artifact } from '../formatters/index.js';
 
-exports.command = 'publish';
+const { configStore } = helpers;
 
-exports.aliases = ['pkg', 'package', 'pub'];
+export const command = 'publish';
 
-exports.describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
+export const aliases = ['pkg', 'package', 'pub'];
 
-exports.builder = (yargs) => {
+export const describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
+
+export const builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -63,7 +60,7 @@ exports.builder = (yargs) => {
     yargs.example(`eik pkg --debug`);
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, dryRun, cwd, token } = argv;
     const config = configStore.findInDirectory(cwd);

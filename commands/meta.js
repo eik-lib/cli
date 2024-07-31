@@ -1,22 +1,19 @@
 /* eslint-disable prefer-template */
 /* eslint-disable no-restricted-properties */
 /* eslint-disable one-var */
+import ora from 'ora';
+import Meta from '../classes/meta.js';
+import { Artifact } from '../formatters/index.js';
+import { logger, getDefaults, getCWD } from '../utils/index.js';
 
-'use strict';
+export const command = 'meta <name>';
 
-const ora = require('ora');
-const Meta = require('../classes/meta');
-const { Artifact } = require('../formatters');
-const { logger, getDefaults, getCWD } = require('../utils');
+export const aliases = ['show'];
 
-exports.command = 'meta <name>';
-
-exports.aliases = ['show'];
-
-exports.describe = `Retrieve meta information by package, map or npm name
+export const describe = `Retrieve meta information by package, map or npm name
     If a given name exists in several types (package and map for example), results will be returned and displayed from all matching types`;
 
-exports.builder = (yargs) => {
+export const builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -49,7 +46,7 @@ exports.builder = (yargs) => {
     yargs.example(`eik meta my-app --server https://assets.myeikserver.com`);
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let meta = false;
     const { debug, server } = argv;

@@ -1,13 +1,9 @@
-/* eslint-disable no-await-in-loop */
+import bytes from 'bytes';
+import fs from 'fs';
+import gzipSize from 'gzip-size';
+import Task from './task.js';
 
-'use strict';
-
-const bytes = require('bytes');
-const fs = require('fs');
-const gzipSize = require('gzip-size');
-const Task = require('./task');
-
-module.exports = class CheckBundleSizes extends Task {
+export default class CheckBundleSizes extends Task {
     async process() {
         this.log.debug('Checking bundle file sizes');
         try {
@@ -25,4 +21,4 @@ module.exports = class CheckBundleSizes extends Task {
             throw new Error(`Failed to check bundle sizes: ${err.message}`);
         }
     }
-};
+}

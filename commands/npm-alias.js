@@ -1,20 +1,18 @@
-'use strict';
+import ora from 'ora';
+import Alias from '../classes/alias.js';
+import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { Alias as AliasFormatter } from '../formatters/index.js';
 
-const ora = require('ora');
-const Alias = require('../classes/alias');
-const { logger, getDefaults, getCWD } = require('../utils');
-const { Alias: AliasFormatter } = require('../formatters');
+export const command = 'npm-alias <name> <version> <alias>';
 
-exports.command = 'npm-alias <name> <version> <alias>';
+export const aliases = ['na', 'dep-alias', 'dependency-alias'];
 
-exports.aliases = ['na', 'dep-alias', 'dependency-alias'];
-
-exports.describe = `Create a semver major alias for an NPM package as identified by its name and version.
+export const describe = `Create a semver major alias for an NPM package as identified by its name and version.
     An NPM package with the given name and version must already exist on the asset server
     Alias should be the semver major part of the NPM package version.
     Eg. For an NPM package of version 5.4.3, you should use 5 as the alias`;
 
-exports.builder = (yargs) => {
+export const builder = (yargs) => {
     const cwd = getCWD();
     const defaults = getDefaults(cwd);
 
@@ -66,7 +64,7 @@ exports.builder = (yargs) => {
     );
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
     const { debug, server } = argv;

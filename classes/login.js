@@ -1,10 +1,10 @@
-'use strict';
+import abslog from 'abslog';
+import eik from '@eik/common';
+import { request } from '../utils/http/index.js';
 
-const abslog = require('abslog');
-const { schemas, ValidationError } = require('@eik/common');
-const { request } = require('../utils/http');
+const { schemas, ValidationError } = eik;
 
-module.exports = class Login {
+export default class Login {
     constructor({ logger, server, key } = {}) {
         this.log = abslog(logger);
         this.server = server;
@@ -46,4 +46,4 @@ module.exports = class Login {
             }
         }
     }
-};
+}

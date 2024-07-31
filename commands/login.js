@@ -1,21 +1,21 @@
-'use strict';
+import os from 'os';
+import readline from 'readline';
+import ora from 'ora';
+import Login from '../classes/login.js';
+import { logger, getDefaults, getCWD } from '../utils/index.js';
+import json from '../utils/json/index.js';
 
-const homedir = require('os').homedir();
-const readline = require('readline');
-const ora = require('ora');
-const Login = require('../classes/login');
-const { logger, getDefaults, getCWD } = require('../utils');
-const json = require('../utils/json');
+const homedir = os.homedir();
 
-exports.command = 'login';
+export const command = 'login';
 
-exports.aliases = [];
+export const aliases = [];
 
-exports.describe = `Authenticate against an Eik server and save the returned token to an .eikrc file in the users home directory.
+export const describe = `Authenticate against an Eik server and save the returned token to an .eikrc file in the users home directory.
     You can specify key and server values to authenticate against using the --key and --server flags which will then bypass login prompts
     It is possible to be authenticated against multiple asset servers simultaneously. Simply call "eik login" multiple times.`;
 
-exports.builder = (yargs) => {
+export const builder = (yargs) => {
     yargs.example('eik login --server https://assets.myserver.com');
     yargs.example(
         'eik login --server https://assets.myserver.com --key ######',
@@ -53,7 +53,7 @@ exports.builder = (yargs) => {
     });
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     let success = false;
     const { debug, key, server } = argv;
     let k = key;

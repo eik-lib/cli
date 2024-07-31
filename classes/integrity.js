@@ -1,15 +1,13 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-plusplus */
+import abslog from 'abslog';
+import { join } from 'path';
+import eik from '@eik/common';
+import { typeSlug } from '../utils/index.js';
 
-'use strict';
+const { schemas, ValidationError } = eik;
 
-const abslog = require('abslog');
-const { join } = require('path');
-const { schemas, ValidationError } = require('@eik/common');
-const fetch = require('node-fetch');
-const { typeSlug } = require('../utils');
-
-module.exports = class Integrity {
+export default class Integrity {
     constructor({
         logger,
         name,
@@ -93,4 +91,4 @@ module.exports = class Integrity {
             );
         }
     }
-};
+}

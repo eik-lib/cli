@@ -1,13 +1,8 @@
-/* eslint-disable import/no-unresolved */
-
-'use strict';
-
+/* eslint-disable no-undef */
+// @ts-nocheck
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 const main = () => {
-    // eslint-disable-next-line no-undef
-    const node = document.getElementById('hero');
-
     scrollIntoView(node, {
         scrollMode: 'if-needed',
         block: 'nearest',
