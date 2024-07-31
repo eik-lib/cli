@@ -32,7 +32,6 @@ export default class Ping {
 
         this.log.debug('Requesting ping from server');
         try {
-            // @ts-expect-error We validate it's a string above
             const result = await fetch(this.server);
 
             if (!result.ok) {

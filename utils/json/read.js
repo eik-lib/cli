@@ -8,7 +8,7 @@ import { join, isAbsolute } from 'path';
  * @param {string|{filename:string,cwd:string}} location - Path string or object describing location for where to write JSON to.
  *                                   If location is a string it can be relative or absolute.
  *                                   If location is an object, `pathname` must be given which can be relative or absolute. `cwd` can also be given to define the current working directory.
- * @return {Promise<any{}>} - JavaScript object deserialized from JSON file contents
+ * @return {Promise<unknown>} - JavaScript object deserialized from JSON file contents
  *
  * @example json.read('/path/to/file.json');
  * @example json.read('./relative/path/to/file.json');

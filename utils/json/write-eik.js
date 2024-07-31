@@ -16,7 +16,7 @@ import { join } from 'path';
 export default async (data = {}, options) => {
     const { cwd = process.cwd(), filename = 'eik.json' } = options;
     const eikpath = join(cwd, filename);
-    const eik = await fs.readFile(eikpath);
+    const eik = await fs.readFile(eikpath, 'utf-8');
     const eikjson = JSON.parse(eik);
 
     await fs.writeFile(

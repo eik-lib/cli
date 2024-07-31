@@ -174,7 +174,6 @@ export default class Version {
         }
 
         log.debug(`Incrementing by "${level}" level`);
-        // @ts-expect-error
         const newVersion = semver.inc(version, level);
         log.debug(`  ==> ${newVersion}`);
         return newVersion;

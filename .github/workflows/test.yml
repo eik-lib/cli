@@ -31,5 +31,7 @@ jobs:
       - name: Lint files
         run: npm run lint
 
+      - run: npm run types
+
       - name: Run tests
         run: npm run test:ci
