@@ -1,5 +1,3 @@
-'use strict';
-
 import { join } from 'path';
 import ora from 'ora';
 import PublishMap from '../classes/publish/map.js';

@@ -1,5 +1,3 @@
-'use strict';
-
 import Ping from './ping.js';
 import Alias from './alias.js';
 import Meta from './meta.js';

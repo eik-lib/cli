@@ -1,5 +1,3 @@
-'use strict';
-
 import ora from 'ora';
 import Alias from '../classes/alias.js';
 import { logger, getDefaults, getCWD } from '../utils/index.js';

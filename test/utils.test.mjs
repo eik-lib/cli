@@ -17,7 +17,7 @@ test('calculate file hash', async (t) => {
     const hash = await h.file(join(__dirname, 'fixtures', 'client.js'));
     t.equal(
         hash,
-        'sha512-7y37q0qk5mDqzHrGvJAR9J8kPX+orJhuO+KrCTKw11ZKRI/5udUuKt2Zb/thH5H39OQYrvnHTLbZS9ShG/lGCg==',
+        'sha512-AzZUEv6TzJOlb7MOJSkAtFDihZnjCqOjgWqQmRlQj+/9CsWGQKGJzOT1CPp2R9PQlA0dd3B1+xrrgLsDX9OFtQ==',
         'returned hash should match',
     );
 });

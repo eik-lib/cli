@@ -1,5 +1,3 @@
-'use strict';
-
 import abslog from 'abslog';
 import eik from '@eik/common';
 import { request } from '../utils/http/index.js';
