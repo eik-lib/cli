@@ -22,7 +22,7 @@ export default class Login {
     }
 
     /**
-     * @returns {Promise<string | false>} Login token, or false if login fails
+     * @returns {Promise<string | false>} Bearer token, or false if login fails
      */
     async run() {
         this.log.debug('Validating input');

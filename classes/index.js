@@ -23,6 +23,8 @@ export default {
     },
 
     /**
+     * Log in using a key to get a Bearer token for use with other commands.
+     *
      * @param {import('./login.js').LoginOptions} opts
      */
     login(opts) {
