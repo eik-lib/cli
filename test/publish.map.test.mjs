@@ -5,7 +5,7 @@ import { join, basename } from 'path';
 import { mockLogger } from './utils.mjs';
 import { test, beforeEach, afterEach } from 'tap';
 import EikService from '@eik/service';
-import { sink } from '@eik/core';
+import Sink from '@eik/sink-memory';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import cli from '../classes/index.js';
@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 beforeEach(async (t) => {
-    const memSink = new sink.MEM();
+    const memSink = new Sink();
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
