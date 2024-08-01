@@ -1,6 +1,6 @@
 import bytes from 'bytes';
 import fs from 'fs';
-import gzipSize from 'gzip-size';
+import { gzipSizeSync } from 'gzip-size';
 import Task from './task.js';
 
 export default class CheckBundleSizes extends Task {
@@ -13,7 +13,7 @@ export default class CheckBundleSizes extends Task {
                     `  ==> entrypoint size (${
                         mapping.source.destination
                     } => ${file}): ${bytes(
-                        gzipSize.sync(fs.readFileSync(file, 'utf8')),
+                        gzipSizeSync(fs.readFileSync(file, 'utf8')),
                     )}`,
                 );
             }
