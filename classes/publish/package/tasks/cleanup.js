@@ -1,6 +1,6 @@
 import { join } from 'path';
 import fs from 'fs';
-import rimraf from 'rimraf';
+import { rimrafSync } from 'rimraf';
 import Task from './task.js';
 
 export default class Cleanup extends Task {
@@ -11,7 +11,7 @@ export default class Cleanup extends Task {
         if (fs.existsSync(path)) {
             fs.readdirSync(path)
                 .filter((file) => file !== 'integrity.json')
-                .forEach((file) => rimraf.sync(join(path, file)));
+                .forEach((file) => rimrafSync(join(path, file)));
         }
     }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { parse } from 'path';
 import Task from './task.js';
 

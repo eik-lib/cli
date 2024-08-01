@@ -1,5 +1,3 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-plusplus */
 import abslog from 'abslog';
 import { join } from 'path';
 import { schemas } from '@eik/common';

@@ -28,10 +28,9 @@ const logger = (spinner, debug = false) => ({
      */
     info(message) {
         if (typeof message !== 'string') {
-            // eslint-disable-next-line no-param-reassign
             spinner.text = '';
             spinner.stopAndPersist();
-            // eslint-disable-next-line no-console
+
             console.log(message);
             spinner.start();
         } else {

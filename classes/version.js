@@ -1,9 +1,8 @@
-/* eslint-disable max-classes-per-file */
 import { copyFileSync, writeFileSync } from 'fs';
 import { join, isAbsolute, parse } from 'path';
 import abslog from 'abslog';
 import semver from 'semver';
-import mkdir from 'make-dir';
+import { makeDirectorySync } from 'make-dir';
 import { schemas, EikConfig } from '@eik/common';
 import { integrity } from '../utils/http/index.js';
 import hash from '../utils/hash/index.js';
@@ -124,7 +123,7 @@ export default class Version {
 
         let localHash;
         try {
-            mkdir.sync(path);
+            makeDirectorySync(path);
             const eikPathDest = join(path, './eik.json');
             const eikJSON = {
                 name,

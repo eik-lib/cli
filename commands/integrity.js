@@ -1,6 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-restricted-properties */
-/* eslint-disable one-var */
 import { join } from 'path';
 import ora from 'ora';
 import { helpers } from '@eik/common';

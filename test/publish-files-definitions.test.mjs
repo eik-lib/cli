@@ -4,7 +4,7 @@ import os from 'os';
 import { join, basename } from 'path';
 import { test, beforeEach, afterEach } from 'tap';
 import EikService from '@eik/service';
-import { sink } from '@eik/core';
+import Sink from '@eik/sink-memory';
 import fsExtra from 'fs-extra';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -25,7 +25,7 @@ const config = (files, server, token, cwd) => ({
 });
 
 beforeEach(async (t) => {
-    const memSink = new sink.MEM();
+    const memSink = new Sink();
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
     server.register(service.api());
