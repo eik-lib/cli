@@ -1,7 +1,3 @@
-/* eslint-disable no-restricted-properties */
-/* eslint-disable prefer-template */
-/* eslint-disable one-var */
-/* eslint-disable no-underscore-dangle */
 import { join } from 'path';
 import chalk from 'chalk';
 import formatDistance from 'date-fns/formatDistance/index.js';

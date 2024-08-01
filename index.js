@@ -26,10 +26,8 @@ const boxenOptions = {
 };
 const msgBox = boxen(greeting, boxenOptions);
 
-// eslint-disable-next-line no-console
 console.log(msgBox);
 
-// eslint-disable-next-line no-unused-expressions
 yargs(hideBin(process.argv))
     .example('eik init')
     .example('eik login --server https://assets.myserver.com --key ######')

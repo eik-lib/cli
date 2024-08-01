@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { copyFileSync, writeFileSync } from 'fs';
 import { join, isAbsolute, parse } from 'path';
 import abslog from 'abslog';

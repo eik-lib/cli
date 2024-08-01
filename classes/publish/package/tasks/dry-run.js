@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { join } from 'path';
 import Task from './task.js';
 

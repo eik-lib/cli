@@ -1,5 +1,3 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-await-in-loop */
 import fs from 'fs';
 import { join, resolve, basename, dirname } from 'path';
 import tar from 'tar';

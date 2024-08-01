@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { join } from 'path';
 import chalk from 'chalk';
 import File from './file.js';

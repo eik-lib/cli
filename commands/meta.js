@@ -1,6 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-restricted-properties */
-/* eslint-disable one-var */
 import ora from 'ora';
 import Meta from '../classes/meta.js';
 import { Artifact } from '../formatters/index.js';

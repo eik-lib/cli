@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import { join } from 'path';
 import { request } from '../../../../utils/http/index.js';
 import { typeSlug } from '../../../../utils/index.js';
