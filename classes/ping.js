@@ -1,12 +1,25 @@
 import abslog from 'abslog';
 import { schemas } from '@eik/common';
 
+/**
+ * @typedef {object} PingOptions
+ * @property {string} [server]
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ */
+
 export default class Ping {
+    /**
+     * @param {PingOptions} options
+     */
     constructor({ logger, server } = {}) {
         this.log = abslog(logger);
         this.server = server;
     }
 
+    /**
+     * Run the ping command
+     * @returns {Promise<boolean>}
+     */
     async run() {
         this.log.debug('Validating input');
 
@@ -19,10 +32,11 @@ export default class Ping {
 
         this.log.debug('Requesting ping from server');
         try {
-            const result = await fetch(this.server);
+            const result = await fetch(/** @type {string}*/ (this.server));
 
             if (!result.ok) {
                 const err = new Error('Ping unsuccessful');
+                // @ts-expect-error
                 err.statusCode = result.status;
                 throw err;
             }

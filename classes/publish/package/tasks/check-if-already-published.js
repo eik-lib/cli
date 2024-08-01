@@ -65,6 +65,7 @@ export default class CheckIfAlreadyPublished extends Task {
             );
         }
 
+        // @ts-expect-error
         const versionMap = new Map(pkgVersions);
         for (const v of versionMap.values()) {
             const same = hash.compare(v.integrity, localHash);

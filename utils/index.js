@@ -4,6 +4,6 @@ import getCWD from './get-cwd.js';
 import typeSlug from './type-slug.js';
 import typeTitle from './type-title.js';
 
-const { getDefaults, files } = helpers;
+const { getDefaults } = helpers;
 
-export { logger, getDefaults, getCWD, files, typeSlug, typeTitle };
+export { logger, getDefaults, getCWD, typeSlug, typeTitle };

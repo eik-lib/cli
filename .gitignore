@@ -15,3 +15,4 @@ coverage
 .eikrc
 test/.eik
 test-read-json.json
+types/

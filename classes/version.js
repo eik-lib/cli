@@ -9,7 +9,24 @@ import { integrity } from '../utils/http/index.js';
 import hash from '../utils/hash/index.js';
 import { typeSlug } from '../utils/index.js';
 
+/**
+ * @typedef {object} VersionOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {"package" | "npm" | "map"} [type="package"]
+ * @property {string} name
+ * @property {string} version
+ * @property {import("semver").ReleaseType} [level="patch"]
+ * @property {string} cwd
+ * @property {string[]} [map]
+ * @property {string} [out="./.eik"]
+ * @property {string | Record<string, string>} files
+ */
+
 export default class Version {
+    /**
+     * @param {VersionOptions} options
+     */
     constructor({
         logger,
         server,
@@ -21,7 +38,7 @@ export default class Version {
         map = [],
         out = './.eik',
         files,
-    } = {}) {
+    }) {
         const config = new EikConfig(
             {
                 server,
@@ -42,6 +59,10 @@ export default class Version {
         this.level = level;
     }
 
+    /**
+     * Similar to `npm version`, but updates `eik.json`
+     * @returns {Promise<string | null>} The new version number, or null if the versioning failed
+     */
     async run() {
         const { name, server, type, version, cwd, out, files, map } =
             this.config;
@@ -56,6 +77,7 @@ export default class Version {
 
         log.debug(`  ==> level: ${level}`);
         if (!['major', 'minor', 'patch'].includes(level)) {
+            // @ts-expect-error
             throw new schemas.ValidationError(
                 'Parameter "version" is not valid',
             );
@@ -63,11 +85,13 @@ export default class Version {
 
         log.debug(`  ==> files: ${JSON.stringify(files)}`);
         if (!files) {
+            // @ts-expect-error
             throw new schemas.ValidationError('Parameter "files" is not valid');
         }
 
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
         if (!Array.isArray(map)) {
+            // @ts-expect-error
             throw new schemas.ValidationError('Parameter "map" is not valid');
         }
 

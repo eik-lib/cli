@@ -8,35 +8,61 @@ import Integrity from './integrity.js';
 import Version from './version.js';
 
 export default {
-    ping(opts) {
-        return new Ping(opts).run();
-    },
-
+    /**
+     * @param {import('./alias.js').AliasOptions} opts
+     */
     alias(opts) {
         return new Alias(opts).run();
     },
 
-    meta(opts) {
-        return new Meta(opts).run();
-    },
-
-    login(opts) {
-        return new Login(opts).run();
-    },
-
+    /**
+     * @param {import('./integrity.js').IntegrityOptions} opts
+     */
     integrity(opts) {
         return new Integrity(opts).run();
     },
 
-    version(opts) {
-        return new Version(opts).run();
+    /**
+     * Log in using a key to get a Bearer token for use with other commands.
+     *
+     * @param {import('./login.js').LoginOptions} opts
+     */
+    login(opts) {
+        return new Login(opts).run();
     },
 
+    /**
+     * @param {import('./publish/map.js').PublishMapOptions} opts
+     */
+    map(opts) {
+        return new PublishMap(opts).run();
+    },
+
+    /**
+     * @param {import('./meta.js').MetaOptions} opts
+     */
+    meta(opts) {
+        return new Meta(opts).run();
+    },
+
+    /**
+     * @param {import('./ping.js').PingOptions} opts
+     */
+    ping(opts) {
+        return new Ping(opts).run();
+    },
+
+    /**
+     * @param {import('./publish/package/index.js').PublishOptions} opts
+     */
     publish(opts) {
         return new PublishPackage(opts).run();
     },
 
-    map(opts) {
-        return new PublishMap(opts).run();
+    /**
+     * @param {import('./version.js').VersionOptions} opts
+     */
+    version(opts) {
+        return new Version(opts).run();
     },
 };

@@ -69,8 +69,9 @@ export const handler = async (argv) => {
 
     if (!s) {
         await new Promise((resolve) => {
-            rl.question('Enter Eik server address > ', (input) => {
+            rl?.question('Enter Eik server address > ', (input) => {
                 s = input;
+                // @ts-expect-error
                 resolve();
             });
         });
@@ -78,8 +79,9 @@ export const handler = async (argv) => {
 
     if (!k) {
         await new Promise((resolve) => {
-            rl.question(`Enter login key for ${s} > `, (input) => {
+            rl?.question(`Enter login key for ${s} > `, (input) => {
                 k = input;
+                // @ts-expect-error
                 resolve();
             });
         });
@@ -92,13 +94,14 @@ export const handler = async (argv) => {
     try {
         const token = await new Login({
             logger: logger(spinner, debug),
-            debug,
             key: k,
             server: s,
         }).run();
 
         if (token) {
-            const meta = await json.read({ cwd: homedir, filename: '.eikrc' });
+            const meta = /** @type {{ tokens: any }} */ (
+                await json.read({ cwd: homedir, filename: '.eikrc' })
+            );
 
             const tokens = new Map(meta.tokens);
             tokens.set(s, token);
@@ -108,6 +111,7 @@ export const handler = async (argv) => {
             success = true;
         }
     } catch (err) {
+        // @ts-expect-error
         logger.warn(err.message);
     }
 

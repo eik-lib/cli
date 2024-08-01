@@ -5,8 +5,35 @@ import { schemas, validators } from '@eik/common';
 import { request } from '../utils/http/index.js';
 import { typeSlug } from '../utils/index.js';
 
+/**
+ * @typedef {object} AliasOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {"package" | "npm" | "map"} [type="package"]
+ * @property {string} name
+ * @property {string} version
+ * @property {string} alias
+ * @property {string} token
+ */
+
+/**
+ * @typedef {object} AliasResult
+ * @property {string} server
+ * @property {string} type
+ * @property {string} name
+ * @property {string} alias
+ * @property {string} version
+ * @property {boolean} update
+ * @property {string[]} files
+ * @property {string} org
+ * @property {string} integrity
+ */
+
 export default class Alias {
-    constructor({ logger, server, token, type, name, version, alias } = {}) {
+    /**
+     * @param {AliasOptions} options
+     */
+    constructor({ logger, server, token, type, name, version, alias }) {
         this.log = abslog(logger);
         this.server = server;
         this.token = token;
@@ -16,6 +43,9 @@ export default class Alias {
         this.version = version;
     }
 
+    /**
+     * @returns {Promise<AliasResult>}
+     */
     async run() {
         const data = {
             server: this.server,
