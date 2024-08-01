@@ -16,3 +16,4 @@ coverage
 test/.eik
 test-read-json.json
 types/
+.tap
