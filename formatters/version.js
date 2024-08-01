@@ -1,6 +1,6 @@
 import { join } from 'path';
 import chalk from 'chalk';
-import formatDistance from 'date-fns/formatDistance/index.js';
+import { formatDistance } from 'date-fns/formatDistance';
 import File from './file.js';
 
 class Version {
