@@ -16,7 +16,7 @@ import { typeSlug } from '../utils/index.js';
  * @property {"package" | "npm" | "map"} [type="package"]
  * @property {string} name
  * @property {string} version
- * @property {string} [level="patch"]
+ * @property {import("semver").ReleaseType} [level="patch"]
  * @property {string} cwd
  * @property {string[]} [map]
  * @property {string} [out="./.eik"]

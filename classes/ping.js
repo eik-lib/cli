@@ -32,7 +32,7 @@ export default class Ping {
 
         this.log.debug('Requesting ping from server');
         try {
-            const result = await fetch(this.server);
+            const result = await fetch(/** @type {string}*/ (this.server));
 
             if (!result.ok) {
                 const err = new Error('Ping unsuccessful');
