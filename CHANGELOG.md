@@ -1,3 +1,21 @@
+# [3.0.0-next.1](https://github.com/eik-lib/cli/compare/v2.0.39...v3.0.0-next.1) (2024-08-01)
+
+
+### Bug Fixes
+
+* add jsdoc  for publish commands as well ([a2b51c8](https://github.com/eik-lib/cli/commit/a2b51c86fe10ab84aa21e07151007fdc723e36c4))
+* include type definitions for programatic API ([96d6079](https://github.com/eik-lib/cli/commit/96d6079145198f5df3cd353952e9bac4d530031d))
+
+
+### chore
+
+* convert codebase to ESM ([f3c4c74](https://github.com/eik-lib/cli/commit/f3c4c746cc3ac283d0f8e493682af34086831f51))
+
+
+### BREAKING CHANGES
+
+* JavaScript API is now ESM only and no longer supports CJS
+
 # [3.0.0-next.1](https://github.com/eik-lib/cli/compare/v2.0.39...v3.0.0-next.1) (2024-07-31)
 
 
