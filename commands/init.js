@@ -7,8 +7,7 @@ const command = 'init';
 
 const aliases = ['i'];
 
-const describe = `Creates a new default "eik.json" file and saves it to the current working directory
-    Override default "eik.json" fields using command line flags --server, --name, --major, --js and --css`;
+const describe = `Creates a new default "eik.json" file and saves it to the current working directory. Override default "eik.json" fields using command line flags --server, --name, --major, --js and --css`;
 
 const builder = (yargs) => {
     yargs.example('eik init');
@@ -21,17 +20,12 @@ const builder = (yargs) => {
     yargs.options({
         server: {
             alias: 's',
-            describe: `Specify asset server field in "eik.json".
-                This the URL to an Eik asset server
-                Eg. --server https://assets.myeikserver.com`,
+            describe: `Specify asset server field in "eik.json". This the URL to an Eik asset server Eg. --server https://assets.myeikserver.com`,
             default: '',
         },
         cwd: {
             alias: 'c',
-            describe: `Alter the current working directory
-                Defaults to the directory where the command is being run.
-                This affects where the generated "eik.json" file will be saved.
-                Eg. --cwd /path/to/save/to`,
+            describe: `Alter the current working directory. Defaults to the directory where the command is being run. This affects where the generated "eik.json" file will be saved. Eg. --cwd /path/to/save/to`,
             default: process.cwd(),
         },
         version: {

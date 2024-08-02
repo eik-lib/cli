@@ -9,6 +9,7 @@ import * as packageAlias from './package-alias.js';
 import * as ping from './ping.js';
 import * as publish from './publish.js';
 import * as version from './version.js';
+import * as alias from './alias.js';
 
 export const commands = [
     init,
@@ -22,4 +23,5 @@ export const commands = [
     ping,
     publish,
     version,
+    alias,
 ];
