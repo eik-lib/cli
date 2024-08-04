@@ -21,8 +21,7 @@ export const builder = (yargs) => {
             default: defaults.name,
         })
         .positional('version', {
-            describe:
-                'The version the alias should redirect to',
+            describe: 'The version the alias should redirect to',
             type: 'string',
             default: defaults.version,
         })
