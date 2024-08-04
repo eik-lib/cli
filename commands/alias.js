@@ -1,16 +1,14 @@
-// @deprecated in favor of `alias` command
-
 import ora from 'ora';
 import semver from 'semver';
 import Alias from '../classes/alias.js';
 import { logger, getDefaults, getCWD } from '../utils/index.js';
 import { Alias as AliasFormatter } from '../formatters/index.js';
 
-export const command = 'package-alias [name] [version] [alias]';
+export const command = 'alias [name] [version] [alias]';
 
-export const aliases = ['pkg-alias', 'pa'];
+export const aliases = ['a'];
 
-export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for a package as identified by its name and version. A package with the given name and version must already exist on asset server. Alias should be the semver major part of the package version. Eg. For a package of version 5.4.3, you should use 5 as the alias`;
+export const describe = `Create or update a semver major alias for a package, NPM package or import map as identified by its name and version. A package with the given name and version must already exist on the Eik server. The alias should be the semver major part of the package version. Eg. for a package of version 5.4.3, you should use 5 as the alias. The alias type (npm, map, package) is detected from eik.json in the current working directory.`;
 
 export const builder = (yargs) => {
     const cwd = getCWD();
@@ -18,19 +16,18 @@ export const builder = (yargs) => {
 
     yargs
         .positional('name', {
-            describe: 'Name matching existing name for a package on Eik server',
+            describe: 'Name matching a package or import map on the Eik server',
             type: 'string',
             default: defaults.name,
         })
         .positional('version', {
-            describe:
-                'Version matching existing version for a package on Eik server',
+            describe: 'The version the alias should redirect to',
             type: 'string',
             default: defaults.version,
         })
         .positional('alias', {
             describe:
-                'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
+                'Alias, should be the semver major component of version. Eg. 1.0.0 should be given the alias 1',
             type: 'string',
             default: defaults.version ? semver.major(defaults.version) : null,
         });
@@ -45,6 +42,11 @@ export const builder = (yargs) => {
             alias: 'c',
             describe: 'Alter the current working directory.',
             default: defaults.cwd,
+        },
+        type: {
+            describe:
+                'Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm',
+            default: defaults.type,
         },
         debug: {
             describe: 'Logs additional messages',
@@ -61,34 +63,37 @@ export const builder = (yargs) => {
 
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
-    yargs.example(`eik package-alias my-app 1.0.0 1`);
-    yargs.example(`eik package-alias my-app 1.7.3 1`);
-    yargs.example(`eik package-alias my-app 6.3.1 6`);
+    yargs.example(`eik alias my-app 1.0.0 1`);
+    yargs.example(`eik alias my-app 1.7.3 1`);
+    yargs.example(`eik alias my-app 6.3.1 6`);
     yargs.example(
-        `eik package-alias my-app 6.3.1 6 --server https://assets.myeikserver.com`,
+        `eik alias my-app 6.3.1 6 --server https://assets.myeikserver.com`,
     );
-    yargs.example(`eik package-alias my-app 4.2.2 4 --debug`);
+    yargs.example(`eik alias my-app 4.2.2 4 --debug`);
+    yargs.example(`eik alias my-app 4.2.2 4 --type package`);
 };
 
 export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
-    const { debug, server } = argv;
+    const { debug, server, type } = argv;
     const log = logger(spinner, debug);
     let af;
 
     try {
         const data = await new Alias({
-            type: 'pkg',
+            type,
             logger: log,
             ...argv,
         }).run();
 
+        // TODO: get rid of this rediculous formatter class idea that past me put here to irk present and future me.
+        // Smells like DRY silliness
         af = new AliasFormatter(data);
 
         const createdOrUpdated = data.update ? 'Updated' : 'Created';
         log.info(
-            `${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+            `${createdOrUpdated} alias for "${type}" "${data.name}". ("${data.version}" => "v${data.alias}")`,
         );
         success = true;
     } catch (err) {
@@ -103,6 +108,3 @@ export const handler = async (argv) => {
         process.exit(1);
     }
 };
-
-export const deprecated =
-    '"package-alias" will be removed in a future version. Please use "alias" instead';

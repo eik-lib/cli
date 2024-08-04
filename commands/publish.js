@@ -44,8 +44,7 @@ export const builder = (yargs) => {
             type: 'boolean',
         },
         token: {
-            describe: `Provide a jwt token to be used to authenticate with the Eik server.
-                Automatically determined if authenticated (via eik login)`,
+            describe: `Provide a jwt token to be used to authenticate with the Eik server. Automatically determined if authenticated (via eik login)`,
             type: 'string',
             alias: 't',
         },

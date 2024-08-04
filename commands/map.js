@@ -8,9 +8,7 @@ export const command = 'map <name> <version> <file>';
 
 export const aliases = ['m'];
 
-export const describe = `Upload an import map file to the server under a given name and version.
-    A name/version combination must be unique and a version must be semver compliant.
-    Subsquent published versions must increase. Eg. 1.0.0 1.0.1, 1.1.0, 2.0.0 etc.`;
+export const describe = `Upload an import map file to the server under a given name and version. A name/version combination must be unique and a version must be semver compliant. Subsquent published versions must increase. Eg. 1.0.0 1.0.1, 1.1.0, 2.0.0 etc.`;
 
 export const builder = (yargs) => {
     const cwd = getCWD();
