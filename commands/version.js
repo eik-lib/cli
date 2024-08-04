@@ -10,8 +10,6 @@ const { configStore } = helpers;
 
 export const command = 'version [level]';
 
-export const aliases = ['v'];
-
 export const describe = `Compares local files with files on server and increments "version" field in eik.json if necessary.`;
 
 export const builder = (yargs) => {
@@ -48,7 +46,6 @@ export const builder = (yargs) => {
 
     yargs.example(`eik version`);
     yargs.example(`eik version minor`);
-    yargs.example(`eik v`);
 };
 
 export const handler = async (argv) => {
