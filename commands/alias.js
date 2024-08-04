@@ -8,7 +8,7 @@ export const command = 'alias [name] [version] [alias]';
 
 export const aliases = ['a'];
 
-export const describe = `Create a semver major alias for a package, NPM package or import map as identified by its name and version. A package with the given name and version must already exist on asset server. Alias should be the semver major part of the package version. Eg. For a package of version 5.4.3, you should use 5 as the alias. Alias type is detected from an eik.json file in the current working directory.`;
+export const describe = `Create or update a semver major alias for a package, NPM package or import map as identified by its name and version. A package with the given name and version must already exist on the Eik server. The alias should be the semver major part of the package version. Eg. for a package of version 5.4.3, you should use 5 as the alias. The alias type (npm, map, package) is detected from eik.json in the current working directory.`;
 
 export const builder = (yargs) => {
     const cwd = getCWD();
@@ -16,19 +16,19 @@ export const builder = (yargs) => {
 
     yargs
         .positional('name', {
-            describe: 'Name matching existing name for a package on Eik server',
+            describe: 'Name matching a package or import map on the Eik server',
             type: 'string',
             default: defaults.name,
         })
         .positional('version', {
             describe:
-                'Version matching existing version for a package on Eik server',
+                'The version the alias should redirect to',
             type: 'string',
             default: defaults.version,
         })
         .positional('alias', {
             describe:
-                'Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1',
+                'Alias, should be the semver major component of version. Eg. 1.0.0 should be given the alias 1',
             type: 'string',
             default: defaults.version ? semver.major(defaults.version) : null,
         });
