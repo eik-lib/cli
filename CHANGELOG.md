@@ -1,3 +1,33 @@
+# [3.0.0-next.1](https://github.com/eik-lib/cli/compare/v2.0.39...v3.0.0-next.1) (2024-08-04)
+
+
+### Bug Fixes
+
+* add jsdoc  for publish commands as well ([a2b51c8](https://github.com/eik-lib/cli/commit/a2b51c86fe10ab84aa21e07151007fdc723e36c4))
+* include type definitions for programatic API ([96d6079](https://github.com/eik-lib/cli/commit/96d6079145198f5df3cd353952e9bac4d530031d))
+* update boxen, chalk and ora ([73a200f](https://github.com/eik-lib/cli/commit/73a200f20a59edc69abc5fb3d8760fbf2630b0c1))
+* update date-fns ([0b32270](https://github.com/eik-lib/cli/commit/0b322700cd62e73052eef42016658931c27202c2))
+* update gzip-size ([6075766](https://github.com/eik-lib/cli/commit/6075766b9a3c60f91b7d64374e9396b87fb9294c))
+* update make-dir ([8d9c939](https://github.com/eik-lib/cli/commit/8d9c939449e0adfd8bed33d517f8e219d6790a74))
+* update rimraf ([3e40b11](https://github.com/eik-lib/cli/commit/3e40b11b527c722f4ecf51872f0b09d82eef034b))
+* update ssri package ([944426a](https://github.com/eik-lib/cli/commit/944426add01481af20232410b3d86fc983b73da8))
+* update tar package ([41c8227](https://github.com/eik-lib/cli/commit/41c8227578b166682c00c6dd841bcb972f475433))
+
+
+### chore
+
+* convert codebase to ESM ([f3c4c74](https://github.com/eik-lib/cli/commit/f3c4c746cc3ac283d0f8e493682af34086831f51))
+
+
+### Features
+
+* add alias command as an eventual replacement for the 3 existing alias commands ([ff4a27c](https://github.com/eik-lib/cli/commit/ff4a27cc8e46f55321a6c814d23a111737eba29d))
+
+
+### BREAKING CHANGES
+
+* JavaScript API is now ESM only and no longer supports CJS
+
 # [3.0.0-next.1](https://github.com/eik-lib/cli/compare/v2.0.39...v3.0.0-next.1) (2024-08-01)
 
 
