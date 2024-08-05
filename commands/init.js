@@ -41,7 +41,7 @@ const builder = (yargs) => {
         },
         debug: {
             describe: 'Logs additional messages during command run',
-            default: true,
+            default: false,
             type: 'boolean',
         },
     });
