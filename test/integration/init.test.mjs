@@ -11,60 +11,78 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 function exec(cmd) {
-    return new Promise((resolve) => {
-        execCallback(cmd, (error, stdout, stderr) => {
-            resolve({ error, stdout, stderr });
-        });
-    });
+    return /** @type {Promise<void>} */ (
+        new Promise((resolve, reject) => {
+            execCallback(cmd, (error, stdout, stderr) => {
+                if (stdout) console.log(stdout);
+                if (stderr) console.error(stderr);
+                if (error) reject(error);
+                resolve();
+            });
+        })
+    );
 }
 
 test('Initializing a new eik.json file', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
     const publishCmd = `${eik} init --cwd ${folder}`;
-    const res = await exec(publishCmd);
-    const assets = JSON.parse(
+
+    await exec(publishCmd);
+
+    const eikJson = JSON.parse(
         readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }),
     );
-    t.equal(assets.name, '', 'eik.json "name" field should be empty');
-    t.equal(
-        assets.version,
-        '1.0.0',
-        'eik.json "version" field should equal 1.0.0',
-    );
-    t.equal(assets.server, '', 'eik.json "server" field should be empty');
-    t.same(assets.files, {}, 'eik.json "files" should be an empty object');
+    t.ok(eikJson['$schema'], 'eik.json "$schema" field should not be empty');
+    t.equal(eikJson.name, '', 'eik.json "name" field should be empty');
+    t.equal(eikJson.version, '1.0.0');
+    t.equal(eikJson.server, '', 'eik.json "server" field should be empty');
+    t.same(eikJson.files, './public');
 });
 
 test('Initializing a new eik.json file passing custom values', async (t) => {
     const eik = join(__dirname, '../../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
-
-    const publishCmd = `${eik} init 
+    const publishCmd = `${eik} init
         --cwd ${folder}
         --name custom-name
         --version 2.0.0
         --server http://localhost:4001`;
+
     await exec(publishCmd.split('\n').join(' '));
 
-    const assets = JSON.parse(
+    const eikJson = JSON.parse(
         readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }),
     );
 
-    t.equal(
-        assets.name,
-        'custom-name',
-        'eik.json "name" field should not be empty',
+    t.equal(eikJson.name, 'custom-name');
+    t.equal(eikJson.version, '2.0.0');
+    t.equal(eikJson.server, 'http://localhost:4001');
+    t.same(eikJson.files, './public');
+});
+
+test('Initializing a new eik.json file in an existing project', async (t) => {
+    const eik = join(__dirname, '../../index.js');
+    const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+
+    const packageJson = {
+        name: 'legendary-app',
+        version: '13.3.7',
+    };
+
+    await fs.writeFile(
+        join(folder, 'package.json'),
+        JSON.stringify(packageJson, null, 2),
+        'utf-8',
     );
-    t.equal(
-        assets.version,
-        '2.0.0',
-        'eik.json "version" field should not be empty',
+
+    const publishCmd = `${eik} init --cwd ${folder}`;
+    await exec(publishCmd);
+
+    const eikJson = JSON.parse(
+        readFileSync(join(folder, 'eik.json'), { encoding: 'utf8' }),
     );
-    t.equal(
-        assets.server,
-        'http://localhost:4001',
-        'eik.json "server" field should not be empty',
-    );
-    t.same(assets.files, {}, 'eik.json "js.input" field should not be empty');
+
+    t.equal(eikJson.name, packageJson.name);
+    t.equal(eikJson.version, packageJson.version);
 });
