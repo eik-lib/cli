@@ -3,7 +3,7 @@
 import ora from 'ora';
 import semver from 'semver';
 import Alias from '../classes/alias.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 import { Alias as AliasFormatter } from '../formatters/index.js';
 
 export const command = 'package-alias [name] [version] [alias]';
@@ -13,8 +13,7 @@ export const aliases = ['pkg-alias', 'pa'];
 export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for a package as identified by its name and version. A package with the given name and version must already exist on asset server. Alias should be the semver major part of the package version. Eg. For a package of version 5.4.3, you should use 5 as the alias`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs
         .positional('name', {
@@ -40,16 +39,6 @@ export const builder = (yargs) => {
             alias: 's',
             describe: 'Specify location of Eik asset server.',
             default: defaults.server,
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter the current working directory.',
-            default: defaults.cwd,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
         },
         token: {
             describe:

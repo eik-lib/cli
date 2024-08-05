@@ -1,7 +1,7 @@
 import { join } from 'path';
 import ora from 'ora';
 import PublishMap from '../classes/publish/map.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 import { Artifact } from '../formatters/index.js';
 
 export const command = 'map <name> <version> <file>';
@@ -11,8 +11,7 @@ export const aliases = ['m'];
 export const describe = `Upload an import map file to the server under a given name and version. A name/version combination must be unique and a version must be semver compliant. Subsquent published versions must increase. Eg. 1.0.0 1.0.1, 1.1.0, 2.0.0 etc.`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs
         .positional('name', {
@@ -35,16 +34,6 @@ export const builder = (yargs) => {
             alias: 's',
             describe: 'Specify location of asset server.',
             default: defaults.server,
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter current working directory.',
-            default: defaults.cwd,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
         },
         token: {
             describe:

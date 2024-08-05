@@ -2,7 +2,7 @@ import os from 'os';
 import readline from 'readline';
 import ora from 'ora';
 import Login from '../classes/login.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 import json from '../utils/json/index.js';
 
 const homedir = os.homedir();
@@ -20,8 +20,7 @@ export const builder = (yargs) => {
     );
     yargs.example('eik login --server https://assets.myserver.com --debug');
 
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs.options({
         server: {
@@ -35,11 +34,6 @@ export const builder = (yargs) => {
             describe: `Login access key. This is a passkey for a given user account and needs to be configured on the server. If this flag is not specifed, a prompt will be used to ask for the key to be input. Eg. --key ########`,
             type: 'string',
             default: '',
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
         },
     });
 };

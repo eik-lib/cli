@@ -23,11 +23,6 @@ const builder = (yargs) => {
             describe: `Specify asset server field in "eik.json". This the URL to an Eik asset server Eg. --server https://assets.myeikserver.com`,
             default: '',
         },
-        cwd: {
-            alias: 'c',
-            describe: `Alter the current working directory. Defaults to the directory where the command is being run. This affects where the generated "eik.json" file will be saved. Eg. --cwd /path/to/save/to`,
-            default: process.cwd(),
-        },
         version: {
             alias: 'v',
             describe: `Specify the semver version field in "eik.json". Eg. --version 1.0.0`,
@@ -38,11 +33,6 @@ const builder = (yargs) => {
             describe: `Specify the app name field in "eik.json".
                 Eg. --name my-great-app`,
             default: '',
-        },
-        debug: {
-            describe: 'Logs additional messages during command run',
-            default: false,
-            type: 'boolean',
         },
     });
 };

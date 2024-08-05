@@ -40,6 +40,22 @@ const msgBox = boxen(greeting, boxenOptions);
 console.log(msgBox);
 
 yargs(hideBin(process.argv))
+    .options({
+        config: {
+            alias: 'c',
+            describe:
+                'Provide an exact path to an eik.json or package.json file to use as config. Default is eik.json in the current working directory.',
+        },
+        cwd: {
+            describe: 'Alter the current working directory.',
+            default: process.cwd(),
+        },
+        debug: {
+            describe: 'Logs additional messages',
+            default: false,
+            type: 'boolean',
+        },
+    })
     .example('eik init')
     .example('eik login --server https://assets.myserver.com --key ######')
     .example('eik publish')

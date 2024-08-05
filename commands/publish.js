@@ -1,18 +1,9 @@
 import { join } from 'path';
 import ora from 'ora';
 import chalk from 'chalk';
-import { helpers } from '@eik/common';
 import PublishPackage from '../classes/publish/package/index.js';
-import {
-    logger,
-    getDefaults,
-    getCWD,
-    typeSlug,
-    typeTitle,
-} from '../utils/index.js';
+import { logger, getDefaults, typeSlug, typeTitle } from '../utils/index.js';
 import { Artifact } from '../formatters/index.js';
-
-const { configStore } = helpers;
 
 export const command = 'publish';
 
@@ -21,25 +12,13 @@ export const aliases = ['pkg', 'package', 'pub'];
 export const describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs.options({
-        cwd: {
-            alias: 'c',
-            describe: 'Alter the current working directory.',
-            default: defaults.cwd,
-            type: 'string',
-        },
         dryRun: {
             alias: 'd',
             describe:
                 'Terminates the publish early (before upload) and provides information about created bundles for inspection.',
-            default: false,
-            type: 'boolean',
-        },
-        debug: {
-            describe: 'Logs additional messages',
             default: false,
             type: 'boolean',
         },
@@ -61,9 +40,10 @@ export const builder = (yargs) => {
 
 export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, dryRun, cwd, token } = argv;
-    const config = configStore.findInDirectory(cwd);
-    const { name, server, version, type, map, out, files } = config;
+    const { debug, dryRun, cwd, token, config } = argv;
+    const { name, version, server, map, out, files, type } = getDefaults(
+        config || cwd,
+    );
 
     if (type === 'map') {
         spinner.warn(
@@ -89,6 +69,7 @@ export const handler = async (argv) => {
             files,
         };
 
+        // @ts-expect-error
         const publish = await new PublishPackage(options).run();
 
         if (!publish) {

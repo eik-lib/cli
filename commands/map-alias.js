@@ -2,7 +2,7 @@
 
 import ora from 'ora';
 import Alias from '../classes/alias.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 import { Alias as AliasFormatter } from '../formatters/index.js';
 
 export const command = 'map-alias <name> <version> <alias>';
@@ -12,8 +12,7 @@ export const aliases = ['ma'];
 export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for an import map as identified by its name and version. An import map with the given name and version must already exist on asset server. Alias should be the semver major part of the import map version. Eg. For an import map of version 5.4.3, you should use 5 as the alias`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs
         .positional('name', {
@@ -34,16 +33,6 @@ export const builder = (yargs) => {
             alias: 's',
             describe: 'Specify location of asset server.',
             default: defaults.server,
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter current working directory.',
-            default: defaults.cwd,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
         },
         token: {
             describe:
