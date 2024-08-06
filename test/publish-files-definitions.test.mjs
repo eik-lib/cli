@@ -63,7 +63,7 @@ test('when a folder of files is specified as a string', async (t) => {
         'eik.json file should be at package root',
     );
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -75,7 +75,7 @@ test('when a folder of files is specified as a string prefixed by ./', async (t)
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -87,7 +87,7 @@ test('when a folder of files is specified as a string postfixed by /', async (t)
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -99,7 +99,7 @@ test('when a folder of files is specified with a nested folder mapping', async (
     const { files } = await cli.publish(config(patter, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -111,7 +111,7 @@ test('when a folder of files is specified with a nested folder mapping prefixed 
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -123,7 +123,7 @@ test('when a folder of files is specified with a nested folder mapping prefixed 
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -135,7 +135,7 @@ test('when a folder of files is specified with a nested folder mapping post fixe
     const { files } = await cli.publish(config(patter, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -152,7 +152,7 @@ test('when a folder of files is specified as an absolute path string', async (t)
         'eik.json file should be at package root',
     );
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -166,7 +166,7 @@ test('when a folder of files is specified as an object', async (t) => {
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/icons/checkbox-sprite-nontouch.svg',
         'files should be packaged under /icons',
     );
@@ -180,7 +180,7 @@ test('when a folder of files is specified as an object with absolute path', asyn
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/icons/checkbox-sprite-nontouch.svg',
         'files should be packaged under /icons',
     );
@@ -232,12 +232,12 @@ test('when a recursive glob is specified', async (t) => {
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[2].pathname,
+        files[4].pathname,
         '/client.js',
         'client.js should be packaged at /',
     );
     t.equal(
-        files[3].pathname,
+        files[11].pathname,
         '/icons/checkbox-sprite-nontouch.svg',
         'svgs should be packaged under /icons',
     );
@@ -251,7 +251,7 @@ test('when a non recursive glob is specified', async (t) => {
     const nested = files.filter((file) => file.pathname.includes('icons'));
 
     t.equal(
-        files[2].pathname,
+        files[4].pathname,
         '/client.js',
         'client.js should be packaged at /',
     );
