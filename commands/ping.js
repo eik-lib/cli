@@ -13,6 +13,7 @@ export const builder = (yargs) => {
 
     yargs.positional('server', {
         describe: 'Specify location of Eik server to ping.',
+        // @ts-expect-error
         default: defaults.server,
     });
 

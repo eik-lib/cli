@@ -17,6 +17,7 @@ export const builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
+            // @ts-expect-error
             default: defaults.server,
         },
     });
@@ -30,6 +31,7 @@ export const handler = async (argv) => {
     let integrity = false;
     const { debug, cwd, config } = argv;
     const l = logger(spinner, debug);
+    // @ts-expect-error
     const { name, version, server, out, type } = getDefaults(config || cwd);
 
     try {

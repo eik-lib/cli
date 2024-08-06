@@ -34,6 +34,7 @@ export const builder = (yargs) => {
 export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { level, debug, dryRun, cwd, config } = argv;
+    // @ts-expect-error
     const { name, version, server, map, out, files } = getDefaults(
         config || cwd,
     );

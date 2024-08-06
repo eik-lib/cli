@@ -29,6 +29,7 @@ export const builder = (yargs) => {
         },
     });
 
+    // @ts-expect-error
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik publish`);
@@ -41,6 +42,7 @@ export const builder = (yargs) => {
 export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     const { debug, dryRun, cwd, token, config } = argv;
+    // @ts-expect-error
     const { name, version, server, map, out, files, type } = getDefaults(
         config || cwd,
     );
@@ -69,7 +71,6 @@ export const handler = async (argv) => {
             files,
         };
 
-        // @ts-expect-error
         const publish = await new PublishPackage(options).run();
 
         if (!publish) {

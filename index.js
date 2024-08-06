@@ -35,6 +35,7 @@ const boxenOptions = {
     borderColor: 'green',
     backgroundColor: '#555555',
 };
+// @ts-expect-error
 const msgBox = boxen(greeting, boxenOptions);
 
 console.log(msgBox);
@@ -56,17 +57,25 @@ yargs(hideBin(process.argv))
             type: 'boolean',
         },
     })
+    // @ts-expect-error
     .example('eik init')
+    // @ts-expect-error
     .example('eik login --server https://assets.myserver.com --key ######')
+    // @ts-expect-error
     .example('eik publish')
+    // @ts-expect-error
     .example('eik meta my-app --server https://assets.myserver.com')
     .example(
+        // @ts-expect-error
         'eik npm-alias lit-html 1.0.0 1 --server https://assets.myserver.com --token ######',
     )
     .example(
+        // @ts-expect-error
         'eik map my-map 1.0.0 ./import-map.json --server https://assets.myserver.com --token ######',
     )
+    // @ts-expect-error
     .example('eik map-alias my-map 1.0.0 1')
+    // @ts-expect-error
     .command(commands)
     .demandCommand()
     .wrap(150)

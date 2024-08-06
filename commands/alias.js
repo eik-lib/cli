@@ -17,17 +17,20 @@ export const builder = (yargs) => {
         .positional('name', {
             describe: 'Name matching a package or import map on the Eik server',
             type: 'string',
+            // @ts-expect-error
             default: defaults.name,
         })
         .positional('version', {
             describe: 'The version the alias should redirect to',
             type: 'string',
+            // @ts-expect-error
             default: defaults.version,
         })
         .positional('alias', {
             describe:
                 'Alias, should be the semver major component of version. Eg. 1.0.0 should be given the alias 1',
             type: 'string',
+            // @ts-expect-error
             default: defaults.version ? semver.major(defaults.version) : null,
         });
 
@@ -35,11 +38,13 @@ export const builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of Eik asset server.',
+            // @ts-expect-error
             default: defaults.server,
         },
         type: {
             describe:
                 'Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm',
+            // @ts-expect-error
             default: defaults.type,
         },
         token: {
@@ -50,6 +55,7 @@ export const builder = (yargs) => {
         },
     });
 
+    // @ts-expect-error
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik alias my-app 1.0.0 1`);

@@ -22,6 +22,7 @@ export const builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
+            // @ts-expect-error
             default: defaults.server,
         },
     });

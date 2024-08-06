@@ -32,6 +32,7 @@ export const builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
+            // @ts-expect-error
             default: defaults.server,
         },
         token: {
@@ -42,6 +43,7 @@ export const builder = (yargs) => {
         },
     });
 
+    // @ts-expect-error
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik map-alias my-map 1.0.0 1`);
