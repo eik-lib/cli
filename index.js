@@ -15,6 +15,17 @@ const __dirname = dirname(__filename);
 const { version } = JSON.parse(
     readFileSync(join(__dirname, './package.json'), { encoding: 'utf-8' }),
 );
+
+// short circuit and provide a -v and --version flag
+if (
+    process.argv.includes('-v') ||
+    // last position only to avoid conflict with publish command
+    process.argv[process.argv.length - 1].includes('--version')
+) {
+    console.log(version);
+    process.exit(0);
+}
+
 const greeting = chalk.white.bold(`Eik CLI (v${version})`);
 
 const boxenOptions = {
