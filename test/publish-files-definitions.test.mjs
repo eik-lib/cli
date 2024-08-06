@@ -55,6 +55,7 @@ afterEach(async (t) => {
 test('when a folder of files is specified as a string', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = 'fixtures/icons';
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
@@ -63,7 +64,7 @@ test('when a folder of files is specified as a string', async (t) => {
         'eik.json file should be at package root',
     );
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -72,10 +73,11 @@ test('when a folder of files is specified as a string', async (t) => {
 test('when a folder of files is specified as a string prefixed by ./', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = './fixtures/icons';
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -84,10 +86,11 @@ test('when a folder of files is specified as a string prefixed by ./', async (t)
 test('when a folder of files is specified as a string postfixed by /', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = './fixtures/icons/';
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -96,10 +99,11 @@ test('when a folder of files is specified as a string postfixed by /', async (t)
 test('when a folder of files is specified with a nested folder mapping', async (t) => {
     const { address, token, cwd } = t.context;
     const patter = { 'path/to/folder': './fixtures/icons/' };
+    // @ts-expect-error
     const { files } = await cli.publish(config(patter, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -108,10 +112,11 @@ test('when a folder of files is specified with a nested folder mapping', async (
 test('when a folder of files is specified with a nested folder mapping prefixed by ./', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = { './path/to/folder': './fixtures/icons/' };
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -120,10 +125,11 @@ test('when a folder of files is specified with a nested folder mapping prefixed 
 test('when a folder of files is specified with a nested folder mapping prefixed by /', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = { '/path/to/folder': './fixtures/icons/' };
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -132,10 +138,11 @@ test('when a folder of files is specified with a nested folder mapping prefixed 
 test('when a folder of files is specified with a nested folder mapping post fixed with /', async (t) => {
     const { address, token, cwd } = t.context;
     const patter = { 'path/to/folder/': './fixtures/icons/' };
+    // @ts-expect-error
     const { files } = await cli.publish(config(patter, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/path/to/folder/checkbox-sprite-nontouch.svg',
         'files should be packaged at path/to/folder',
     );
@@ -144,6 +151,7 @@ test('when a folder of files is specified with a nested folder mapping post fixe
 test('when a folder of files is specified as an absolute path string', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = join(__dirname, './fixtures/icons');
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
@@ -152,7 +160,7 @@ test('when a folder of files is specified as an absolute path string', async (t)
         'eik.json file should be at package root',
     );
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/checkbox-sprite-nontouch.svg',
         'files should be packaged at package root',
     );
@@ -163,10 +171,11 @@ test('when a folder of files is specified as an object', async (t) => {
     const pattern = {
         '/icons': './fixtures/icons',
     };
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/icons/checkbox-sprite-nontouch.svg',
         'files should be packaged under /icons',
     );
@@ -177,10 +186,11 @@ test('when a folder of files is specified as an object with absolute path', asyn
     const pattern = {
         '/icons': join(__dirname, './fixtures/icons'),
     };
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[1].pathname,
+        files[6].pathname,
         '/icons/checkbox-sprite-nontouch.svg',
         'files should be packaged under /icons',
     );
@@ -192,6 +202,7 @@ test('when 2 specific file name entries are specified', async (t) => {
         '/esm.js': './fixtures/client.js',
         '/esm.css': './fixtures/styles.css',
     };
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
@@ -212,6 +223,7 @@ test('when 2 specific file name entries are specified with absolute paths', asyn
         '/esm.js': join(__dirname, './fixtures/client.js'),
         '/esm.css': join(__dirname, './fixtures/styles.css'),
     };
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
@@ -229,15 +241,16 @@ test('when 2 specific file name entries are specified with absolute paths', asyn
 test('when a recursive glob is specified', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = 'fixtures/**/*';
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
-        files[2].pathname,
+        files[4].pathname,
         '/client.js',
         'client.js should be packaged at /',
     );
     t.equal(
-        files[3].pathname,
+        files[11].pathname,
         '/icons/checkbox-sprite-nontouch.svg',
         'svgs should be packaged under /icons',
     );
@@ -246,12 +259,13 @@ test('when a recursive glob is specified', async (t) => {
 test('when a non recursive glob is specified', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = 'fixtures/*';
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     const nested = files.filter((file) => file.pathname.includes('icons'));
 
     t.equal(
-        files[2].pathname,
+        files[4].pathname,
         '/client.js',
         'client.js should be packaged at /',
     );
@@ -261,6 +275,7 @@ test('when a non recursive glob is specified', async (t) => {
 test('when a file is specified with a leading path', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = 'fixtures/client.js';
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(
@@ -273,6 +288,7 @@ test('when a file is specified with a leading path', async (t) => {
 test('when a file is specified as an object and mapped with a leading path', async (t) => {
     const { address, token, cwd } = t.context;
     const pattern = { 'path/to/esm.js': 'fixtures/client.js' };
+    // @ts-expect-error
     const { files } = await cli.publish(config(pattern, address, token, cwd));
 
     t.equal(

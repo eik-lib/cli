@@ -1,7 +1,7 @@
 import ora from 'ora';
 import Meta from '../classes/meta.js';
 import { Artifact } from '../formatters/index.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 
 export const command = 'meta <name>';
 
@@ -10,8 +10,7 @@ export const aliases = ['show'];
 export const describe = `Retrieve meta information by package, map or npm name.If a given name exists in several types (package and map for example), results will be returned and displayed from all matching types`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs.positional('name', {
         describe:
@@ -23,17 +22,8 @@ export const builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
+            // @ts-expect-error
             default: defaults.server,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter current working directory.',
-            default: defaults.cwd,
         },
     });
 
@@ -49,6 +39,7 @@ export const handler = async (argv) => {
     const l = logger(spinner, debug);
 
     try {
+        // @ts-expect-error
         meta = await new Meta({ logger: l, ...argv }).run();
         spinner.text = '';
         spinner.stopAndPersist();

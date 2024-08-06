@@ -41,7 +41,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "^3.0.0",
+    "@eik/common": "4.0.1",
     "abslog": "2.4.4",
     "boxen": "8.0.0",
     "bytes": "3.1.2",

@@ -1,7 +1,7 @@
 import ora from 'ora';
 import semver from 'semver';
 import Alias from '../classes/alias.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 import { Alias as AliasFormatter } from '../formatters/index.js';
 
 export const command = 'alias [name] [version] [alias]';
@@ -11,24 +11,26 @@ export const aliases = ['a'];
 export const describe = `Create or update a semver major alias for a package, NPM package or import map as identified by its name and version. A package with the given name and version must already exist on the Eik server. The alias should be the semver major part of the package version. Eg. for a package of version 5.4.3, you should use 5 as the alias. The alias type (npm, map, package) is detected from eik.json in the current working directory.`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs
         .positional('name', {
             describe: 'Name matching a package or import map on the Eik server',
             type: 'string',
+            // @ts-expect-error
             default: defaults.name,
         })
         .positional('version', {
             describe: 'The version the alias should redirect to',
             type: 'string',
+            // @ts-expect-error
             default: defaults.version,
         })
         .positional('alias', {
             describe:
                 'Alias, should be the semver major component of version. Eg. 1.0.0 should be given the alias 1',
             type: 'string',
+            // @ts-expect-error
             default: defaults.version ? semver.major(defaults.version) : null,
         });
 
@@ -36,22 +38,14 @@ export const builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of Eik asset server.',
+            // @ts-expect-error
             default: defaults.server,
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter the current working directory.',
-            default: defaults.cwd,
         },
         type: {
             describe:
                 'Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm',
+            // @ts-expect-error
             default: defaults.type,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
         },
         token: {
             describe:
@@ -61,6 +55,7 @@ export const builder = (yargs) => {
         },
     });
 
+    // @ts-expect-error
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik alias my-app 1.0.0 1`);

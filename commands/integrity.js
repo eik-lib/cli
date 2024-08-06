@@ -1,11 +1,8 @@
 import { join } from 'path';
 import ora from 'ora';
-import { helpers } from '@eik/common';
 import Integrity from '../classes/integrity.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 import json from '../utils/json/index.js';
-
-const { configStore } = helpers;
 
 export const command = 'integrity [name] [version]';
 
@@ -14,24 +11,14 @@ export const aliases = ['int'];
 export const describe = `Retrieve file integrity information for package name and version defined in eik.json, then populate integrity.json file with this information`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs.options({
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
+            // @ts-expect-error
             default: defaults.server,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter current working directory.',
-            default: defaults.cwd,
         },
     });
 
@@ -42,10 +29,10 @@ export const builder = (yargs) => {
 export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let integrity = false;
-    const { debug, cwd } = argv;
+    const { debug, cwd, config } = argv;
     const l = logger(spinner, debug);
-    const config = configStore.findInDirectory(cwd);
-    const { name, server, version, type, out } = config;
+    // @ts-expect-error
+    const { name, version, server, out, type } = getDefaults(config || cwd);
 
     try {
         integrity = await new Integrity({

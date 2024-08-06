@@ -2,7 +2,7 @@
 
 import ora from 'ora';
 import Alias from '../classes/alias.js';
-import { logger, getDefaults, getCWD } from '../utils/index.js';
+import { logger, getDefaults } from '../utils/index.js';
 import { Alias as AliasFormatter } from '../formatters/index.js';
 
 export const command = 'npm-alias <name> <version> <alias>';
@@ -12,8 +12,7 @@ export const aliases = ['na', 'dep-alias', 'dependency-alias'];
 export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for an NPM package as identified by its name and version. An NPM package with the given name and version must already exist on the asset server. Alias should be the semver major part of the NPM package version. Eg. For an NPM package of version 5.4.3, you should use 5 as the alias`;
 
 export const builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs
         .positional('name', {
@@ -34,17 +33,8 @@ export const builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
+            // @ts-expect-error
             default: defaults.server,
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter current working directory.',
-            default: defaults.cwd,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
         },
         token: {
             describe:
@@ -54,6 +44,7 @@ export const builder = (yargs) => {
         },
     });
 
+    // @ts-expect-error
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik npm lit-html 1.0.0 1`);
