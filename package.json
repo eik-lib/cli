@@ -20,6 +20,7 @@
     "types"
   ],
   "scripts": {
+    "clean": "rimraf node_modules",
     "test": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 0 --disable-coverage test/**/*.test.mjs",
     "test:integration": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 0 --disable-coverage test/integration/**/*.test.mjs",
     "test:unit": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 0 --disable-coverage test/*.test.mjs",
@@ -59,16 +60,13 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.25.1",
+    "@eik/eslint-config": "1.0.2",
     "@eik/semantic-release-config": "1.0.0",
     "@eik/service": "2.1.0",
     "@eik/sink-memory": "1.1.1",
     "@eik/typescript-config": "1.0.0",
-    "@eslint/js": "9.8.0",
     "cross-env": "7.0.3",
     "eslint": "9.8.0",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.1",
     "fastify": "4.28.1",
     "fs-extra": "11.2.0",
     "globals": "15.8.0",
