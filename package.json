@@ -60,12 +60,11 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.25.1",
+    "@eik/semantic-release-config": "1.0.0",
     "@eik/service": "2.1.0",
     "@eik/sink-memory": "1.1.1",
     "@eik/typescript-config": "1.0.0",
     "@eslint/js": "9.8.0",
-    "@semantic-release/changelog": "6.0.3",
-    "@semantic-release/git": "10.0.1",
     "cross-env": "7.0.3",
     "eslint": "9.8.0",
     "eslint-config-prettier": "9.1.0",
