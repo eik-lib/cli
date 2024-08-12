@@ -1,12 +1,5 @@
-/* eslint-disable no-restricted-properties */
-/* eslint-disable prefer-template */
-/* eslint-disable one-var */
-/* eslint-disable no-underscore-dangle */
-
-'use strict';
-
-const { join } = require('path');
-const chalk = require('chalk');
+import { join } from 'path';
+import chalk from 'chalk';
 
 function readableBytes(bytes) {
     const i = Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -39,4 +32,4 @@ class File {
     }
 }
 
-module.exports = File;
+export default File;

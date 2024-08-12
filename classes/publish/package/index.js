@@ -1,20 +1,52 @@
-'use strict';
+import abslog from 'abslog';
+import { join, isAbsolute } from 'path';
+import { EikConfig } from '@eik/common';
+import { typeSlug } from '../../../utils/index.js';
+import ValidateInput from './tasks/validate-input.js';
+import CreateTempDirectory from './tasks/create-temp-directory.js';
+import CreateZipFile from './tasks/create-zip-file.js';
+import CheckBundleSizes from './tasks/check-bundle-sizes.js';
+import DryRun from './tasks/dry-run.js';
+import CheckIfAlreadyPublished from './tasks/check-if-already-published.js';
+import UploadFiles from './tasks/upload-files.js';
+import SaveMetafile from './tasks/save-metafile.js';
+import Cleanup from './tasks/cleanup.js';
 
-const abslog = require('abslog');
-const { join, isAbsolute } = require('path');
-const { EikConfig } = require('@eik/common');
-const { typeSlug } = require('../../../utils');
-const ValidateInput = require('./tasks/validate-input');
-const CreateTempDirectory = require('./tasks/create-temp-directory');
-const CreateZipFile = require('./tasks/create-zip-file');
-const CheckBundleSizes = require('./tasks/check-bundle-sizes');
-const DryRun = require('./tasks/dry-run');
-const CheckIfAlreadyPublished = require('./tasks/check-if-already-published');
-const UploadFiles = require('./tasks/upload-files');
-const SaveMetafile = require('./tasks/save-metafile');
-const Cleanup = require('./tasks/cleanup');
+/**
+ * @typedef {object} PublishOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} [cwd]
+ * @property {string} token
+ * @property {boolean} [dryRun=false]
+ * @property {string} server
+ * @property {"package" | "map" | "npm"} [type="package"]
+ * @property {string} name
+ * @property {string} [version="1.0.0"]
+ * @property {string[]} [map]
+ * @property {string} [out="./.eik"]
+ * @property {Record<string, string>} files
+ */
 
-module.exports = class Publish {
+/**
+ * @typedef {object} PublishResult
+ * @property {string} type
+ * @property {string} server
+ * @property {string} name
+ * @property {unknown} level
+ * @property {boolean} dryRun
+ * @property {string} integrity
+ * @property {unknown} created
+ * @property {unknown} author
+ * @property {string} org
+ * @property {string} version
+ * @property {unknown} response
+ * @property {Array<{ pathname: string; type: string; }>} files
+ */
+
+export default class Publish {
+    /**
+     * @param {PublishOptions} options
+     */
     constructor({
         logger,
         cwd = process.cwd(),
@@ -27,7 +59,7 @@ module.exports = class Publish {
         map = [],
         out = './.eik',
         files = {},
-    } = {}) {
+    }) {
         const config = new EikConfig(
             {
                 server,
@@ -84,6 +116,9 @@ module.exports = class Publish {
         });
     }
 
+    /**
+     * @returns {Promise<PublishResult>}
+     */
     async run() {
         this.log.debug(`Running package command against server`);
         this.log.debug(`  ==> package name: ${this.config.name}`);
@@ -102,6 +137,7 @@ module.exports = class Publish {
                 type: typeSlug(this.config.type),
                 server: this.config.server,
                 name: this.config.name,
+                // @ts-expect-error Not sure where this.level originated
                 level: this.level,
                 dryRun: this.dryRun,
                 integrity: '',
@@ -122,6 +158,7 @@ module.exports = class Publish {
             type: typeSlug(this.config.type),
             server: this.config.server,
             name: this.config.name,
+            // @ts-expect-error Not sure where this.level originated
             level: this.level,
             dryRun: this.dryRun,
             created: null,
@@ -131,4 +168,4 @@ module.exports = class Publish {
             ...response,
         };
     }
-};
+}

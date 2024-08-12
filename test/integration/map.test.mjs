@@ -4,9 +4,8 @@ import os from 'os';
 import { exec as execCallback } from 'child_process';
 import { join, basename } from 'path';
 import { test, beforeEach, afterEach } from 'tap';
-import fetch from 'node-fetch';
 import EikService from '@eik/service';
-import { sink } from '@eik/core';
+import Sink from '@eik/sink-memory';
 import cli from '../../classes/index.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -23,7 +22,7 @@ function exec(cmd) {
 }
 
 beforeEach(async (t) => {
-    const memSink = new sink.MEM();
+    const memSink = new Sink();
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
     server.register(service.api());

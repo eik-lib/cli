@@ -1,13 +1,9 @@
-/* eslint-disable no-param-reassign */
+import { join } from 'path';
+import { request } from '../../../../utils/http/index.js';
+import { typeSlug } from '../../../../utils/index.js';
+import Task from './task.js';
 
-'use strict';
-
-const { join } = require('path');
-const { request } = require('../../../../utils/http');
-const { typeSlug } = require('../../../../utils');
-const Task = require('./task');
-
-module.exports = class UploadFiles extends Task {
+export default class UploadFiles extends Task {
     async process(zipFile) {
         const { log } = this;
         const { server, name, version, type, token } = this.config;
@@ -62,4 +58,4 @@ module.exports = class UploadFiles extends Task {
             }
         }
     }
-};
+}

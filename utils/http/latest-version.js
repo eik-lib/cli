@@ -1,7 +1,4 @@
-'use strict';
-
-const { join } = require('path');
-const fetch = require('node-fetch');
+import { join } from 'path';
 
 /**
  * Fetches the latest version from an Eik server of a package by name, optionally restricting the lookup to a specified semver major version
@@ -14,7 +11,7 @@ const fetch = require('node-fetch');
  *
  * @throws Error
  */
-module.exports = async (server, type, name, major) => {
+export default async (server, type, name, major) => {
     const url = new URL(`${join(type, name)}?t=${Date.now()}`, server);
     const res = await fetch(url);
     if (!res.ok) {

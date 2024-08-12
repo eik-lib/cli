@@ -1,39 +1,20 @@
-'use strict';
+import { join } from 'path';
+import ora from 'ora';
+import chalk from 'chalk';
+import PublishPackage from '../classes/publish/package/index.js';
+import { logger, getDefaults, typeSlug, typeTitle } from '../utils/index.js';
+import { Artifact } from '../formatters/index.js';
 
-const { join } = require('path');
-const fetch = require('node-fetch');
-const ora = require('ora');
-const chalk = require('chalk');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
-const PublishPackage = require('../classes/publish/package/index');
-const {
-    logger,
-    getDefaults,
-    getCWD,
-    typeSlug,
-    typeTitle,
-} = require('../utils');
-const { Artifact } = require('../formatters');
+export const command = 'publish';
 
-exports.command = 'publish';
+export const aliases = ['pkg', 'package', 'pub'];
 
-exports.aliases = ['pkg', 'package', 'pub'];
+export const describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
 
-exports.describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
-
-exports.builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+export const builder = (yargs) => {
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs.options({
-        cwd: {
-            alias: 'c',
-            describe: 'Alter the current working directory.',
-            default: defaults.cwd,
-            type: 'string',
-        },
         dryRun: {
             alias: 'd',
             describe:
@@ -41,19 +22,14 @@ exports.builder = (yargs) => {
             default: false,
             type: 'boolean',
         },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
-        },
         token: {
-            describe: `Provide a jwt token to be used to authenticate with the Eik server.
-                Automatically determined if authenticated (via eik login)`,
+            describe: `Provide a jwt token to be used to authenticate with the Eik server. Automatically determined if authenticated (via eik login)`,
             type: 'string',
             alias: 't',
         },
     });
 
+    // @ts-expect-error
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik publish`);
@@ -63,11 +39,13 @@ exports.builder = (yargs) => {
     yargs.example(`eik pkg --debug`);
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, dryRun, cwd, token } = argv;
-    const config = configStore.findInDirectory(cwd);
-    const { name, server, version, type, map, out, files } = config;
+    const { debug, dryRun, cwd, token, config } = argv;
+    // @ts-expect-error
+    const { name, version, server, map, out, files, type } = getDefaults(
+        config || cwd,
+    );
 
     if (type === 'map') {
         spinner.warn(

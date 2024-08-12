@@ -1,11 +1,9 @@
-'use strict';
+import { join } from 'path';
+import fs from 'fs';
+import { rimrafSync } from 'rimraf';
+import Task from './task.js';
 
-const { join } = require('path');
-const fs = require('fs');
-const rimraf = require('rimraf');
-const Task = require('./task');
-
-module.exports = class Cleanup extends Task {
+export default class Cleanup extends Task {
     async process() {
         const { log, path } = this;
         log.debug('Cleaning up');
@@ -13,7 +11,7 @@ module.exports = class Cleanup extends Task {
         if (fs.existsSync(path)) {
             fs.readdirSync(path)
                 .filter((file) => file !== 'integrity.json')
-                .forEach((file) => rimraf.sync(join(path, file)));
+                .forEach((file) => rimrafSync(join(path, file)));
         }
     }
-};
+}

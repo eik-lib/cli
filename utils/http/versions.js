@@ -1,7 +1,4 @@
-'use strict';
-
-const { join } = require('path');
-const fetch = require('node-fetch');
+import { join } from 'path';
 
 /**
  * Fetches package versions by name from a given Eik asset server.
@@ -13,7 +10,7 @@ const fetch = require('node-fetch');
  *
  * @throws Error
  */
-module.exports = async (server, type, name) => {
+export default async (server, type, name) => {
     const pkg = join(type, name);
     const url = new URL(pkg, server);
     url.search = `?t=${Date.now()}`;

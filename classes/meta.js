@@ -1,23 +1,31 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-plusplus */
-
-'use strict';
-
-const abslog = require('abslog');
-const { join } = require('path');
-const { schemas } = require('@eik/common');
-const fetch = require('node-fetch');
+import abslog from 'abslog';
+import { join } from 'path';
+import { schemas } from '@eik/common';
 
 const types = ['pkg', 'map', 'npm'];
 
-module.exports = class Meta {
-    constructor({ logger, server, name, version } = {}) {
+/**
+ * @typedef {object} MetaOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {string} name
+ * @property {string} version
+ */
+
+export default class Meta {
+    /**
+     * @param {MetaOptions} options
+     */
+    constructor({ logger, server, name, version }) {
         this.log = abslog(logger);
         this.server = server;
         this.name = name;
         this.version = version;
     }
 
+    /**
+     * @returns {Promise<unknown | false>}
+     */
     async run() {
         this.log.debug('Validating input');
 
@@ -90,4 +98,4 @@ module.exports = class Meta {
             return false;
         }
     }
-};
+}

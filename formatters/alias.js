@@ -1,10 +1,6 @@
-/* eslint-disable no-underscore-dangle */
-
-'use strict';
-
-const { join } = require('path');
-const chalk = require('chalk');
-const File = require('./file');
+import { join } from 'path';
+import chalk from 'chalk';
+import File from './file.js';
 
 function colorType(type) {
     if (type === 'npm') {
@@ -79,4 +75,4 @@ class Alias {
     }
 }
 
-module.exports = Alias;
+export default Alias;

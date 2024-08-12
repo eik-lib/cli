@@ -1,9 +1,5 @@
-/* eslint-disable max-classes-per-file */
-
-'use strict';
-
-const { parse } = require('path');
-const Task = require('./task');
+import { parse } from 'path';
+import Task from './task.js';
 
 class ValidationError extends Error {
     constructor(message, err) {
@@ -15,7 +11,7 @@ class ValidationError extends Error {
     }
 }
 
-module.exports = class ValidateInput extends Task {
+export default class ValidateInput extends Task {
     process() {
         const { log } = this;
         const { cwd, dryRun } = this.config;
@@ -34,4 +30,4 @@ module.exports = class ValidateInput extends Task {
             throw new ValidationError('Parameter "dryRun" is not valid');
         }
     }
-};
+}

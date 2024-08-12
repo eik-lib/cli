@@ -1,9 +1,5 @@
-/* eslint-disable max-classes-per-file */
-
-'use strict';
-
-const mkdir = require('make-dir');
-const Task = require('./task');
+import { makeDirectorySync } from 'make-dir';
+import Task from './task.js';
 
 class IOError extends Error {
     constructor(message, err) {
@@ -13,7 +9,7 @@ class IOError extends Error {
     }
 }
 
-module.exports = class CreateTempDir extends Task {
+export default class CreateTempDir extends Task {
     async process() {
         const { log, path } = this;
 
@@ -21,9 +17,9 @@ module.exports = class CreateTempDir extends Task {
         log.debug(`  ==> ${path}`);
 
         try {
-            mkdir.sync(path);
+            makeDirectorySync(path);
         } catch (err) {
             throw new IOError('Unable to create temp dir', err);
         }
     }
-};
+}

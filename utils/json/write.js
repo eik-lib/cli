@@ -1,8 +1,6 @@
-'use strict';
-
-const assert = require('assert');
-const fs = require('fs').promises;
-const { join, isAbsolute, dirname } = require('path');
+import assert from 'assert';
+import fs from 'node:fs/promises';
+import { join, isAbsolute, dirname } from 'path';
 
 /**
  * Utility function that can be used to write a JavaScript object to a file at a given location.
@@ -21,7 +19,7 @@ const { join, isAbsolute, dirname } = require('path');
  *
  * @throws Error
  */
-module.exports = async (meta = {}, location) => {
+export default async (meta = {}, location) => {
     if (typeof location !== 'string') {
         assert(
             location.filename,

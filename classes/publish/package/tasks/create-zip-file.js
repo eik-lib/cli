@@ -1,16 +1,11 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-await-in-loop */
-
-'use strict';
-
-const fs = require('fs');
-const { join, resolve, basename, dirname } = require('path');
-const tar = require('tar');
-const Task = require('./task');
+import fs from 'fs';
+import { join, resolve, basename, dirname } from 'path';
+import * as tar from 'tar';
+import Task from './task.js';
 
 const { copyFileSync, writeFileSync } = fs;
 
-module.exports = class CreateZipFile extends Task {
+export default class CreateZipFile extends Task {
     async process() {
         const { log, path } = this;
         const { name, map, server, out, files } = this.config;
@@ -80,4 +75,4 @@ module.exports = class CreateZipFile extends Task {
             throw new Error(`Unable to create zip file: ${err.message}`);
         }
     }
-};
+}

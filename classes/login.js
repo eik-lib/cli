@@ -1,23 +1,37 @@
-'use strict';
+import abslog from 'abslog';
+import eik from '@eik/common';
+import { request } from '../utils/http/index.js';
 
-const abslog = require('abslog');
-const { schemas, ValidationError } = require('@eik/common');
-const { request } = require('../utils/http');
+const { schemas } = eik;
 
-module.exports = class Login {
-    constructor({ logger, server, key } = {}) {
+/**
+ * @typedef {object} LoginOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {string} key
+ */
+
+export default class Login {
+    /**
+     * @param {LoginOptions} options
+     */
+    constructor({ logger, server, key }) {
         this.log = abslog(logger);
         this.server = server;
         this.key = key;
     }
 
+    /**
+     * @returns {Promise<string | false>} Bearer token, or false if login fails
+     */
     async run() {
         this.log.debug('Validating input');
 
         try {
             schemas.assert.server(this.server);
             if (!this.key || typeof !this.key === 'string') {
-                throw new ValidationError('"key" must be a string');
+                // @ts-expect-error
+                throw new schemas.ValidationError('"key" must be a string');
             }
         } catch (err) {
             this.log.error(err.message);
@@ -46,4 +60,4 @@ module.exports = class Login {
             }
         }
     }
-};
+}

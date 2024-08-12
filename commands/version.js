@@ -1,25 +1,15 @@
-'use strict';
+import { execSync } from 'child_process';
+import { join } from 'path';
+import ora from 'ora';
+import VersionPackage from '../classes/version.js';
+import { logger, getDefaults } from '../utils/index.js';
+import json from '../utils/json/index.js';
 
-const { execSync } = require('child_process');
-const { join } = require('path');
-const ora = require('ora');
-const {
-    helpers: { configStore },
-} = require('@eik/common');
-const VersionPackage = require('../classes/version');
-const { logger, getDefaults, getCWD } = require('../utils');
-const json = require('../utils/json');
+export const command = 'version [level]';
 
-exports.command = 'version [level]';
+export const describe = `Compares local files with files on server and increments "version" field in eik.json if necessary.`;
 
-exports.aliases = ['v'];
-
-exports.describe = `Compares local files with files on server and increments "version" field in eik.json if necessary.`;
-
-exports.builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
-
+export const builder = (yargs) => {
     yargs.positional('level', {
         describe: 'Semver level to increment version by',
         default: 'patch',
@@ -28,12 +18,6 @@ exports.builder = (yargs) => {
     });
 
     yargs.options({
-        cwd: {
-            alias: 'c',
-            describe: 'Alter the current working directory.',
-            default: defaults.cwd,
-            type: 'string',
-        },
         dryRun: {
             alias: 'd',
             describe:
@@ -41,23 +25,19 @@ exports.builder = (yargs) => {
             default: false,
             type: 'boolean',
         },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
-        },
     });
 
     yargs.example(`eik version`);
     yargs.example(`eik version minor`);
-    yargs.example(`eik v`);
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
-    const { level, debug, dryRun, cwd } = argv;
-    const config = configStore.findInDirectory(cwd);
-    const { name, version, server, map, out, files } = config;
+    const { level, debug, dryRun, cwd, config } = argv;
+    // @ts-expect-error
+    const { name, version, server, map, out, files } = getDefaults(
+        config || cwd,
+    );
 
     try {
         const log = logger(spinner, debug);
@@ -82,6 +62,7 @@ exports.handler = async (argv) => {
             );
         } else {
             log.debug(`Writing new version ${newVersion} to eik.json`);
+            // @ts-expect-error
             await json.writeEik({ version: newVersion }, { cwd });
 
             log.debug(`Committing eik.json to local git repository`);

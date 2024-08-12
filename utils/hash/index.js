@@ -1,5 +1,5 @@
-const file = require('./file');
-const files = require('./files');
-const compare = require('./compare');
+import file from './file.js';
+import files from './files.js';
+import compare from './compare.js';
 
-module.exports = { file, files, compare };
+export default { file, files, compare };

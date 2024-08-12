@@ -1,14 +1,39 @@
-'use strict';
+import assert from 'assert';
+import abslog from 'abslog';
+import { join } from 'path';
+import { schemas, validators } from '@eik/common';
+import { request } from '../utils/http/index.js';
+import { typeSlug } from '../utils/index.js';
 
-const assert = require('assert');
-const abslog = require('abslog');
-const { join } = require('path');
-const { schemas, validators } = require('@eik/common');
-const { request } = require('../utils/http');
-const { typeSlug } = require('../utils');
+/**
+ * @typedef {object} AliasOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {"package" | "npm" | "map"} [type="package"]
+ * @property {string} name
+ * @property {string} version
+ * @property {string} alias
+ * @property {string} token
+ */
 
-module.exports = class Alias {
-    constructor({ logger, server, token, type, name, version, alias } = {}) {
+/**
+ * @typedef {object} AliasResult
+ * @property {string} server
+ * @property {string} type
+ * @property {string} name
+ * @property {string} alias
+ * @property {string} version
+ * @property {boolean} update
+ * @property {string[]} files
+ * @property {string} org
+ * @property {string} integrity
+ */
+
+export default class Alias {
+    /**
+     * @param {AliasOptions} options
+     */
+    constructor({ logger, server, token, type, name, version, alias }) {
         this.log = abslog(logger);
         this.server = server;
         this.token = token;
@@ -18,6 +43,9 @@ module.exports = class Alias {
         this.version = version;
     }
 
+    /**
+     * @returns {Promise<AliasResult>}
+     */
     async run() {
         const data = {
             server: this.server,
@@ -121,4 +149,4 @@ module.exports = class Alias {
             }
         }
     }
-};
+}

@@ -1,22 +1,18 @@
-'use strict';
+// @deprecated in favor of `alias` command
 
-const ora = require('ora');
-const Alias = require('../classes/alias');
-const { logger, getDefaults, getCWD } = require('../utils');
-const { Alias: AliasFormatter } = require('../formatters');
+import ora from 'ora';
+import Alias from '../classes/alias.js';
+import { logger, getDefaults } from '../utils/index.js';
+import { Alias as AliasFormatter } from '../formatters/index.js';
 
-exports.command = 'npm-alias <name> <version> <alias>';
+export const command = 'npm-alias <name> <version> <alias>';
 
-exports.aliases = ['na', 'dep-alias', 'dependency-alias'];
+export const aliases = ['na', 'dep-alias', 'dependency-alias'];
 
-exports.describe = `Create a semver major alias for an NPM package as identified by its name and version.
-    An NPM package with the given name and version must already exist on the asset server
-    Alias should be the semver major part of the NPM package version.
-    Eg. For an NPM package of version 5.4.3, you should use 5 as the alias`;
+export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for an NPM package as identified by its name and version. An NPM package with the given name and version must already exist on the asset server. Alias should be the semver major part of the NPM package version. Eg. For an NPM package of version 5.4.3, you should use 5 as the alias`;
 
-exports.builder = (yargs) => {
-    const cwd = getCWD();
-    const defaults = getDefaults(cwd);
+export const builder = (yargs) => {
+    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
     yargs
         .positional('name', {
@@ -37,17 +33,8 @@ exports.builder = (yargs) => {
         server: {
             alias: 's',
             describe: 'Specify location of asset server.',
+            // @ts-expect-error
             default: defaults.server,
-        },
-        cwd: {
-            alias: 'c',
-            describe: 'Alter current working directory.',
-            default: defaults.cwd,
-        },
-        debug: {
-            describe: 'Logs additional messages',
-            default: false,
-            type: 'boolean',
         },
         token: {
             describe:
@@ -57,6 +44,7 @@ exports.builder = (yargs) => {
         },
     });
 
+    // @ts-expect-error
     yargs.default('token', defaults.token, defaults.token ? '######' : '');
 
     yargs.example(`eik npm lit-html 1.0.0 1`);
@@ -66,7 +54,7 @@ exports.builder = (yargs) => {
     );
 };
 
-exports.handler = async (argv) => {
+export const handler = async (argv) => {
     const spinner = ora({ stream: process.stdout }).start('working...');
     let success = false;
     const { debug, server } = argv;
@@ -97,3 +85,6 @@ exports.handler = async (argv) => {
         process.exit(1);
     }
 };
+
+export const deprecated =
+    '"npm-alias" will be removed in a future version. Please use "alias" instead';

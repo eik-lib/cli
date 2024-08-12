@@ -1,15 +1,26 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-plusplus */
+import abslog from 'abslog';
+import { join } from 'path';
+import eik from '@eik/common';
+import { typeSlug } from '../utils/index.js';
 
-'use strict';
+const { schemas } = eik;
 
-const abslog = require('abslog');
-const { join } = require('path');
-const { schemas, ValidationError } = require('@eik/common');
-const fetch = require('node-fetch');
-const { typeSlug } = require('../utils');
+/**
+ * @typedef {object} IntegrityOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {"package" | "npm" | "map"} [type="package"]
+ * @property {string} name
+ * @property {string} version
+ * @property {string} [cwd]
+ * @property {boolean} [debug]
+ */
 
-module.exports = class Integrity {
+export default class Integrity {
+    /**
+     *
+     * @param {IntegrityOptions} options
+     */
     constructor({
         logger,
         name,
@@ -18,7 +29,7 @@ module.exports = class Integrity {
         type,
         debug = false,
         cwd = process.cwd(),
-    } = {}) {
+    }) {
         this.log = abslog(logger);
         this.server = server;
         this.name = name;
@@ -46,12 +57,18 @@ module.exports = class Integrity {
 
             this.log.debug(`  ==> debug: ${this.debug}`);
             if (typeof this.debug !== 'boolean') {
-                throw new ValidationError(`Parameter "debug" is not valid`);
+                // @ts-expect-error
+                throw new schemas.ValidationError(
+                    `Parameter "debug" is not valid`,
+                );
             }
 
             this.log.debug(`  ==> cwd: ${this.cwd}`);
             if (typeof this.cwd !== 'string') {
-                throw new ValidationError(`Parameter "cwd" is not valid`);
+                // @ts-expect-error
+                throw new schemas.ValidationError(
+                    `Parameter "cwd" is not valid`,
+                );
             }
         } catch (err) {
             throw new Error(
@@ -93,4 +110,4 @@ module.exports = class Integrity {
             );
         }
     }
-};
+}

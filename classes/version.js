@@ -1,18 +1,31 @@
-/* eslint-disable max-classes-per-file */
+import { copyFileSync, writeFileSync } from 'fs';
+import { join, isAbsolute, parse } from 'path';
+import abslog from 'abslog';
+import semver from 'semver';
+import { makeDirectorySync } from 'make-dir';
+import { schemas, EikConfig } from '@eik/common';
+import { integrity } from '../utils/http/index.js';
+import hash from '../utils/hash/index.js';
+import { typeSlug } from '../utils/index.js';
 
-'use strict';
+/**
+ * @typedef {object} VersionOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {"package" | "npm" | "map"} [type="package"]
+ * @property {string} name
+ * @property {string} version
+ * @property {import("semver").ReleaseType} [level="patch"]
+ * @property {string} cwd
+ * @property {string[]} [map]
+ * @property {string} [out="./.eik"]
+ * @property {string | Record<string, string>} files
+ */
 
-const { copyFileSync, writeFileSync } = require('fs');
-const { join, isAbsolute, parse } = require('path');
-const abslog = require('abslog');
-const semver = require('semver');
-const mkdir = require('make-dir');
-const { schemas, EikConfig } = require('@eik/common');
-const { integrity } = require('../utils/http');
-const hash = require('../utils/hash');
-const { typeSlug } = require('../utils');
-
-module.exports = class Version {
+export default class Version {
+    /**
+     * @param {VersionOptions} options
+     */
     constructor({
         logger,
         server,
@@ -24,7 +37,7 @@ module.exports = class Version {
         map = [],
         out = './.eik',
         files,
-    } = {}) {
+    }) {
         const config = new EikConfig(
             {
                 server,
@@ -45,6 +58,10 @@ module.exports = class Version {
         this.level = level;
     }
 
+    /**
+     * Similar to `npm version`, but updates `eik.json`
+     * @returns {Promise<string | null>} The new version number, or null if the versioning failed
+     */
     async run() {
         const { name, server, type, version, cwd, out, files, map } =
             this.config;
@@ -59,6 +76,7 @@ module.exports = class Version {
 
         log.debug(`  ==> level: ${level}`);
         if (!['major', 'minor', 'patch'].includes(level)) {
+            // @ts-expect-error
             throw new schemas.ValidationError(
                 'Parameter "version" is not valid',
             );
@@ -66,11 +84,13 @@ module.exports = class Version {
 
         log.debug(`  ==> files: ${JSON.stringify(files)}`);
         if (!files) {
+            // @ts-expect-error
             throw new schemas.ValidationError('Parameter "files" is not valid');
         }
 
         log.debug(`  ==> map: ${JSON.stringify(map)}`);
         if (!Array.isArray(map)) {
+            // @ts-expect-error
             throw new schemas.ValidationError('Parameter "map" is not valid');
         }
 
@@ -103,7 +123,7 @@ module.exports = class Version {
 
         let localHash;
         try {
-            mkdir.sync(path);
+            makeDirectorySync(path);
             const eikPathDest = join(path, './eik.json');
             const eikJSON = {
                 name,
@@ -157,4 +177,4 @@ module.exports = class Version {
         log.debug(`  ==> ${newVersion}`);
         return newVersion;
     }
-};
+}

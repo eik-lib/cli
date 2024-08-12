@@ -5,7 +5,7 @@ import { exec as execCallback } from 'child_process';
 import { join, basename } from 'path';
 import { test, beforeEach, afterEach } from 'tap';
 import EikService from '@eik/service';
-import { sink } from '@eik/core';
+import Sink from '@eik/sink-memory';
 import cli from '../../classes/index.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -15,14 +15,14 @@ const __dirname = dirname(__filename);
 
 function exec(cmd) {
     return new Promise((resolve) => {
-			execCallback(cmd, (error, stdout, stderr) => {
+        execCallback(cmd, (error, stdout, stderr) => {
             resolve({ error, stdout, stderr });
         });
     });
 }
 
 beforeEach(async (t) => {
-    const memSink = new sink.MEM();
+    const memSink = new Sink();
     const server = fastify({ logger: false });
     const service = new EikService({ customSink: memSink });
     server.register(service.api());

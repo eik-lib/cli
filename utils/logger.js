@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Creates a logger object that wraps an instance of the "ora" module in order to provide consistent command line logging that includes a spinner
  *
@@ -30,10 +28,9 @@ const logger = (spinner, debug = false) => ({
      */
     info(message) {
         if (typeof message !== 'string') {
-            // eslint-disable-next-line no-param-reassign
             spinner.text = '';
             spinner.stopAndPersist();
-            // eslint-disable-next-line no-console
+
             console.log(message);
             spinner.start();
         } else {
@@ -54,4 +51,4 @@ const logger = (spinner, debug = false) => ({
     },
 });
 
-module.exports = logger;
+export default logger;

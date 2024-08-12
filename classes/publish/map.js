@@ -1,13 +1,33 @@
-'use strict';
+import assert from 'assert';
+import abslog from 'abslog';
+import { join, parse, isAbsolute } from 'path';
+import { existsSync } from 'fs';
+import { schemas } from '@eik/common';
+import { request } from '../../utils/http/index.js';
 
-const assert = require('assert');
-const abslog = require('abslog');
-const { join, parse, isAbsolute } = require('path');
-const { existsSync } = require('fs');
-const { schemas } = require('@eik/common');
-const { request } = require('../../utils/http');
+/**
+ * @typedef {object} PublishMapOptions
+ * @property {import('abslog').AbstractLoggerOptions} [logger]
+ * @property {string} server
+ * @property {string} [cwd]
+ * @property {string} token
+ * @property {string} file
+ * @property {string} name
+ * @property {string} version
+ */
 
-module.exports = class PublishMap {
+/**
+ * @typedef {object} PublishMapResult
+ * @property {string} server
+ * @property {string} name
+ * @property {string} version
+ * @property {string} type
+ */
+
+export default class PublishMap {
+    /**
+     * @param {PublishMapOptions} options
+     */
     constructor({
         logger,
         cwd = process.cwd(),
@@ -16,7 +36,7 @@ module.exports = class PublishMap {
         file,
         name,
         version,
-    } = {}) {
+    }) {
         this.log = abslog(logger);
         this.cwd = cwd;
         this.server = server;
@@ -26,6 +46,9 @@ module.exports = class PublishMap {
         this.file = file;
     }
 
+    /**
+     * @returns {Promise<PublishMapResult>}
+     */
     async run() {
         this.log.debug('Running import map publish command');
 
@@ -93,4 +116,4 @@ module.exports = class PublishMap {
             }
         }
     }
-};
+}
