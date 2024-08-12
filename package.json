@@ -35,7 +35,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "^3.0.0",
+    "@eik/common": "^4.0.0",
     "abslog": "2.4.4",
     "boxen": "5.1.2",
     "bytes": "3.1.2",
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@eik/core": "1.2.28",
-    "@eik/service": "1.2.98",
+    "@eik/service": "2.2.1",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
     "cross-env": "7.0.3",
