@@ -1,9 +1,21 @@
-# Eik CLI
+# @eik/cli
 
-## Installation
+The Eik CLI helps you publish to an [Eik server](https://eik.dev/docs/introduction/) and manage import maps and aliases.
+
+## Installing
+
+Run this command to install the Eik CLI globally.
 
 ```sh
-npm install -g @eik/cli
+npm install --global @eik/cli
 ```
 
-See Eik [documentation site](https://eik.dev/) for usage instructions.
+This makes the `eik` command available in your shell.
+
+```sh
+eik --version
+```
+
+## Usage
+
+See [the CLI reference documentation](https://eik.dev/docs/reference/at-eik-cli) to learn about the available commands.
