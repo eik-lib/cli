@@ -1,6 +1,9 @@
+import config from '@eik/semantic-release-config';
+
 export default {
   extends: '@eik/semantic-release-config',
   plugins: [
+    ...(config.plugins || []),
     [
       'semantic-release-slack-bot',
       {
