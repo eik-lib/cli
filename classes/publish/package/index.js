@@ -19,7 +19,7 @@ import Cleanup from './tasks/cleanup.js';
  * @property {string} token
  * @property {boolean} [dryRun=false]
  * @property {string} server
- * @property {"package" | "map" | "npm"} [type="package"]
+ * @property {"package" | "map" | "npm" | "image"} [type="package"]
  * @property {string} name
  * @property {string} [version="1.0.0"]
  * @property {string[]} [map]
