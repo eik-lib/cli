@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/eik-lib/cli/compare/v3.0.1...v3.0.2) (2024-08-14)
+
+
+### Bug Fixes
+
+* include semantic release plugins from common package ([ac9e5a1](https://github.com/eik-lib/cli/commit/ac9e5a1ebd7dfda2ab77625f2c8c8c5dee5f8c31))
+
 # [3.0.0](https://github.com/eik-lib/cli/compare/v2.0.39...v3.0.0) (2024-08-12)
 
 
