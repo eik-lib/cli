@@ -11,6 +11,10 @@ function colorType(type) {
         return chalk.white.bgYellow.bold(' PACKAGE ');
     }
 
+    if (type === 'img') {
+        return chalk.white.bgYellow.bold(' IMAGE ');
+    }
+
     return chalk.white.bgBlue.bold(' IMPORT MAP ');
 }
 
