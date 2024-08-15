@@ -132,6 +132,54 @@ test('Creating an npm alias', async (t) => {
     );
 });
 
+test('Creating an image alias', async (t) => {
+    const { address, token, cwd } = t.context;
+    const l = mockLogger();
+
+    await cli.publish({
+        server: address,
+        name: 'lit-html',
+        version: '1.1.2',
+        debug: true,
+        token,
+        cwd,
+        type: 'image',
+        files: {
+            'index.js': join(__dirname, './fixtures/client.js'),
+        },
+    });
+
+    const result = await cli.alias({
+        logger: l.logger,
+        server: address,
+        type: 'image',
+        name: 'lit-html',
+        version: '1.1.2',
+        alias: '1',
+        debug: true,
+        token,
+        cwd,
+    });
+
+    t.match(
+        result.server,
+        '127.0.0.1',
+        'server property should return "127.0.0.1"',
+    );
+    t.equal(result.type, 'img', 'type property should return "img"');
+    t.equal(result.name, 'lit-html', 'name property should return "lit-html"');
+    t.equal(result.alias, '1', 'alias property should return 1');
+    t.equal(result.version, '1.1.2', 'version property should return 1.1.2');
+    t.equal(result.update, false, 'update property should return false');
+    t.equal(result.files.length, 2, 'files property should be 2');
+    t.equal(result.org, 'local', 'org property should return an organisation');
+    t.match(
+        result.integrity,
+        '==',
+        'integrity property should contain an integrity string',
+    );
+});
+
 test('Creating a map alias', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();

@@ -95,6 +95,34 @@ test('Uploading app assets to an asset server under npm namespace', async (t) =>
     t.match(l.logs.debug, 'Cleaning up');
 });
 
+test('Uploading app assets to an asset server under image namespace', async (t) => {
+    const { address, token, cwd } = t.context;
+    const l = mockLogger();
+
+    const result = await cli.publish({
+        logger: l.logger,
+        cwd,
+        server: address,
+        name: 'my-app',
+        debug: true,
+        type: 'image',
+        token,
+        version: '1.0.0',
+        files: {
+            'index.js': join(__dirname, './fixtures/client.js'),
+            'index.css': join(__dirname, './fixtures/styles.css'),
+        },
+    });
+
+    t.equal(result.type, 'img', 'Command should return correct type');
+    t.equal(result.name, 'my-app', 'Command should return correct name');
+    t.equal(result.version, '1.0.0', 'Command should return correct version');
+    t.equal(result.files.length, 3, 'Command should return files array');
+    t.match(l.logs.debug, 'Running package command');
+    t.match(l.logs.debug, 'Uploading zip file to server');
+    t.match(l.logs.debug, 'Cleaning up');
+});
+
 test('Uploading JS app assets only to an asset server', async (t) => {
     const { address, token, cwd } = t.context;
     const l = mockLogger();
