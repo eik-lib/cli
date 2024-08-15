@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/eik-lib/cli/compare/v3.0.2...v3.1.0) (2024-08-15)
+
+
+### Features
+
+* add support for image namespace publishing and aliasing ([a1a7e4c](https://github.com/eik-lib/cli/commit/a1a7e4c676cc45d30c63f4e522771298947dc47d))
+
 ## [3.0.2](https://github.com/eik-lib/cli/compare/v3.0.1...v3.0.2) (2024-08-14)
 
 
