@@ -24,7 +24,7 @@ function exec(cmd) {
 }
 
 test('Initializing a new eik.json file', async (t) => {
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
     const publishCmd = `node ${eik} init --cwd ${folder}`;
 
@@ -41,7 +41,7 @@ test('Initializing a new eik.json file', async (t) => {
 });
 
 test('Initializing a new eik.json file passing custom values', async (t) => {
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '../index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
     const publishCmd = `node ${eik} init
         --cwd ${folder}
@@ -62,7 +62,7 @@ test('Initializing a new eik.json file passing custom values', async (t) => {
 });
 
 test('Initializing a new eik.json file in an existing project', async (t) => {
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
     const packageJson = {

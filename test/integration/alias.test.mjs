@@ -31,7 +31,7 @@ beforeEach(async (t) => {
         port: 0,
     });
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
 
     const token = await cli.login({
         server: address,
@@ -44,8 +44,8 @@ beforeEach(async (t) => {
         type: 'npm',
         server: address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -81,7 +81,7 @@ afterEach(async (t) => {
 
 test('packages: eik alias <name> <version> <alias>', async (t) => {
     const { address, token, folder: cwd } = t.context;
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
 
     const assets = {
         server: address,
@@ -89,8 +89,8 @@ test('packages: eik alias <name> <version> <alias>', async (t) => {
         name: 'my-pack',
         version: '1.0.0',
         files: {
-            'index.js': join(__dirname, '../fixtures/client.js'),
-            'index.css': join(__dirname, '../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -118,7 +118,7 @@ test('packages: eik alias <name> <version> <alias>', async (t) => {
 });
 
 test('npm: eik alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
     const cmd = `node ${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
         --token ${t.context.token}
         --type npm
@@ -151,15 +151,15 @@ test('npm: eik alias <name> <version> <alias> : publish details provided by eik.
         version: '1.0.0',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
     const cmd = `node ${eik} alias scroll-into-view-if-needed 2.2.24 2 --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
@@ -182,7 +182,7 @@ test('npm: eik alias <name> <version> <alias> : publish details provided by eik.
 });
 
 test('map: eik alias <name> <version> <alias> --token --server : no eik.json or .eikrc', async (t) => {
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
     const cmd = `node ${eik} map-alias test-map 1.0.0 1
         --token ${t.context.token}
         --type map
@@ -211,15 +211,15 @@ test('map: eik alias <name> <version> <alias> : publish details provided by eik.
         version: '1.0.0',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
     await fs.writeFile(
         join(t.context.folder, 'eik.json'),
         JSON.stringify(assets),
     );
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
     const cmd = `node ${eik} alias test-map 1.0.0 1 --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);

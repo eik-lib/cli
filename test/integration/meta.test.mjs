@@ -31,7 +31,7 @@ beforeEach(async (t) => {
         port: 0,
     });
     const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
 
     const token = await cli.login({
         server: address,
@@ -44,8 +44,8 @@ beforeEach(async (t) => {
         type: 'npm',
         server: address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -65,7 +65,7 @@ afterEach(async (t) => {
 });
 
 test('eik meta', async (t) => {
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
     const cmd = `node ${eik} meta scroll-into-view-if-needed --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);

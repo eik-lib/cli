@@ -53,8 +53,8 @@ test('eik meta : details provided by eik.json', async (t) => {
         version: '1.0.0',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures/client.js'),
+            'index.css': join(__dirname, '../fixtures/styles.css'),
         },
     };
     await fs.writeFile(
@@ -62,7 +62,7 @@ test('eik meta : details provided by eik.json', async (t) => {
         JSON.stringify(assets),
     );
 
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
 
     let cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
     await exec(cmd);
@@ -73,7 +73,7 @@ test('eik meta : details provided by eik.json', async (t) => {
 
     const integrity = JSON.parse(
         await fs.readFile(
-            join(t.context.folder, './.eik/integrity.json'),
+            join(t.context.folder, '.eik', 'integrity.json'),
             'utf8',
         ),
     );
@@ -96,8 +96,8 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
         type: 'npm',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
     await fs.writeFile(
@@ -105,7 +105,7 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
         JSON.stringify(assets),
     );
 
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '../index.js');
 
     let cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
     await exec(cmd);
@@ -115,7 +115,7 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
 
     const integrity = JSON.parse(
         await fs.readFile(
-            join(t.context.folder, './.eik/integrity.json'),
+            join(t.context.folder, '.eik', 'integrity.json'),
             'utf8',
         ),
     );
