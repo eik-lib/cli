@@ -1,6 +1,6 @@
 import abslog from 'abslog';
-import { join } from 'path';
 import { schemas } from '@eik/common';
+import { joinUrlPathname } from '../utils/url.js';
 
 const types = ['pkg', 'map', 'npm'];
 
@@ -40,7 +40,10 @@ export default class Meta {
         try {
             const typeFetches = [];
             for (const type of types) {
-                const url = new URL(join(type, this.name), this.server);
+                const url = new URL(
+                    joinUrlPathname(type, this.name),
+                    this.server,
+                );
                 url.search = `?t=${Date.now()}`;
                 typeFetches.push(fetch(url));
             }
@@ -64,7 +67,7 @@ export default class Meta {
                     for (let i = 0; i < data[type].versions.length; i++) {
                         const { version } = data[type].versions[i];
                         const url = new URL(
-                            join(type, name, version),
+                            joinUrlPathname(type, name, version),
                             this.server,
                         );
 

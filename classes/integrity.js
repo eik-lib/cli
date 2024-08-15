@@ -1,7 +1,7 @@
 import abslog from 'abslog';
-import { join } from 'path';
 import eik from '@eik/common';
 import { typeSlug } from '../utils/index.js';
+import { joinUrlPathname } from '../utils/url.js';
 
 const { schemas } = eik;
 
@@ -79,7 +79,7 @@ export default class Integrity {
         this.log.debug('Requesting meta information from asset server');
         try {
             const url = new URL(
-                join(typeSlug(this.type), this.name, this.version),
+                joinUrlPathname(typeSlug(this.type), this.name, this.version),
                 this.server,
             );
             this.log.debug(`  ==> url: ${url}`);

@@ -1,6 +1,7 @@
-import { join } from 'path';
 import { request } from '../../../../utils/http/index.js';
 import { typeSlug } from '../../../../utils/index.js';
+import { joinUrlPathname } from '../../../../utils/url.js';
+
 import Task from './task.js';
 
 export default class UploadFiles extends Task {
@@ -9,7 +10,7 @@ export default class UploadFiles extends Task {
         const { server, name, version, type, token } = this.config;
         log.debug('Uploading zip file to server');
         try {
-            const pathname = join(
+            const pathname = joinUrlPathname(
                 typeSlug(type),
                 encodeURIComponent(name),
                 version,

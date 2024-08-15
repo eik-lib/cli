@@ -2,7 +2,7 @@ import fastify from 'fastify';
 import { promises as fs } from 'fs';
 import os from 'os';
 import { exec as execCallback } from 'child_process';
-import { join, basename } from 'path';
+import { join, basename, sep } from 'path';
 import { test, beforeEach, afterEach } from 'tap';
 import EikService from '@eik/service';
 import Sink from '@eik/sink-memory';
@@ -81,7 +81,7 @@ test('eik meta : details provided by eik.json', async (t) => {
     t.notOk(error);
     t.match(
         stdout,
-        'integrity information for package "test-app" (v1.0.0) saved to ".eik/integrity.json"',
+        `integrity information for package "test-app" (v1.0.0) saved to ".eik${sep}integrity.json"`,
     );
     t.equal(integrity.name, 'test-app');
     t.equal(integrity.version, '1.0.0');
@@ -123,7 +123,7 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
     t.notOk(error);
     t.match(
         stdout,
-        'integrity information for package "test-app-npm" (v1.0.0) saved to ".eik/integrity.json"',
+        `integrity information for package "test-app-npm" (v1.0.0) saved to ".eik${sep}integrity.json"`,
     );
     t.equal(integrity.name, 'test-app-npm');
     t.equal(integrity.version, '1.0.0');

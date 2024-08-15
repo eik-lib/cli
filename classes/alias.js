@@ -1,9 +1,9 @@
 import assert from 'assert';
 import abslog from 'abslog';
-import { join } from 'path';
 import { schemas, validators } from '@eik/common';
 import { request } from '../utils/http/index.js';
 import { typeSlug } from '../utils/index.js';
+import { joinUrlPathname } from '../utils/url.js';
 
 /**
  * @typedef {object} AliasOptions
@@ -74,7 +74,11 @@ export default class Alias {
             `Requesting creation of ${this.type} alias "v${this.alias}" for ${this.name} v${this.version} on ${this.server}`,
         );
 
-        const pathname = join(this.type, this.name, `v${this.alias}`);
+        const pathname = joinUrlPathname(
+            this.type,
+            this.name,
+            `v${this.alias}`,
+        );
         try {
             const { message } = await request({
                 host: this.server,

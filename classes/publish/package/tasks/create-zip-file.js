@@ -10,13 +10,13 @@ export default class CreateZipFile extends Task {
         const { log, path } = this;
         const { name, map, server, out, files } = this.config;
 
-        log.debug(`Creating zip file`);
-        log.debug(`  ==> ${join(path, `eik.tgz`)}`);
+        log.debug('Creating zip file');
+        log.debug(`  ==> ${join(path, 'eik.tgz')}`);
 
         const filesToZip = [];
 
         try {
-            const eikPathDest = join(path, './eik.json');
+            const eikPathDest = join(path, 'eik.json');
             writeFileSync(
                 eikPathDest,
                 JSON.stringify(
@@ -59,7 +59,7 @@ export default class CreateZipFile extends Task {
         }
 
         try {
-            const zipFile = resolve(`${path}/eik.tgz`);
+            const zipFile = resolve(path, 'eik.tgz');
 
             await tar.c(
                 {

@@ -4,6 +4,7 @@ import { join, parse, isAbsolute } from 'path';
 import { existsSync } from 'fs';
 import { schemas } from '@eik/common';
 import { request } from '../../utils/http/index.js';
+import { joinUrlPathname } from '../../utils/url.js';
 
 /**
  * @typedef {object} PublishMapOptions
@@ -79,7 +80,7 @@ export default class PublishMap {
             await request({
                 method: 'PUT',
                 host: this.server,
-                pathname: join('map', this.name, this.version),
+                pathname: joinUrlPathname('map', this.name, this.version),
                 map: this.absoluteFile,
                 token: this.token,
             });
