@@ -64,10 +64,10 @@ test('eik meta : details provided by eik.json', async (t) => {
 
     const eik = join(__dirname, '../../index.js');
 
-    let cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    let cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
     await exec(cmd);
 
-    cmd = `${eik} integrity --cwd ${t.context.folder}`;
+    cmd = `node ${eik} integrity --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -107,10 +107,10 @@ test('eik meta : details provided by eik.json - npm namespace', async (t) => {
 
     const eik = join(__dirname, '../../index.js');
 
-    let cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    let cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
     await exec(cmd);
 
-    cmd = `${eik} integrity --cwd ${t.context.folder}`;
+    cmd = `node ${eik} integrity --cwd ${t.context.folder}`;
     const { error, stdout } = await exec(cmd);
 
     const integrity = JSON.parse(

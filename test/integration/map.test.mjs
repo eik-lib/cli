@@ -76,7 +76,7 @@ test('eik map : publish, details provided by eik.json file', async (t) => {
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} map test-map 1.0.0 import-map.json --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `node ${eik} map test-map 1.0.0 import-map.json --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 

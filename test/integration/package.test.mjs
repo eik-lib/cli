@@ -64,7 +64,7 @@ test('eik package : package, details provided by eik.json file', async (t) => {
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -98,7 +98,7 @@ test('eik package : package, details provided by eik.json file - npm namespace',
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -132,7 +132,7 @@ test('eik package : package, details provided by eik.json file - explicit packag
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -167,7 +167,7 @@ test('eik package : package, details provided by package.json values', async (t)
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -217,7 +217,7 @@ test('eik package : package, details provided by package.json values and eik.jso
     );
 
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error } = await exec(cmd);
 
@@ -245,11 +245,11 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         JSON.stringify(assets),
     );
 
-    cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
     await exec(cmd);
 
     // alias npm dependency
-    cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
+    cmd = `node ${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
         --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
@@ -269,14 +269,14 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     );
 
     // upload import map file
-    cmd = `${eik} map my-map 1.0.0 ./import-map.json
+    cmd = `node ${eik} map my-map 1.0.0 ./import-map.json
         --cwd ${t.context.folder}
         --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
     // alias import map
-    cmd = `${eik} map-alias my-map 1.0.0 1
+    cmd = `node ${eik} map-alias my-map 1.0.0 1
         --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
@@ -302,7 +302,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     // TODO: create a bundle that uses import maps
 
     // use import map when publishing app files
-    // cmd = `${eik} package
+    // cmd = `node ${eik} package
     //     --token ${t.context.token}
     //     --cwd ${t.context.folder}
     //     --debug`;

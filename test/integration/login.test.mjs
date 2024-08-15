@@ -43,7 +43,7 @@ afterEach(async (t) => {
 
 test('eik login --key --server --cwd : valid key', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key change_me --server ${t.context.address} --cwd ${t.context.folder}`;
+    const cmd = `node ${eik} login --key change_me --server ${t.context.address} --cwd ${t.context.folder}`;
 
     const { stdout } = await exec(cmd);
 
@@ -53,7 +53,7 @@ test('eik login --key --server --cwd : valid key', async (t) => {
 
 test('eik login --key --server --cwd : invalid key', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} login --key invalid --server ${t.context.address} --cwd ${t.context.folder}`;
+    const cmd = `node ${eik} login --key invalid --server ${t.context.address} --cwd ${t.context.folder}`;
 
     const { stdout } = await exec(cmd);
     t.match(stdout, 'Login unsuccessful');

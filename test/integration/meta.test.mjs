@@ -51,7 +51,7 @@ beforeEach(async (t) => {
 
     await fs.writeFile(join(folder, 'eik.json'), JSON.stringify(assets));
 
-    const cmd = `${eik} package --token ${token} --cwd ${folder}`;
+    const cmd = `node ${eik} package --token ${token} --cwd ${folder}`;
     await exec(cmd);
 
     t.context.server = server;
@@ -66,7 +66,7 @@ afterEach(async (t) => {
 
 test('eik meta', async (t) => {
     const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} meta scroll-into-view-if-needed --cwd ${t.context.folder}`;
+    const cmd = `node ${eik} meta scroll-into-view-if-needed --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
