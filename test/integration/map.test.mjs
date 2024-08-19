@@ -53,8 +53,8 @@ test('eik map : publish, details provided by eik.json file', async (t) => {
         version: '2.2.24',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
     await fs.writeFile(
@@ -75,8 +75,8 @@ test('eik map : publish, details provided by eik.json file', async (t) => {
         JSON.stringify(map),
     );
 
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} map test-map 1.0.0 import-map.json --token ${t.context.token} --cwd ${t.context.folder}`;
+    const eik = join(__dirname, '..', '..', 'index.js');
+    const cmd = `node ${eik} map test-map 1.0.0 import-map.json --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 

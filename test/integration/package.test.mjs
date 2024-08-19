@@ -53,8 +53,8 @@ test('eik package : package, details provided by eik.json file', async (t) => {
         version: '1.0.0',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -63,8 +63,8 @@ test('eik package : package, details provided by eik.json file', async (t) => {
         JSON.stringify(assets),
     );
 
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const eik = join(__dirname, '..', '..', 'index.js');
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -87,8 +87,8 @@ test('eik package : package, details provided by eik.json file - npm namespace',
         type: 'npm',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -97,8 +97,8 @@ test('eik package : package, details provided by eik.json file - npm namespace',
         JSON.stringify(assets),
     );
 
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    const eik = join(__dirname, '..', '..', 'index.js');
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -121,8 +121,8 @@ test('eik package : package, details provided by eik.json file - explicit packag
         type: 'package',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -131,8 +131,8 @@ test('eik package : package, details provided by eik.json file - explicit packag
         JSON.stringify(assets),
     );
 
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    const eik = join(__dirname, '..', '..', 'index.js');
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -155,8 +155,8 @@ test('eik package : package, details provided by package.json values', async (t)
         eik: {
             server: t.context.address,
             files: {
-                'index.js': join(__dirname, './../fixtures/client.js'),
-                'index.css': join(__dirname, './../fixtures/styles.css'),
+                'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+                'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
             },
         },
     };
@@ -166,8 +166,8 @@ test('eik package : package, details provided by package.json values', async (t)
         JSON.stringify(assets),
     );
 
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const eik = join(__dirname, '..', '..', 'index.js');
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error, stdout } = await exec(cmd);
 
@@ -190,8 +190,8 @@ test('eik package : package, details provided by package.json values and eik.jso
         eik: {
             server: t.context.address,
             files: {
-                'index.js': join(__dirname, './../fixtures/client.js'),
-                'index.css': join(__dirname, './../fixtures/styles.css'),
+                'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+                'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
             },
         },
     };
@@ -206,8 +206,8 @@ test('eik package : package, details provided by package.json values and eik.jso
         version: '1.0.0',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -216,8 +216,8 @@ test('eik package : package, details provided by package.json values and eik.jso
         JSON.stringify(assets),
     );
 
-    const eik = join(__dirname, '../../index.js');
-    const cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
+    const eik = join(__dirname, '..', '..', 'index.js');
+    const cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
 
     const { error } = await exec(cmd);
 
@@ -226,7 +226,7 @@ test('eik package : package, details provided by package.json values and eik.jso
 });
 
 test('workflow: publish npm, alias npm, publish map, alias map and then publish package using map', async (t) => {
-    const eik = join(__dirname, '../../index.js');
+    const eik = join(__dirname, '..', '..', 'index.js');
     let cmd = '';
 
     // publish npm dep
@@ -235,8 +235,8 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         version: '2.2.24',
         server: t.context.address,
         files: {
-            'index.js': join(__dirname, './../fixtures/client.js'),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.js': join(__dirname, '..', 'fixtures', 'client.js'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
     };
 
@@ -245,11 +245,11 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         JSON.stringify(assets),
     );
 
-    cmd = `${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
+    cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
     await exec(cmd);
 
     // alias npm dependency
-    cmd = `${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
+    cmd = `node ${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
         --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
@@ -269,14 +269,14 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     );
 
     // upload import map file
-    cmd = `${eik} map my-map 1.0.0 ./import-map.json
+    cmd = `node ${eik} map my-map 1.0.0 ./import-map.json
         --cwd ${t.context.folder}
         --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
 
     // alias import map
-    cmd = `${eik} map-alias my-map 1.0.0 1
+    cmd = `node ${eik} map-alias my-map 1.0.0 1
         --token ${t.context.token}
         --server ${t.context.address}`;
     await exec(cmd.split('\n').join(' '));
@@ -288,9 +288,11 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
         files: {
             'index.js': join(
                 __dirname,
-                './../fixtures/client-with-bare-imports.js',
+                '..',
+                'fixtures',
+                'client-with-bare-imports.js',
             ),
-            'index.css': join(__dirname, './../fixtures/styles.css'),
+            'index.css': join(__dirname, '..', 'fixtures', 'styles.css'),
         },
         'import-map': [new URL('/map/my-map/v1', t.context.address).href],
     };
@@ -302,7 +304,7 @@ test('workflow: publish npm, alias npm, publish map, alias map and then publish 
     // TODO: create a bundle that uses import maps
 
     // use import map when publishing app files
-    // cmd = `${eik} package
+    // cmd = `node ${eik} package
     //     --token ${t.context.token}
     //     --cwd ${t.context.folder}
     //     --debug`;

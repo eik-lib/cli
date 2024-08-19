@@ -46,7 +46,7 @@ export default class CheckIfAlreadyPublished extends Task {
 
         let localHash;
         try {
-            const localFiles = [join(path, './eik.json')];
+            const localFiles = [join(path, 'eik.json')];
             if (files) {
                 const mappings = await this.config.mappings();
 

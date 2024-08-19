@@ -124,7 +124,7 @@ export default class Version {
         let localHash;
         try {
             makeDirectorySync(path);
-            const eikPathDest = join(path, './eik.json');
+            const eikPathDest = join(path, 'eik.json');
             const eikJSON = {
                 name,
                 server,
