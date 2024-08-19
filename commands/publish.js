@@ -12,8 +12,6 @@ export const aliases = ["pkg", "package", "pub"];
 export const describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
 
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
 	yargs.options({
 		dryRun: {
 			alias: "d",
@@ -28,9 +26,6 @@ export const builder = (yargs) => {
 			alias: "t",
 		},
 	});
-
-	// @ts-expect-error
-	yargs.default("token", defaults.token, defaults.token ? "######" : "");
 
 	yargs.example(`eik publish`);
 	yargs.example(`eik package`);

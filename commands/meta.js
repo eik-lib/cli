@@ -1,7 +1,7 @@
 import ora from "ora";
 import Meta from "../classes/meta.js";
 import { Artifact } from "../formatters/index.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger } from "../utils/index.js";
 
 export const command = "meta <name>";
 
@@ -10,8 +10,6 @@ export const aliases = ["show"];
 export const describe = `Get information about a package`;
 
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
 	yargs.positional("name", {
 		describe: "Name matching one or more of package, npm or import map name",
 		type: "string",
@@ -21,8 +19,6 @@ export const builder = (yargs) => {
 		server: {
 			alias: "s",
 			describe: "Specify location of asset server.",
-			// @ts-expect-error
-			default: defaults.server,
 		},
 	});
 

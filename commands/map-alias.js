@@ -14,8 +14,6 @@ export const describe = "Create an alias for a map";
 export const deprecated = "map-alias is replaced by alias";
 
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
 	yargs
 		.positional("name", {
 			describe: `Import map name for import map that is to be aliased`,
@@ -34,8 +32,6 @@ export const builder = (yargs) => {
 		server: {
 			alias: "s",
 			describe: "Specify location of asset server.",
-			// @ts-expect-error
-			default: defaults.server,
 		},
 		token: {
 			describe:
@@ -44,9 +40,6 @@ export const builder = (yargs) => {
 			alias: "t",
 		},
 	});
-
-	// @ts-expect-error
-	yargs.default("token", defaults.token, defaults.token ? "######" : "");
 
 	yargs.example(`eik map-alias my-map 1.0.0 1`);
 	yargs.example(`eik map-alias my-map 1.7.3 1`);

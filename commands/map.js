@@ -1,7 +1,7 @@
 import { join } from "path";
 import ora from "ora";
 import PublishMap from "../classes/publish/map.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger } from "../utils/index.js";
 import { Artifact } from "../formatters/index.js";
 
 export const command = "map <name> <version> <file>";
@@ -11,8 +11,6 @@ export const aliases = ["m"];
 export const describe = "Publish an import map to the server";
 
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
 	yargs
 		.positional("name", {
 			describe: "Import map name.",
@@ -33,8 +31,6 @@ export const builder = (yargs) => {
 		server: {
 			alias: "s",
 			describe: "Specify location of asset server.",
-			// @ts-expect-error
-			default: defaults.server,
 		},
 		token: {
 			describe:
@@ -43,9 +39,6 @@ export const builder = (yargs) => {
 			alias: "t",
 		},
 	});
-
-	// @ts-expect-error
-	yargs.default("token", defaults.token, defaults.token ? "######" : "");
 
 	yargs.example(`eik map my-map 1.0.0 ./import-map.json`);
 	yargs.example(`eik map my-map 2.1.0 ./import-map.json --debug`);

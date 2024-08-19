@@ -2,7 +2,7 @@ import os from "os";
 import readline from "readline";
 import ora from "ora";
 import Login from "../classes/login.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger } from "../utils/index.js";
 import json from "../utils/json/index.js";
 
 const homedir = os.homedir();
@@ -18,14 +18,11 @@ export const builder = (yargs) => {
 	yargs.example("eik login --server https://assets.myserver.com --key ######");
 	yargs.example("eik login --server https://assets.myserver.com --debug");
 
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
 	yargs.options({
 		server: {
 			alias: "s",
 			describe: `Eik server address. Specify location of the Eik asset server to authenticate against. If an eik.json file is present in the current working directory, the files server value will be used as default. If no eik.json file is present in the current working directory and this flag is not specified, a prompt will be presented to ask for the server address to be input. Eg. --server https://assets.myeikserver.com`,
 			type: "string",
-			default: defaults.server,
 		},
 		key: {
 			alias: "k",

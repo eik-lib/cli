@@ -2,7 +2,7 @@
 
 import ora from "ora";
 import Alias from "../classes/alias.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
 
 export const command = "npm-alias <name> <version> <alias>";
@@ -14,8 +14,6 @@ export const describe = "Create an alias for an npm package";
 export const deprecated = "npm-alias is replaced by alias";
 
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
 	yargs
 		.positional("name", {
 			describe: "Name matching NPM package name.",
@@ -35,8 +33,6 @@ export const builder = (yargs) => {
 		server: {
 			alias: "s",
 			describe: "Specify location of asset server.",
-			// @ts-expect-error
-			default: defaults.server,
 		},
 		token: {
 			describe:
@@ -45,9 +41,6 @@ export const builder = (yargs) => {
 			alias: "t",
 		},
 	});
-
-	// @ts-expect-error
-	yargs.default("token", defaults.token, defaults.token ? "######" : "");
 
 	yargs.example(`eik npm lit-html 1.0.0 1`);
 	yargs.example(`eik npm lit-html 1.3.5 1 --debug`);

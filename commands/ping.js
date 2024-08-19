@@ -9,11 +9,8 @@ export const aliases = [];
 export const describe = "Check that the Eik server is responding";
 
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
 	yargs.positional("server", {
 		describe: "Specify location of Eik server to ping.",
-		default: defaults.server,
 	});
 
 	yargs.example(`eik ping`);

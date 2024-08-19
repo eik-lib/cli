@@ -9,32 +9,33 @@ const aliases = ["i"];
 
 const describe = `Create an eik.json file`;
 
+/** @type {import('yargs').CommandBuilder} */
 const builder = (yargs) => {
-	yargs.example("eik init");
-	yargs.example("eik init --cwd /path/to/dir");
-	yargs.example(
-		'eik init --server https://assets.myserver.com --version 2.0.0 --name my-app --files "./public"',
-	);
-	yargs.example("eik init --debug");
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: `Specify asset server field in "eik.json". This the URL to an Eik asset server Eg. --server https://assets.myeikserver.com`,
-			default: "",
-		},
-		version: {
-			alias: "v",
-			describe: `Specify the semver version field in "eik.json". Eg. --version 1.0.0`,
-			default: "1.0.0",
-		},
-		name: {
-			alias: "n",
-			describe: `Specify the app name field in "eik.json".
+	return yargs
+		.options({
+			server: {
+				alias: "s",
+				describe: `Specify asset server field in "eik.json". This the URL to an Eik asset server Eg. --server https://assets.myeikserver.com`,
+				default: "",
+			},
+			version: {
+				alias: "v",
+				describe: `Specify the semver version field in "eik.json". Eg. --version 1.0.0`,
+				default: "1.0.0",
+			},
+			name: {
+				alias: "n",
+				describe: `Specify the app name field in "eik.json".
                 Eg. --name my-great-app`,
-			default: "",
-		},
-	});
+				default: "",
+			},
+		})
+		.example("eik init")
+		.example("eik init --cwd /path/to/dir")
+		.example(
+			'eik init --server https://assets.myserver.com --version 2.0.0 --name my-app --files "./public"',
+		)
+		.example("eik init --debug");
 };
 
 const handler = async (argv) => {

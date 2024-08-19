@@ -8,22 +8,19 @@ export const command = "integrity [name] [version]";
 
 export const aliases = ["int"];
 
-export const describe = `Get file integrity information`;
+export const describe = "Get file integrity information";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: "Specify location of asset server.",
-			// @ts-expect-error
-			default: defaults.server,
-		},
-	});
-
-	yargs.example(`eik integrity`);
-	yargs.example(`eik integrity --debug`);
+	return yargs
+		.options({
+			server: {
+				alias: "s",
+				describe: "Specify location of asset server.",
+			},
+		})
+		.example("eik integrity")
+		.example("eik integrity --debug");
 };
 
 export const handler = async (argv) => {

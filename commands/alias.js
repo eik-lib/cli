@@ -1,7 +1,6 @@
 import ora from "ora";
-import semver from "semver";
 import Alias from "../classes/alias.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
 
 export const command = "alias [name] [version] [alias]";
@@ -12,36 +11,28 @@ export const describe = `Create or update a semver major alias for a package or 
 
 /** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	// @ts-expect-error
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
-	yargs
+	return yargs
 		.positional("name", {
 			describe: "Name matching a package or import map on the Eik server",
 			type: "string",
-			default: defaults.name,
 		})
 		.positional("version", {
 			describe: "The version the alias should redirect to",
 			type: "string",
-			default: defaults.version,
 		})
 		.positional("alias", {
 			describe:
 				"Alias, should be the semver major component of version. Eg. 1.0.0 should be given the alias 1",
 			type: "string",
-			default: defaults.version ? semver.major(defaults.version) : null,
 		})
 		.options({
 			server: {
 				alias: "s",
 				describe: "Specify location of Eik asset server.",
-				default: defaults.server,
 			},
 			type: {
 				describe:
 					"Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm",
-				default: defaults.type,
 			},
 			token: {
 				describe:
@@ -50,7 +41,6 @@ export const builder = (yargs) => {
 				alias: "t",
 			},
 		})
-		.default("token", defaults.token, defaults.token ? "######" : "")
 		.example(
 			`eik alias my-app 1.0.0 1`,
 			"Create an alias v1 for my-app pointing at 1.0.0",
