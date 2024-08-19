@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@eik/eslint-config": "1.0.2",
+    "@eik/prettier-config": "1.0.1",
     "@eik/semantic-release-config": "1.0.0",
     "@eik/service": "2.3.1",
     "@eik/sink-memory": "1.1.2",

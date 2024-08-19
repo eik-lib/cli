@@ -1,6 +1,6 @@
-import assert from 'assert';
-import fs from 'node:fs/promises';
-import { join, isAbsolute, dirname } from 'path';
+import assert from "assert";
+import fs from "node:fs/promises";
+import { join, isAbsolute, dirname } from "path";
 
 /**
  * Utility function that can be used to write a JavaScript object to a file at a given location.
@@ -20,29 +20,27 @@ import { join, isAbsolute, dirname } from 'path';
  * @throws Error
  */
 export default async (meta = {}, location) => {
-    if (typeof location !== 'string') {
-        assert(
-            location.filename,
-            'When "location" is not of type "string" then it must be an "object" with property "filename"',
-        );
-    }
-    let cwd = process.cwd();
-    let filename = '';
-    if (typeof location === 'string') {
-        filename = location;
-    } else {
-        filename = location.filename;
-        if (location.cwd) {
-            cwd = location.cwd;
-        }
-    }
-    const path = isAbsolute(filename) ? filename : join(cwd, filename);
-    try {
-        await fs.mkdir(dirname(path), { recursive: true });
-        await fs.writeFile(path, JSON.stringify(meta, null, 2));
-    } catch (err) {
-        throw new Error(
-            `Error writing to JSON file ["${path}"]: ${err.message}`,
-        );
-    }
+	if (typeof location !== "string") {
+		assert(
+			location.filename,
+			'When "location" is not of type "string" then it must be an "object" with property "filename"',
+		);
+	}
+	let cwd = process.cwd();
+	let filename = "";
+	if (typeof location === "string") {
+		filename = location;
+	} else {
+		filename = location.filename;
+		if (location.cwd) {
+			cwd = location.cwd;
+		}
+	}
+	const path = isAbsolute(filename) ? filename : join(cwd, filename);
+	try {
+		await fs.mkdir(dirname(path), { recursive: true });
+		await fs.writeFile(path, JSON.stringify(meta, null, 2));
+	} catch (err) {
+		throw new Error(`Error writing to JSON file ["${path}"]: ${err.message}`);
+	}
 };

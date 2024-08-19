@@ -1,38 +1,38 @@
-import ora from 'ora';
-import Ping from '../classes/ping.js';
-import { logger, getDefaults } from '../utils/index.js';
+import ora from "ora";
+import Ping from "../classes/ping.js";
+import { logger, getDefaults } from "../utils/index.js";
 
-export const command = 'ping [server]';
+export const command = "ping [server]";
 
 export const aliases = [];
 
 export const describe = `Ping an Eik server to check that it is responding.`;
 
 export const builder = (yargs) => {
-    const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
+	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
-    yargs.positional('server', {
-        describe: 'Specify location of Eik server to ping.',
-        // @ts-expect-error
-        default: defaults.server,
-    });
+	yargs.positional("server", {
+		describe: "Specify location of Eik server to ping.",
+		// @ts-expect-error
+		default: defaults.server,
+	});
 
-    yargs.example(`eik ping`);
-    yargs.example(`eik ping http://assets.myeikserver.com`);
-    yargs.example(`eik ping http://assets.myeikserver.com --debug`);
+	yargs.example(`eik ping`);
+	yargs.example(`eik ping http://assets.myeikserver.com`);
+	yargs.example(`eik ping http://assets.myeikserver.com --debug`);
 };
 
 export const handler = async (argv) => {
-    const spinner = ora({ stream: process.stdout }).start('working...');
-    const { debug, server } = argv;
+	const spinner = ora({ stream: process.stdout }).start("working...");
+	const { debug, server } = argv;
 
-    try {
-        await new Ping({ logger: logger(spinner, debug), server }).run();
-    } catch (err) {
-        // @ts-expect-error
-        logger.warn(err.message);
-    }
+	try {
+		await new Ping({ logger: logger(spinner, debug), server }).run();
+	} catch (err) {
+		// @ts-expect-error
+		logger.warn(err.message);
+	}
 
-    spinner.text = '';
-    spinner.stopAndPersist();
+	spinner.text = "";
+	spinner.stopAndPersist();
 };

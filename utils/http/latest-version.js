@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join } from "path";
 
 /**
  * Fetches the latest version from an Eik server of a package by name, optionally restricting the lookup to a specified semver major version
@@ -12,44 +12,44 @@ import { join } from 'path';
  * @throws Error
  */
 export default async (server, type, name, major) => {
-    const url = new URL(`${join(type, name)}?t=${Date.now()}`, server);
-    const res = await fetch(url);
-    if (!res.ok) {
-        if (res.status === 404) {
-            return null;
-        }
-        throw new Error('Server responded with non 200 status code.');
-    }
+	const url = new URL(`${join(type, name)}?t=${Date.now()}`, server);
+	const res = await fetch(url);
+	if (!res.ok) {
+		if (res.status === 404) {
+			return null;
+		}
+		throw new Error("Server responded with non 200 status code.");
+	}
 
-    let body;
-    try {
-        body = await res.json();
-    } catch (err) {
-        throw new Error(
-            'An error occurred while attempting to parse json response from server.',
-        );
-    }
+	let body;
+	try {
+		body = await res.json();
+	} catch (err) {
+		throw new Error(
+			"An error occurred while attempting to parse json response from server.",
+		);
+	}
 
-    let versions;
-    try {
-        versions = new Map(body.versions);
-    } catch (err) {
-        throw new Error(
-            'An error occurred while attempting to create an internal versions map. The JSON returned from the server is most likely invalid.',
-        );
-    }
+	let versions;
+	try {
+		versions = new Map(body.versions);
+	} catch (err) {
+		throw new Error(
+			"An error occurred while attempting to create an internal versions map. The JSON returned from the server is most likely invalid.",
+		);
+	}
 
-    const highestMajor = Math.max(...versions.keys());
-    if (Number.isNaN(highestMajor)) {
-        throw new Error(
-            'An error occurred while attempting to get the highest major version from the internal versions map.',
-        );
-    }
+	const highestMajor = Math.max(...versions.keys());
+	if (Number.isNaN(highestMajor)) {
+		throw new Error(
+			"An error occurred while attempting to get the highest major version from the internal versions map.",
+		);
+	}
 
-    try {
-        const entry = versions.get(Number(major || highestMajor));
-        return entry.version;
-    } catch (err) {
-        return null;
-    }
+	try {
+		const entry = versions.get(Number(major || highestMajor));
+		return entry.version;
+	} catch (err) {
+		return null;
+	}
 };

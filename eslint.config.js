@@ -1,10 +1,10 @@
-import config from '@eik/eslint-config';
+import config from "@eik/eslint-config";
 
 export default [
-    ...config,
-    {
-        rules: {
-            'no-unused-vars': 'off',
-        },
-    },
+	...config,
+	{
+		rules: {
+			"no-unused-vars": "off",
+		},
+	},
 ];

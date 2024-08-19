@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { join } from "node:path";
 
 /**
  * A version of path.join that replaces \ (win32) with /
@@ -6,5 +6,5 @@ import { join } from 'node:path';
  * @returns {string}
  */
 export function joinUrlPathname(...parts) {
-    return join(...parts).replace(/\\/g, '/');
+	return join(...parts).replace(/\\/g, "/");
 }
