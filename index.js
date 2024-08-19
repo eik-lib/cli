@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-import chalk from "chalk";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import boxen from "boxen";
 import { join } from "path";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
@@ -25,20 +23,6 @@ if (
 	console.log(version);
 	process.exit(0);
 }
-
-const greeting = chalk.white.bold(`Eik CLI (v${version})`);
-
-const boxenOptions = {
-	padding: 1,
-	margin: 1,
-	borderStyle: "round",
-	borderColor: "green",
-	backgroundColor: "#555555",
-};
-// @ts-expect-error
-const msgBox = boxen(greeting, boxenOptions);
-
-console.log(msgBox);
 
 yargs(hideBin(process.argv))
 	.options({
