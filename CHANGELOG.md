@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/eik-lib/cli/compare/v3.1.2...v3.1.3) (2024-08-19)
+
+
+### Bug Fixes
+
+* add support for Windows ([#584](https://github.com/eik-lib/cli/issues/584)) ([3d2dc7e](https://github.com/eik-lib/cli/commit/3d2dc7ef87abc48a3b4b796e5d717b280837974b))
+
 ## [3.1.2](https://github.com/eik-lib/cli/compare/v3.1.1...v3.1.2) (2024-08-19)
 
 
