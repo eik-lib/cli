@@ -42,7 +42,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "4.1.0",
+    "@eik/common": "4.1.1",
     "abslog": "2.4.4",
     "boxen": "8.0.1",
     "bytes": "3.1.2",
@@ -63,7 +63,7 @@
     "@eik/eslint-config": "1.0.2",
     "@eik/semantic-release-config": "1.0.0",
     "@eik/service": "2.3.0",
-    "@eik/sink-memory": "1.1.1",
+    "@eik/sink-memory": "1.1.2",
     "@eik/typescript-config": "1.0.0",
     "cross-env": "7.0.3",
     "eslint": "9.8.0",
