@@ -7,7 +7,7 @@ export const command = "meta <name>";
 
 export const aliases = ["show"];
 
-export const describe = `Retrieve meta information by package, map or npm name.If a given name exists in several types (package and map for example), results will be returned and displayed from all matching types`;
+export const describe = `Get information about a package`;
 
 export const builder = (yargs) => {
 	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);

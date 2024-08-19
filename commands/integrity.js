@@ -8,7 +8,7 @@ export const command = "integrity [name] [version]";
 
 export const aliases = ["int"];
 
-export const describe = `Retrieve file integrity information for package name and version defined in eik.json, then populate integrity.json file with this information`;
+export const describe = `Get file integrity information`;
 
 export const builder = (yargs) => {
 	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);

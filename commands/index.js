@@ -12,16 +12,16 @@ import * as version from "./version.js";
 import * as alias from "./alias.js";
 
 export const commands = [
+	alias,
 	init,
 	integrity,
 	login,
-	mapAlias,
 	map,
+	mapAlias,
 	meta,
 	npmAlias,
 	packageAlias,
 	ping,
 	publish,
 	version,
-	alias,
 ];

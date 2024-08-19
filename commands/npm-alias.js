@@ -9,7 +9,9 @@ export const command = "npm-alias <name> <version> <alias>";
 
 export const aliases = ["na", "dep-alias", "dependency-alias"];
 
-export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for an NPM package as identified by its name and version. An NPM package with the given name and version must already exist on the asset server. Alias should be the semver major part of the NPM package version. Eg. For an NPM package of version 5.4.3, you should use 5 as the alias`;
+export const describe = "Create an alias for an npm package";
+
+export const deprecated = "npm-alias is replaced by alias";
 
 export const builder = (yargs) => {
 	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
@@ -85,6 +87,3 @@ export const handler = async (argv) => {
 		process.exit(1);
 	}
 };
-
-export const deprecated =
-	'"npm-alias" will be removed in a future version. Please use "alias" instead';

@@ -7,7 +7,7 @@ const command = "init";
 
 const aliases = ["i"];
 
-const describe = `Creates an eik.json file and saves it to the current working directory. If package.json exists in the directory its name and version will be used as the default. Override defaults using command line flags.`;
+const describe = `Create an eik.json file`;
 
 const builder = (yargs) => {
 	yargs.example("eik init");

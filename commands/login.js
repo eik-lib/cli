@@ -11,7 +11,7 @@ export const command = "login";
 
 export const aliases = [];
 
-export const describe = `Authenticate against an Eik server and save the returned token to an .eikrc file in the users home directory. You can specify key and server values to authenticate against using the --key and --server flags which will then bypass login prompts. It is possible to be authenticated against multiple asset servers simultaneously. Simply call "eik login" multiple times.`;
+export const describe = `Log in to an Eik server`;
 
 export const builder = (yargs) => {
 	yargs.example("eik login --server https://assets.myserver.com");

@@ -6,14 +6,13 @@ export const command = "ping [server]";
 
 export const aliases = [];
 
-export const describe = `Ping an Eik server to check that it is responding.`;
+export const describe = "Check that the Eik server is responding";
 
 export const builder = (yargs) => {
 	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
 	yargs.positional("server", {
 		describe: "Specify location of Eik server to ping.",
-		// @ts-expect-error
 		default: defaults.server,
 	});
 

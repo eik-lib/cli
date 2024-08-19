@@ -10,7 +10,9 @@ export const command = "package-alias [name] [version] [alias]";
 
 export const aliases = ["pkg-alias", "pa"];
 
-export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for a package as identified by its name and version. A package with the given name and version must already exist on asset server. Alias should be the semver major part of the package version. Eg. For a package of version 5.4.3, you should use 5 as the alias`;
+export const describe = "Create an alias for a package";
+
+export const deprecated = "package-alias is replaced by alias";
 
 export const builder = (yargs) => {
 	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
@@ -19,20 +21,17 @@ export const builder = (yargs) => {
 		.positional("name", {
 			describe: "Name matching existing name for a package on Eik server",
 			type: "string",
-			// @ts-expect-error
 			default: defaults.name,
 		})
 		.positional("version", {
 			describe: "Version matching existing version for a package on Eik server",
 			type: "string",
-			// @ts-expect-error
 			default: defaults.version,
 		})
 		.positional("alias", {
 			describe:
 				"Alias for a semver version. Must be the semver major component of version. Eg. 1.0.0 should be given as 1",
 			type: "string",
-			// @ts-expect-error
 			default: defaults.version ? semver.major(defaults.version) : null,
 		});
 
@@ -40,7 +39,6 @@ export const builder = (yargs) => {
 		server: {
 			alias: "s",
 			describe: "Specify location of Eik asset server.",
-			// @ts-expect-error
 			default: defaults.server,
 		},
 		token: {
@@ -51,7 +49,6 @@ export const builder = (yargs) => {
 		},
 	});
 
-	// @ts-expect-error
 	yargs.default("token", defaults.token, defaults.token ? "######" : "");
 
 	yargs.example(`eik package-alias my-app 1.0.0 1`);
@@ -96,6 +93,3 @@ export const handler = async (argv) => {
 		process.exit(1);
 	}
 };
-
-export const deprecated =
-	'"package-alias" will be removed in a future version. Please use "alias" instead';

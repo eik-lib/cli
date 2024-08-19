@@ -8,64 +8,65 @@ export const command = "alias [name] [version] [alias]";
 
 export const aliases = ["a"];
 
-export const describe = `Create or update a semver major alias for a package, NPM package or import map as identified by its name and version. A package with the given name and version must already exist on the Eik server. The alias should be the semver major part of the package version. Eg. for a package of version 5.4.3, you should use 5 as the alias. The alias type (npm, map, package) is detected from eik.json in the current working directory.`;
+export const describe = `Create or update a semver major alias for a package or map`;
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
+	// @ts-expect-error
 	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
 
 	yargs
 		.positional("name", {
 			describe: "Name matching a package or import map on the Eik server",
 			type: "string",
-			// @ts-expect-error
 			default: defaults.name,
 		})
 		.positional("version", {
 			describe: "The version the alias should redirect to",
 			type: "string",
-			// @ts-expect-error
 			default: defaults.version,
 		})
 		.positional("alias", {
 			describe:
 				"Alias, should be the semver major component of version. Eg. 1.0.0 should be given the alias 1",
 			type: "string",
-			// @ts-expect-error
 			default: defaults.version ? semver.major(defaults.version) : null,
-		});
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: "Specify location of Eik asset server.",
-			// @ts-expect-error
-			default: defaults.server,
-		},
-		type: {
-			describe:
-				"Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm",
-			// @ts-expect-error
-			default: defaults.type,
-		},
-		token: {
-			describe:
-				"Provide a jwt token to be used to authenticate with the Eik server.",
-			default: "",
-			alias: "t",
-		},
-	});
-
-	// @ts-expect-error
-	yargs.default("token", defaults.token, defaults.token ? "######" : "");
-
-	yargs.example(`eik alias my-app 1.0.0 1`);
-	yargs.example(`eik alias my-app 1.7.3 1`);
-	yargs.example(`eik alias my-app 6.3.1 6`);
-	yargs.example(
-		`eik alias my-app 6.3.1 6 --server https://assets.myeikserver.com`,
-	);
-	yargs.example(`eik alias my-app 4.2.2 4 --debug`);
-	yargs.example(`eik alias my-app 4.2.2 4 --type package`);
+		})
+		.options({
+			server: {
+				alias: "s",
+				describe: "Specify location of Eik asset server.",
+				default: defaults.server,
+			},
+			type: {
+				describe:
+					"Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm",
+				default: defaults.type,
+			},
+			token: {
+				describe:
+					"Provide a jwt token to be used to authenticate with the Eik server.",
+				default: "",
+				alias: "t",
+			},
+		})
+		.default("token", defaults.token, defaults.token ? "######" : "")
+		.example(
+			`eik alias my-app 1.0.0 1`,
+			"Create an alias v1 for my-app pointing at 1.0.0",
+		)
+		.example(
+			`eik alias my-app 1.7.3 1`,
+			"Update an alias v1 for my-app to point at 1.7.3",
+		)
+		.example(
+			`eik alias my-app 6.3.1 6 --server https://assets.myeikserver.com`,
+			"Specify a server other than the one in eik.json",
+		)
+		.example(
+			`eik alias my-app 4.2.2 4 --type package`,
+			"Specify a package type other than the one in eik.json",
+		);
 };
 
 export const handler = async (argv) => {

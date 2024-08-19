@@ -9,7 +9,9 @@ export const command = "map-alias <name> <version> <alias>";
 
 export const aliases = ["ma"];
 
-export const describe = `DEPRECATED: This command has been replaced by the alias command and will be removed in a future version. Create a semver major alias for an import map as identified by its name and version. An import map with the given name and version must already exist on asset server. Alias should be the semver major part of the import map version. Eg. For an import map of version 5.4.3, you should use 5 as the alias`;
+export const describe = "Create an alias for a map";
+
+export const deprecated = "map-alias is replaced by alias";
 
 export const builder = (yargs) => {
 	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
@@ -90,6 +92,3 @@ export const handler = async (argv) => {
 		process.exit(1);
 	}
 };
-
-export const deprecated =
-	'"map-alias" will be removed in a future version. Please use "alias" instead';
