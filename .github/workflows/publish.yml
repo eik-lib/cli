@@ -30,7 +30,7 @@ jobs:
 
       - run: npm run types
 
-      - run: npm run test:ci
+      - run: npm test
 
       - run: npx semantic-release
         env:
