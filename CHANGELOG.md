@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/eik-lib/cli/compare/v3.1.0...v3.1.1) (2024-08-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency boxen to v8.0.1 ([19fb7cf](https://github.com/eik-lib/cli/commit/19fb7cf1b72fadcf47ea2049761ee0e9c6a28050))
+
 # [3.1.0](https://github.com/eik-lib/cli/compare/v3.0.2...v3.1.0) (2024-08-15)
 
 
