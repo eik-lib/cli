@@ -14,7 +14,11 @@ const { version } = JSON.parse(
 	readFileSync(join(__dirname, "./package.json"), { encoding: "utf-8" }),
 );
 
-// short circuit and provide a -v and --version flag
+// Short circuit and provide a -v and --version flag.
+// It's a known limitation in yargs that you can't have both a command
+// and an option named version https://github.com/yargs/yargs/issues/2064
+// We use the version name as a command in yargs, so handle the version
+// option before using yargs.
 if (
 	process.argv.includes("-v") ||
 	// last position only to avoid conflict with publish command
@@ -41,28 +45,20 @@ yargs(hideBin(process.argv))
 			type: "boolean",
 		},
 	})
-	// @ts-expect-error
 	.example("eik init")
-	// @ts-expect-error
 	.example("eik login --server https://assets.myserver.com --key ######")
-	// @ts-expect-error
 	.example("eik publish")
-	// @ts-expect-error
 	.example("eik meta my-app --server https://assets.myserver.com")
 	.example(
-		// @ts-expect-error
 		"eik npm-alias lit-html 1.0.0 1 --server https://assets.myserver.com --token ######",
 	)
 	.example(
-		// @ts-expect-error
 		"eik map my-map 1.0.0 ./import-map.json --server https://assets.myserver.com --token ######",
 	)
-	// @ts-expect-error
 	.example("eik map-alias my-map 1.0.0 1")
-	// @ts-expect-error
 	.command(commands)
 	.demandCommand()
-	.wrap(150)
-	.version(false)
+	.wrap(null)
+	.version(false) // Turn off the built-in version option to not conflict with the version command
 	.help()
 	.parse();
