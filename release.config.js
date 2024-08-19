@@ -15,28 +15,10 @@ export default {
 						pattern: "main",
 						notifyOnSuccess: true,
 						onSuccessTemplate: {
-							text: "$package_name $npm_package_version is now available - $repo_url",
-						},
-					},
-					{
-						pattern: "alpha",
-						notifyOnSuccess: true,
-						onSuccessTemplate: {
-							text: "$package_name $npm_package_version (pre-release) is now available - $repo_url",
-						},
-					},
-					{
-						pattern: "beta",
-						notifyOnSuccess: true,
-						onSuccessTemplate: {
-							text: "$package_name $npm_package_version (pre-release) is now available - $repo_url",
-						},
-					},
-					{
-						pattern: "next",
-						notifyOnSuccess: true,
-						onSuccessTemplate: {
-							text: "$package_name $npm_package_version (pre-release) is now available - $repo_url",
+							type: "mrkdwn",
+							text: `A new version of \`$package_name\` has been released.
+Current version is *$npm_package_version*
+:package: *<$repo_url|$repo_path>:* <$repo_url/releases/tag/v$npm_package_version|v$npm_package_version>`,
 						},
 					},
 				],
