@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/eik-lib/cli/compare/v3.1.1...v3.1.2) (2024-08-19)
+
+
+### Bug Fixes
+
+* **deps:** update eik packages ([d55f539](https://github.com/eik-lib/cli/commit/d55f53955cce60d0e07a9d79c3746fc14d0ea00d))
+
 ## [3.1.1](https://github.com/eik-lib/cli/compare/v3.1.0...v3.1.1) (2024-08-19)
 
 
