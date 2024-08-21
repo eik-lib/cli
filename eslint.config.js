@@ -7,4 +7,5 @@ export default [
 			"no-unused-vars": "off",
 		},
 	},
+	{ ignores: ["test/fixtures/*"] },
 ];
