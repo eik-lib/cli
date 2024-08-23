@@ -1,6 +1,6 @@
 import ora from "ora";
 import Alias from "../classes/alias.js";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
 
 export const command = "alias [name] [version] [alias]";
@@ -48,17 +48,19 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	let success = false;
-	const { debug, server, type } = argv;
-	const log = logger(spinner, debug);
-	let af;
+	const { debug, server, type, ...rest } = getArgsOrDefaults(argv);
 
+	const spinner = ora({ stream: process.stdout }).start("working...");
+	const log = logger(spinner, debug);
+
+	let success = false;
+	let af;
 	try {
 		const data = await new Alias({
 			type,
+			server,
 			logger: log,
-			...argv,
+			...rest,
 		}).run();
 
 		// TODO: get rid of this rediculous formatter class idea that past me put here to irk present and future me.

@@ -1,7 +1,7 @@
 import { join } from "path";
 import ora from "ora";
 import Integrity from "../classes/integrity.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 import json from "../utils/json/index.js";
 
 export const command = "integrity [name] [version]";
@@ -24,13 +24,13 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	let integrity = false;
-	const { debug, cwd, config } = argv;
-	const l = logger(spinner, debug);
-	// @ts-expect-error
-	const { name, version, server, out, type } = getDefaults(config || cwd);
+	const { name, version, server, out, type, cwd, debug } =
+		getArgsOrDefaults(argv);
 
+	const spinner = ora({ stream: process.stdout }).start("working...");
+	const l = logger(spinner, debug);
+
+	let integrity = false;
 	try {
 		integrity = await new Integrity({
 			logger: l,

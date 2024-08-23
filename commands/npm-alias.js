@@ -1,6 +1,6 @@
 import ora from "ora";
 import Alias from "../classes/alias.js";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
 
 export const command = "npm-alias <name> <version> <alias>";
@@ -45,17 +45,20 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	let success = false;
-	const { debug, server } = argv;
-	const log = logger(spinner, debug);
-	let data = {};
+	const { debug, server, ...rest } = getArgsOrDefaults(argv);
 
+	const spinner = ora({ stream: process.stdout }).start("working...");
+	const log = logger(spinner, debug);
+
+	let success = false;
+	let data = {};
 	try {
 		data = await new Alias({
+			debug,
+			server,
+			...rest,
 			type: "npm",
 			logger: log,
-			...argv,
 		}).run();
 
 		const createdOrUpdated = data.update ? "Updated" : "Created";

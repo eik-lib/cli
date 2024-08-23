@@ -2,7 +2,12 @@ import { join } from "path";
 import ora from "ora";
 import chalk from "chalk";
 import PublishPackage from "../classes/publish/package/index.js";
-import { logger, getDefaults, typeSlug, typeTitle } from "../utils/index.js";
+import {
+	logger,
+	getArgsOrDefaults,
+	typeSlug,
+	typeTitle,
+} from "../utils/index.js";
 import { Artifact } from "../formatters/index.js";
 
 export const command = "publish";
@@ -32,12 +37,21 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
+	const {
+		debug,
+		dryRun,
+		cwd,
+		token,
+		name,
+		version,
+		server,
+		map,
+		out,
+		files,
+		type,
+	} = getArgsOrDefaults(argv);
+
 	const spinner = ora({ stream: process.stdout }).start("working...");
-	const { debug, dryRun, cwd, token, config } = argv;
-	// @ts-expect-error
-	const { name, version, server, map, out, files, type } = getDefaults(
-		config || cwd,
-	);
 
 	if (type === "map") {
 		spinner.warn(

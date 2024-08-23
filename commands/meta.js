@@ -1,7 +1,7 @@
 import ora from "ora";
 import Meta from "../classes/meta.js";
 import { Artifact } from "../formatters/index.js";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 
 export const command = "meta <name>";
 
@@ -28,14 +28,15 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
+	const { debug, server, ...rest } = getArgsOrDefaults(argv);
+
 	const spinner = ora({ stream: process.stdout }).start("working...");
-	let meta = false;
-	const { debug, server } = argv;
 	const l = logger(spinner, debug);
 
+	let meta = false;
 	try {
 		// @ts-expect-error
-		meta = await new Meta({ logger: l, ...argv }).run();
+		meta = await new Meta({ logger: l, debug, server, ...rest }).run();
 		spinner.text = "";
 		spinner.stopAndPersist();
 	} catch (err) {

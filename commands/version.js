@@ -2,7 +2,7 @@ import { execSync } from "child_process";
 import { join } from "path";
 import ora from "ora";
 import VersionPackage from "../classes/version.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 import json from "../utils/json/index.js";
 
 export const command = "version [level]";
@@ -32,10 +32,10 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
+	const { level, debug, dryRun, cwd, name, version, server, map, out, files } =
+		getArgsOrDefaults(argv);
+
 	const spinner = ora({ stream: process.stdout }).start("working...");
-	const { level, debug, dryRun, cwd, config } = argv;
-	// @ts-expect-error
-	const { name, version, server, map, out, files } = getDefaults(config || cwd);
 
 	try {
 		const log = logger(spinner, debug);

@@ -1,7 +1,7 @@
 import { join } from "path";
 import ora from "ora";
 import PublishMap from "../classes/publish/map.js";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 import { Artifact } from "../formatters/index.js";
 
 export const command = "map <name> <version> <file>";
@@ -45,13 +45,21 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
+	const { debug, name, version, server, ...rest } = getArgsOrDefaults(argv);
+
 	const spinner = ora({ stream: process.stdout }).start("working...");
-	const { debug, server, name, version } = argv;
 
 	try {
 		const log = logger(spinner, debug);
 
-		await new PublishMap({ logger: log, ...argv }).run();
+		await new PublishMap({
+			logger: log,
+			debug,
+			name,
+			version,
+			server,
+			...rest,
+		}).run();
 
 		let url = new URL(join("map", name), server);
 		let res = await fetch(url);

@@ -1,6 +1,6 @@
 import ora from "ora";
 import Ping from "../classes/ping.js";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 
 // TODO: replace positional argument with --server to be in line with other commands
 export const command = "ping [server]";
@@ -20,8 +20,9 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
+	const { debug, server } = getArgsOrDefaults(argv);
+
 	const spinner = ora({ stream: process.stdout }).start("working...");
-	const { debug, server } = argv;
 
 	try {
 		await new Ping({ logger: logger(spinner, debug), server }).run();

@@ -1,6 +1,6 @@
 import ora from "ora";
 import Alias from "../classes/alias.js";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
 
 export const command = "map-alias <name> <version> <alias>";
@@ -47,17 +47,22 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	let success = false;
-	const { debug, name, version, server } = argv;
-	const log = logger(spinner, debug);
-	let data = {};
+	const { debug, name, version, server, ...rest } = getArgsOrDefaults(argv);
 
+	const spinner = ora({ stream: process.stdout }).start("working...");
+	const log = logger(spinner, debug);
+
+	let data = {};
+	let success = false;
 	try {
 		data = await new Alias({
+			debug,
+			name,
+			version,
+			server,
+			...rest,
 			type: "map",
 			logger: log,
-			...argv,
 		}).run();
 
 		data.name = name;
@@ -75,6 +80,7 @@ export const handler = async (argv) => {
 
 	spinner.text = "";
 	spinner.stopAndPersist();
+
 	if (success) {
 		new AliasFormatter(data).format(server);
 	} else {

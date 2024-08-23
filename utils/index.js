@@ -1,7 +1,8 @@
 import { helpers } from "@eik/common";
 import logger from "./logger.js";
 import typeTitle from "./type-title.js";
+import { getArgsOrDefaults } from "./defaults.js";
 
-const { getDefaults, typeSlug } = helpers;
+const { typeSlug } = helpers;
 
-export { logger, getDefaults, typeSlug, typeTitle };
+export { logger, getArgsOrDefaults, typeSlug, typeTitle };

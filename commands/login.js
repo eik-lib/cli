@@ -2,7 +2,7 @@ import os from "os";
 import readline from "readline";
 import ora from "ora";
 import Login from "../classes/login.js";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 import json from "../utils/json/index.js";
 
 const homedir = os.homedir();
@@ -33,8 +33,8 @@ export const builder = (yargs) => {
 };
 
 export const handler = async (argv) => {
-	let success = false;
-	const { debug, key, server } = argv;
+	const { debug, key, server } = getArgsOrDefaults(argv);
+
 	let k = key;
 	let s = server;
 	let rl = null;
@@ -70,6 +70,7 @@ export const handler = async (argv) => {
 
 	const spinner = ora({ stream: process.stdout }).start("working...");
 
+	let success = false;
 	try {
 		const token = await new Login({
 			logger: logger(spinner, debug),

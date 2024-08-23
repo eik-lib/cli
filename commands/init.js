@@ -1,7 +1,7 @@
 import { join } from "path";
 import fs from "fs";
 import ora from "ora";
-import { logger } from "../utils/index.js";
+import { logger, getArgsOrDefaults } from "../utils/index.js";
 
 const command = "init";
 
@@ -36,13 +36,14 @@ const builder = (yargs) => {
 };
 
 const handler = async (argv) => {
-	let { name, version } = argv;
-	const { server, cwd, debug } = argv;
-	const pathname = join(cwd, "./eik.json");
+	let { cwd, debug, server, name, version } = getArgsOrDefaults(argv, {
+		init: true,
+	});
 
 	const spinner = ora({ stream: process.stdout }).start("working...");
 	const log = logger(spinner, debug);
 
+	const pathname = join(cwd, "./eik.json");
 	try {
 		log.debug(`Checking for existing ${pathname}`);
 
