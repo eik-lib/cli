@@ -1,5 +1,3 @@
-// @deprecated in favor of `alias` command
-
 import ora from "ora";
 import Alias from "../classes/alias.js";
 import { logger } from "../utils/index.js";
@@ -13,8 +11,9 @@ export const describe = "Create an alias for an npm package";
 
 export const deprecated = "npm-alias is replaced by alias";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs
+	return yargs
 		.positional("name", {
 			describe: "Name matching NPM package name.",
 			type: "string",
@@ -27,26 +26,22 @@ export const builder = (yargs) => {
 			describe:
 				"Alias for a semver version. Must be the semver major component of version.",
 			type: "string",
-		});
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: "Specify location of asset server.",
-		},
-		token: {
-			describe:
-				"Provide a jwt token to be used to authenticate with the Eik server.",
-			default: "",
-			alias: "t",
-		},
-	});
-
-	yargs.example(`eik npm lit-html 1.0.0 1`);
-	yargs.example(`eik npm lit-html 1.3.5 1 --debug`);
-	yargs.example(
-		`eik npm lit-html 5.3.2 5 --server https://assets.myeikserver.com`,
-	);
+		})
+		.options({
+			server: {
+				alias: "s",
+				describe: "Eik server address, if different from configuration file",
+			},
+			token: {
+				describe: "JTW used for authentication, if not using eik login",
+				alias: "t",
+			},
+		})
+		.example("eik npm-alias lit-html 1.0.0 1")
+		.example(
+			"eik npm-alias lit-html 5.3.2 5 --server https://assets.myeikserver.com",
+		)
+		.example("eik npm-alias lit-html 1.0.0 1 --token yourtoken");
 };
 
 export const handler = async (argv) => {

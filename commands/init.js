@@ -7,7 +7,7 @@ const command = "init";
 
 const aliases = ["i"];
 
-const describe = `Create an eik.json file`;
+const describe = "Create an eik.json file";
 
 /** @type {import('yargs').CommandBuilder} */
 const builder = (yargs) => {
@@ -15,27 +15,24 @@ const builder = (yargs) => {
 		.options({
 			server: {
 				alias: "s",
-				describe: `Specify asset server field in "eik.json". This the URL to an Eik asset server Eg. --server https://assets.myeikserver.com`,
-				default: "",
+				describe: "Eik server address, if different from configuration file",
 			},
 			version: {
 				alias: "v",
-				describe: `Specify the semver version field in "eik.json". Eg. --version 1.0.0`,
+				describe:
+					'Specify the semver version field in "eik.json". Eg. --version 1.0.0',
 				default: "1.0.0",
 			},
 			name: {
 				alias: "n",
-				describe: `Specify the app name field in "eik.json".
-                Eg. --name my-great-app`,
-				default: "",
+				describe:
+					'Specify the app name field in "eik.json". Eg. --name my-great-app',
 			},
 		})
 		.example("eik init")
-		.example("eik init --cwd /path/to/dir")
 		.example(
-			'eik init --server https://assets.myserver.com --version 2.0.0 --name my-app --files "./public"',
-		)
-		.example("eik init --debug");
+			"eik init --server https://assets.myserver.com --version 2.0.0 --name my-app",
+		);
 };
 
 const handler = async (argv) => {

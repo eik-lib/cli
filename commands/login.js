@@ -11,26 +11,25 @@ export const command = "login";
 
 export const aliases = [];
 
-export const describe = `Log in to an Eik server`;
+export const describe = "Log in to an Eik server";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs.example("eik login --server https://assets.myserver.com");
-	yargs.example("eik login --server https://assets.myserver.com --key ######");
-	yargs.example("eik login --server https://assets.myserver.com --debug");
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: `Eik server address. Specify location of the Eik asset server to authenticate against. If an eik.json file is present in the current working directory, the files server value will be used as default. If no eik.json file is present in the current working directory and this flag is not specified, a prompt will be presented to ask for the server address to be input. Eg. --server https://assets.myeikserver.com`,
-			type: "string",
-		},
-		key: {
-			alias: "k",
-			describe: `Login access key. This is a passkey for a given user account and needs to be configured on the server. If this flag is not specifed, a prompt will be used to ask for the key to be input. Eg. --key ########`,
-			type: "string",
-			default: "",
-		},
-	});
+	return yargs
+		.options({
+			server: {
+				alias: "s",
+				describe: "Eik server address, if different from configuration file",
+				type: "string",
+			},
+			key: {
+				alias: "k",
+				describe: "Login access key",
+				type: "string",
+			},
+		})
+		.example("eik login --server https://assets.myserver.com")
+		.example("eik login --server https://assets.myserver.com --key yourkey");
 };
 
 export const handler = async (argv) => {

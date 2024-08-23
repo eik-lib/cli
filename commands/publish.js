@@ -9,29 +9,26 @@ export const command = "publish";
 
 export const aliases = ["pkg", "package", "pub"];
 
-export const describe = `Publish an app package to an Eik server. Reads configuration from eik.json or package.json files. See https://eik.dev for more details.`;
+export const describe = "Publish an app package to an Eik server";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs.options({
-		dryRun: {
-			alias: "d",
-			describe:
-				"Terminates the publish early (before upload) and provides information about created bundles for inspection.",
-			default: false,
-			type: "boolean",
-		},
-		token: {
-			describe: `Provide a jwt token to be used to authenticate with the Eik server. Automatically determined if authenticated (via eik login)`,
-			type: "string",
-			alias: "t",
-		},
-	});
-
-	yargs.example(`eik publish`);
-	yargs.example(`eik package`);
-	yargs.example(`eik pub --dry-run`);
-	yargs.example(`eik pkg --token ######`);
-	yargs.example(`eik pkg --debug`);
+	return yargs
+		.options({
+			dryRun: {
+				alias: "d",
+				describe: "Log details about the operation and skip upload",
+				type: "boolean",
+			},
+			token: {
+				describe: "JTW used for authentication, if not using eik login",
+				type: "string",
+				alias: "t",
+			},
+		})
+		.example("eik publish")
+		.example("eik publish --dry-run")
+		.example("eik publish --token yourtoken");
 };
 
 export const handler = async (argv) => {

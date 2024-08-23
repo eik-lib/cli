@@ -7,7 +7,8 @@ export const command = "alias [name] [version] [alias]";
 
 export const aliases = ["a"];
 
-export const describe = `Create or update a semver major alias for a package or map`;
+export const describe =
+	"Create or update a semver major alias for a package or map";
 
 /** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
@@ -28,35 +29,22 @@ export const builder = (yargs) => {
 		.options({
 			server: {
 				alias: "s",
-				describe: "Specify location of Eik asset server.",
+				describe: "Eik server address, if different from configuration file",
 			},
 			type: {
 				describe:
 					"Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm",
 			},
 			token: {
-				describe:
-					"Provide a jwt token to be used to authenticate with the Eik server.",
-				default: "",
+				describe: "JTW used for authentication, if not using eik login",
 				alias: "t",
 			},
 		})
-		.example(
-			`eik alias my-app 1.0.0 1`,
-			"Create an alias v1 for my-app pointing at 1.0.0",
-		)
-		.example(
-			`eik alias my-app 1.7.3 1`,
-			"Update an alias v1 for my-app to point at 1.7.3",
-		)
-		.example(
-			`eik alias my-app 6.3.1 6 --server https://assets.myeikserver.com`,
-			"Specify a server other than the one in eik.json",
-		)
-		.example(
-			`eik alias my-app 4.2.2 4 --type package`,
-			"Specify a package type other than the one in eik.json",
-		);
+		.example("eik alias my-app 1.0.0 1")
+		.example("eik alias my-app 1.7.3 1")
+		.example("eik alias my-app 6.3.1 6 --server https://assets.myeikserver.com")
+		.example("eik alias my-app 6.3.1 6 --token yourtoken")
+		.example("eik alias my-app 4.2.2 4 --type package");
 };
 
 export const handler = async (argv) => {

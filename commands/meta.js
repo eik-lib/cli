@@ -7,24 +7,24 @@ export const command = "meta <name>";
 
 export const aliases = ["show"];
 
-export const describe = `Get information about a package`;
+export const describe = "Get information about a package";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs.positional("name", {
-		describe: "Name matching one or more of package, npm or import map name",
-		type: "string",
-	});
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: "Specify location of asset server.",
-		},
-	});
-
-	yargs.example(`eik meta lit-html`);
-	yargs.example(`eik meta my-map --debug`);
-	yargs.example(`eik meta my-app --server https://assets.myeikserver.com`);
+	return yargs
+		.positional("name", {
+			describe: "Name matching one or more of package, npm or import map name",
+			type: "string",
+		})
+		.options({
+			server: {
+				alias: "s",
+				describe: "Eik server address, if different from configuration file",
+			},
+		})
+		.example("eik meta lit-html")
+		.example("eik meta my-map --debug")
+		.example("eik meta my-app --server https://assets.myeikserver.com");
 };
 
 export const handler = async (argv) => {

@@ -16,11 +16,11 @@ export const builder = (yargs) => {
 		.options({
 			server: {
 				alias: "s",
-				describe: "Specify location of asset server.",
+				describe: "Eik server address, if different from configuration file",
 			},
 		})
 		.example("eik integrity")
-		.example("eik integrity --debug");
+		.example("eik integrity --server https://assets.myserver.com");
 };
 
 export const handler = async (argv) => {

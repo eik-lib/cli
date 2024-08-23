@@ -1,8 +1,6 @@
-// @deprecated in favor of `alias` command
-
 import ora from "ora";
 import Alias from "../classes/alias.js";
-import { logger, getDefaults } from "../utils/index.js";
+import { logger } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
 
 export const command = "map-alias <name> <version> <alias>";
@@ -13,41 +11,39 @@ export const describe = "Create an alias for a map";
 
 export const deprecated = "map-alias is replaced by alias";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs
+	return yargs
 		.positional("name", {
-			describe: `Import map name for import map that is to be aliased`,
+			describe: "Import map package name",
 			type: "string",
 		})
 		.positional("version", {
-			describe: `Import map version for import map that is to be aliased`,
+			describe: "Import map version",
 			type: "string",
 		})
 		.positional("alias", {
-			describe: `Alias for a semver version. Should be the semver major component of version.`,
-			type: "string",
-		});
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: "Specify location of asset server.",
-		},
-		token: {
 			describe:
-				"Provide a jwt token to be used to authenticate with the Eik server.",
-			default: "",
-			alias: "t",
-		},
-	});
-
-	yargs.example(`eik map-alias my-map 1.0.0 1`);
-	yargs.example(`eik map-alias my-map 1.7.3 1`);
-	yargs.example(`eik map-alias my-map 6.3.1 6`);
-	yargs.example(
-		`eik map-alias my-map 6.3.1 6 --server https://assets.myeikserver.com`,
-	);
-	yargs.example(`eik map-alias my-map 4.2.2 4 --debug`);
+				"Alias value, the semver major component of the import map version",
+			type: "string",
+		})
+		.options({
+			server: {
+				alias: "s",
+				describe: "Eik server address, if different from configuration file",
+			},
+			token: {
+				describe: "JTW used for authentication, if not using eik login",
+				alias: "t",
+			},
+		})
+		.example("eik map-alias my-map 1.0.0 1")
+		.example("eik map-alias my-map 1.7.3 1")
+		.example("eik map-alias my-map 6.3.1 6")
+		.example(
+			"eik map-alias my-map 6.3.1 6 --server https://assets.myeikserver.com",
+		)
+		.example("eik map-alias my-map 6.3.1 6 --token yourtoken");
 };
 
 export const handler = async (argv) => {

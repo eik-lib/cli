@@ -59,11 +59,10 @@ https://eik.dev/docs/reference/at-eik-cli/`,
 			describe: "Path to Eik configuration file (eik.json or package.json)",
 		},
 		cwd: {
-			describe: "Path to a different working directory",
-			default: process.cwd(),
+			describe: "Path to a different working directory than the current",
 		},
 		debug: {
-			default: false,
+			describe: "Show additional logs",
 			type: "boolean",
 		},
 	})

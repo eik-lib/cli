@@ -7,28 +7,28 @@ import json from "../utils/json/index.js";
 
 export const command = "version [level]";
 
-export const describe = `Compares local files with files on server and increments "version" field in eik.json if necessary.`;
+export const describe =
+	'Compare local files with files on server and increment "version" field if different';
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs.positional("level", {
-		describe: "Semver level to increment version by",
-		default: "patch",
-		type: "string",
-		choices: ["major", "minor", "patch"],
-	});
-
-	yargs.options({
-		dryRun: {
-			alias: "d",
-			describe:
-				"Terminates the publish early (before upload) and provides information about created bundles for inspection.",
-			default: false,
-			type: "boolean",
-		},
-	});
-
-	yargs.example(`eik version`);
-	yargs.example(`eik version minor`);
+	return yargs
+		.positional("level", {
+			describe: "Semver level to increment version by",
+			default: "patch",
+			type: "string",
+			choices: ["major", "minor", "patch"],
+		})
+		.options({
+			dryRun: {
+				alias: "d",
+				describe: "Log details about the operation and skip upload",
+				type: "boolean",
+			},
+		})
+		.example("eik version")
+		.example("eik version minor")
+		.example("eik version --dry-run");
 };
 
 export const handler = async (argv) => {

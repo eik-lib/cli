@@ -10,8 +10,9 @@ export const aliases = ["m"];
 
 export const describe = "Publish an import map to the server";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs
+	return yargs
 		.positional("name", {
 			describe: "Import map name.",
 			type: "string",
@@ -25,26 +26,22 @@ export const builder = (yargs) => {
 				"Path to import map file on local disk relative to the current working directory.",
 			type: "string",
 			normalize: true,
-		});
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: "Specify location of asset server.",
-		},
-		token: {
-			describe:
-				"Provide a jwt token to be used to authenticate with the Eik server.",
-			default: "",
-			alias: "t",
-		},
-	});
-
-	yargs.example(`eik map my-map 1.0.0 ./import-map.json`);
-	yargs.example(`eik map my-map 2.1.0 ./import-map.json --debug`);
-	yargs.example(
-		`eik map my-map 2.1.1 ./import-map.json --server https://assets.myeikserver.com`,
-	);
+		})
+		.options({
+			server: {
+				alias: "s",
+				describe: "Eik server address, if different from configuration file",
+			},
+			token: {
+				describe: "JTW used for authentication, if not using eik login",
+				alias: "t",
+			},
+		})
+		.example("eik map my-map 1.0.0 ./import-map.json")
+		.example(
+			"eik map my-map 2.1.1 ./import-map.json --server https://assets.myeikserver.com",
+		)
+		.example("eik map my-map 1.0.0 ./import-map.json --token yourtoken");
 };
 
 export const handler = async (argv) => {
