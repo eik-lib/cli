@@ -70,7 +70,7 @@ test("eik meta", async (t) => {
 
 	const { error, stdout } = await exec(cmd);
 
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "::");
 	t.match(stdout, "NPM");
 	t.match(stdout, "scroll-into-view-if-needed");

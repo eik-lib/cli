@@ -73,7 +73,7 @@ test("eik package : package, details provided by eik.json file", async (t) => {
 	);
 
 	t.equal(res.ok, true);
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "published");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
@@ -107,7 +107,7 @@ test("eik package : package, details provided by eik.json file - npm namespace",
 	);
 
 	t.equal(res.ok, true);
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "NPM");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
@@ -141,7 +141,7 @@ test("eik package : package, details provided by eik.json file - explicit packag
 	);
 
 	t.equal(res.ok, true);
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "PACKAGE");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
@@ -176,7 +176,7 @@ test("eik package : package, details provided by package.json values", async (t)
 	);
 
 	t.equal(res.ok, true);
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "published");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
@@ -233,6 +233,7 @@ test("workflow: publish npm, alias npm, publish map, alias map and then publish 
 	let assets = {
 		name: "scroll-into-view-if-needed",
 		version: "2.2.24",
+		type: "npm",
 		server: t.context.address,
 		files: {
 			"index.js": join(__dirname, "..", "fixtures", "client.js"),
@@ -246,13 +247,16 @@ test("workflow: publish npm, alias npm, publish map, alias map and then publish 
 	);
 
 	cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder} --npm`;
-	await exec(cmd);
+	let out = await exec(cmd);
+	t.equal(out.error, null);
 
 	// alias npm dependency
 	cmd = `node ${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
+				--cwd ${t.context.folder}
         --token ${t.context.token}
         --server ${t.context.address}`;
-	await exec(cmd.split("\n").join(" "));
+	out = await exec(cmd.split("\n").join(" "));
+	t.equal(out.error, null);
 
 	// create import map file locally
 	const map = {
@@ -273,13 +277,16 @@ test("workflow: publish npm, alias npm, publish map, alias map and then publish 
         --cwd ${t.context.folder}
         --token ${t.context.token}
         --server ${t.context.address}`;
-	await exec(cmd.split("\n").join(" "));
+	out = await exec(cmd.split("\n").join(" "));
+	t.equal(out.error, null);
 
 	// alias import map
 	cmd = `node ${eik} map-alias my-map 1.0.0 1
+				--cwd ${t.context.folder}
         --token ${t.context.token}
         --server ${t.context.address}`;
-	await exec(cmd.split("\n").join(" "));
+	out = await exec(cmd.split("\n").join(" "));
+	t.equal(out.error, null);
 
 	assets = {
 		name: "test-app",
@@ -308,7 +315,8 @@ test("workflow: publish npm, alias npm, publish map, alias map and then publish 
 	//     --token ${t.context.token}
 	//     --cwd ${t.context.folder}
 	//     --debug`;
-	// await exec(cmd.split('\n').join(' '));
+	// out = await exec(cmd.split('\n').join(' '));
+	// t.equal(out.error, null);
 
 	// const res = await fetch(new URL('/pkg/test-app/1.0.0/index.js', t.context.address));
 	// const text = await res.text();
