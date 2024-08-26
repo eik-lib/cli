@@ -9,7 +9,7 @@ import { joinUrlPathname } from "../utils/url.js";
  * @typedef {object} AliasOptions
  * @property {import('abslog').AbstractLoggerOptions} [logger]
  * @property {string} server
- * @property {"package" | "npm" | "map"} [type="package"]
+ * @property {"package" | "npm" | "image" | "map"} [type="package"]
  * @property {string} name
  * @property {string} version
  * @property {string} alias
