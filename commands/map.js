@@ -43,31 +43,34 @@ export const builder = (yargs) => {
 		.example("eik map my-map 1.0.0 ./import-map.json --token yourtoken");
 };
 
-export const handler = commandHandler(async (argv, log) => {
-	const { debug, name, version, server, ...rest } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log) => {
+		const { debug, name, version, server, ...rest } = argv;
 
-	await new PublishMap({
-		logger: log,
-		debug,
-		name,
-		version,
-		server,
-		...rest,
-	}).run();
+		await new PublishMap({
+			logger: log,
+			debug,
+			name,
+			version,
+			server,
+			...rest,
+		}).run();
 
-	let url = new URL(join("map", name), server);
-	let res = await fetch(url);
-	const pkgMeta = await res.json();
+		let url = new URL(join("map", name), server);
+		let res = await fetch(url);
+		const pkgMeta = await res.json();
 
-	url = new URL(join("map", name, version), server);
-	res = await fetch(url);
+		url = new URL(join("map", name, version), server);
+		res = await fetch(url);
 
-	log.info(`Published import map "${name}" at version "${version}"`);
+		log.info(`Published import map "${name}" at version "${version}"`);
 
-	const artifact = new Artifact(pkgMeta);
-	const versions = new Map(pkgMeta.versions);
-	artifact.versions = Array.from(versions.values());
-	artifact.format(server);
+		const artifact = new Artifact(pkgMeta);
+		const versions = new Map(pkgMeta.versions);
+		artifact.versions = Array.from(versions.values());
+		artifact.format(server);
 
-	process.stdout.write("\n");
-});
+		process.stdout.write("\n");
+	},
+);

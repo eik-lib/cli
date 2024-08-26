@@ -32,88 +32,93 @@ export const builder = (yargs) => {
 		.example("eik publish --token yourtoken");
 };
 
-export const handler = commandHandler(async (argv, log, spinner) => {
-	const {
-		debug,
-		dryRun,
-		cwd,
-		token,
-		name,
-		version,
-		server,
-		map,
-		out,
-		files,
-		type,
-	} = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log, spinner) => {
+		const {
+			debug,
+			dryRun,
+			cwd,
+			token,
+			name,
+			version,
+			server,
+			map,
+			out,
+			files,
+			type,
+		} = argv;
 
-	if (type === "map") {
-		throw new EikCliError(
-			errors.ERR_WRONG_TYPE,
-			'"type" is set to "map", which is not supported by the publish command. Please use the "eik map" command instead',
-		);
-	}
-
-	const options = {
-		logger: log,
-		cwd,
-		token,
-		dryRun,
-		debug,
-		name,
-		server,
-		version,
-		type,
-		map,
-		out,
-		files,
-	};
-
-	const publish = await new PublishPackage(options).run();
-
-	if (!publish) {
-		throw new EikCliError(
-			errors.ERR_VERSION_EXISTS,
-			"Version in eik.json has not changed since last publish, publishing is not necessary",
-		);
-	}
-
-	const { files: fls } = publish;
-
-	if (!dryRun) {
-		let url = new URL(join(typeSlug(type), name), server);
-		let res = await fetch(url);
-		const pkgMeta = await res.json();
-
-		url = new URL(join(typeSlug(type), name, version), server);
-		res = await fetch(url);
-		const pkgVersionMeta = await res.json();
-
-		const artifact = new Artifact(pkgMeta);
-		artifact.versions = [pkgVersionMeta];
-
-		spinner.text = "";
-		spinner.stopAndPersist();
-
-		artifact.format(server);
-		process.stdout.write("\n");
-	} else {
-		spinner.text = "";
-		spinner.stopAndPersist();
-
-		process.stdout.write(
-			`:: ${chalk.bgYellow.white.bold(
-				typeTitle(type),
-			)} > ${chalk.green(name)} | ${chalk.bold("dry run")}`,
-		);
-		process.stdout.write("\n\n");
-		process.stdout.write("   files (local temporary):\n");
-		for (const file of fls) {
-			process.stdout.write(`   - ${chalk.bold("type")}: ${file.type}\n`);
-			process.stdout.write(`     ${chalk.bold("path")}: ${file.pathname}\n\n`);
+		if (type === "map") {
+			throw new EikCliError(
+				errors.ERR_WRONG_TYPE,
+				'"type" is set to "map", which is not supported by the publish command. Please use the "eik map" command instead',
+			);
 		}
-		process.stdout.write(
-			`   ${chalk.bold("No files were published to remote server")}\n\n`,
-		);
-	}
-});
+
+		const options = {
+			logger: log,
+			cwd,
+			token,
+			dryRun,
+			debug,
+			name,
+			server,
+			version,
+			type,
+			map,
+			out,
+			files,
+		};
+
+		const publish = await new PublishPackage(options).run();
+
+		if (!publish) {
+			throw new EikCliError(
+				errors.ERR_VERSION_EXISTS,
+				"Version in eik.json has not changed since last publish, publishing is not necessary",
+			);
+		}
+
+		const { files: fls } = publish;
+
+		if (!dryRun) {
+			let url = new URL(join(typeSlug(type), name), server);
+			let res = await fetch(url);
+			const pkgMeta = await res.json();
+
+			url = new URL(join(typeSlug(type), name, version), server);
+			res = await fetch(url);
+			const pkgVersionMeta = await res.json();
+
+			const artifact = new Artifact(pkgMeta);
+			artifact.versions = [pkgVersionMeta];
+
+			spinner.text = "";
+			spinner.stopAndPersist();
+
+			artifact.format(server);
+			process.stdout.write("\n");
+		} else {
+			spinner.text = "";
+			spinner.stopAndPersist();
+
+			process.stdout.write(
+				`:: ${chalk.bgYellow.white.bold(
+					typeTitle(type),
+				)} > ${chalk.green(name)} | ${chalk.bold("dry run")}`,
+			);
+			process.stdout.write("\n\n");
+			process.stdout.write("   files (local temporary):\n");
+			for (const file of fls) {
+				process.stdout.write(`   - ${chalk.bold("type")}: ${file.type}\n`);
+				process.stdout.write(
+					`     ${chalk.bold("path")}: ${file.pathname}\n\n`,
+				);
+			}
+			process.stdout.write(
+				`   ${chalk.bold("No files were published to remote server")}\n\n`,
+			);
+		}
+	},
+);

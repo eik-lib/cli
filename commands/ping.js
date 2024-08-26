@@ -18,7 +18,10 @@ export const builder = (yargs) => {
 		.example("eik ping http://assets.myeikserver.com");
 };
 
-export const handler = commandHandler(async (argv, logger) => {
-	const { server } = argv;
-	await new Ping({ logger, server }).run();
-});
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, logger) => {
+		const { server } = argv;
+		await new Ping({ logger, server }).run();
+	},
+);

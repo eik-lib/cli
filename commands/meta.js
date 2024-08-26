@@ -26,15 +26,18 @@ export const builder = (yargs) => {
 		.example("eik meta my-app --server https://assets.myeikserver.com");
 };
 
-export const handler = commandHandler(async (argv, log) => {
-	const { debug, server, ...rest } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log) => {
+		const { debug, server, ...rest } = argv;
 
-	const meta = await new Meta({ logger: log, debug, server, ...rest }).run();
-	if (meta) {
-		for (const m of Object.values(meta)) {
-			const artifact = new Artifact(m);
-			artifact.format(server);
-			process.stdout.write(`\n`);
+		const meta = await new Meta({ logger: log, debug, server, ...rest }).run();
+		if (meta) {
+			for (const m of Object.values(meta)) {
+				const artifact = new Artifact(m);
+				artifact.format(server);
+				process.stdout.write(`\n`);
+			}
 		}
-	}
-});
+	},
+);

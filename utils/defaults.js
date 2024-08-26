@@ -17,20 +17,17 @@ const defaults = {
  * If a specific argument is given for it, that takes precedence.
  * @template [T=Record<string, unknown>]
  * @param {any} argv
- * @param {{ init?: boolean }} [opts]
+ * @param {{ command: string; options?: string[] }} opts
  * @returns {import('@eik/common').EikConfig & typeof defaults & T}
  */
-export function getArgsOrDefaults(argv, opts = { init: false }) {
+export function getArgsOrDefaults(argv, opts) {
 	let { cwd, config: configPath } = argv;
 	if (!cwd) {
 		cwd = process.cwd();
 	}
 
 	let config = {};
-	if (!opts.init) {
-		// let path = configPath || cwd;
-		// config = helpers.getDefaults(path).toJSON();
-		// TODO: make so we can do this to give better feedback on missing configs
+	if (!opts.command.startsWith("init")) {
 		let path = configPath || cwd;
 		try {
 			const stats = fs.statSync(path);
@@ -42,11 +39,13 @@ export function getArgsOrDefaults(argv, opts = { init: false }) {
 		} catch (error) {
 			const e = /** @type {Error} */ (error);
 			if (e.constructor.name === "MissingConfigError") {
-				throw new EikCliError(
-					errors.ERR_MISSING_CONFIG,
-					`No eik.json or package.json with eik configuration in ${cwd}`,
-					error,
-				);
+				if (!hasOptionsOnArgv(argv, opts.options)) {
+					throw new EikCliError(
+						errors.ERR_MISSING_CONFIG,
+						`No eik.json or package.json with eik configuration in ${cwd}, and did not get required fields as options`,
+						error,
+					);
+				}
 			}
 		}
 	}
@@ -59,4 +58,18 @@ export function getArgsOrDefaults(argv, opts = { init: false }) {
 	};
 
 	return result;
+}
+
+/**
+ * @param {any} argv
+ * @param {string[]} options
+ * @returns {boolean}
+ */
+function hasOptionsOnArgv(argv, options = []) {
+	for (const arg of options) {
+		if (typeof argv[arg] === "undefined") {
+			return false;
+		}
+	}
+	return true;
 }

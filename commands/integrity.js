@@ -22,25 +22,28 @@ export const builder = (yargs) => {
 		.example("eik integrity --server https://assets.myserver.com");
 };
 
-export const handler = commandHandler(async (argv, log, spinner) => {
-	const { name, version, server, out, type, cwd, debug } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log, spinner) => {
+		const { name, version, server, out, type, cwd, debug } = argv;
 
-	const integrity = await new Integrity({
-		logger: log,
-		name,
-		version,
-		server,
-		debug,
-		cwd,
-		type,
-	}).run();
+		const integrity = await new Integrity({
+			logger: log,
+			name,
+			version,
+			server,
+			debug,
+			cwd,
+			type,
+		}).run();
 
-	if (integrity) {
-		const filename = join(out, "integrity.json");
-		await json.write(integrity, { cwd, filename });
-		spinner.succeed(
-			`integrity information for package "${name}" (v${version}) saved to "${filename}"`,
-		);
-		process.stdout.write("\n");
-	}
-});
+		if (integrity) {
+			const filename = join(out, "integrity.json");
+			await json.write(integrity, { cwd, filename });
+			spinner.succeed(
+				`integrity information for package "${name}" (v${version}) saved to "${filename}"`,
+			);
+			process.stdout.write("\n");
+		}
+	},
+);

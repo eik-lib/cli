@@ -31,57 +31,60 @@ export const builder = (yargs) => {
 		.example("eik login --server https://assets.myserver.com --key yourkey");
 };
 
-export const handler = commandHandler(async (argv, logger) => {
-	const { key, server } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, logger) => {
+		const { key, server } = argv;
 
-	let k = key;
-	let s = server;
-	let rl = null;
+		let k = key;
+		let s = server;
+		let rl = null;
 
-	if (!s || !k) {
-		rl = readline.createInterface({
-			input: process.stdin,
-			output: process.stdout,
-		});
-	}
-
-	if (!s) {
-		await new Promise((resolve) => {
-			rl?.question("Enter Eik server address > ", (input) => {
-				s = input;
-				// @ts-expect-error
-				resolve();
+		if (!s || !k) {
+			rl = readline.createInterface({
+				input: process.stdin,
+				output: process.stdout,
 			});
-		});
-	}
+		}
 
-	if (!k) {
-		await new Promise((resolve) => {
-			rl?.question(`Enter login key for ${s} > `, (input) => {
-				k = input;
-				// @ts-expect-error
-				resolve();
+		if (!s) {
+			await new Promise((resolve) => {
+				rl?.question("Enter Eik server address > ", (input) => {
+					s = input;
+					// @ts-expect-error
+					resolve();
+				});
 			});
-		});
-	}
+		}
 
-	if (rl) rl.close();
+		if (!k) {
+			await new Promise((resolve) => {
+				rl?.question(`Enter login key for ${s} > `, (input) => {
+					k = input;
+					// @ts-expect-error
+					resolve();
+				});
+			});
+		}
 
-	const token = await new Login({
-		logger,
-		key: k,
-		server: s,
-	}).run();
+		if (rl) rl.close();
 
-	if (token) {
-		const meta = /** @type {{ tokens: any }} */ (
-			await json.read({ cwd: homedir, filename: ".eikrc" })
-		);
+		const token = await new Login({
+			logger,
+			key: k,
+			server: s,
+		}).run();
 
-		const tokens = new Map(meta.tokens);
-		tokens.set(s, token);
-		meta.tokens = Array.from(tokens);
+		if (token) {
+			const meta = /** @type {{ tokens: any }} */ (
+				await json.read({ cwd: homedir, filename: ".eikrc" })
+			);
 
-		await json.write(meta, { cwd: homedir, filename: ".eikrc" });
-	}
-});
+			const tokens = new Map(meta.tokens);
+			tokens.set(s, token);
+			meta.tokens = Array.from(tokens);
+
+			await json.write(meta, { cwd: homedir, filename: ".eikrc" });
+		}
+	},
+);

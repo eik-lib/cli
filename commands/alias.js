@@ -46,23 +46,26 @@ export const builder = (yargs) => {
 		.example("eik alias my-app 4.2.2 4 --type package");
 };
 
-export const handler = commandHandler(async (argv, log) => {
-	const { debug, server, type, ...rest } = argv;
-	const data = await new Alias({
-		type,
-		server,
-		logger: log,
-		...rest,
-	}).run();
+export const handler = commandHandler(
+	{ command, options: ["server", "type"] },
+	async (argv, log) => {
+		const { debug, server, type, ...rest } = argv;
+		const data = await new Alias({
+			type,
+			server,
+			logger: log,
+			...rest,
+		}).run();
 
-	// TODO: get rid of this rediculous formatter class idea that past me put here to irk present and future me.
-	// Smells like DRY silliness
-	const af = new AliasFormatter(data);
+		// TODO: get rid of this rediculous formatter class idea that past me put here to irk present and future me.
+		// Smells like DRY silliness
+		const af = new AliasFormatter(data);
 
-	const createdOrUpdated = data.update ? "Updated" : "Created";
-	log.info(
-		`${createdOrUpdated} alias for "${type}" "${data.name}". ("${data.version}" => "v${data.alias}")`,
-	);
+		const createdOrUpdated = data.update ? "Updated" : "Created";
+		log.info(
+			`${createdOrUpdated} alias for "${type}" "${data.name}". ("${data.version}" => "v${data.alias}")`,
+		);
 
-	af.format(server);
-});
+		af.format(server);
+	},
+);

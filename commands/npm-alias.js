@@ -43,20 +43,23 @@ export const builder = (yargs) => {
 		.example("eik npm-alias lit-html 1.0.0 1 --token yourtoken");
 };
 
-export const handler = commandHandler(async (argv, log) => {
-	const { debug, server, ...rest } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log) => {
+		const { debug, server, ...rest } = argv;
 
-	const data = await new Alias({
-		debug,
-		server,
-		...rest,
-		type: "npm",
-		logger: log,
-	}).run();
+		const data = await new Alias({
+			debug,
+			server,
+			...rest,
+			type: "npm",
+			logger: log,
+		}).run();
 
-	const createdOrUpdated = data.update ? "Updated" : "Created";
-	log.info(
-		`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
-	);
-	new AliasFormatter(data).format(server);
-});
+		const createdOrUpdated = data.update ? "Updated" : "Created";
+		log.info(
+			`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+		);
+		new AliasFormatter(data).format(server);
+	},
+);

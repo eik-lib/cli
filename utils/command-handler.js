@@ -19,11 +19,11 @@ import { getArgsOrDefaults } from "./defaults.js";
  */
 
 /**
+ * @param {{ command: string; options?: string[] }} opts
  * @param {HandlerFunction} handlerFunction
- * @param {{ init?: boolean }} [opts]
  * @returns {import('yargs').CommandModule["handler"]}
  */
-export function commandHandler(handlerFunction, opts = { init: false }) {
+export function commandHandler(opts, handlerFunction) {
 	return async (argv) => {
 		const spinner = ora({ stream: process.stdout }).start();
 		const log = logger(spinner, argv.debug);

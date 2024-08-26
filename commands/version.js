@@ -31,66 +31,69 @@ export const builder = (yargs) => {
 		.example("eik version --dry-run");
 };
 
-export const handler = commandHandler(async (argv, log) => {
-	const { level, dryRun, cwd, name, version, server, map, out, files } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log) => {
+		const { level, dryRun, cwd, name, version, server, map, out, files } = argv;
 
-	const options = {
-		logger: log,
-		name,
-		server,
-		version,
-		cwd,
-		level,
-		map,
-		out,
-		files,
-	};
+		const options = {
+			logger: log,
+			name,
+			server,
+			version,
+			cwd,
+			level,
+			map,
+			out,
+			files,
+		};
 
-	const newVersion = await new VersionPackage(options).run();
+		const newVersion = await new VersionPackage(options).run();
 
-	if (dryRun) {
-		log.info(
-			`Dry Run: new version needed, determined new version to be ${newVersion}`,
-		);
-	} else {
-		log.debug(`Writing new version ${newVersion} to eik.json`);
-		// @ts-expect-error
-		await json.writeEik({ version: newVersion }, { cwd });
-
-		log.debug(`Committing eik.json to local git repository`);
-		try {
-			execSync(`git add ${join(cwd, "eik.json")}`);
-			log.debug(`  ==> stage: ${join(cwd, "eik.json")}`);
-		} catch (err) {
-			throw new EikCliError(
-				errors.ERR_NOT_GIT,
-				'Failed to stage file "eik.json". Is this directory (or any parent directories) a git repository?',
-				err,
+		if (dryRun) {
+			log.info(
+				`Dry Run: new version needed, determined new version to be ${newVersion}`,
 			);
-		}
+		} else {
+			log.debug(`Writing new version ${newVersion} to eik.json`);
+			// @ts-expect-error
+			await json.writeEik({ version: newVersion }, { cwd });
 
-		try {
-			execSync(
-				`git commit -m "build(assets): version eik.json to v${newVersion} [skip ci]"`,
-				{
-					env: {
-						GIT_AUTHOR_NAME: "Eik Cli",
-						GIT_AUTHOR_EMAIL: "eik@eik.dev",
-						GIT_COMMITTER_NAME: "Eik Cli",
-						GIT_COMMITTER_EMAIL: "eik@eik.dev",
+			log.debug(`Committing eik.json to local git repository`);
+			try {
+				execSync(`git add ${join(cwd, "eik.json")}`);
+				log.debug(`  ==> stage: ${join(cwd, "eik.json")}`);
+			} catch (err) {
+				throw new EikCliError(
+					errors.ERR_NOT_GIT,
+					'Failed to stage file "eik.json". Is this directory (or any parent directories) a git repository?',
+					err,
+				);
+			}
+
+			try {
+				execSync(
+					`git commit -m "build(assets): version eik.json to v${newVersion} [skip ci]"`,
+					{
+						env: {
+							GIT_AUTHOR_NAME: "Eik Cli",
+							GIT_AUTHOR_EMAIL: "eik@eik.dev",
+							GIT_COMMITTER_NAME: "Eik Cli",
+							GIT_COMMITTER_EMAIL: "eik@eik.dev",
+						},
+						stdio: "ignore",
 					},
-					stdio: "ignore",
-				},
-			);
-			log.debug(`  ==> commit`);
+				);
+				log.debug(`  ==> commit`);
 
-			log.info(`New version ${newVersion} written back to eik.json`);
-		} catch (err) {
-			throw new EikCliError(
-				errors.ERR_GIT_COMMIT,
-				'Failed to commit changes to file "eik.json".',
-				err,
-			);
+				log.info(`New version ${newVersion} written back to eik.json`);
+			} catch (err) {
+				throw new EikCliError(
+					errors.ERR_GIT_COMMIT,
+					'Failed to commit changes to file "eik.json".',
+					err,
+				);
+			}
 		}
-	}
-});
+	},
+);

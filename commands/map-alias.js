@@ -45,28 +45,31 @@ export const builder = (yargs) => {
 		.example("eik map-alias my-map 6.3.1 6 --token yourtoken");
 };
 
-export const handler = commandHandler(async (argv, log) => {
-	const { debug, name, version, server, ...rest } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log) => {
+		const { debug, name, version, server, ...rest } = argv;
 
-	const data = await new Alias({
-		debug,
-		name,
-		version,
-		server,
-		...rest,
-		type: "map",
-		logger: log,
-	}).run();
+		const data = await new Alias({
+			debug,
+			name,
+			version,
+			server,
+			...rest,
+			type: "map",
+			logger: log,
+		}).run();
 
-	data.name = name;
-	data.version = version;
-	data.files = [];
+		data.name = name;
+		data.version = version;
+		data.files = [];
 
-	const createdOrUpdated = data.update ? "Updated" : "Created";
+		const createdOrUpdated = data.update ? "Updated" : "Created";
 
-	log.info(
-		`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
-	);
+		log.info(
+			`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+		);
 
-	new AliasFormatter(data).format(server);
-});
+		new AliasFormatter(data).format(server);
+	},
+);

@@ -45,23 +45,26 @@ export const builder = (yargs) => {
 		.example("eik package-alias my-app 4.2.2 4 --token yourtoken");
 };
 
-export const handler = commandHandler(async (argv, log) => {
-	const { debug, server, ...rest } = argv;
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log) => {
+		const { debug, server, ...rest } = argv;
 
-	const data = await new Alias({
-		debug,
-		server,
-		...rest,
-		type: "pkg",
-		logger: log,
-	}).run();
+		const data = await new Alias({
+			debug,
+			server,
+			...rest,
+			type: "pkg",
+			logger: log,
+		}).run();
 
-	const af = new AliasFormatter(data);
+		const af = new AliasFormatter(data);
 
-	const createdOrUpdated = data.update ? "Updated" : "Created";
-	log.info(
-		`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
-	);
+		const createdOrUpdated = data.update ? "Updated" : "Created";
+		log.info(
+			`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+		);
 
-	af.format(server);
-});
+		af.format(server);
+	},
+);

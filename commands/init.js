@@ -34,74 +34,69 @@ const builder = (yargs) => {
 		);
 };
 
-const handler = commandHandler(
-	async (argv, log) => {
-		let { cwd, server, name, version } = argv;
+const handler = commandHandler({ command }, async (argv, log) => {
+	let { cwd, server, name, version } = argv;
 
-		const pathname = join(cwd, "./eik.json");
-		log.debug(`Checking for existing ${pathname}`);
+	const pathname = join(cwd, "./eik.json");
+	log.debug(`Checking for existing ${pathname}`);
 
-		let eikJsonExists = false;
+	let eikJsonExists = false;
+	try {
+		const st = fs.statSync(pathname);
+		if (st.isFile()) {
+			eikJsonExists = true;
+		}
+	} catch (err) {
+		// noop
+	}
+	if (eikJsonExists) {
+		throw new Error(
+			`An "eik.json" file already exists in directory. File will not be written`,
+		);
+	}
+
+	if (!name || !version || version === "1.0.0") {
+		log.debug("Looking for default from package.json");
 		try {
-			const st = fs.statSync(pathname);
-			if (st.isFile()) {
-				eikJsonExists = true;
+			let packageJson = fs.readFileSync(join(cwd, "package.json"), "utf-8");
+			packageJson = JSON.parse(packageJson);
+			if (!name) {
+				name = packageJson.name;
+				log.debug(`Using ${name} from package.json as default name`);
 			}
-		} catch (err) {
+			if (!version || version === "1.0.0") {
+				version = packageJson.version;
+				log.debug(`Using ${version} from package.json as default version`);
+			}
+		} catch (e) {
 			// noop
 		}
-		if (eikJsonExists) {
-			throw new Error(
-				`An "eik.json" file already exists in directory. File will not be written`,
-			);
-		}
+	} else {
+		log.debug(`Got ${name} and ${version}, skipping package.json`);
+	}
 
-		if (!name || !version || version === "1.0.0") {
-			log.debug("Looking for default from package.json");
-			try {
-				let packageJson = fs.readFileSync(join(cwd, "package.json"), "utf-8");
-				packageJson = JSON.parse(packageJson);
-				if (!name) {
-					name = packageJson.name;
-					log.debug(`Using ${name} from package.json as default name`);
-				}
-				if (!version || version === "1.0.0") {
-					version = packageJson.version;
-					log.debug(`Using ${version} from package.json as default version`);
-				}
-			} catch (e) {
-				// noop
-			}
-		} else {
-			log.debug(`Got ${name} and ${version}, skipping package.json`);
-		}
+	log.debug(`Writing to ${pathname}`);
 
-		log.debug(`Writing to ${pathname}`);
+	const output = JSON.stringify(
+		{
+			$schema:
+				"https://raw.githubusercontent.com/eik-lib/common/main/lib/schemas/eikjson.schema.json",
+			name,
+			version,
+			server,
+			files: "./public",
+			"import-map": [],
+		},
+		null,
+		2,
+	);
+	fs.writeFileSync(pathname, output);
 
-		const output = JSON.stringify(
-			{
-				$schema:
-					"https://raw.githubusercontent.com/eik-lib/common/main/lib/schemas/eikjson.schema.json",
-				name,
-				version,
-				server,
-				files: "./public",
-				"import-map": [],
-			},
-			null,
-			2,
-		);
-		fs.writeFileSync(pathname, output);
-
-		log.info(`Wrote to ${pathname}
+	log.info(`Wrote to ${pathname}
 
 ${output}
 
 Read more about configuring Eik on https://eik.dev/docs/reference/eik-json`);
-	},
-	{
-		init: true,
-	},
-);
+});
 
 export { command, aliases, describe, builder, handler };
