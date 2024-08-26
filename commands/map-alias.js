@@ -9,7 +9,7 @@ export const aliases = ["ma"];
 
 export const describe = "Create an alias for a map";
 
-export const deprecated = "map-alias is replaced by alias";
+export const deprecated = "map-alias has been replaced by alias";
 
 /** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
@@ -33,7 +33,7 @@ export const builder = (yargs) => {
 				describe: "Eik server address, if different from configuration file",
 			},
 			token: {
-				describe: "JTW used for authentication, if not using eik login",
+				describe: "JWT used for authentication, if not using eik login",
 				alias: "t",
 			},
 		})

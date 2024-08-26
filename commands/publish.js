@@ -26,7 +26,7 @@ export const builder = (yargs) => {
 				type: "boolean",
 			},
 			token: {
-				describe: "JTW used for authentication, if not using eik login",
+				describe: "JWT used for authentication, if not using eik login",
 				type: "string",
 				alias: "t",
 			},

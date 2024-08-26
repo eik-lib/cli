@@ -7,9 +7,9 @@ export const command = "npm-alias <name> <version> <alias>";
 
 export const aliases = ["na", "dep-alias", "dependency-alias"];
 
-export const describe = "Create an alias for an npm package";
+export const describe = "Create an alias for an NPM package";
 
-export const deprecated = "npm-alias is replaced by alias";
+export const deprecated = "npm-alias has been replaced by alias";
 
 /** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
@@ -33,7 +33,7 @@ export const builder = (yargs) => {
 				describe: "Eik server address, if different from configuration file",
 			},
 			token: {
-				describe: "JTW used for authentication, if not using eik login",
+				describe: "JWT used for authentication, if not using eik login",
 				alias: "t",
 			},
 		})

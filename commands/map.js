@@ -33,7 +33,7 @@ export const builder = (yargs) => {
 				describe: "Eik server address, if different from configuration file",
 			},
 			token: {
-				describe: "JTW used for authentication, if not using eik login",
+				describe: "JWT used for authentication, if not using eik login",
 				alias: "t",
 			},
 		})

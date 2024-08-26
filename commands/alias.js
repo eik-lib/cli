@@ -33,10 +33,10 @@ export const builder = (yargs) => {
 			},
 			type: {
 				describe:
-					"Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, or `map` Eg. --type npm",
+					"Alter the alias type. Default is detected from eik.json. Valid values are `package`, `npm`, 'image', or `map` Eg. --type npm",
 			},
 			token: {
-				describe: "JTW used for authentication, if not using eik login",
+				describe: "JWT used for authentication, if not using eik login",
 				alias: "t",
 			},
 		})

@@ -13,7 +13,7 @@ export const describe = "Check that the Eik server is responding";
 export const builder = (yargs) => {
 	return yargs
 		.positional("server", {
-			describe: "Specify location of Eik server to ping.",
+			describe: "Specify location of Eik server to check against.",
 		})
 		.example("eik ping")
 		.example("eik ping http://assets.myeikserver.com");
