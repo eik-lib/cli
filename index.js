@@ -50,8 +50,8 @@ yargs(hideBin(process.argv))
 	.epilogue(
 		`Run $0 <command> --help to read more about a specific subcommand.
 
-For a more detailed description, see the reference documentation:
-https://eik.dev/docs/reference/at-eik-cli/`,
+For a more detailed description of commands and options, see the reference documentation:
+  https://eik.dev/cli`,
 	)
 	.options({
 		config: {
