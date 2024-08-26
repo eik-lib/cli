@@ -14,27 +14,37 @@ import { getArgsOrDefaults } from "./defaults.js";
  * @callback HandlerFunction
  * @param {Argv & T} argv
  * @param {Logger} log
- * @param {Spinner} spinner
+ * @param {Spinner} spinner Can we remove this?
  * @returns {Promise<void>}
  */
 
 /**
  * @param {HandlerFunction} handlerFunction
+ * @param {{ init?: boolean }} [opts]
  * @returns {import('yargs').CommandModule["handler"]}
  */
-export function commandHandler(handlerFunction) {
+export function commandHandler(handlerFunction, opts = { init: false }) {
 	return async (argv) => {
 		const spinner = ora({ stream: process.stdout }).start();
 		const log = logger(spinner, argv.debug);
 
 		try {
-			await handlerFunction(getArgsOrDefaults(argv), log, spinner);
+			await handlerFunction(getArgsOrDefaults(argv, opts), log, spinner);
 
 			spinner.text = "";
 			spinner.stopAndPersist();
 		} catch (e) {
 			if (e instanceof EikCliError) {
 				log.error(e.message);
+
+				if (argv.debug) {
+					log.debug(e.stack);
+					if (e.cause) {
+						log.debug(`Caused by ${e.cause.message}`);
+						log.debug(e.cause.stack);
+					}
+				}
+
 				spinner.text = "";
 				spinner.stopAndPersist();
 				return process.exit(e.exitCode);

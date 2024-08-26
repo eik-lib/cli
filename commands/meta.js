@@ -1,7 +1,6 @@
-import ora from "ora";
 import Meta from "../classes/meta.js";
 import { Artifact } from "../formatters/index.js";
-import { logger, getArgsOrDefaults } from "../utils/index.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "meta <name>";
 
@@ -27,25 +26,10 @@ export const builder = (yargs) => {
 		.example("eik meta my-app --server https://assets.myeikserver.com");
 };
 
-export const handler = async (argv) => {
-	const { debug, server, ...rest } = getArgsOrDefaults(argv);
+export const handler = commandHandler(async (argv, log) => {
+	const { debug, server, ...rest } = argv;
 
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	const l = logger(spinner, debug);
-
-	let meta = false;
-	try {
-		// @ts-expect-error
-		meta = await new Meta({ logger: l, debug, server, ...rest }).run();
-		spinner.text = "";
-		spinner.stopAndPersist();
-	} catch (err) {
-		spinner.text = "";
-		spinner.stopAndPersist();
-		l.warn(err.message);
-		process.exit(1);
-	}
-
+	const meta = await new Meta({ logger: log, debug, server, ...rest }).run();
 	if (meta) {
 		for (const m of Object.values(meta)) {
 			const artifact = new Artifact(m);
@@ -53,4 +37,4 @@ export const handler = async (argv) => {
 			process.stdout.write(`\n`);
 		}
 	}
-};
+});

@@ -1,9 +1,9 @@
 import { execSync } from "child_process";
 import { join } from "path";
-import ora from "ora";
 import VersionPackage from "../classes/version.js";
-import { logger, getArgsOrDefaults } from "../utils/index.js";
 import json from "../utils/json/index.js";
+import { EikCliError, errors } from "../utils/error.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "version [level]";
 
@@ -31,75 +31,66 @@ export const builder = (yargs) => {
 		.example("eik version --dry-run");
 };
 
-export const handler = async (argv) => {
-	const { level, debug, dryRun, cwd, name, version, server, map, out, files } =
-		getArgsOrDefaults(argv);
+export const handler = commandHandler(async (argv, log) => {
+	const { level, dryRun, cwd, name, version, server, map, out, files } = argv;
 
-	const spinner = ora({ stream: process.stdout }).start("working...");
+	const options = {
+		logger: log,
+		name,
+		server,
+		version,
+		cwd,
+		level,
+		map,
+		out,
+		files,
+	};
 
-	try {
-		const log = logger(spinner, debug);
+	const newVersion = await new VersionPackage(options).run();
 
-		const options = {
-			logger: log,
-			name,
-			server,
-			version,
-			cwd,
-			level,
-			map,
-			out,
-			files,
-		};
+	if (dryRun) {
+		log.info(
+			`Dry Run: new version needed, determined new version to be ${newVersion}`,
+		);
+	} else {
+		log.debug(`Writing new version ${newVersion} to eik.json`);
+		// @ts-expect-error
+		await json.writeEik({ version: newVersion }, { cwd });
 
-		const newVersion = await new VersionPackage(options).run();
-
-		if (dryRun) {
-			log.info(
-				`Dry Run: new version needed, determined new version to be ${newVersion}`,
+		log.debug(`Committing eik.json to local git repository`);
+		try {
+			execSync(`git add ${join(cwd, "eik.json")}`);
+			log.debug(`  ==> stage: ${join(cwd, "eik.json")}`);
+		} catch (err) {
+			throw new EikCliError(
+				errors.ERR_NOT_GIT,
+				'Failed to stage file "eik.json". Is this directory (or any parent directories) a git repository?',
+				err,
 			);
-		} else {
-			log.debug(`Writing new version ${newVersion} to eik.json`);
-			// @ts-expect-error
-			await json.writeEik({ version: newVersion }, { cwd });
-
-			log.debug(`Committing eik.json to local git repository`);
-			try {
-				execSync(`git add ${join(cwd, "eik.json")}`);
-				log.debug(`  ==> stage: ${join(cwd, "eik.json")}`);
-			} catch (err) {
-				throw new Error(
-					'Failed to stage file "eik.json". Is this directory (or any parent directories) a git repository?',
-				);
-			}
-
-			try {
-				execSync(
-					`git commit -m "build(assets): version eik.json to v${newVersion} [skip ci]"`,
-					{
-						env: {
-							GIT_AUTHOR_NAME: "Eik Cli",
-							GIT_AUTHOR_EMAIL: "eik@eik.dev",
-							GIT_COMMITTER_NAME: "Eik Cli",
-							GIT_COMMITTER_EMAIL: "eik@eik.dev",
-						},
-						stdio: "ignore",
-					},
-				);
-				log.debug(`  ==> commit`);
-
-				log.info(`New version ${newVersion} written back to eik.json`);
-			} catch (err) {
-				throw new Error('Failed to commit changes to file "eik.json".');
-			}
 		}
 
-		spinner.text = "";
-		spinner.stopAndPersist();
-		process.exit();
-	} catch (err) {
-		spinner.warn(err.message);
-		spinner.text = "";
-		spinner.stopAndPersist();
+		try {
+			execSync(
+				`git commit -m "build(assets): version eik.json to v${newVersion} [skip ci]"`,
+				{
+					env: {
+						GIT_AUTHOR_NAME: "Eik Cli",
+						GIT_AUTHOR_EMAIL: "eik@eik.dev",
+						GIT_COMMITTER_NAME: "Eik Cli",
+						GIT_COMMITTER_EMAIL: "eik@eik.dev",
+					},
+					stdio: "ignore",
+				},
+			);
+			log.debug(`  ==> commit`);
+
+			log.info(`New version ${newVersion} written back to eik.json`);
+		} catch (err) {
+			throw new EikCliError(
+				errors.ERR_GIT_COMMIT,
+				'Failed to commit changes to file "eik.json".',
+				err,
+			);
+		}
 	}
-};
+});

@@ -1,9 +1,8 @@
 import os from "os";
 import readline from "readline";
-import ora from "ora";
 import Login from "../classes/login.js";
-import { logger, getArgsOrDefaults } from "../utils/index.js";
 import json from "../utils/json/index.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 const homedir = os.homedir();
 
@@ -32,8 +31,8 @@ export const builder = (yargs) => {
 		.example("eik login --server https://assets.myserver.com --key yourkey");
 };
 
-export const handler = async (argv) => {
-	const { debug, key, server } = getArgsOrDefaults(argv);
+export const handler = commandHandler(async (argv, logger) => {
+	const { key, server } = argv;
 
 	let k = key;
 	let s = server;
@@ -68,39 +67,21 @@ export const handler = async (argv) => {
 
 	if (rl) rl.close();
 
-	const spinner = ora({ stream: process.stdout }).start("working...");
+	const token = await new Login({
+		logger,
+		key: k,
+		server: s,
+	}).run();
 
-	let success = false;
-	try {
-		const token = await new Login({
-			logger: logger(spinner, debug),
-			key: k,
-			server: s,
-		}).run();
+	if (token) {
+		const meta = /** @type {{ tokens: any }} */ (
+			await json.read({ cwd: homedir, filename: ".eikrc" })
+		);
 
-		if (token) {
-			const meta = /** @type {{ tokens: any }} */ (
-				await json.read({ cwd: homedir, filename: ".eikrc" })
-			);
+		const tokens = new Map(meta.tokens);
+		tokens.set(s, token);
+		meta.tokens = Array.from(tokens);
 
-			const tokens = new Map(meta.tokens);
-			tokens.set(s, token);
-			meta.tokens = Array.from(tokens);
-
-			await json.write(meta, { cwd: homedir, filename: ".eikrc" });
-			success = true;
-		}
-	} catch (err) {
-		// @ts-expect-error
-		logger.warn(err.message);
+		await json.write(meta, { cwd: homedir, filename: ".eikrc" });
 	}
-
-	if (success) {
-		spinner.text = "";
-		spinner.stopAndPersist();
-	} else {
-		spinner.text = "";
-		spinner.stopAndPersist();
-		process.exit(1);
-	}
-};
+});

@@ -1,7 +1,6 @@
-import ora from "ora";
 import Alias from "../classes/alias.js";
-import { logger, getArgsOrDefaults } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "map-alias <name> <version> <alias>";
 
@@ -46,44 +45,28 @@ export const builder = (yargs) => {
 		.example("eik map-alias my-map 6.3.1 6 --token yourtoken");
 };
 
-export const handler = async (argv) => {
-	const { debug, name, version, server, ...rest } = getArgsOrDefaults(argv);
+export const handler = commandHandler(async (argv, log) => {
+	const { debug, name, version, server, ...rest } = argv;
 
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	const log = logger(spinner, debug);
+	const data = await new Alias({
+		debug,
+		name,
+		version,
+		server,
+		...rest,
+		type: "map",
+		logger: log,
+	}).run();
 
-	let data = {};
-	let success = false;
-	try {
-		data = await new Alias({
-			debug,
-			name,
-			version,
-			server,
-			...rest,
-			type: "map",
-			logger: log,
-		}).run();
+	data.name = name;
+	data.version = version;
+	data.files = [];
 
-		data.name = name;
-		data.version = version;
-		data.files = [];
+	const createdOrUpdated = data.update ? "Updated" : "Created";
 
-		const createdOrUpdated = data.update ? "Updated" : "Created";
-		log.info(
-			`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
-		);
-		success = true;
-	} catch (err) {
-		log.warn(err.message);
-	}
+	log.info(
+		`${createdOrUpdated} alias for package "${data.name}". ("${data.version}" => "v${data.alias}")`,
+	);
 
-	spinner.text = "";
-	spinner.stopAndPersist();
-
-	if (success) {
-		new AliasFormatter(data).format(server);
-	} else {
-		process.exit(1);
-	}
-};
+	new AliasFormatter(data).format(server);
+});

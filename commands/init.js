@@ -1,7 +1,6 @@
 import { join } from "path";
 import fs from "fs";
-import ora from "ora";
-import { logger, getArgsOrDefaults } from "../utils/index.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 const command = "init";
 
@@ -35,16 +34,11 @@ const builder = (yargs) => {
 		);
 };
 
-const handler = async (argv) => {
-	let { cwd, debug, server, name, version } = getArgsOrDefaults(argv, {
-		init: true,
-	});
+const handler = commandHandler(
+	async (argv, log) => {
+		let { cwd, server, name, version } = argv;
 
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	const log = logger(spinner, debug);
-
-	const pathname = join(cwd, "./eik.json");
-	try {
+		const pathname = join(cwd, "./eik.json");
 		log.debug(`Checking for existing ${pathname}`);
 
 		let eikJsonExists = false;
@@ -104,11 +98,10 @@ const handler = async (argv) => {
 ${output}
 
 Read more about configuring Eik on https://eik.dev/docs/reference/eik-json`);
-	} catch (err) {
-		log.warn(err.message);
-	}
-	spinner.text = "";
-	spinner.stopAndPersist();
-};
+	},
+	{
+		init: true,
+	},
+);
 
 export { command, aliases, describe, builder, handler };

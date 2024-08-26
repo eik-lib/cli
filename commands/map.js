@@ -1,8 +1,7 @@
 import { join } from "path";
-import ora from "ora";
 import PublishMap from "../classes/publish/map.js";
-import { logger, getArgsOrDefaults } from "../utils/index.js";
 import { Artifact } from "../formatters/index.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "map <name> <version> <file>";
 
@@ -44,45 +43,31 @@ export const builder = (yargs) => {
 		.example("eik map my-map 1.0.0 ./import-map.json --token yourtoken");
 };
 
-export const handler = async (argv) => {
-	const { debug, name, version, server, ...rest } = getArgsOrDefaults(argv);
+export const handler = commandHandler(async (argv, log) => {
+	const { debug, name, version, server, ...rest } = argv;
 
-	const spinner = ora({ stream: process.stdout }).start("working...");
+	await new PublishMap({
+		logger: log,
+		debug,
+		name,
+		version,
+		server,
+		...rest,
+	}).run();
 
-	try {
-		const log = logger(spinner, debug);
+	let url = new URL(join("map", name), server);
+	let res = await fetch(url);
+	const pkgMeta = await res.json();
 
-		await new PublishMap({
-			logger: log,
-			debug,
-			name,
-			version,
-			server,
-			...rest,
-		}).run();
+	url = new URL(join("map", name, version), server);
+	res = await fetch(url);
 
-		let url = new URL(join("map", name), server);
-		let res = await fetch(url);
-		const pkgMeta = await res.json();
+	log.info(`Published import map "${name}" at version "${version}"`);
 
-		url = new URL(join("map", name, version), server);
-		res = await fetch(url);
+	const artifact = new Artifact(pkgMeta);
+	const versions = new Map(pkgMeta.versions);
+	artifact.versions = Array.from(versions.values());
+	artifact.format(server);
 
-		log.info(`Published import map "${name}" at version "${version}"`);
-
-		spinner.text = "";
-		spinner.stopAndPersist();
-
-		const artifact = new Artifact(pkgMeta);
-		const versions = new Map(pkgMeta.versions);
-		artifact.versions = Array.from(versions.values());
-		artifact.format(server);
-
-		process.stdout.write("\n");
-	} catch (err) {
-		spinner.warn(err.message);
-		spinner.text = "";
-		spinner.stopAndPersist();
-		process.exit(1);
-	}
-};
+	process.stdout.write("\n");
+});

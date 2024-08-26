@@ -1,10 +1,14 @@
 export const errors = {
 	ERR_MISSING_CONFIG: "ERR_MISSING_CONFIG",
+	ERR_WRONG_TYPE: "ERR_WRONG_TYPE",
+	ERR_VERSION_EXISTS: "ERR_VERSION_EXISTS",
+	ERR_NOT_GIT: "ERR_NOT_GIT",
+	ERR_GIT_COMMIT: "ERR_GIT_COMMIT",
 };
 
 export class EikCliError extends Error {
 	#errorCode;
-	#exitCode = 1;
+	#exitCode;
 
 	/**
 	 * @param {string} errorCode
@@ -18,6 +22,19 @@ export class EikCliError extends Error {
 		this.cause = cause;
 
 		this.#errorCode = errorCode;
+
+		switch (errorCode) {
+			case errors.ERR_VERSION_EXISTS:
+				this.#exitCode = 0;
+				break;
+			default:
+				this.#exitCode = 1;
+		}
+	}
+
+	/** @type {Error | undefined} */
+	get cause() {
+		return this.cause;
 	}
 
 	get errorCode() {

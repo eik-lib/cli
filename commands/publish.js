@@ -1,14 +1,10 @@
 import { join } from "path";
-import ora from "ora";
 import chalk from "chalk";
 import PublishPackage from "../classes/publish/package/index.js";
-import {
-	logger,
-	getArgsOrDefaults,
-	typeSlug,
-	typeTitle,
-} from "../utils/index.js";
+import { typeSlug, typeTitle } from "../utils/index.js";
 import { Artifact } from "../formatters/index.js";
+import { EikCliError, errors } from "../utils/error.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "publish";
 
@@ -36,7 +32,7 @@ export const builder = (yargs) => {
 		.example("eik publish --token yourtoken");
 };
 
-export const handler = async (argv) => {
+export const handler = commandHandler(async (argv, log, spinner) => {
 	const {
 		debug,
 		dryRun,
@@ -49,88 +45,75 @@ export const handler = async (argv) => {
 		out,
 		files,
 		type,
-	} = getArgsOrDefaults(argv);
-
-	const spinner = ora({ stream: process.stdout }).start("working...");
+	} = argv;
 
 	if (type === "map") {
-		spinner.warn(
+		throw new EikCliError(
+			errors.ERR_WRONG_TYPE,
 			'"type" is set to "map", which is not supported by the publish command. Please use the "eik map" command instead',
 		);
-		process.stdout.write("\n");
-		process.exit(0);
 	}
 
-	try {
-		const options = {
-			logger: logger(spinner, debug),
-			cwd,
-			token,
-			dryRun,
-			debug,
-			name,
-			server,
-			version,
-			type,
-			map,
-			out,
-			files,
-		};
+	const options = {
+		logger: log,
+		cwd,
+		token,
+		dryRun,
+		debug,
+		name,
+		server,
+		version,
+		type,
+		map,
+		out,
+		files,
+	};
 
-		const publish = await new PublishPackage(options).run();
+	const publish = await new PublishPackage(options).run();
 
-		if (!publish) {
-			spinner.warn(
-				"Version in eik.json has not changed since last publish, publishing is not necessary",
-			);
-			process.stdout.write("\n");
-			process.exit(0);
-		}
+	if (!publish) {
+		throw new EikCliError(
+			errors.ERR_VERSION_EXISTS,
+			"Version in eik.json has not changed since last publish, publishing is not necessary",
+		);
+	}
 
-		const { files: fls } = publish;
+	const { files: fls } = publish;
 
-		if (!dryRun) {
-			let url = new URL(join(typeSlug(type), name), server);
-			let res = await fetch(url);
-			const pkgMeta = await res.json();
+	if (!dryRun) {
+		let url = new URL(join(typeSlug(type), name), server);
+		let res = await fetch(url);
+		const pkgMeta = await res.json();
 
-			url = new URL(join(typeSlug(type), name, version), server);
-			res = await fetch(url);
-			const pkgVersionMeta = await res.json();
+		url = new URL(join(typeSlug(type), name, version), server);
+		res = await fetch(url);
+		const pkgVersionMeta = await res.json();
 
-			const artifact = new Artifact(pkgMeta);
-			artifact.versions = [pkgVersionMeta];
+		const artifact = new Artifact(pkgMeta);
+		artifact.versions = [pkgVersionMeta];
 
-			spinner.text = "";
-			spinner.stopAndPersist();
-
-			artifact.format(server);
-			process.stdout.write("\n");
-		} else {
-			spinner.text = "";
-			spinner.stopAndPersist();
-
-			process.stdout.write(
-				`:: ${chalk.bgYellow.white.bold(
-					typeTitle(type),
-				)} > ${chalk.green(name)} | ${chalk.bold("dry run")}`,
-			);
-			process.stdout.write("\n\n");
-			process.stdout.write("   files (local temporary):\n");
-			for (const file of fls) {
-				process.stdout.write(`   - ${chalk.bold("type")}: ${file.type}\n`);
-				process.stdout.write(
-					`     ${chalk.bold("path")}: ${file.pathname}\n\n`,
-				);
-			}
-			process.stdout.write(
-				`   ${chalk.bold("No files were published to remote server")}\n\n`,
-			);
-		}
-	} catch (err) {
-		spinner.warn(err.message);
 		spinner.text = "";
 		spinner.stopAndPersist();
-		process.exit(1);
+
+		artifact.format(server);
+		process.stdout.write("\n");
+	} else {
+		spinner.text = "";
+		spinner.stopAndPersist();
+
+		process.stdout.write(
+			`:: ${chalk.bgYellow.white.bold(
+				typeTitle(type),
+			)} > ${chalk.green(name)} | ${chalk.bold("dry run")}`,
+		);
+		process.stdout.write("\n\n");
+		process.stdout.write("   files (local temporary):\n");
+		for (const file of fls) {
+			process.stdout.write(`   - ${chalk.bold("type")}: ${file.type}\n`);
+			process.stdout.write(`     ${chalk.bold("path")}: ${file.pathname}\n\n`);
+		}
+		process.stdout.write(
+			`   ${chalk.bold("No files were published to remote server")}\n\n`,
+		);
 	}
-};
+});

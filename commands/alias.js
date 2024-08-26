@@ -1,7 +1,6 @@
-import ora from "ora";
 import Alias from "../classes/alias.js";
-import { logger, getArgsOrDefaults } from "../utils/index.js";
 import { Alias as AliasFormatter } from "../formatters/index.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "alias [name] [version] [alias]";
 
@@ -47,40 +46,23 @@ export const builder = (yargs) => {
 		.example("eik alias my-app 4.2.2 4 --type package");
 };
 
-export const handler = async (argv) => {
-	const { debug, server, type, ...rest } = getArgsOrDefaults(argv);
+export const handler = commandHandler(async (argv, log) => {
+	const { debug, server, type, ...rest } = argv;
+	const data = await new Alias({
+		type,
+		server,
+		logger: log,
+		...rest,
+	}).run();
 
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	const log = logger(spinner, debug);
+	// TODO: get rid of this rediculous formatter class idea that past me put here to irk present and future me.
+	// Smells like DRY silliness
+	const af = new AliasFormatter(data);
 
-	let success = false;
-	let af;
-	try {
-		const data = await new Alias({
-			type,
-			server,
-			logger: log,
-			...rest,
-		}).run();
+	const createdOrUpdated = data.update ? "Updated" : "Created";
+	log.info(
+		`${createdOrUpdated} alias for "${type}" "${data.name}". ("${data.version}" => "v${data.alias}")`,
+	);
 
-		// TODO: get rid of this rediculous formatter class idea that past me put here to irk present and future me.
-		// Smells like DRY silliness
-		af = new AliasFormatter(data);
-
-		const createdOrUpdated = data.update ? "Updated" : "Created";
-		log.info(
-			`${createdOrUpdated} alias for "${type}" "${data.name}". ("${data.version}" => "v${data.alias}")`,
-		);
-		success = true;
-	} catch (err) {
-		log.warn(err.message);
-	}
-
-	spinner.text = "";
-	spinner.stopAndPersist();
-	if (success) {
-		af?.format(server);
-	} else {
-		process.exit(1);
-	}
-};
+	af.format(server);
+});
