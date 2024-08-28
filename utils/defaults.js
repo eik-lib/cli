@@ -32,9 +32,9 @@ export function getArgsOrDefaults(argv, opts) {
 		try {
 			const stats = fs.statSync(path);
 			if (stats.isDirectory()) {
-				config = helpers.configStore.findInDirectory(path);
+				config = helpers.configStore.findInDirectory(path).toJSON();
 			} else {
-				config = helpers.configStore.loadFromPath(path);
+				config = helpers.configStore.loadFromPath(path).toJSON();
 			}
 		} catch (error) {
 			const e = /** @type {Error} */ (error);

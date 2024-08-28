@@ -29,7 +29,14 @@ export function commandHandler(opts, handlerFunction) {
 		const log = logger(spinner, argv.debug);
 
 		try {
-			await handlerFunction(getArgsOrDefaults(argv, opts), log, spinner);
+			const args = getArgsOrDefaults(argv, opts);
+
+			if (argv.debug) {
+				log.debug(`command inputs:
+${JSON.stringify(args, null, 2)}`);
+			}
+
+			await handlerFunction(args, log, spinner);
 
 			spinner.text = "";
 			spinner.stopAndPersist();
