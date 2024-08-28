@@ -32,11 +32,6 @@ export class EikCliError extends Error {
 		}
 	}
 
-	/** @type {Error | undefined} */
-	get cause() {
-		return this.cause;
-	}
-
 	get errorCode() {
 		return this.#errorCode;
 	}
