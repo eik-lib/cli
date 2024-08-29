@@ -333,12 +333,19 @@ test("getArgsOrDefaults - file absolute path", async (t) => {
 			files: "./public",
 		}),
 	);
-	const defaults = getArgsOrDefaults({
-		cwd,
-		config: join(cwd, "./eik.json"),
-	}, { command: "publish", options: [] });
+	const defaults = getArgsOrDefaults(
+		{
+			cwd,
+			config: join(cwd, "./eik.json"),
+		},
+		{ command: "publish", options: [] },
+	);
 
-	t.equal(defaults.name, "magestic-muffin", "eik.json name property should have been read from given absolute config path");
+	t.equal(
+		defaults.name,
+		"magestic-muffin",
+		"eik.json name property should have been read from given absolute config path",
+	);
 });
 
 test("getArgsOrDefaults - file relative path", async (t) => {
@@ -352,10 +359,17 @@ test("getArgsOrDefaults - file relative path", async (t) => {
 			files: "./public",
 		}),
 	);
-	const defaults = getArgsOrDefaults({
-		cwd,
-		config: "./eik.json",
-	}, { command: "publish", options: [] });
+	const defaults = getArgsOrDefaults(
+		{
+			cwd,
+			config: "./eik.json",
+		},
+		{ command: "publish", options: [] },
+	);
 
-	t.equal(defaults.name, "magestic-muffin", "eik.json name property should have been read from given relative config path");
+	t.equal(
+		defaults.name,
+		"magestic-muffin",
+		"eik.json name property should have been read from given relative config path",
+	);
 });
