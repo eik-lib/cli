@@ -1,84 +1,88 @@
 #!/usr/bin/env node
-import chalk from "chalk";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import boxen from "boxen";
 import { join } from "path";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import { commands } from "./commands/index.js";
+
+import * as alias from "./commands/alias.js";
+import * as init from "./commands/init.js";
+import * as integrity from "./commands/integrity.js";
+import * as login from "./commands/login.js";
+import * as mapAlias from "./commands/map-alias.js";
+import * as map from "./commands/map.js";
+import * as meta from "./commands/meta.js";
+import * as npmAlias from "./commands/npm-alias.js";
+import * as packageAlias from "./commands/package-alias.js";
+import * as ping from "./commands/ping.js";
+import * as publish from "./commands/publish.js";
+import * as version from "./commands/version.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const { version } = JSON.parse(
+const { version: cliVersion } = JSON.parse(
 	readFileSync(join(__dirname, "./package.json"), { encoding: "utf-8" }),
 );
 
-// short circuit and provide a -v and --version flag
+// Short circuit and provide a -v and --version flag.
+// It's a known limitation in yargs that you can't have both a command
+// and an option named version https://github.com/yargs/yargs/issues/2064
+// We use the version name as a command in yargs, so handle the version
+// option before using yargs.
 if (
 	process.argv.includes("-v") ||
 	// last position only to avoid conflict with publish command
 	process.argv[process.argv.length - 1].includes("--version")
 ) {
-	console.log(version);
+	console.log(cliVersion);
 	process.exit(0);
 }
 
-const greeting = chalk.white.bold(`Eik CLI (v${version})`);
-
-const boxenOptions = {
-	padding: 1,
-	margin: 1,
-	borderStyle: "round",
-	borderColor: "green",
-	backgroundColor: "#555555",
-};
-// @ts-expect-error
-const msgBox = boxen(greeting, boxenOptions);
-
-console.log(msgBox);
-
 yargs(hideBin(process.argv))
+	.scriptName("eik")
+	// inspired by git
+	.usage(
+		`usage: $0 [-v | --version] [-h | --help] [-c <path> | --config <path>]
+           [--cwd <path>] [--debug] <command> [<args>]`,
+	)
+	.epilogue(
+		`Run $0 <command> --help to read more about a specific subcommand.
+
+For a more detailed description of commands and options, see the reference documentation:
+  https://eik.dev/cli`,
+	)
 	.options({
 		config: {
 			alias: "c",
-			describe:
-				"Provide an exact path to an eik.json or package.json file to use as config. Default is eik.json in the current working directory.",
+			describe: "Path to Eik configuration file (eik.json or package.json)",
 		},
 		cwd: {
-			describe: "Alter the current working directory.",
-			default: process.cwd(),
+			describe: "Path to a different working directory than the current",
 		},
 		debug: {
-			describe: "Logs additional messages",
-			default: false,
+			describe: "Show additional logs",
 			type: "boolean",
 		},
 	})
-	// @ts-expect-error
-	.example("eik init")
-	// @ts-expect-error
-	.example("eik login --server https://assets.myserver.com --key ######")
-	// @ts-expect-error
-	.example("eik publish")
-	// @ts-expect-error
-	.example("eik meta my-app --server https://assets.myserver.com")
-	.example(
-		// @ts-expect-error
-		"eik npm-alias lit-html 1.0.0 1 --server https://assets.myserver.com --token ######",
-	)
-	.example(
-		// @ts-expect-error
-		"eik map my-map 1.0.0 ./import-map.json --server https://assets.myserver.com --token ######",
-	)
-	// @ts-expect-error
-	.example("eik map-alias my-map 1.0.0 1")
-	// @ts-expect-error
-	.command(commands)
+	.command([
+		alias,
+		init,
+		integrity,
+		login,
+		map,
+		mapAlias,
+		meta,
+		npmAlias,
+		packageAlias,
+		ping,
+		publish,
+		version,
+	])
 	.demandCommand()
-	.wrap(150)
-	.version(false)
+	.wrap(null)
+	.version(false) // Turn off the built-in version option to not conflict with the version command
 	.help()
+	.alias("h", "help")
 	.parse();

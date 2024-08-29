@@ -1,44 +1,40 @@
 import { execSync } from "child_process";
 import { join } from "path";
-import ora from "ora";
 import VersionPackage from "../classes/version.js";
-import { logger, getDefaults } from "../utils/index.js";
 import json from "../utils/json/index.js";
+import { EikCliError, errors } from "../utils/error.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "version [level]";
 
-export const describe = `Compares local files with files on server and increments "version" field in eik.json if necessary.`;
+export const describe =
+	'Compare local files with files on server and increment "version" field if different';
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	yargs.positional("level", {
-		describe: "Semver level to increment version by",
-		default: "patch",
-		type: "string",
-		choices: ["major", "minor", "patch"],
-	});
-
-	yargs.options({
-		dryRun: {
-			alias: "d",
-			describe:
-				"Terminates the publish early (before upload) and provides information about created bundles for inspection.",
-			default: false,
-			type: "boolean",
-		},
-	});
-
-	yargs.example(`eik version`);
-	yargs.example(`eik version minor`);
+	return yargs
+		.positional("level", {
+			describe: "Semver level to increment version by",
+			default: "patch",
+			type: "string",
+			choices: ["major", "minor", "patch"],
+		})
+		.options({
+			dryRun: {
+				alias: "d",
+				describe: "Log details about the operation and skip upload",
+				type: "boolean",
+			},
+		})
+		.example("eik version")
+		.example("eik version minor")
+		.example("eik version --dry-run");
 };
 
-export const handler = async (argv) => {
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	const { level, debug, dryRun, cwd, config } = argv;
-	// @ts-expect-error
-	const { name, version, server, map, out, files } = getDefaults(config || cwd);
-
-	try {
-		const log = logger(spinner, debug);
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log) => {
+		const { level, dryRun, cwd, name, version, server, map, out, files } = argv;
 
 		const options = {
 			logger: log,
@@ -68,8 +64,10 @@ export const handler = async (argv) => {
 				execSync(`git add ${join(cwd, "eik.json")}`);
 				log.debug(`  ==> stage: ${join(cwd, "eik.json")}`);
 			} catch (err) {
-				throw new Error(
+				throw new EikCliError(
+					errors.ERR_NOT_GIT,
 					'Failed to stage file "eik.json". Is this directory (or any parent directories) a git repository?',
+					err,
 				);
 			}
 
@@ -90,16 +88,12 @@ export const handler = async (argv) => {
 
 				log.info(`New version ${newVersion} written back to eik.json`);
 			} catch (err) {
-				throw new Error('Failed to commit changes to file "eik.json".');
+				throw new EikCliError(
+					errors.ERR_GIT_COMMIT,
+					'Failed to commit changes to file "eik.json".',
+					err,
+				);
 			}
 		}
-
-		spinner.text = "";
-		spinner.stopAndPersist();
-		process.exit();
-	} catch (err) {
-		spinner.warn(err.message);
-		spinner.text = "";
-		spinner.stopAndPersist();
-	}
-};
+	},
+);

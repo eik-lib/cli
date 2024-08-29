@@ -2,13 +2,14 @@ import fastify from "fastify";
 import { promises as fs } from "fs";
 import os from "os";
 import { join, basename } from "path";
-import { test, beforeEach, afterEach } from "tap";
+import { test } from "tap";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import crypto from "crypto";
 import j from "../utils/json/index.js";
 import h from "../utils/hash/index.js";
 import f from "../utils/http/index.js";
+import { getArgsOrDefaults } from "../utils/defaults.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -319,4 +320,56 @@ test("read JSON file - string - file absolute path", async (t) => {
 	const json = await j.read(join(cwd, "./test-read-json-2.json"));
 
 	t.equal(json.key, "val", "Key should equal val");
+});
+
+test("getArgsOrDefaults - file absolute path", async (t) => {
+	const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+	await fs.writeFile(
+		join(cwd, "./eik.json"),
+		JSON.stringify({
+			name: "magestic-muffin",
+			version: "1.33.7",
+			server: "https://myserver.com",
+			files: "./public",
+		}),
+	);
+	const defaults = getArgsOrDefaults(
+		{
+			cwd,
+			config: join(cwd, "./eik.json"),
+		},
+		{ command: "publish", options: [] },
+	);
+
+	t.equal(
+		defaults.name,
+		"magestic-muffin",
+		"eik.json name property should have been read from given absolute config path",
+	);
+});
+
+test("getArgsOrDefaults - file relative path", async (t) => {
+	const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+	await fs.writeFile(
+		join(cwd, "./eik.json"),
+		JSON.stringify({
+			name: "magestic-muffin",
+			version: "1.33.7",
+			server: "https://myserver.com",
+			files: "./public",
+		}),
+	);
+	const defaults = getArgsOrDefaults(
+		{
+			cwd,
+			config: "./eik.json",
+		},
+		{ command: "publish", options: [] },
+	);
+
+	t.equal(
+		defaults.name,
+		"magestic-muffin",
+		"eik.json name property should have been read from given relative config path",
+	);
 });

@@ -1,42 +1,34 @@
 import { join } from "path";
-import ora from "ora";
 import Integrity from "../classes/integrity.js";
-import { logger, getDefaults } from "../utils/index.js";
 import json from "../utils/json/index.js";
+import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "integrity [name] [version]";
 
 export const aliases = ["int"];
 
-export const describe = `Retrieve file integrity information for package name and version defined in eik.json, then populate integrity.json file with this information`;
+export const describe = "Get file integrity information";
 
+/** @type {import('yargs').CommandBuilder} */
 export const builder = (yargs) => {
-	const defaults = getDefaults(yargs.argv.config || yargs.argv.cwd);
-
-	yargs.options({
-		server: {
-			alias: "s",
-			describe: "Specify location of asset server.",
-			// @ts-expect-error
-			default: defaults.server,
-		},
-	});
-
-	yargs.example(`eik integrity`);
-	yargs.example(`eik integrity --debug`);
+	return yargs
+		.options({
+			server: {
+				alias: "s",
+				describe: "Eik server address, if different from configuration file",
+			},
+		})
+		.example("eik integrity")
+		.example("eik integrity --server https://assets.myserver.com");
 };
 
-export const handler = async (argv) => {
-	const spinner = ora({ stream: process.stdout }).start("working...");
-	let integrity = false;
-	const { debug, cwd, config } = argv;
-	const l = logger(spinner, debug);
-	// @ts-expect-error
-	const { name, version, server, out, type } = getDefaults(config || cwd);
+export const handler = commandHandler(
+	{ command, options: ["server"] },
+	async (argv, log, spinner) => {
+		const { name, version, server, out, type, cwd, debug } = argv;
 
-	try {
-		integrity = await new Integrity({
-			logger: l,
+		const integrity = await new Integrity({
+			logger: log,
 			name,
 			version,
 			server,
@@ -53,10 +45,5 @@ export const handler = async (argv) => {
 			);
 			process.stdout.write("\n");
 		}
-	} catch (err) {
-		spinner.text = "";
-		spinner.stopAndPersist();
-		l.warn(err.message);
-		process.exit(1);
-	}
-};
+	},
+);

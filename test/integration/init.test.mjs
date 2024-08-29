@@ -12,12 +12,9 @@ const __dirname = dirname(__filename);
 
 function exec(cmd) {
 	return /** @type {Promise<void>} */ (
-		new Promise((resolve, reject) => {
+		new Promise((resolve) => {
 			execCallback(cmd, (error, stdout, stderr) => {
-				if (stdout) console.log(stdout);
-				if (stderr) console.error(stderr);
-				if (error) reject(error);
-				resolve();
+				resolve({ error, stdout, stderr });
 			});
 		})
 	);
@@ -28,7 +25,8 @@ test("Initializing a new eik.json file", async (t) => {
 	const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 	const publishCmd = `node ${eik} init --cwd ${folder}`;
 
-	await exec(publishCmd);
+	let out = await exec(publishCmd);
+	t.equal(out.error, null);
 
 	const eikJson = JSON.parse(
 		readFileSync(join(folder, "eik.json"), { encoding: "utf8" }),
@@ -49,7 +47,8 @@ test("Initializing a new eik.json file passing custom values", async (t) => {
         --version 2.0.0
         --server http://localhost:4001`;
 
-	await exec(publishCmd.split("\n").join(" "));
+	let out = await exec(publishCmd.split("\n").join(" "));
+	t.equal(out.error, null);
 
 	const eikJson = JSON.parse(
 		readFileSync(join(folder, "eik.json"), { encoding: "utf8" }),
@@ -77,7 +76,8 @@ test("Initializing a new eik.json file in an existing project", async (t) => {
 	);
 
 	const publishCmd = `node ${eik} init --cwd ${folder}`;
-	await exec(publishCmd);
+	let out = await exec(publishCmd);
+	t.equal(out.error, null);
 
 	const eikJson = JSON.parse(
 		readFileSync(join(folder, "eik.json"), { encoding: "utf8" }),

@@ -18,4 +18,4 @@ eik --version
 
 ## Usage
 
-See [the CLI reference documentation](https://eik.dev/docs/reference/at-eik-cli) to learn about the available commands.
+See [the CLI reference documentation](https://eik.dev/cli) to learn about the available commands.

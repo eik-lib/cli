@@ -85,7 +85,7 @@ test("eik map : publish, details provided by eik.json file", async (t) => {
 
 	t.equal(res.ok, true);
 	t.same(result, map);
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, 'Published import map "test-map" at version "1.0.0"');
 	t.end();
 });

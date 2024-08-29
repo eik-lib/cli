@@ -96,24 +96,29 @@ test("eik package-alias <name> <version> <alias>", async (t) => {
 	await fs.writeFile(join(cwd, "eik.json"), JSON.stringify(assets));
 
 	const cmd1 = `node ${eik} package --token ${token} --cwd ${cwd}`;
-	await exec(cmd1);
+	let out = await exec(cmd1);
+	if (out.error) {
+		t.equal(out.error, null);
+	}
 
 	const cmd2 = `node ${eik} package-alias my-pack 1.0.0 1
         --token ${token}
         --server ${address}
         --cwd ${cwd}`;
 
-	const { error, stdout } = await exec(cmd2.split("\n").join(" "));
+	out = await exec(cmd2.split("\n").join(" "));
+	if (out.error) {
+		t.equal(out.error, null);
+	}
 
 	const res = await fetch(new URL("/pkg/my-pack/v1/index.js", address));
 
+	t.match(out.stdout, "PACKAGE");
+	t.match(out.stdout, "my-pack");
+	t.match(out.stdout, "1.0.0");
+	t.match(out.stdout, "v1");
+	t.match(out.stdout, "NEW");
 	t.equal(res.ok, true);
-	t.notOk(error);
-	t.match(stdout, "PACKAGE");
-	t.match(stdout, "my-pack");
-	t.match(stdout, "1.0.0");
-	t.match(stdout, "v1");
-	t.match(stdout, "NEW");
 });
 
 test("eik npm-alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
@@ -123,19 +128,19 @@ test("eik npm-alias <name> <version> <alias> --token --server : no eik.json or .
         --server ${t.context.address}
         --cwd ${t.context.folder}`;
 
-	const { error, stdout } = await exec(cmd.split("\n").join(" "));
+	const { stdout, error } = await exec(cmd.split("\n").join(" "));
 
 	const res = await fetch(
 		new URL("/npm/scroll-into-view-if-needed/v2/index.js", t.context.address),
 	);
 
-	t.equal(res.ok, true);
-	t.notOk(error);
 	t.match(stdout, "NPM");
 	t.match(stdout, "scroll-into-view-if-needed");
 	t.match(stdout, "2.2.24");
 	t.match(stdout, "v2");
 	t.match(stdout, "NEW");
+	t.equal(res.ok, true);
+	t.equal(error, null);
 	t.end();
 });
 
@@ -156,19 +161,19 @@ test("eik npm-alias <name> <version> <alias> : publish details provided by eik.j
 	const eik = join(__dirname, "..", "..", "index.js");
 	const cmd = `node ${eik} npm-alias scroll-into-view-if-needed 2.2.24 2 --token ${t.context.token} --cwd ${t.context.folder}`;
 
-	const { error, stdout } = await exec(cmd);
+	const { stdout, error } = await exec(cmd);
 
 	const res = await fetch(
 		new URL("/npm/scroll-into-view-if-needed/v2/index.js", t.context.address),
 	);
 
-	t.equal(res.ok, true);
-	t.notOk(error);
 	t.match(stdout, "NPM");
 	t.match(stdout, "scroll-into-view-if-needed");
 	t.match(stdout, "2.2.24");
 	t.match(stdout, "v2");
 	t.match(stdout, "NEW");
+	t.equal(res.ok, true);
+	t.equal(error, null);
 	t.end();
 });
 
@@ -179,18 +184,17 @@ test("eik map-alias <name> <version> <alias> --token --server : no eik.json or .
         --server ${t.context.address}
         --cwd ${t.context.folder}`;
 
-	const { error, stdout } = await exec(cmd.split("\n").join(" "));
+	const { stdout, error } = await exec(cmd.split("\n").join(" "));
 
 	const res = await fetch(new URL("/map/test-map/v1", t.context.address));
 
-	t.equal(res.ok, true);
-
-	t.notOk(error);
 	t.match(stdout, "MAP");
 	t.match(stdout, "test-map");
 	t.match(stdout, "1.0.0");
 	t.match(stdout, "v1");
 	t.match(stdout, "NEW");
+	t.equal(res.ok, true);
+	t.equal(error, null);
 	t.end();
 });
 
@@ -211,17 +215,16 @@ test("eik map-alias <name> <version> <alias> : publish details provided by eik.j
 	const eik = join(__dirname, "..", "..", "index.js");
 	const cmd = `node ${eik} map-alias test-map 1.0.0 1 --token ${t.context.token} --cwd ${t.context.folder}`;
 
-	const { error, stdout } = await exec(cmd);
+	const { stdout, error } = await exec(cmd);
 
 	const res = await fetch(new URL("/map/test-map/v1", t.context.address));
 
-	t.equal(res.ok, true);
-
-	t.notOk(error);
 	t.match(stdout, "MAP");
 	t.match(stdout, "test-map");
 	t.match(stdout, "1.0.0");
 	t.match(stdout, "v1");
 	t.match(stdout, "NEW");
+	t.equal(res.ok, true);
+	t.equal(error, null);
 	t.end();
 });

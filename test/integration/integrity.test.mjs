@@ -65,19 +65,20 @@ test("eik meta : details provided by eik.json", async (t) => {
 	const eik = join(__dirname, "..", "..", "index.js");
 
 	let cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
-	await exec(cmd);
+	let out = await exec(cmd);
+	t.equal(out.error, null);
 
 	cmd = `node ${eik} integrity --cwd ${t.context.folder}`;
 
-	const { error, stdout } = await exec(cmd);
+	out = await exec(cmd);
+	t.equal(out.error, null);
 
 	const integrity = JSON.parse(
 		await fs.readFile(join(t.context.folder, ".eik", "integrity.json"), "utf8"),
 	);
 
-	t.notOk(error);
 	t.match(
-		stdout,
+		out.stdout,
 		`integrity information for package "test-app" (v1.0.0) saved to ".eik${sep}integrity.json"`,
 	);
 	t.equal(integrity.name, "test-app");
@@ -105,18 +106,19 @@ test("eik meta : details provided by eik.json - npm namespace", async (t) => {
 	const eik = join(__dirname, "..", "../index.js");
 
 	let cmd = `node ${eik} package --token ${t.context.token} --cwd ${t.context.folder}`;
-	await exec(cmd);
+	let out = await exec(cmd);
+	t.equal(out.error, null);
 
 	cmd = `node ${eik} integrity --cwd ${t.context.folder}`;
-	const { error, stdout } = await exec(cmd);
+	out = await exec(cmd);
+	t.equal(out.error, null);
 
 	const integrity = JSON.parse(
 		await fs.readFile(join(t.context.folder, ".eik", "integrity.json"), "utf8"),
 	);
 
-	t.notOk(error);
 	t.match(
-		stdout,
+		out.stdout,
 		`integrity information for package "test-app-npm" (v1.0.0) saved to ".eik${sep}integrity.json"`,
 	);
 	t.equal(integrity.name, "test-app-npm");

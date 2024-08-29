@@ -97,24 +97,25 @@ test("packages: eik alias <name> <version> <alias>", async (t) => {
 	await fs.writeFile(join(cwd, "eik.json"), JSON.stringify(assets));
 
 	const cmd1 = `node ${eik} package --token ${token} --cwd ${cwd}`;
-	await exec(cmd1);
+	let out = await exec(cmd1);
+	t.equal(out.error, null);
 
 	const cmd2 = `node ${eik} alias my-pack 1.0.0 1
         --token ${token}
         --server ${address}
         --cwd ${cwd}`;
 
-	const { error, stdout } = await exec(cmd2.split("\n").join(" "));
+	out = await exec(cmd2.split("\n").join(" "));
+	t.equal(out.error, null);
 
 	const res = await fetch(new URL("/pkg/my-pack/v1/index.js", address));
 
 	t.equal(res.ok, true);
-	t.notOk(error);
-	t.match(stdout, "PACKAGE");
-	t.match(stdout, "my-pack");
-	t.match(stdout, "1.0.0");
-	t.match(stdout, "v1");
-	t.match(stdout, "NEW");
+	t.match(out.stdout, "PACKAGE");
+	t.match(out.stdout, "my-pack");
+	t.match(out.stdout, "1.0.0");
+	t.match(out.stdout, "v1");
+	t.match(out.stdout, "NEW");
 });
 
 test("npm: eik alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
@@ -132,7 +133,7 @@ test("npm: eik alias <name> <version> <alias> --token --server : no eik.json or 
 	);
 
 	t.equal(res.ok, true);
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "NPM");
 	t.match(stdout, "scroll-into-view-if-needed");
 	t.match(stdout, "2.2.24");
@@ -166,7 +167,7 @@ test("npm: eik alias <name> <version> <alias> : publish details provided by eik.
 	);
 
 	t.equal(res.ok, true);
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "NPM");
 	t.match(stdout, "scroll-into-view-if-needed");
 	t.match(stdout, "2.2.24");
@@ -189,7 +190,7 @@ test("map: eik alias <name> <version> <alias> --token --server : no eik.json or 
 
 	t.equal(res.ok, true);
 
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "MAP");
 	t.match(stdout, "test-map");
 	t.match(stdout, "1.0.0");
@@ -222,7 +223,7 @@ test("map: eik alias <name> <version> <alias> : publish details provided by eik.
 
 	t.equal(res.ok, true);
 
-	t.notOk(error);
+	t.equal(error, null);
 	t.match(stdout, "MAP");
 	t.match(stdout, "test-map");
 	t.match(stdout, "1.0.0");
