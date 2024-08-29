@@ -327,3 +327,36 @@ test("workflow: publish npm, alias npm, publish map, alias map and then publish 
 	//     t.context.address,
 	// ).href)
 });
+
+test("workflow: login command, publish with token from environment", async (t) => {
+	// as opposed to passing in --token
+	const eik = join(__dirname, "..", "..", "index.js");
+	const cwd = t.context.folder;
+
+	const assets = {
+		name: "test-app",
+		version: "1.0.0",
+		server: t.context.address,
+		files: {
+			"index.js": join(__dirname, "..", "fixtures", "client.js"),
+			"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+		},
+	};
+	await fs.writeFile(join(cwd, "eik.json"), JSON.stringify(assets));
+
+	let out = await exec(
+		`node ${eik} login --cwd ${t.context.folder} --key change_me`,
+	);
+	t.equal(out.error, null);
+
+	out = await exec(`node ${eik} package --cwd ${cwd}`);
+	t.equal(out.error, null);
+
+	const res = await fetch(
+		new URL("/pkg/test-app/1.0.0/index.js", t.context.address),
+	);
+
+	t.equal(res.ok, true);
+	t.match(out.stdout, "published");
+	t.end();
+});
