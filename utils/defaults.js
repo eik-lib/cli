@@ -1,4 +1,5 @@
 import fs from "fs";
+import { join, isAbsolute } from "path";
 import { helpers } from "@eik/common";
 import { EikCliError, errors } from "./error.js";
 
@@ -28,7 +29,10 @@ export function getArgsOrDefaults(argv, opts) {
 
 	let config = {};
 	if (!opts.command.startsWith("init")) {
-		let path = configPath || cwd;
+		let path = cwd;
+		if (configPath) {
+			path = isAbsolute(configPath) ? configPath : join(cwd, configPath);
+		}
 		try {
 			const stats = fs.statSync(path);
 			if (stats.isDirectory()) {
