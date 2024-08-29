@@ -1,3 +1,10 @@
+## [3.1.5](https://github.com/eik-lib/cli/compare/v3.1.4...v3.1.5) (2024-08-29)
+
+
+### Bug Fixes
+
+* handle relative and absolute paths to config, improve error messages, edit help for brevity ([06e9951](https://github.com/eik-lib/cli/commit/06e9951a6efe6b3f37600f6f0477417e708dcf08))
+
 ## [3.1.4](https://github.com/eik-lib/cli/compare/v3.1.3...v3.1.4) (2024-08-26)
 
 
