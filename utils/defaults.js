@@ -35,11 +35,22 @@ export function getArgsOrDefaults(argv, opts) {
 		}
 		try {
 			const stats = fs.statSync(path);
+			/** @type {import('@eik/common').EikConfig} */
+			let eikConfig;
 			if (stats.isDirectory()) {
-				config = helpers.configStore.findInDirectory(path).toJSON();
+				eikConfig = helpers.configStore.findInDirectory(path);
 			} else {
-				config = helpers.configStore.loadFromPath(path).toJSON();
+				eikConfig = helpers.configStore.loadFromPath(path);
 			}
+			config = {
+				name: eikConfig.name,
+				version: eikConfig.version,
+				type: eikConfig.type,
+				server: eikConfig.server,
+				token: eikConfig.token,
+				files: eikConfig.files,
+				out: eikConfig.out,
+			};
 		} catch (error) {
 			const e = /** @type {Error} */ (error);
 			if (e.constructor.name === "MissingConfigError") {
