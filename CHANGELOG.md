@@ -1,3 +1,10 @@
+## [3.1.6](https://github.com/eik-lib/cli/compare/v3.1.5...v3.1.6) (2024-08-29)
+
+
+### Bug Fixes
+
+* include the token in getArgsOrDefaults ([bd4793d](https://github.com/eik-lib/cli/commit/bd4793d1d830ed41f4cb126e841a47c5086b3cc0))
+
 ## [3.1.5](https://github.com/eik-lib/cli/compare/v3.1.4...v3.1.5) (2024-08-29)
 
 
