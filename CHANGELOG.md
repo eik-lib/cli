@@ -1,3 +1,10 @@
+## [3.1.7](https://github.com/eik-lib/cli/compare/v3.1.6...v3.1.7) (2024-08-29)
+
+
+### Bug Fixes
+
+* add missing image type to debug output ([c4f0407](https://github.com/eik-lib/cli/commit/c4f04077fac1df977947b53576e1d22edba3de98))
+
 ## [3.1.6](https://github.com/eik-lib/cli/compare/v3.1.5...v3.1.6) (2024-08-29)
 
 
