@@ -33,7 +33,7 @@ export const builder = (yargs) => {
 
 export const handler = commandHandler(
 	{ command, options: ["server"] },
-	async (argv, logger) => {
+	async (argv, logger, spinner) => {
 		const { key, server } = argv;
 
 		let k = key;
@@ -41,6 +41,7 @@ export const handler = commandHandler(
 		let rl = null;
 
 		if (!s || !k) {
+			spinner.stop();
 			rl = readline.createInterface({
 				input: process.stdin,
 				output: process.stdout,
@@ -69,6 +70,7 @@ export const handler = commandHandler(
 
 		if (rl) rl.close();
 
+		spinner.start();
 		const token = await new Login({
 			logger,
 			key: k,
