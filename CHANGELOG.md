@@ -1,3 +1,10 @@
+## [3.1.8](https://github.com/eik-lib/cli/compare/v3.1.7...v3.1.8) (2024-09-17)
+
+
+### Bug Fixes
+
+* login spinner obscuring input ([#600](https://github.com/eik-lib/cli/issues/600)) ([3c18a87](https://github.com/eik-lib/cli/commit/3c18a87945e0f59dd57f3b56688bbaf0fc1ee60e))
+
 ## [3.1.7](https://github.com/eik-lib/cli/compare/v3.1.6...v3.1.7) (2024-08-29)
 
 
