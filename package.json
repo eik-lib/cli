@@ -70,7 +70,7 @@
     "prettier": "3.3.3",
     "semantic-release": "24.0.0",
     "semantic-release-slack-bot": "4.0.2",
-    "tap": "21.0.0",
+    "tap": "21.0.1",
     "typescript": "5.5.4"
   }
 }
