@@ -1,3 +1,10 @@
+## [3.1.9](https://github.com/eik-lib/cli/compare/v3.1.8...v3.1.9) (2024-10-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency form-data to v4.0.1 ([e4e151c](https://github.com/eik-lib/cli/commit/e4e151c8cd4b3a2c2c94625b5701aac3c6c53814))
+
 ## [3.1.8](https://github.com/eik-lib/cli/compare/v3.1.7...v3.1.8) (2024-09-17)
 
 
