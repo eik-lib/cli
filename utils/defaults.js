@@ -19,7 +19,7 @@ const defaults = {
  * @template [T=Record<string, unknown>]
  * @param {any} argv
  * @param {{ command: string; options?: string[] }} opts
- * @returns {import('@eik/common').EikConfig & typeof defaults & T}
+ * @returns {import('@eik/common').EikConfig & typeof defaults & { configFile: string } & T}
  */
 export function getArgsOrDefaults(argv, opts) {
 	let { cwd, config: configPath } = argv;
@@ -27,7 +27,9 @@ export function getArgsOrDefaults(argv, opts) {
 		cwd = process.cwd();
 	}
 
-	let config = {};
+	let config = {
+		configFile: "eik.json",
+	};
 	if (!opts.command.startsWith("init")) {
 		let path = cwd;
 		if (configPath) {
@@ -41,8 +43,10 @@ export function getArgsOrDefaults(argv, opts) {
 				eikConfig = helpers.configStore.findInDirectory(path);
 			} else {
 				eikConfig = helpers.configStore.loadFromPath(path);
+				config.configFile = configPath;
 			}
 			config = {
+				...config,
 				name: eikConfig.name,
 				version: eikConfig.version,
 				type: eikConfig.type,

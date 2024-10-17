@@ -34,7 +34,18 @@ export const builder = (yargs) => {
 export const handler = commandHandler(
 	{ command, options: ["server"] },
 	async (argv, log) => {
-		const { level, dryRun, cwd, name, version, server, map, out, files } = argv;
+		const {
+			level,
+			dryRun,
+			cwd,
+			name,
+			version,
+			server,
+			map,
+			out,
+			files,
+			configFile,
+		} = argv;
 
 		const options = {
 			logger: log,
@@ -46,6 +57,7 @@ export const handler = commandHandler(
 			map,
 			out,
 			files,
+			configFile,
 		};
 
 		const newVersion = await new VersionPackage(options).run();
@@ -55,25 +67,28 @@ export const handler = commandHandler(
 				`Dry Run: new version needed, determined new version to be ${newVersion}`,
 			);
 		} else {
-			log.debug(`Writing new version ${newVersion} to eik.json`);
+			log.debug(`Writing new version ${newVersion} to ${configFile}`);
 			// @ts-expect-error
-			await json.writeEik({ version: newVersion }, { cwd });
+			await json.writeEik(
+				{ version: newVersion },
+				{ cwd, filename: configFile },
+			);
 
-			log.debug(`Committing eik.json to local git repository`);
+			log.debug(`Committing ${configFile} to local git repository`);
 			try {
-				execSync(`git add eik.json`, { cwd });
-				log.debug(`  ==> stage: ${join(cwd, "eik.json")}`);
+				execSync(`git add ${configFile}`, { cwd });
+				log.debug(`  ==> stage: ${join(cwd, configFile)}`);
 			} catch (err) {
 				throw new EikCliError(
 					errors.ERR_NOT_GIT,
-					'Failed to stage file "eik.json". Is this directory (or any parent directories) a git repository?',
+					`Failed to stage file "${configFile}". Is this directory (or any parent directories) a git repository?`,
 					err,
 				);
 			}
 
 			try {
 				execSync(
-					`git commit -m "build(assets): version eik.json to v${newVersion} [skip ci]"`,
+					`git commit -m "build(assets): version ${configFile} to v${newVersion} [skip ci]"`,
 					{
 						cwd,
 						env: {
@@ -87,11 +102,11 @@ export const handler = commandHandler(
 				);
 				log.debug(`  ==> commit`);
 
-				log.info(`New version ${newVersion} written back to eik.json`);
+				log.info(`New version ${newVersion} written back to ${configFile}`);
 			} catch (err) {
 				throw new EikCliError(
 					errors.ERR_GIT_COMMIT,
-					'Failed to commit changes to file "eik.json".',
+					`Failed to commit changes to file "${configFile}".`,
 					err,
 				);
 			}
