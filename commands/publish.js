@@ -47,6 +47,7 @@ export const handler = commandHandler(
 			out,
 			files,
 			type,
+			configFile,
 		} = argv;
 
 		if (type === "map") {
@@ -76,7 +77,7 @@ export const handler = commandHandler(
 		if (!publish) {
 			throw new EikCliError(
 				errors.ERR_VERSION_EXISTS,
-				"Version in eik.json has not changed since last publish, publishing is not necessary",
+				`Version in ${configFile} has not changed since last publish, publishing is not necessary`,
 			);
 		}
 
