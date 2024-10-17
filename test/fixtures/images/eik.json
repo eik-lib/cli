@@ -1,0 +1,6 @@
+{
+  "name": "eik-fixture",
+  "version": "1.0.0",
+  "type": "package",
+  "files": "./public/package"
+}

@@ -239,7 +239,7 @@ test("when a recursive glob is specified", async (t) => {
 	t.equal(files[4].pathname, "/client.js", "client.js should be packaged at /");
 	t.equal(
 		files[11].pathname,
-		"/icons/checkbox-sprite-nontouch.svg",
+		"/icons/checkboxes.svg",
 		"svgs should be packaged under /icons",
 	);
 });
