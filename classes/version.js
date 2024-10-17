@@ -20,6 +20,7 @@ import { typeSlug } from "../utils/index.js";
  * @property {string[]} [map]
  * @property {string} [out="./.eik"]
  * @property {string | Record<string, string>} files
+ * @property {string} [configFile="eik.json"]
  */
 
 export default class Version {
@@ -37,6 +38,7 @@ export default class Version {
 		map = [],
 		out = "./.eik",
 		files,
+		configFile = "eik.json",
 	}) {
 		const config = new EikConfig(
 			{
@@ -54,6 +56,7 @@ export default class Version {
 
 		this.log = abslog(logger);
 		this.config = config;
+		this.configFile = configFile;
 		this.path = isAbsolute(config.out) ? config.out : join(cwd, config.out);
 		this.level = level;
 	}
@@ -64,7 +67,7 @@ export default class Version {
 	 */
 	async run() {
 		const { name, server, type, version, cwd, out, files, map } = this.config;
-		const { log, level, path } = this;
+		const { log, level, path, configFile } = this;
 		log.debug("Validating input");
 
 		log.debug(`  ==> config object`);
@@ -116,7 +119,7 @@ export default class Version {
 		let localHash;
 		try {
 			makeDirectorySync(path);
-			const eikPathDest = join(path, "eik.json");
+			const eikPathDest = join(path, configFile);
 			const eikJSON = {
 				name,
 				server,
