@@ -56,7 +56,7 @@ For a more detailed description of commands and options, see the reference docum
 	.options({
 		config: {
 			alias: "c",
-			describe: "Path to Eik configuration file (eik.json or package.json)",
+			describe: "Path to Eik configuration file",
 		},
 		cwd: {
 			describe: "Path to a different working directory than the current",

@@ -2,7 +2,6 @@ import fastify from "fastify";
 import { promises as fs } from "fs";
 import os from "os";
 import { join, basename } from "path";
-import { mockLogger } from "./utils.mjs";
 import { test, beforeEach, afterEach } from "tap";
 import EikService from "@eik/service";
 import Sink from "@eik/sink-memory";

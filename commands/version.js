@@ -61,7 +61,7 @@ export const handler = commandHandler(
 
 			log.debug(`Committing eik.json to local git repository`);
 			try {
-				execSync(`git add ${join(cwd, "eik.json")}`);
+				execSync(`git add eik.json`, { cwd });
 				log.debug(`  ==> stage: ${join(cwd, "eik.json")}`);
 			} catch (err) {
 				throw new EikCliError(
@@ -75,6 +75,7 @@ export const handler = commandHandler(
 				execSync(
 					`git commit -m "build(assets): version eik.json to v${newVersion} [skip ci]"`,
 					{
+						cwd,
 						env: {
 							GIT_AUTHOR_NAME: "Eik Cli",
 							GIT_AUTHOR_EMAIL: "eik@eik.dev",
