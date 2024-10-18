@@ -1,3 +1,11 @@
+## [3.1.10](https://github.com/eik-lib/cli/compare/v3.1.9...v3.1.10) (2024-10-18)
+
+
+### Bug Fixes
+
+* output config file name when passed --config ([c078fca](https://github.com/eik-lib/cli/commit/c078fca2bf512f904edf5cb4f9af717f977a3ae9))
+* support --config for file paths ([07a8924](https://github.com/eik-lib/cli/commit/07a892439e3ff22b69d16c8e3ee93a3dd0332eba))
+
 ## [3.1.9](https://github.com/eik-lib/cli/compare/v3.1.8...v3.1.9) (2024-10-14)
 
 
