@@ -1,3 +1,10 @@
+## [3.1.11](https://github.com/eik-lib/cli/compare/v3.1.10...v3.1.11) (2024-11-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ora to v8.1.1 ([13e0ff9](https://github.com/eik-lib/cli/commit/13e0ff98e91c212952158030a31862d0025c7977))
+
 ## [3.1.10](https://github.com/eik-lib/cli/compare/v3.1.9...v3.1.10) (2024-10-18)
 
 
