@@ -73,7 +73,7 @@ test("compare hashes - false", async (t) => {
 });
 
 test("fetch latest version for a given published bundle", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	server.get("/pkg/foo", async () => ({
 		versions: [
 			[1, { version: "1.3.2" }],
@@ -93,7 +93,7 @@ test("fetch latest version for a given published bundle", async (t) => {
 });
 
 test("fetch latest version, filtered by major, for a given published bundle", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	server.get("/pkg/foo", async () => ({
 		versions: [
 			[1, { version: "1.3.2" }],
@@ -113,7 +113,7 @@ test("fetch latest version, filtered by major, for a given published bundle", as
 });
 
 test("fetch latest version for a given published bundle, non existant bundle on server", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	const address = await server.listen({
 		host: "127.0.0.1",
 		port: 0,
@@ -133,7 +133,7 @@ test("fetch latest version for a given published bundle, non existant bundle on 
 });
 
 test("fetch latest version, filtered by major, for a given published bundle", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	server.get("/pkg/foo", async () => "");
 	const address = await server.listen({
 		host: "127.0.0.1",
@@ -154,7 +154,7 @@ test("fetch latest version, filtered by major, for a given published bundle", as
 });
 
 test("fetch latest version, invalid versions returned by server", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	server.get("/pkg/foo", async () => ({ versions: 1 }));
 	const address = await server.listen({
 		host: "127.0.0.1",
@@ -170,7 +170,7 @@ test("fetch latest version, invalid versions returned by server", async (t) => {
 });
 
 test("fetch latest version, invalid versions keys returned by server", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	server.get("/pkg/foo", async () => ({
 		versions: [
 			["not a number", 1],
@@ -191,7 +191,7 @@ test("fetch latest version, invalid versions keys returned by server", async (t)
 });
 
 test("fetch latest version, no bundles yet published", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	server.get("/pkg/foo", async () => ({
 		latest: {},
 		versions: [],
@@ -209,7 +209,7 @@ test("fetch latest version, no bundles yet published", async (t) => {
 });
 
 test("fetch remote hash for a given version", async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	server.get("/pkg/foo/1.0.0", async () => ({
 		integrity:
 			"sha512-36Ug1lJ/p/H0n5+or1HDLrqLaI3nvB7j2f7PC9RIzWd3T5GE4CfOuClEZRiNsf/F4BjT5FnS9mz0EzeDHpu3uw==",

@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 beforeEach(async (t) => {
-	const server = fastify();
+	const server = fastify({ ignoreTrailingSlash: true });
 	const memSink = new Sink();
 	const service = new EikService({ sink: memSink });
 	await server.register(service.api());
