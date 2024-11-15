@@ -24,7 +24,7 @@ function exec(cmd) {
 beforeEach(async (t) => {
 	const memSink = new Sink();
 	const server = fastify();
-	const service = new EikService({ customSink: memSink });
+	const service = new EikService({ sink: memSink });
 	await server.register(service.api());
 	const address = await server.listen({
 		host: "127.0.0.1",
