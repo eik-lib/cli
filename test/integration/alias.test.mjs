@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import { promises as fs } from "node:fs";
-import os, { type } from "node:os";
+import os from "node:os";
 import { exec as execCallback } from "child_process";
 import { join, basename } from "node:path";
 import { test, beforeEach, afterEach } from "tap";
@@ -22,10 +22,10 @@ function exec(cmd) {
 }
 
 beforeEach(async (t) => {
-	const server = fastify({ logger: false });
+	const server = fastify();
 	const memSink = new Sink();
 	const service = new EikService({ customSink: memSink });
-	server.register(service.api());
+	await server.register(service.api());
 	const address = await server.listen({
 		host: "127.0.0.1",
 		port: 0,
