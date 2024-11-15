@@ -8,6 +8,9 @@
   "bin": {
     "eik": "index.js"
   },
+  "engines": {
+    "node": ">=20.5.0"
+  },
   "files": [
     "CHANGELOG.md",
     "package.json",
@@ -38,39 +41,39 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "4.1.1",
+    "@eik/common": "5.0.0",
     "abslog": "2.4.4",
     "bytes": "3.1.2",
     "chalk": "5.3.0",
-    "date-fns": "3.6.0",
+    "date-fns": "4.1.0",
     "form-data": "4.0.1",
     "gzip-size": "7.0.0",
     "make-dir": "5.0.0",
     "ora": "8.1.1",
     "rimraf": "6.0.1",
     "semver": "7.6.3",
-    "ssri": "10.0.6",
+    "ssri": "12.0.0",
     "tar": "7.4.3",
     "yargs": "17.7.2",
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@eik/eslint-config": "1.0.4",
+    "@eik/eslint-config": "1.0.5",
     "@eik/prettier-config": "1.0.1",
     "@eik/semantic-release-config": "1.0.0",
-    "@eik/service": "2.3.2",
-    "@eik/sink-memory": "1.1.2",
+    "@eik/service": "5.0.0",
+    "@eik/sink-memory": "2.0.0",
     "@eik/typescript-config": "1.0.0",
     "@types/yargs": "17.0.33",
     "cross-env": "7.0.3",
-    "eslint": "9.11.1",
-    "fastify": "4.28.1",
+    "eslint": "9.14.0",
+    "fastify": "5.1.0",
     "fs-extra": "11.2.0",
-    "npm-run-all2": "5.0.2",
+    "npm-run-all2": "7.0.1",
     "prettier": "3.3.3",
-    "semantic-release": "24.0.0",
+    "semantic-release": "24.2.0",
     "semantic-release-slack-bot": "4.0.2",
     "tap": "21.0.1",
-    "typescript": "5.5.4"
+    "typescript": "5.6.3"
   }
 }
