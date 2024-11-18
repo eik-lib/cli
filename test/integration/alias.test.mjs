@@ -22,7 +22,10 @@ function exec(cmd) {
 }
 
 beforeEach(async (t) => {
-	const server = fastify({ ignoreTrailingSlash: true });
+	const server = fastify({
+		ignoreTrailingSlash: true,
+		forceCloseConnections: true,
+	});
 	const memSink = new Sink();
 	const service = new EikService({ sink: memSink });
 	await server.register(service.api());

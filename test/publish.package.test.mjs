@@ -15,7 +15,10 @@ const __dirname = dirname(__filename);
 
 beforeEach(async (t) => {
 	const memSink = new Sink();
-	const server = fastify({ ignoreTrailingSlash: true });
+	const server = fastify({
+		ignoreTrailingSlash: true,
+		forceCloseConnections: true,
+	});
 	const service = new EikService({ sink: memSink });
 	await server.register(service.api());
 	const address = await server.listen({
