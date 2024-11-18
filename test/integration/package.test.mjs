@@ -43,9 +43,7 @@ beforeEach(async (t) => {
 	t.context.token = token;
 });
 
-afterEach(async (t) => {
-	await t.context.server.close();
-});
+afterEach((t) => t.context.server.close());
 
 test("eik package : package, details provided by eik.json file", async (t) => {
 	const assets = {

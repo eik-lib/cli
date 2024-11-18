@@ -75,11 +75,9 @@ beforeEach(async (t) => {
 	t.context.token = token;
 });
 
-afterEach(async (t) => {
-	await t.context.server.close();
-});
+afterEach((t) => t.context.server.close());
 
-await test("eik package-alias <name> <version> <alias>", async (t) => {
+test("eik package-alias <name> <version> <alias>", async (t) => {
 	const { address, token, folder: cwd } = t.context;
 	const eik = join(__dirname, "..", "..", "index.js");
 
@@ -121,7 +119,7 @@ await test("eik package-alias <name> <version> <alias>", async (t) => {
 	t.equal(res.ok, true);
 });
 
-await test("eik npm-alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
+test("eik npm-alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
 	const eik = join(__dirname, "..", "..", "index.js");
 	const cmd = `node ${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
         --token ${t.context.token}
@@ -144,7 +142,7 @@ await test("eik npm-alias <name> <version> <alias> --token --server : no eik.jso
 	t.end();
 });
 
-await test("eik npm-alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
+test("eik npm-alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
 	const assets = {
 		name: "test-app",
 		version: "1.0.0",
@@ -177,7 +175,7 @@ await test("eik npm-alias <name> <version> <alias> : publish details provided by
 	t.end();
 });
 
-await test("eik map-alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
+test("eik map-alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
 	const eik = join(__dirname, "..", "..", "index.js");
 	const cmd = `node ${eik} map-alias test-map 1.0.0 1
         --token ${t.context.token}
@@ -198,7 +196,7 @@ await test("eik map-alias <name> <version> <alias> --token --server : no eik.jso
 	t.end();
 });
 
-await test("eik map-alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
+test("eik map-alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
 	const assets = {
 		name: "test-app",
 		version: "1.0.0",
