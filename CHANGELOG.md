@@ -1,3 +1,10 @@
+## [3.1.12](https://github.com/eik-lib/cli/compare/v3.1.11...v3.1.12) (2024-12-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency chalk to v5.4.1 ([#619](https://github.com/eik-lib/cli/issues/619)) ([7e87274](https://github.com/eik-lib/cli/commit/7e872747ebbd33fddbfa1f999f8739d9f2340a2e))
+
 ## [3.1.11](https://github.com/eik-lib/cli/compare/v3.1.10...v3.1.11) (2024-11-04)
 
 
