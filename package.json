@@ -55,7 +55,7 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@eik/eslint-config": "1.0.7",
+    "@eik/eslint-config": "1.0.10",
     "@eik/prettier-config": "1.0.1",
     "@eik/semantic-release-config": "1.0.0",
     "@eik/service": "2.3.2",
