@@ -1,6 +1,5 @@
 eik.json
 !test/fixtures/images/eik.json
-package-lock.json
 node_modules
 tmp
 .nyc_output
