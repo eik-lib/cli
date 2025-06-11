@@ -1,10 +1,8 @@
 import assert from "assert";
 import abslog from "abslog";
 import schemasAssert from "@eik/common/lib/schemas/assert.js";
-import {
-	type as validateType,
-	alias as validateAlias,
-} from "@eik/common/lib/validators/index.js";
+import { type as validateType } from "@eik/common/lib/validators/type.js";
+import { alias as validateAlias } from "@eik/common/lib/validators/alias.js";
 import request from "../utils/http/request.js";
 import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import { joinUrlPathname } from "../utils/url.js";
