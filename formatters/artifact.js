@@ -1,5 +1,5 @@
 import { join } from "path";
-import chalk from "chalk";
+import c from "tinyrainbow";
 import Version from "./version.js";
 
 const _name = Symbol("name");
@@ -9,18 +9,18 @@ const _versions = Symbol("versions");
 
 function colorType(type) {
 	if (type === "npm") {
-		return chalk.white.bgRed.bold(" NPM ");
+		return c.white(c.bgRed(c.bold(" NPM ")));
 	}
 
 	if (type === "pkg") {
-		return chalk.white.bgYellow.bold(" PACKAGE ");
+		return c.white(c.bgYellow(c.bold(" PACKAGE ")));
 	}
 
 	if (type === "img") {
-		return chalk.white.bgYellow.bold(" IMAGE ");
+		return c.white(c.bgYellow(c.bold(" IMAGE ")));
 	}
 
-	return chalk.white.bgBlue.bold(" IMPORT MAP ");
+	return c.white(c.bgBlue(c.bold(" IMPORT MAP ")));
 }
 
 class Artifact {
@@ -71,12 +71,12 @@ class Artifact {
 		const write = process.stdout.write.bind(process.stdout);
 		const url = new URL(join(this.type, this.name), baseURL);
 
-		write(`:: ${colorType(this.type)} > ${chalk.green(this.name)} | `);
-		write(`${chalk.bold("org:")} ${this.org} | `);
-		write(`${chalk.bold("url:")} ${chalk.cyan(url.href)}\n`);
+		write(`:: ${colorType(this.type)} > ${c.green(this.name)} | `);
+		write(`${c.bold("org:")} ${this.org} | `);
+		write(`${c.bold("url:")} ${c.cyan(url.href)}\n`);
 
 		if (this.versions.length) {
-			write(`\n   ${chalk.bold("versions:")}\n`);
+			write(`\n   ${c.bold("versions:")}\n`);
 		}
 
 		for (const version of this.versions) {

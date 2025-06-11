@@ -1,21 +1,21 @@
 import { join } from "path";
-import chalk from "chalk";
+import c from "tinyrainbow";
 import File from "./file.js";
 
 function colorType(type) {
 	if (type === "npm") {
-		return chalk.white.bgRed.bold(" NPM ");
+		return c.white(c.bgRed(c.bold(" NPM ")));
 	}
 
 	if (type === "pkg") {
-		return chalk.white.bgYellow.bold(" PACKAGE ");
+		return c.white(c.bgYellow(c.bold(" PACKAGE ")));
 	}
 
 	if (type === "img") {
-		return chalk.white.bgYellow.bold(" IMAGE ");
+		return c.white(c.bgYellow(c.bold(" IMAGE ")));
 	}
 
-	return chalk.white.bgBlue.bold(" IMPORT MAP ");
+	return c.white(c.bgBlue(c.bold(" IMPORT MAP ")));
 }
 
 class Alias {
@@ -45,27 +45,27 @@ class Alias {
 
 		write(`:: `);
 
-		write(`${colorType(this.type)} > ${chalk.green(this.name)} | `);
-		write(`${chalk.bold("org:")} ${this.org} | `);
-		write(`${chalk.bold("version:")} ${this.version} | `);
-		write(`${chalk.bold("alias:")} v${this.alias} `);
+		write(`${colorType(this.type)} > ${c.green(this.name)} | `);
+		write(`${c.bold("org:")} ${this.org} | `);
+		write(`${c.bold("version:")} ${this.version} | `);
+		write(`${c.bold("alias:")} v${this.alias} `);
 
 		if (this.update) {
-			write(`${chalk.bgMagenta.white(" UPDATED \n\n")}`);
+			write(`${c.bgMagenta(c.white(" UPDATED \n\n"))}`);
 		} else {
-			write(`${chalk.bgGreen.white(" NEW ")}\n\n`);
+			write(`${c.bgGreen(c.white(" NEW "))}\n\n`);
 		}
 
 		if (url.href) {
-			write(`   ${chalk.bold("url:      ")} ${chalk.cyan(url.href)}\n`);
+			write(`   ${c.bold("url:      ")} ${c.cyan(url.href)}\n`);
 		}
 
 		if (this.integrity) {
-			write(`   ${chalk.bold("integrity:")} ${this.integrity}\n`);
+			write(`   ${c.bold("integrity:")} ${this.integrity}\n`);
 		}
 
 		if (this.files.length) {
-			write(`\n   ${chalk.bold("files:")}\n`);
+			write(`\n   ${c.bold("files:")}\n`);
 		}
 
 		for (const file of this.files) {

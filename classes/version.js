@@ -1,8 +1,7 @@
-import { copyFileSync, writeFileSync } from "fs";
+import { copyFileSync, writeFileSync, mkdirSync } from "fs";
 import { join, isAbsolute, parse } from "path";
 import abslog from "abslog";
 import semver from "semver";
-import { makeDirectorySync } from "make-dir";
 import EikConfig from "@eik/common/lib/classes/eik-config.js";
 import ValidationError from "@eik/common/lib/schemas/validation-error.js";
 import typeSlug from "@eik/common/lib/helpers/type-slug.js";
@@ -117,7 +116,7 @@ export default class Version {
 
 		let localHash;
 		try {
-			makeDirectorySync(path);
+			mkdirSync(path, { recursive: true });
 			const eikPathDest = join(path, configFile);
 			const eikJSON = {
 				name,

@@ -1,5 +1,5 @@
 import { join } from "path";
-import chalk from "chalk";
+import c from "tinyrainbow";
 import { formatDistance } from "date-fns/formatDistance";
 import File from "./file.js";
 
@@ -31,12 +31,12 @@ class Version {
 		const url = new URL(baseURL);
 		const bURL = new URL(join(url.pathname, this.version), url.origin);
 
-		write(`   - ${chalk.green(this.version)}\n`);
-		write(`     ${chalk.bold("url:")} ${chalk.cyan(bURL.href)}\n`);
-		write(`     ${chalk.bold("integrity:")} ${this.integrity}\n`);
+		write(`   - ${c.green(this.version)}\n`);
+		write(`     ${c.bold("url:")} ${c.cyan(bURL.href)}\n`);
+		write(`     ${c.bold("integrity:")} ${this.integrity}\n`);
 
 		if (this.files && this.files.length) {
-			write(`\n     ${chalk.bold("files:")}\n`);
+			write(`\n     ${c.bold("files:")}\n`);
 			for (const file of this.files) {
 				new File(file).format(bURL.href);
 				write(`\n`);
@@ -47,11 +47,11 @@ class Version {
 			const d = formatDistance(new Date(this.created * 1000), new Date(), {
 				addSuffix: true,
 			});
-			write(`     ${chalk.bold("published")} ${chalk.yellow(d)}`);
+			write(`     ${c.bold("published")} ${c.yellow(d)}`);
 		}
 
 		if (this.author && this.author.name) {
-			write(` ${chalk.bold("by")} ${chalk.yellow(this.author.name)}`);
+			write(` ${c.bold("by")} ${c.yellow(this.author.name)}`);
 		}
 	}
 }
