@@ -1,7 +1,8 @@
 import os from "os";
 import readline from "readline";
 import Login from "../classes/login.js";
-import json from "../utils/json/index.js";
+import read from "../utils/json/read.js";
+import write from "../utils/json/write.js";
 import { commandHandler } from "../utils/command-handler.js";
 
 const homedir = os.homedir();
@@ -79,14 +80,14 @@ export const handler = commandHandler(
 
 		if (token) {
 			const meta = /** @type {{ tokens: any }} */ (
-				await json.read({ cwd: homedir, filename: ".eikrc" })
+				await read({ cwd: homedir, filename: ".eikrc" })
 			);
 
 			const tokens = new Map(meta.tokens);
 			tokens.set(s, token);
 			meta.tokens = Array.from(tokens);
 
-			await json.write(meta, { cwd: homedir, filename: ".eikrc" });
+			await write(meta, { cwd: homedir, filename: ".eikrc" });
 		}
 	},
 );

@@ -1,8 +1,7 @@
 import abslog from "abslog";
-import eik from "@eik/common";
-import { request } from "../utils/http/index.js";
-
-const { schemas } = eik;
+import assert from "@eik/common/lib/schemas/assert.js";
+import ValidationError from "@eik/common/lib/schemas/validation-error.js";
+import request from "../utils/http/request.js";
 
 /**
  * @typedef {object} LoginOptions
@@ -28,10 +27,9 @@ export default class Login {
 		this.log.debug("Validating input");
 
 		try {
-			schemas.assert.server(this.server);
+			assert.server(this.server);
 			if (!this.key || typeof !this.key === "string") {
-				// @ts-expect-error
-				throw new schemas.ValidationError('"key" must be a string');
+				throw new ValidationError('"key" must be a string');
 			}
 		} catch (err) {
 			this.log.error(err.message);

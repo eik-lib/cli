@@ -1,6 +1,6 @@
 import { join } from "path";
 import PublishMap from "../classes/publish/map.js";
-import { Artifact } from "../formatters/index.js";
+import Artifact from "../formatters/artifact.js";
 import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "map <name> <version> <file>";

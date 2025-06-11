@@ -1,5 +1,6 @@
 import abslog from "abslog";
-import { schemas } from "@eik/common";
+import assert from "@eik/common/lib/schemas/assert.js";
+
 import { joinUrlPathname } from "../utils/url.js";
 
 const types = ["pkg", "map", "npm"];
@@ -30,7 +31,7 @@ export default class Meta {
 		this.log.debug("Validating input");
 
 		try {
-			schemas.assert.server(this.server);
+			assert.server(this.server);
 		} catch (err) {
 			this.log.error(err.message);
 			return false;

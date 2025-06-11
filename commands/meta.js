@@ -1,5 +1,5 @@
 import Meta from "../classes/meta.js";
-import { Artifact } from "../formatters/index.js";
+import Artifact from "../formatters/artifact.js";
 import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "meta <name>";

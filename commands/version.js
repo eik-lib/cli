@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import { join } from "path";
 import VersionPackage from "../classes/version.js";
-import json from "../utils/json/index.js";
+import writeEik from "../utils/json/write-eik.js";
 import { EikCliError, errors } from "../utils/error.js";
 import { commandHandler } from "../utils/command-handler.js";
 
@@ -68,11 +68,7 @@ export const handler = commandHandler(
 			);
 		} else {
 			log.debug(`Writing new version ${newVersion} to ${configFile}`);
-			// @ts-expect-error
-			await json.writeEik(
-				{ version: newVersion },
-				{ cwd, filename: configFile },
-			);
+			await writeEik({ version: newVersion }, { cwd, filename: configFile });
 
 			log.debug(`Committing ${configFile} to local git repository`);
 			try {

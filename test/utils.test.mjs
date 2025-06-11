@@ -6,10 +6,25 @@ import { test } from "tap";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import crypto from "crypto";
-import j from "../utils/json/index.js";
-import h from "../utils/hash/index.js";
-import f from "../utils/http/index.js";
+import read from "../utils/json/read.js";
+import write from "../utils/json/write.js";
+import file from "../utils/hash/file.js";
+import files from "../utils/hash/files.js";
+import compare from "../utils/hash/compare.js";
+import latestVersion from "../utils/http/latest-version.js";
+import integrity from "../utils/http/integrity.js";
 import { getArgsOrDefaults } from "../utils/defaults.js";
+
+const j = {
+	write,
+	read,
+};
+
+const h = {
+	file,
+	files,
+	compare,
+};
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -85,7 +100,7 @@ test("fetch latest version for a given published bundle", async (t) => {
 		port: 0,
 	});
 
-	const version = await f.latestVersion(address, "pkg", "foo");
+	const version = await latestVersion(address, "pkg", "foo");
 
 	t.equal(version, "2.1.8", "Version should match expected value");
 
@@ -105,7 +120,7 @@ test("fetch latest version, filtered by major, for a given published bundle", as
 		port: 0,
 	});
 
-	const version = await f.latestVersion(address, "pkg", "foo", 1);
+	const version = await latestVersion(address, "pkg", "foo", 1);
 
 	t.equal(version, "1.3.2", "Version should match expected value");
 
@@ -120,7 +135,7 @@ test("fetch latest version for a given published bundle, non existant bundle on 
 	});
 
 	try {
-		await f.latestVersion(address, "pkg", "foo");
+		await latestVersion(address, "pkg", "foo");
 	} catch (err) {
 		t.equal(
 			err.message,
@@ -141,7 +156,7 @@ test("fetch latest version, filtered by major, for a given published bundle", as
 	});
 
 	try {
-		await f.latestVersion(address, "pkg", "foo");
+		await latestVersion(address, "pkg", "foo");
 	} catch (err) {
 		t.equal(
 			err.message,
@@ -162,7 +177,7 @@ test("fetch latest version, invalid versions returned by server", async (t) => {
 	});
 
 	t.rejects(
-		f.latestVersion(address, "pkg", "foo"),
+		latestVersion(address, "pkg", "foo"),
 		"should throw when server responds with invalid version object",
 	);
 
@@ -183,7 +198,7 @@ test("fetch latest version, invalid versions keys returned by server", async (t)
 	});
 
 	t.rejects(
-		f.latestVersion(address, "pkg", "foo"),
+		latestVersion(address, "pkg", "foo"),
 		"should throw when server responds with invalid version keys",
 	);
 
@@ -201,7 +216,7 @@ test("fetch latest version, no bundles yet published", async (t) => {
 		port: 0,
 	});
 
-	const version = await f.latestVersion(address, "pkg", "foo");
+	const version = await latestVersion(address, "pkg", "foo");
 
 	t.equal(version, null, "Version should be null");
 
@@ -228,7 +243,7 @@ test("fetch remote hash for a given version", async (t) => {
 		host: "127.0.0.1",
 		port: 0,
 	});
-	const result = await f.integrity(address, "pkg", "foo", "1.0.0");
+	const result = await integrity(address, "pkg", "foo", "1.0.0");
 
 	t.equal(
 		result,

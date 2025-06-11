@@ -1,9 +1,8 @@
 import abslog from "abslog";
-import eik from "@eik/common";
-import { typeSlug } from "../utils/index.js";
+import assert from "@eik/common/lib/schemas/assert.js";
+import ValidationError from "@eik/common/lib/schemas/validation-error.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import { joinUrlPathname } from "../utils/url.js";
-
-const { schemas } = eik;
 
 /**
  * @typedef {object} IntegrityOptions
@@ -44,27 +43,25 @@ export default class Integrity {
 
 		try {
 			this.log.debug(`  ==> server: ${this.server}`);
-			schemas.assert.server(this.server);
+			assert.server(this.server);
 
 			this.log.debug(`  ==> name: ${this.name}`);
-			schemas.assert.name(this.name);
+			assert.name(this.name);
 
 			this.log.debug(`  ==> version: ${this.version}`);
-			schemas.assert.version(this.version);
+			assert.version(this.version);
 
 			this.log.debug(`  ==> type: ${this.type}`);
-			schemas.assert.type(this.type || null);
+			assert.type(this.type || null);
 
 			this.log.debug(`  ==> debug: ${this.debug}`);
 			if (typeof this.debug !== "boolean") {
-				// @ts-expect-error
-				throw new schemas.ValidationError(`Parameter "debug" is not valid`);
+				throw new ValidationError(`Parameter "debug" is not valid`);
 			}
 
 			this.log.debug(`  ==> cwd: ${this.cwd}`);
 			if (typeof this.cwd !== "string") {
-				// @ts-expect-error
-				throw new schemas.ValidationError(`Parameter "cwd" is not valid`);
+				throw new ValidationError(`Parameter "cwd" is not valid`);
 			}
 		} catch (err) {
 			throw new Error(`Unable to validate input to command: ${err.message}`);

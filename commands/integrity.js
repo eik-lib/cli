@@ -1,6 +1,6 @@
 import { join } from "path";
 import Integrity from "../classes/integrity.js";
-import json from "../utils/json/index.js";
+import write from "../utils/json/write.js";
 import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "integrity [name] [version]";
@@ -39,7 +39,7 @@ export const handler = commandHandler(
 
 		if (integrity) {
 			const filename = join(out, "integrity.json");
-			await json.write(integrity, { cwd, filename });
+			await write(integrity, { cwd, filename });
 			spinner.succeed(
 				`integrity information for package "${name}" (v${version}) saved to "${filename}"`,
 			);

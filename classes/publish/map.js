@@ -2,8 +2,8 @@ import assert from "assert";
 import abslog from "abslog";
 import { join, parse, isAbsolute } from "path";
 import { existsSync } from "fs";
-import { schemas } from "@eik/common";
-import { request } from "../../utils/http/index.js";
+import schemasAssert from "@eik/common/lib/schemas/assert.js";
+import request from "../../utils/http/request.js";
 import { joinUrlPathname } from "../../utils/url.js";
 
 /**
@@ -55,13 +55,13 @@ export default class PublishMap {
 
 		this.log.debug("Validating input");
 		parse(this.cwd);
-		schemas.assert.server(this.server);
+		schemasAssert.server(this.server);
 		assert(
 			this.token && typeof this.token === "string",
 			'Parameter "token" is not valid',
 		);
-		schemas.assert.name(this.name);
-		schemas.assert.version(this.version);
+		schemasAssert.name(this.name);
+		schemasAssert.version(this.version);
 		parse(this.file);
 
 		this.absoluteFile = isAbsolute(this.file)

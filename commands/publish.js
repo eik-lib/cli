@@ -1,8 +1,9 @@
 import { join } from "path";
 import chalk from "chalk";
-import PublishPackage from "../classes/publish/package/index.js";
-import { typeSlug, typeTitle } from "../utils/index.js";
-import { Artifact } from "../formatters/index.js";
+import PublishPackage from "../classes/publish/package/publish.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
+import typeTitle from "../utils/type-title.js";
+import Artifact from "../formatters/artifact.js";
 import { EikCliError, errors } from "../utils/error.js";
 import { commandHandler } from "../utils/command-handler.js";
 

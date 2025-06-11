@@ -1,5 +1,5 @@
 import { join } from "path";
-import json from "../../../../utils/json/index.js";
+import write from "../../../../utils/json/write.js";
 import Task from "./task.js";
 
 export default class SaveMetaFile extends Task {
@@ -10,7 +10,7 @@ export default class SaveMetaFile extends Task {
 		log.debug("Saving integrity file");
 		log.debug(`  ==> ${filepath}`);
 		try {
-			await json.write(response, { cwd, filename: filepath });
+			await write(response, { cwd, filename: filepath });
 		} catch (err) {
 			throw new Error(
 				`Unable to save integrity file [${filepath}]: ${err.message}`,

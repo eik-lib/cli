@@ -3,10 +3,12 @@ import { join, isAbsolute, parse } from "path";
 import abslog from "abslog";
 import semver from "semver";
 import { makeDirectorySync } from "make-dir";
-import { schemas, EikConfig } from "@eik/common";
-import { integrity } from "../utils/http/index.js";
-import hash from "../utils/hash/index.js";
-import { typeSlug } from "../utils/index.js";
+import EikConfig from "@eik/common/lib/classes/eik-config.js";
+import ValidationError from "@eik/common/lib/schemas/validation-error.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
+import integrity from "../utils/http/integrity.js";
+import hashFiles from "../utils/hash/files.js";
+import hashCompare from "../utils/hash/compare.js";
 
 /**
  * @typedef {object} VersionOptions
@@ -78,20 +80,17 @@ export default class Version {
 
 		log.debug(`  ==> level: ${level}`);
 		if (!["major", "minor", "patch"].includes(level)) {
-			// @ts-expect-error
-			throw new schemas.ValidationError('Parameter "version" is not valid');
+			throw new ValidationError('Parameter "version" is not valid');
 		}
 
 		log.debug(`  ==> files: ${JSON.stringify(files)}`);
 		if (!files) {
-			// @ts-expect-error
-			throw new schemas.ValidationError('Parameter "files" is not valid');
+			throw new ValidationError('Parameter "files" is not valid');
 		}
 
 		log.debug(`  ==> map: ${JSON.stringify(map)}`);
 		if (!Array.isArray(map)) {
-			// @ts-expect-error
-			throw new schemas.ValidationError('Parameter "map" is not valid');
+			throw new ValidationError('Parameter "map" is not valid');
 		}
 
 		log.debug("Checking local package version");
@@ -146,7 +145,7 @@ export default class Version {
 					// throw new Error(`Failed to zip JavaScripts: ${err.message}`);
 				}
 			}
-			localHash = await hash.files(localFiles);
+			localHash = await hashFiles(localFiles);
 		} catch (err) {
 			throw new Error(
 				`Unable to hash local files for comparison: ${err.message}`,
@@ -156,7 +155,7 @@ export default class Version {
 		log.debug(`Comparing hashes:`);
 		log.debug(`  ==> local: ${localHash}`);
 		log.debug(`  ==> remote: ${integrityHash}`);
-		const same = hash.compare(integrityHash, localHash);
+		const same = hashCompare(integrityHash, localHash);
 
 		if (same) {
 			throw new Error(
