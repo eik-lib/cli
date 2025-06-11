@@ -38,7 +38,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "4.1.1",
+    "@eik/common": "5.1.4",
     "abslog": "2.4.4",
     "bytes": "3.1.2",
     "date-fns": "3.6.0",
