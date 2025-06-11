@@ -1,4 +1,4 @@
-import ssri from "ssri";
+import { createHash } from "node:crypto";
 import fileHash from "./file.js";
 
 /**
@@ -12,10 +12,11 @@ import fileHash from "./file.js";
  */
 export default async (files) => {
 	const hashes = await Promise.all(files.map(fileHash));
-	const hasher = ssri.create();
+	const alg = "sha512";
+	const hasher = createHash(alg);
 	for (const hash of hashes.sort()) {
 		hasher.update(hash);
 	}
-	const integrity = hasher.digest();
-	return integrity.toString();
+	const digest = hasher.digest().toString("base64");
+	return `${alg}-${digest}`;
 };

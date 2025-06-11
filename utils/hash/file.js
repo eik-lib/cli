@@ -1,7 +1,5 @@
-import ssri from "ssri";
-import fs from "fs";
-
-// TODO: can we replace ssri with something built-in? It's hella big.
+import { createHash } from "node:crypto";
+import fs from "node:fs/promises";
 
 /**
  * Reads a file from a given path and produces and returns an integrity hash from its contents
@@ -13,6 +11,10 @@ import fs from "fs";
  * @example hash.file('/path/to/file.js');
  */
 export default async (path) => {
-	const integrity = await ssri.fromStream(fs.createReadStream(path));
-	return integrity.toString();
+	const alg = "sha512";
+	const digest = createHash(alg)
+		.update(await fs.readFile(path))
+		.digest()
+		.toString("base64");
+	return `${alg}-${digest}`;
 };
