@@ -1,7 +1,7 @@
-import { copyFileSync, writeFileSync, mkdirSync } from "fs";
-import { join, isAbsolute, parse } from "path";
+import { copyFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { join, isAbsolute, parse } from "node:path";
 import abslog from "abslog";
-import semver from "semver";
+import inc from "semver/functions/inc.js";
 import EikConfig from "@eik/common/lib/classes/eik-config.js";
 import ValidationError from "@eik/common/lib/schemas/validation-error.js";
 import typeSlug from "@eik/common/lib/helpers/type-slug.js";
@@ -163,7 +163,7 @@ export default class Version {
 		}
 
 		log.debug(`Incrementing by "${level}" level`);
-		const newVersion = semver.inc(version, level);
+		const newVersion = inc(version, level);
 		log.debug(`  ==> ${newVersion}`);
 		return newVersion;
 	}
