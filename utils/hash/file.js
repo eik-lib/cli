@@ -1,6 +1,8 @@
 import ssri from "ssri";
 import fs from "fs";
 
+// TODO: can we replace ssri with something built-in? It's hella big.
+
 /**
  * Reads a file from a given path and produces and returns an integrity hash from its contents
  *
