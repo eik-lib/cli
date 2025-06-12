@@ -1,8 +1,10 @@
 import assert from "assert";
 import abslog from "abslog";
-import { schemas, validators } from "@eik/common";
-import { request } from "../utils/http/index.js";
-import { typeSlug } from "../utils/index.js";
+import schemasAssert from "@eik/common/lib/schemas/assert.js";
+import { type as validateType } from "@eik/common/lib/validators/type.js";
+import { alias as validateAlias } from "@eik/common/lib/validators/alias.js";
+import request from "../utils/http/request.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import { joinUrlPathname } from "../utils/url.js";
 
 /**
@@ -60,11 +62,11 @@ export default class Alias {
 		};
 
 		this.log.debug("Validating command input");
-		schemas.assert.server(this.server);
-		schemas.assert.name(this.name);
-		schemas.assert.version(this.version);
-		validators.type(this.type);
-		validators.alias(this.alias);
+		schemasAssert.server(this.server);
+		schemasAssert.name(this.name);
+		schemasAssert.version(this.version);
+		validateType(this.type);
+		validateAlias(this.alias);
 		assert(
 			this.token && typeof this.token === "string",
 			`Parameter "token" is not valid`,

@@ -1,6 +1,6 @@
 import fs from "fs";
 import { join, isAbsolute } from "path";
-import { helpers } from "@eik/common";
+import configStore from "@eik/common/lib/helpers/config-store.js";
 import { EikCliError, errors } from "./error.js";
 
 const defaults = {
@@ -40,9 +40,9 @@ export function getArgsOrDefaults(argv, opts) {
 			/** @type {import('@eik/common').EikConfig} */
 			let eikConfig;
 			if (stats.isDirectory()) {
-				eikConfig = helpers.configStore.findInDirectory(path);
+				eikConfig = configStore.findInDirectory(path);
 			} else {
-				eikConfig = helpers.configStore.loadFromPath(path);
+				eikConfig = configStore.loadFromPath(path);
 				config.configFile = configPath;
 			}
 			config = {

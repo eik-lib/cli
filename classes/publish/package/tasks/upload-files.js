@@ -1,5 +1,5 @@
-import { request } from "../../../../utils/http/index.js";
-import { typeSlug } from "../../../../utils/index.js";
+import request from "../../../../utils/http/request.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import { joinUrlPathname } from "../../../../utils/url.js";
 
 import Task from "./task.js";

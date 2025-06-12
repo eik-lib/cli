@@ -1,7 +1,7 @@
 import abslog from "abslog";
 import { join, isAbsolute } from "path";
 import { EikConfig } from "@eik/common";
-import { typeSlug } from "../../../utils/index.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import ValidateInput from "./tasks/validate-input.js";
 import CreateTempDirectory from "./tasks/create-temp-directory.js";
 import CreateZipFile from "./tasks/create-zip-file.js";

@@ -1,12 +1,14 @@
-import { copyFileSync, writeFileSync } from "fs";
-import { join, isAbsolute, parse } from "path";
+import { copyFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { join, isAbsolute, parse, normalize } from "node:path";
 import abslog from "abslog";
-import semver from "semver";
-import { makeDirectorySync } from "make-dir";
-import { schemas, EikConfig } from "@eik/common";
-import { integrity } from "../utils/http/index.js";
-import hash from "../utils/hash/index.js";
-import { typeSlug } from "../utils/index.js";
+import inc from "semver/functions/inc.js";
+import EikConfig from "@eik/common/lib/classes/eik-config.js";
+import ValidationError from "@eik/common/lib/schemas/validation-error.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
+import integrity from "../utils/http/integrity.js";
+import hashFile from "../utils/hash/file.js";
+import hashFiles from "../utils/hash/files.js";
+import hashCompare from "../utils/hash/compare.js";
 
 /**
  * @typedef {object} VersionOptions
@@ -78,20 +80,17 @@ export default class Version {
 
 		log.debug(`  ==> level: ${level}`);
 		if (!["major", "minor", "patch"].includes(level)) {
-			// @ts-expect-error
-			throw new schemas.ValidationError('Parameter "version" is not valid');
+			throw new ValidationError('Parameter "version" is not valid');
 		}
 
 		log.debug(`  ==> files: ${JSON.stringify(files)}`);
 		if (!files) {
-			// @ts-expect-error
-			throw new schemas.ValidationError('Parameter "files" is not valid');
+			throw new ValidationError('Parameter "files" is not valid');
 		}
 
 		log.debug(`  ==> map: ${JSON.stringify(map)}`);
 		if (!Array.isArray(map)) {
-			// @ts-expect-error
-			throw new schemas.ValidationError('Parameter "map" is not valid');
+			throw new ValidationError('Parameter "map" is not valid');
 		}
 
 		log.debug("Checking local package version");
@@ -118,7 +117,7 @@ export default class Version {
 
 		let localHash;
 		try {
-			makeDirectorySync(path);
+			mkdirSync(path, { recursive: true });
 			const eikPathDest = join(path, configFile);
 			const eikJSON = {
 				name,
@@ -130,23 +129,22 @@ export default class Version {
 			writeFileSync(eikPathDest, JSON.stringify(eikJSON, null, 2));
 
 			const localFiles = [eikPathDest];
-			log.debug(`  ==> ${eikPathDest}`);
+			log.debug(`  ==> ${eikPathDest} (hash: ${await hashFile(eikPathDest)})`);
 
 			if (files) {
-				try {
-					const mappings = await this.config.mappings();
+				const mappings = await this.config.mappings();
 
-					for (const mapping of mappings) {
-						const destination = join(path, mapping.destination.filePathname);
-						copyFileSync(mapping.source.absolute, destination);
-						log.debug(`  ==> ${destination}`);
-						localFiles.push(destination);
-					}
-				} catch (err) {
-					// throw new Error(`Failed to zip JavaScripts: ${err.message}`);
+				for (const mapping of mappings) {
+					const dest = join(path, mapping.destination.filePathname);
+					const destDir = dest.substring(0, dest.lastIndexOf("/"));
+					mkdirSync(normalize(destDir), { recursive: true });
+					copyFileSync(mapping.source.absolute, dest);
+					const hash = await hashFile(dest);
+					log.debug(`  ==> ${dest} (hash: ${hash})`);
+					localFiles.push(dest);
 				}
 			}
-			localHash = await hash.files(localFiles);
+			localHash = await hashFiles(localFiles);
 		} catch (err) {
 			throw new Error(
 				`Unable to hash local files for comparison: ${err.message}`,
@@ -156,7 +154,7 @@ export default class Version {
 		log.debug(`Comparing hashes:`);
 		log.debug(`  ==> local: ${localHash}`);
 		log.debug(`  ==> remote: ${integrityHash}`);
-		const same = hash.compare(integrityHash, localHash);
+		const same = hashCompare(integrityHash, localHash);
 
 		if (same) {
 			throw new Error(
@@ -165,7 +163,7 @@ export default class Version {
 		}
 
 		log.debug(`Incrementing by "${level}" level`);
-		const newVersion = semver.inc(version, level);
+		const newVersion = inc(version, level);
 		log.debug(`  ==> ${newVersion}`);
 		return newVersion;
 	}

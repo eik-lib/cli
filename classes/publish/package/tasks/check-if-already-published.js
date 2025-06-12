@@ -1,7 +1,9 @@
 import { join } from "path";
-import { integrity, versions } from "../../../../utils/http/index.js";
-import hash from "../../../../utils/hash/index.js";
-import { typeSlug } from "../../../../utils/index.js";
+import integrity from "../../../../utils/http/integrity.js";
+import versions from "../../../../utils/http/versions.js";
+import hashFiles from "../../../../utils/hash/files.js";
+import hashCompare from "../../../../utils/hash/compare.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import Task from "./task.js";
 
 export default class CheckIfAlreadyPublished extends Task {
@@ -53,7 +55,7 @@ export default class CheckIfAlreadyPublished extends Task {
 					localFiles.push(destination);
 				}
 			}
-			localHash = await hash.files(localFiles);
+			localHash = await hashFiles(localFiles);
 		} catch (err) {
 			throw new Error(
 				`Unable to hash local files for comparison: ${err.message}`,
@@ -63,7 +65,7 @@ export default class CheckIfAlreadyPublished extends Task {
 		// @ts-expect-error
 		const versionMap = new Map(pkgVersions);
 		for (const v of versionMap.values()) {
-			const same = hash.compare(v.integrity, localHash);
+			const same = hashCompare(v.integrity, localHash);
 			if (same) {
 				throw new Error(
 					`Version ${v.version} of this package already contains these files, publishing is not necessary.`,

@@ -1,5 +1,5 @@
 import Alias from "../classes/alias.js";
-import { Alias as AliasFormatter } from "../formatters/index.js";
+import AliasFormatter from "../formatters/alias.js";
 import { commandHandler } from "../utils/command-handler.js";
 
 export const command = "alias [name] [version] [alias]";

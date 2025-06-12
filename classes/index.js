@@ -3,9 +3,11 @@ import Alias from "./alias.js";
 import Meta from "./meta.js";
 import Login from "./login.js";
 import PublishMap from "./publish/map.js";
-import PublishPackage from "./publish/package/index.js";
+import PublishPackage from "./publish/package/publish.js";
 import Integrity from "./integrity.js";
 import Version from "./version.js";
+
+// TODO: remove this in the next major version of the module, point people to the classes directly
 
 export default {
 	/**
@@ -53,7 +55,7 @@ export default {
 	},
 
 	/**
-	 * @param {import('./publish/package/index.js').PublishOptions} opts
+	 * @param {import('./publish/package/publish.js').PublishOptions} opts
 	 */
 	publish(opts) {
 		return new PublishPackage(opts).run();

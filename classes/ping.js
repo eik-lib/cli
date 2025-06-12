@@ -1,5 +1,5 @@
 import abslog from "abslog";
-import { schemas } from "@eik/common";
+import assert from "@eik/common/lib/schemas/assert.js";
 
 /**
  * @typedef {object} PingOptions
@@ -24,7 +24,7 @@ export default class Ping {
 		this.log.debug("Validating input");
 
 		try {
-			schemas.assert.server(this.server);
+			assert.server(this.server);
 		} catch (err) {
 			this.log.error(err.message);
 			return false;

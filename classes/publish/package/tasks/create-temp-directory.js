@@ -1,4 +1,4 @@
-import { makeDirectorySync } from "make-dir";
+import { mkdirSync } from "fs";
 import Task from "./task.js";
 
 class IOError extends Error {
@@ -17,7 +17,7 @@ export default class CreateTempDir extends Task {
 		log.debug(`  ==> ${path}`);
 
 		try {
-			makeDirectorySync(path);
+			mkdirSync(path, { recursive: true });
 		} catch (err) {
 			throw new IOError("Unable to create temp dir", err);
 		}

@@ -1,5 +1,5 @@
 import { join } from "path";
-import chalk from "chalk";
+import c from "tinyrainbow";
 
 function readableBytes(bytes) {
 	const i = Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -25,10 +25,10 @@ class File {
 		const url = new URL(baseURL);
 
 		const fileUrl = new URL(join(url.pathname, this.pathname), url.origin);
-		write(`     - ${chalk.cyan(fileUrl.href)} `);
-		write(`${chalk.yellow(this.mimeType)} `);
-		write(`${chalk.magenta(readableBytes(this.size))}\n`);
-		write(`       ${chalk.bold("integrity:")} ${this.integrity}\n`);
+		write(`     - ${c.cyan(fileUrl.href)} `);
+		write(`${c.yellow(this.mimeType)} `);
+		write(`${c.magenta(readableBytes(this.size))}\n`);
+		write(`       ${c.bold("integrity:")} ${this.integrity}\n`);
 	}
 }
 

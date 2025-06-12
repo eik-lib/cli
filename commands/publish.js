@@ -1,8 +1,9 @@
 import { join } from "path";
-import chalk from "chalk";
-import PublishPackage from "../classes/publish/package/index.js";
-import { typeSlug, typeTitle } from "../utils/index.js";
-import { Artifact } from "../formatters/index.js";
+import c from "tinyrainbow";
+import PublishPackage from "../classes/publish/package/publish.js";
+import typeSlug from "@eik/common/lib/helpers/type-slug.js";
+import typeTitle from "../utils/type-title.js";
+import Artifact from "../formatters/artifact.js";
 import { EikCliError, errors } from "../utils/error.js";
 import { commandHandler } from "../utils/command-handler.js";
 
@@ -105,20 +106,18 @@ export const handler = commandHandler(
 			spinner.stopAndPersist();
 
 			process.stdout.write(
-				`:: ${chalk.bgYellow.white.bold(
-					typeTitle(type),
-				)} > ${chalk.green(name)} | ${chalk.bold("dry run")}`,
+				`:: ${c.bgYellow(
+					c.white(c.bold(typeTitle(type))),
+				)} > ${c.green(name)} | ${c.bold("dry run")}`,
 			);
 			process.stdout.write("\n\n");
 			process.stdout.write("   files (local temporary):\n");
 			for (const file of fls) {
-				process.stdout.write(`   - ${chalk.bold("type")}: ${file.type}\n`);
-				process.stdout.write(
-					`     ${chalk.bold("path")}: ${file.pathname}\n\n`,
-				);
+				process.stdout.write(`   - ${c.bold("type")}: ${file.type}\n`);
+				process.stdout.write(`     ${c.bold("path")}: ${file.pathname}\n\n`);
 			}
 			process.stdout.write(
-				`   ${chalk.bold("No files were published to remote server")}\n\n`,
+				`   ${c.bold("No files were published to remote server")}\n\n`,
 			);
 		}
 	},
