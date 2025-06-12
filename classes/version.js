@@ -6,6 +6,7 @@ import EikConfig from "@eik/common/lib/classes/eik-config.js";
 import ValidationError from "@eik/common/lib/schemas/validation-error.js";
 import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import integrity from "../utils/http/integrity.js";
+import hashFile from "../utils/hash/file.js";
 import hashFiles from "../utils/hash/files.js";
 import hashCompare from "../utils/hash/compare.js";
 
@@ -137,7 +138,8 @@ export default class Version {
 					for (const mapping of mappings) {
 						const destination = join(path, mapping.destination.filePathname);
 						copyFileSync(mapping.source.absolute, destination);
-						log.debug(`  ==> ${destination}`);
+						const hash = await hashFile(destination);
+						log.debug(`  ==> ${destination} (hash: ${hash})`);
 						localFiles.push(destination);
 					}
 				} catch (err) {
