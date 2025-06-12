@@ -1,3 +1,11 @@
+## [3.1.18](https://github.com/eik-lib/cli/compare/v3.1.17...v3.1.18) (2025-06-12)
+
+
+### Bug Fixes
+
+* recreate subdirectories when comparing hash ([d07baf7](https://github.com/eik-lib/cli/commit/d07baf763ac718c3677b069513297f591c6f11c0))
+* upgrade eik/common ([924c26c](https://github.com/eik-lib/cli/commit/924c26ca50ff84198b7bf8e944565d995c03f7ac))
+
 ## [3.1.17](https://github.com/eik-lib/cli/compare/v3.1.16...v3.1.17) (2025-06-09)
 
 
