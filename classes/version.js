@@ -129,7 +129,7 @@ export default class Version {
 			writeFileSync(eikPathDest, JSON.stringify(eikJSON, null, 2));
 
 			const localFiles = [eikPathDest];
-			log.debug(`  ==> ${eikPathDest}`);
+			log.debug(`  ==> ${eikPathDest} (hash: ${await hashFile(eikPathDest)})`);
 
 			if (files) {
 				try {
