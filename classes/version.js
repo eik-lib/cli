@@ -1,5 +1,5 @@
 import { copyFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, isAbsolute, parse } from "node:path";
+import { join, isAbsolute, parse, normalize } from "node:path";
 import abslog from "abslog";
 import inc from "semver/functions/inc.js";
 import EikConfig from "@eik/common/lib/classes/eik-config.js";
@@ -132,18 +132,16 @@ export default class Version {
 			log.debug(`  ==> ${eikPathDest} (hash: ${await hashFile(eikPathDest)})`);
 
 			if (files) {
-				try {
-					const mappings = await this.config.mappings();
+				const mappings = await this.config.mappings();
 
-					for (const mapping of mappings) {
-						const destination = join(path, mapping.destination.filePathname);
-						copyFileSync(mapping.source.absolute, destination);
-						const hash = await hashFile(destination);
-						log.debug(`  ==> ${destination} (hash: ${hash})`);
-						localFiles.push(destination);
-					}
-				} catch (err) {
-					// throw new Error(`Failed to zip JavaScripts: ${err.message}`);
+				for (const mapping of mappings) {
+					const dest = join(path, mapping.destination.filePathname);
+					const destDir = dest.substring(0, dest.lastIndexOf("/"));
+					mkdirSync(normalize(destDir), { recursive: true });
+					copyFileSync(mapping.source.absolute, dest);
+					const hash = await hashFile(dest);
+					log.debug(`  ==> ${dest} (hash: ${hash})`);
+					localFiles.push(dest);
 				}
 			}
 			localHash = await hashFiles(localFiles);
