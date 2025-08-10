@@ -41,7 +41,7 @@
     "@eik/common": "5.1.6",
     "abslog": "2.4.4",
     "bytes": "3.1.2",
-    "date-fns": "3.6.0",
+    "date-fns": "4.1.0",
     "form-data": "4.0.4",
     "gzip-size": "7.0.0",
     "ora": "8.2.0",
