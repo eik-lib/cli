@@ -13,8 +13,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
-        node-version: [20]
-
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -22,7 +20,7 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
 
       - run: npm ci
 
