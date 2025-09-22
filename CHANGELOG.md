@@ -1,3 +1,13 @@
+## [3.1.22](https://github.com/eik-lib/cli/compare/v3.1.21...v3.1.22) (2025-09-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v4 ([#598](https://github.com/eik-lib/cli/issues/598)) [skip ci] ([c1f3598](https://github.com/eik-lib/cli/commit/c1f3598322de74e08dd7bcc27b62a3a4a686527b))
+* **deps:** update dependency tar to v7.4.4 ([#652](https://github.com/eik-lib/cli/issues/652)) ([33d6311](https://github.com/eik-lib/cli/commit/33d63111956d6fb7d6324de6bac1dbe095873c75))
+* **deps:** update dependency tinyrainbow to v3 ([#650](https://github.com/eik-lib/cli/issues/650)) [skip ci] ([4d9ec43](https://github.com/eik-lib/cli/commit/4d9ec4372897a0c877ea1ac21c04e3e2920e3523))
+* **deps:** update dependency yargs-parser to v22 ([#638](https://github.com/eik-lib/cli/issues/638)) [skip ci] ([80cb9b4](https://github.com/eik-lib/cli/commit/80cb9b4818c66213cf82a5b5a697745c6c94c6b7))
+
 ## [3.1.21](https://github.com/eik-lib/cli/compare/v3.1.20...v3.1.21) (2025-07-28)
 
 
