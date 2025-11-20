@@ -1,3 +1,10 @@
+## [3.1.26](https://github.com/eik-lib/cli/compare/v3.1.25...v3.1.26) (2025-11-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency rimraf to v6.1.2 ([#662](https://github.com/eik-lib/cli/issues/662)) ([5fa2168](https://github.com/eik-lib/cli/commit/5fa2168f38a22f5d0ddc4a72aedb368fc671bbcf))
+
 ## [3.1.25](https://github.com/eik-lib/cli/compare/v3.1.24...v3.1.25) (2025-11-19)
 
 
