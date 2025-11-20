@@ -59,7 +59,7 @@
     "@eik/service": "2.3.2",
     "@eik/sink-memory": "1.1.3",
     "@eik/typescript-config": "1.0.0",
-    "@types/yargs": "17.0.33",
+    "@types/yargs": "17.0.35",
     "cross-env": "7.0.3",
     "eslint": "9.39.1",
     "fastify": "4.29.1",
