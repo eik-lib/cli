@@ -65,7 +65,7 @@
     "fastify": "4.29.1",
     "fs-extra": "11.3.2",
     "npm-run-all2": "5.0.2",
-    "prettier": "3.4.2",
+    "prettier": "3.7.3",
     "semantic-release": "24.0.0",
     "semantic-release-slack-bot": "4.0.2",
     "tap": "21.0.1",
