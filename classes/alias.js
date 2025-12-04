@@ -128,7 +128,7 @@ export default class Alias {
 					throw new Error("Client unauthorized with server");
 				case 404:
 					throw new Error(
-						`The server was unable to locate ${pathname}. Ensure you have the correct package type (eik package-alias vs eik npm-alias), name and that the version exists on the server.`,
+						`The server was unable to locate ${joinUrlPathname(this.type, this.name, this.version)}. Ensure you have the correct package type (eik package-alias vs eik npm-alias), name and that the package version you're trying to alias exists on the server.`,
 					);
 				case 409:
 					throw new Error(
