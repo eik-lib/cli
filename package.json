@@ -36,7 +36,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:podium-lib/cli.git"
+    "url": "git@github.com:eik-lib/cli.git"
   },
   "keywords": [],
   "author": "",
