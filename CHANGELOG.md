@@ -1,3 +1,11 @@
+## [3.1.29](https://github.com/eik-lib/cli/compare/v3.1.28...v3.1.29) (2025-12-11)
+
+
+### Bug Fixes
+
+* updating depedencies ([#670](https://github.com/eik-lib/cli/issues/670)) ([30bb802](https://github.com/eik-lib/cli/commit/30bb802adb18b39164756657be820d53c1f5620a))
+* updating depedencies ([#670](https://github.com/eik-lib/cli/issues/670)) ([7302910](https://github.com/eik-lib/cli/commit/7302910ea370b35af700cac704ff2a210d6efcfe))
+
 ## [3.1.28](https://github.com/eik-lib/cli/compare/v3.1.27...v3.1.28) (2025-12-01)
 
 
