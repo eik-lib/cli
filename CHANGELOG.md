@@ -1,3 +1,11 @@
+## [3.1.30](https://github.com/eik-lib/cli/compare/v3.1.29...v3.1.30) (2025-12-12)
+
+
+### Bug Fixes
+
+* log the version URL causing the 404, not the alias URL ([#668](https://github.com/eik-lib/cli/issues/668)) [skip ci] ([b491c6e](https://github.com/eik-lib/cli/commit/b491c6efa11f055074255a6ffb50ca6b9babd098))
+* update eik/common ([da1f489](https://github.com/eik-lib/cli/commit/da1f4890ec320de022801edefa9d21ad8d0672c7))
+
 ## [3.1.29](https://github.com/eik-lib/cli/compare/v3.1.28...v3.1.29) (2025-12-11)
 
 
