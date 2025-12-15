@@ -43,6 +43,7 @@ export const handler = commandHandler(
 			server,
 			map,
 			out,
+			type,
 			files,
 			configFile,
 		} = argv;
@@ -55,6 +56,7 @@ export const handler = commandHandler(
 			cwd,
 			level,
 			map,
+			type,
 			out,
 			files,
 			configFile,
