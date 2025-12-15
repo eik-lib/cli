@@ -1,3 +1,10 @@
+## [3.1.31](https://github.com/eik-lib/cli/compare/v3.1.30...v3.1.31) (2025-12-15)
+
+
+### Bug Fixes
+
+* version command for types other than package ([2970582](https://github.com/eik-lib/cli/commit/29705829ebc19483f213ad9673d4e943b84748ce))
+
 ## [3.1.30](https://github.com/eik-lib/cli/compare/v3.1.29...v3.1.30) (2025-12-12)
 
 
