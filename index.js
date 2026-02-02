@@ -40,7 +40,7 @@ if (
 	process.exit(0);
 }
 
-yargs(hideBin(process.argv))
+await yargs(hideBin(process.argv))
 	.scriptName("eik")
 	// inspired by git
 	.usage(
@@ -85,4 +85,4 @@ For a more detailed description of commands and options, see the reference docum
 	.version(false) // Turn off the built-in version option to not conflict with the version command
 	.help()
 	.alias("h", "help")
-	.parse();
+	.parseAsync();
