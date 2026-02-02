@@ -1,3 +1,12 @@
+## [3.1.32](https://github.com/eik-lib/cli/compare/v3.1.31...v3.1.32) (2026-02-02)
+
+
+### Bug Fixes
+
+* bump timeout to deal with macOS process spawning ([fa5a5a4](https://github.com/eik-lib/cli/commit/fa5a5a4cf8dc2a854530388c49d8fc207a06caae))
+* try to improve tests ([e9388fe](https://github.com/eik-lib/cli/commit/e9388fe8ec2e703c4b03f16a20c02b6597e34db3))
+* Update dependencies ([e04adcc](https://github.com/eik-lib/cli/commit/e04adcc31a6f1782f16b22d639f45ef17c865287))
+
 ## [3.1.31](https://github.com/eik-lib/cli/compare/v3.1.30...v3.1.31) (2025-12-15)
 
 
