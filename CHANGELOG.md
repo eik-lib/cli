@@ -1,3 +1,10 @@
+## [3.1.33](https://github.com/eik-lib/cli/compare/v3.1.32...v3.1.33) (2026-02-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ora to v9.2.0 ([783eb4e](https://github.com/eik-lib/cli/commit/783eb4ea893fee34ddb021656e86232dda3ab452))
+
 ## [3.1.32](https://github.com/eik-lib/cli/compare/v3.1.31...v3.1.32) (2026-02-02)
 
 
