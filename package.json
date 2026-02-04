@@ -66,7 +66,7 @@
     "@eik/prettier-config": "1.0.1",
     "@eik/semantic-release-config": "1.0.12",
     "@eik/service": "5.1.19",
-    "@eik/sink-memory": "2.0.15",
+    "@eik/sink-memory": "2.0.16",
     "@eik/typescript-config": "1.0.0",
     "@types/yargs": "17.0.35",
     "cross-env": "10.1.0",
