@@ -1,3 +1,11 @@
+## [3.1.35](https://github.com/eik-lib/cli/compare/v3.1.34...v3.1.35) (2026-02-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @eik/common to v5.1.16 ([#681](https://github.com/eik-lib/cli/issues/681)) ([7c024a1](https://github.com/eik-lib/cli/commit/7c024a11e3ad0c995a9a80baebb79d964cad59af))
+* **deps:** update dependency semver to v7.7.4 ([#682](https://github.com/eik-lib/cli/issues/682)) ([1b38383](https://github.com/eik-lib/cli/commit/1b3838386661d6820bb812726bc2a8fa5a89fc64))
+
 ## [3.1.34](https://github.com/eik-lib/cli/compare/v3.1.33...v3.1.34) (2026-02-05)
 
 
