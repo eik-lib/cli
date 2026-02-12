@@ -50,7 +50,7 @@
     "gzip-size": "7.0.0",
     "ora": "9.2.0",
     "rimraf": "6.1.2",
-    "semver": "7.7.3",
+    "semver": "7.7.4",
     "tar": "7.5.7",
     "tinyrainbow": "3.0.3",
     "yargs": "18.0.0",
