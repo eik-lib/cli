@@ -1,3 +1,11 @@
+## [3.1.38](https://github.com/eik-lib/cli/compare/v3.1.37...v3.1.38) (2026-02-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @eik/common to v5.1.22 ([#686](https://github.com/eik-lib/cli/issues/686)) ([2c61e8b](https://github.com/eik-lib/cli/commit/2c61e8bed035eda3f8165b8a8e423b2f0dceb71d))
+* **deps:** update dependency tar to v7.5.8 [security] ([#685](https://github.com/eik-lib/cli/issues/685)) ([eb25369](https://github.com/eik-lib/cli/commit/eb25369bc56be765e8a6a9a97cbdf6f148cb6e6e))
+
 ## [3.1.37](https://github.com/eik-lib/cli/compare/v3.1.36...v3.1.37) (2026-02-16)
 
 
