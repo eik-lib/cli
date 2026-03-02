@@ -1,3 +1,10 @@
+## [3.1.40](https://github.com/eik-lib/cli/compare/v3.1.39...v3.1.40) (2026-03-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.9 ([#687](https://github.com/eik-lib/cli/issues/687)) ([0f4abc5](https://github.com/eik-lib/cli/commit/0f4abc505c1aff7438072872d0342d730d373f6a))
+
 ## [3.1.39](https://github.com/eik-lib/cli/compare/v3.1.38...v3.1.39) (2026-03-02)
 
 
