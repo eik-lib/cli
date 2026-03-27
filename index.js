@@ -34,7 +34,7 @@ const { version: cliVersion } = JSON.parse(
 if (
 	process.argv.includes("-v") ||
 	// last position only to avoid conflict with publish command
-	process.argv[process.argv.length - 1].includes("--version")
+	process.argv.at(-1).includes("--version")
 ) {
 	console.log(cliVersion);
 	process.exit(0);
