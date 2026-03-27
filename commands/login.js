@@ -71,7 +71,7 @@ export const handler = commandHandler(
 
 		if (rl) rl.close();
 
-		spinner.start();
+		if (!spinner.running) spinner.start();
 		const token = await new Login({
 			logger,
 			key: k,

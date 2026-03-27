@@ -53,8 +53,8 @@ ${JSON.stringify(args, null, 2)}`);
 					}
 				}
 
-				spinner.text = "";
-				spinner.stopAndPersist();
+				spinner.setText("");
+				spinner.stop();
 				return process.exit(e.exitCode);
 			}
 
@@ -65,8 +65,8 @@ ${JSON.stringify(args, null, 2)}`);
 				log.debug(error.stack);
 			}
 
-			spinner.text = "";
-			spinner.stopAndPersist();
+			spinner.setText("");
+			spinner.stop();
 			process.exit(1);
 		}
 	};
