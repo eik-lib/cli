@@ -71,7 +71,7 @@ export const handler = commandHandler(
 
 		if (rl) rl.close();
 
-		spinner.start();
+		if (!spinner.running) spinner.start();
 		const token = await new Login({
 			logger,
 			key: k,
@@ -85,7 +85,7 @@ export const handler = commandHandler(
 
 			const tokens = new Map(meta.tokens);
 			tokens.set(s, token);
-			meta.tokens = Array.from(tokens);
+			meta.tokens = [...tokens];
 
 			await write(meta, { cwd: homedir, filename: ".eikrc" });
 		}

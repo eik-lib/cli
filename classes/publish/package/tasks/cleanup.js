@@ -1,7 +1,6 @@
 import { join } from "node:path";
 import { existsSync } from "node:fs";
-import { readdir } from "node:fs/promises";
-import { rimraf } from "rimraf";
+import { readdir, rm } from "node:fs/promises";
 import Task from "./task.js";
 
 export default class Cleanup extends Task {
@@ -14,7 +13,9 @@ export default class Cleanup extends Task {
 			await Promise.all(
 				dir
 					.filter((file) => file !== "integrity.json")
-					.map((file) => rimraf(join(path, file))),
+					.map((file) =>
+						rm(join(path, file), { recursive: true, force: true }),
+					),
 			);
 		}
 	}

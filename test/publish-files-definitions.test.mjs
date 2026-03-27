@@ -1,11 +1,11 @@
 import fastify from "fastify";
-import { promises as fs } from "fs";
+import { cpSync } from "node:fs";
+import fs from "node:fs/promises";
 import os from "os";
 import { join, basename } from "path";
 import { test, beforeEach, afterEach } from "tap";
 import EikService from "@eik/service";
 import Sink from "@eik/sink-memory";
-import fsExtra from "fs-extra";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import cli from "../classes/index.js";
@@ -40,7 +40,9 @@ beforeEach(async (t) => {
 	});
 
 	const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
-	fsExtra.copySync(join(__dirname, "./fixtures"), join(cwd, "fixtures"));
+	cpSync(join(__dirname, "./fixtures"), join(cwd, "fixtures"), {
+		recursive: true,
+	});
 
 	t.context.server = server;
 	t.context.address = address;
