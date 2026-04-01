@@ -64,7 +64,7 @@
   "devDependencies": {
     "@eik/eslint-config": "1.0.25",
     "@eik/prettier-config": "1.0.1",
-    "@eik/semantic-release-config": "1.0.12",
+    "@eik/semantic-release-config": "1.0.15",
     "@eik/service": "5.1.20",
     "@eik/sink-memory": "2.0.16",
     "@eik/typescript-config": "1.0.0",
