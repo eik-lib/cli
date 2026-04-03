@@ -1,4 +1,4 @@
-import ora from "ora";
+import { Spinner } from "picospinner";
 import logger from "./logger.js";
 import { EikCliError } from "./error.js";
 import { getArgsOrDefaults } from "./defaults.js";
@@ -25,7 +25,8 @@ import { getArgsOrDefaults } from "./defaults.js";
  */
 export function commandHandler(opts, handlerFunction) {
 	return async (argv) => {
-		const spinner = ora({ stream: process.stdout }).start();
+		const spinner = new Spinner();
+		spinner.start();
 		const log = logger(spinner, argv.debug);
 
 		try {
@@ -38,8 +39,8 @@ ${JSON.stringify(args, null, 2)}`);
 
 			await handlerFunction(args, log, spinner);
 
-			spinner.text = "";
-			spinner.stopAndPersist();
+			spinner.setText("");
+			spinner.stop();
 		} catch (e) {
 			if (e instanceof EikCliError) {
 				log.error(e.message);
@@ -52,8 +53,8 @@ ${JSON.stringify(args, null, 2)}`);
 					}
 				}
 
-				spinner.text = "";
-				spinner.stopAndPersist();
+				spinner.setText("");
+				spinner.stop();
 				return process.exit(e.exitCode);
 			}
 
@@ -64,8 +65,8 @@ ${JSON.stringify(args, null, 2)}`);
 				log.debug(error.stack);
 			}
 
-			spinner.text = "";
-			spinner.stopAndPersist();
+			spinner.setText("");
+			spinner.stop();
 			process.exit(1);
 		}
 	};

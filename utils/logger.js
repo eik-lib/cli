@@ -1,7 +1,7 @@
 /**
- * Creates a logger object that wraps an instance of the "ora" module in order to provide consistent command line logging that includes a spinner
+ * Creates a logger object that wraps an instance of the "picospinner" module in order to provide consistent command line logging that includes a spinner
  *
- * @param {object} spinner
+ * @param {import('picospinner').Spinner} spinner
  * @param {boolean} debug
  */
 const logger = (spinner, debug = false) => ({
@@ -9,45 +9,55 @@ const logger = (spinner, debug = false) => ({
 	 * @param {string} message
 	 */
 	fatal(message) {
-		spinner.fail(message).start();
+		spinner.fail(message);
+		if (!spinner.running) spinner.start();
 	},
 	/**
 	 * @param {string} message
 	 */
 	error(message) {
-		spinner.fail(message).start();
+		spinner.fail(message);
+		if (!spinner.running) spinner.start();
 	},
 	/**
 	 * @param {string} message
 	 */
 	warn(message) {
-		spinner.warn(message).start();
+		spinner.warn(message);
+		if (!spinner.running) spinner.start();
 	},
 	/**
 	 * @param {string} message
 	 */
 	info(message) {
 		if (typeof message !== "string") {
-			spinner.text = "";
-			spinner.stopAndPersist();
+			spinner.setText("");
+			spinner.stop();
 
 			console.log(message);
 			spinner.start();
 		} else {
-			spinner.succeed(message).start();
+			spinner.succeed(message);
+			if (!spinner.running) spinner.start();
 		}
 	},
 	/**
 	 * @param {string} message
 	 */
 	debug(message) {
-		if (debug) spinner.info(message).start();
+		if (debug) {
+			spinner.info(message);
+			if (!spinner.running) spinner.start();
+		}
 	},
 	/**
 	 * @param {string} message
 	 */
 	trace(message) {
-		if (debug) spinner.info(message).start();
+		if (debug) {
+			spinner.info(message);
+			if (!spinner.running) spinner.start();
+		}
 	},
 });
 
