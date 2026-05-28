@@ -2,6 +2,7 @@ import { join } from "path";
 import Task from "./task.js";
 
 export default class DryRun extends Task {
+	/** @param {string} zipFile */
 	async process(zipFile) {
 		const { path } = this;
 

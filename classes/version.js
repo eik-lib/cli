@@ -102,7 +102,8 @@ export default class Version {
 			integrityHash = await integrity(server, typeSlug(type), name, version);
 		} catch (err) {
 			throw new Error(
-				`Unable to fetch package metadata from server: ${err.message}`,
+				`Unable to fetch package metadata from server: ${/** @type {any} */ (err).message}`,
+				{ cause: err },
 			);
 		}
 
@@ -147,7 +148,8 @@ export default class Version {
 			localHash = await hashFiles(localFiles);
 		} catch (err) {
 			throw new Error(
-				`Unable to hash local files for comparison: ${err.message}`,
+				`Unable to hash local files for comparison: ${/** @type {any} */ (err).message}`,
+				{ cause: err },
 			);
 		}
 

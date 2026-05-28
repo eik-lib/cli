@@ -26,7 +26,7 @@ export default class Ping {
 		try {
 			assert.server(this.server);
 		} catch (err) {
-			this.log.error(err.message);
+			this.log.error(/** @type {any} */ (err).message);
 			return false;
 		}
 
@@ -44,12 +44,13 @@ export default class Ping {
 			this.log.info(`Ping successful`);
 			return true;
 		} catch (err) {
-			if (err.code === "ENOTFOUND") {
+			const e = /** @type {any} */ (err);
+			if (e.code === "ENOTFOUND") {
 				this.log.info("Ping unsuccessful. Server not found.");
 				return false;
 			}
 
-			switch (err.statusCode) {
+			switch (e.statusCode) {
 				case 404:
 					this.log.info("Ping unsuccessful. Route not found.");
 					return false;

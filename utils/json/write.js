@@ -27,20 +27,20 @@ export default async (meta = {}, location) => {
 		);
 	}
 	let cwd = process.cwd();
-	let filename = "";
-	if (typeof location === "string") {
-		filename = location;
-	} else {
-		filename = location.filename;
-		if (location.cwd) {
-			cwd = location.cwd;
-		}
+	const filename = typeof location === "string" ? location : location.filename;
+	if (typeof location !== "string" && location.cwd) {
+		cwd = location.cwd;
 	}
 	const path = isAbsolute(filename) ? filename : join(cwd, filename);
 	try {
 		await fs.mkdir(dirname(path), { recursive: true });
 		await fs.writeFile(path, JSON.stringify(meta, null, 2));
 	} catch (err) {
-		throw new Error(`Error writing to JSON file ["${path}"]: ${err.message}`);
+		throw new Error(
+			`Error writing to JSON file ["${path}"]: ${/** @type {any} */ (err).message}`,
+			{
+				cause: err,
+			},
+		);
 	}
 };

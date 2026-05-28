@@ -64,7 +64,12 @@ export default class Integrity {
 				throw new ValidationError(`Parameter "cwd" is not valid`);
 			}
 		} catch (err) {
-			throw new Error(`Unable to validate input to command: ${err.message}`);
+			throw new Error(
+				`Unable to validate input to command: ${/** @type {any} */ (err).message}`,
+				{
+					cause: err,
+				},
+			);
 		}
 
 		this.log.debug("Requesting meta information from asset server");
@@ -95,7 +100,8 @@ export default class Integrity {
 			throw new Error("Server Error");
 		} catch (err) {
 			throw new Error(
-				`Unable to retrieve meta information for package: ${err.message}`,
+				`Unable to retrieve meta information for package: ${/** @type {any} */ (err).message}`,
+				{ cause: err },
 			);
 		}
 	}

@@ -94,7 +94,7 @@ export default class Alias {
 
 			return data;
 		} catch (err) {
-			let status = err.statusCode;
+			let status = /** @type {any} */ (err).statusCode;
 
 			if (status === 409) {
 				this.log.debug("Alias already exists on server, performing update");
@@ -117,31 +117,38 @@ export default class Alias {
 
 					return data;
 				} catch (error) {
-					status = error.statusCode;
+					status = /** @type {any} */ (error).statusCode;
 				}
 			}
 
 			switch (status) {
 				case 400:
-					throw new Error("Client attempted to send an invalid URL parameter");
+					throw new Error("Client attempted to send an invalid URL parameter", {
+						cause: err,
+					});
 				case 401:
-					throw new Error("Client unauthorized with server");
+					throw new Error("Client unauthorized with server", { cause: err });
 				case 404:
 					throw new Error(
 						`The server was unable to locate ${joinUrlPathname(this.type, this.name, this.version)}. Ensure you have the correct package type (eik package-alias vs eik npm-alias), name and that the package version you're trying to alias exists on the server.`,
+						{ cause: err },
 					);
 				case 409:
 					throw new Error(
 						`${this.type} with name "${this.name}" and version "${this.version}" already exists on server`,
+						{ cause: err },
 					);
 				case 415:
 					throw new Error(
 						"Client attempted to send an unsupported file format to server",
+						{ cause: err },
 					);
 				case 502:
-					throw new Error("Server was unable to write file to storage");
+					throw new Error("Server was unable to write file to storage", {
+						cause: err,
+					});
 				default:
-					throw new Error("Server failure");
+					throw new Error("Server failure", { cause: err });
 			}
 		}
 	}

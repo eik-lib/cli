@@ -23,7 +23,8 @@ export default class CheckIfAlreadyPublished extends Task {
 			log.debug(`  ==> Package version ${version} does not yet exist`);
 		} catch (err) {
 			throw new Error(
-				`Unable to fetch package metadata from server: ${err.message}`,
+				`Unable to fetch package metadata from server: ${/** @type {any} */ (err).message}`,
+				{ cause: err },
 			);
 		}
 
@@ -32,7 +33,8 @@ export default class CheckIfAlreadyPublished extends Task {
 			pkgVersions = await versions(server, typeSlug(type), name);
 		} catch (err) {
 			throw new Error(
-				`Unable to fetch package metadata from server: ${err.message}`,
+				`Unable to fetch package metadata from server: ${/** @type {any} */ (err).message}`,
+				{ cause: err },
 			);
 		}
 
@@ -58,11 +60,11 @@ export default class CheckIfAlreadyPublished extends Task {
 			localHash = await hashFiles(localFiles);
 		} catch (err) {
 			throw new Error(
-				`Unable to hash local files for comparison: ${err.message}`,
+				`Unable to hash local files for comparison: ${/** @type {any} */ (err).message}`,
+				{ cause: err },
 			);
 		}
 
-		// @ts-expect-error
 		const versionMap = new Map(pkgVersions);
 		for (const v of versionMap.values()) {
 			const same = hashCompare(v.integrity, localHash);

@@ -62,7 +62,7 @@ export const handler = commandHandler(
 		const pkgMeta = await res.json();
 
 		url = new URL(join("map", name, version), server);
-		res = await fetch(url);
+		await fetch(url);
 
 		log.info(`Published import map "${name}" at version "${version}"`);
 

@@ -27,6 +27,7 @@ export default async (server, type, name, major) => {
 	} catch (err) {
 		throw new Error(
 			"An error occurred while attempting to parse json response from server.",
+			{ cause: err },
 		);
 	}
 
@@ -36,6 +37,7 @@ export default async (server, type, name, major) => {
 	} catch (err) {
 		throw new Error(
 			"An error occurred while attempting to create an internal versions map. The JSON returned from the server is most likely invalid.",
+			{ cause: err },
 		);
 	}
 
