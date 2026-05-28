@@ -1,3 +1,13 @@
+## [3.1.52](https://github.com/eik-lib/cli/compare/v3.1.51...v3.1.52) (2026-05-28)
+
+
+### Bug Fixes
+
+* Bump @eik/common ([6061bec](https://github.com/eik-lib/cli/commit/6061beccd8101ecf89efde3f8c632be9453a3e49))
+* Bump @eik/service ([ce11d1a](https://github.com/eik-lib/cli/commit/ce11d1a203d2184d67d09fa15dad2afb1da5da93))
+* Bump dependencies ([1285a51](https://github.com/eik-lib/cli/commit/1285a515281fe09114286b554c26740188ff1835))
+* Bump sink-memory ([d60febd](https://github.com/eik-lib/cli/commit/d60febd353ec8855d442af6366944692445280b5))
+
 ## [3.1.51](https://github.com/eik-lib/cli/compare/v3.1.50...v3.1.51) (2026-05-28)
 
 
