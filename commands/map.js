@@ -68,7 +68,7 @@ export const handler = commandHandler(
 
 		const artifact = new Artifact(pkgMeta);
 		const versions = new Map(pkgMeta.versions);
-		artifact.versions = Array.from(versions.values());
+		artifact.versions = [...versions.values()];
 		artifact.format(server);
 
 		process.stdout.write("\n");

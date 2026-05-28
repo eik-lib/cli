@@ -1,7 +1,6 @@
-import { promises as fs } from "fs";
+import { promises as fs, rmSync } from "fs";
 import { join } from "path";
 import { test, beforeEach, afterEach } from "tap";
-import { rimrafSync } from "rimraf";
 import CleanupTask from "../../classes/publish/package/tasks/cleanup.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -28,7 +27,7 @@ beforeEach(async (t) => {
 });
 
 afterEach((t) => {
-	rimrafSync(t.context.path);
+	rmSync(t.context.path, { recursive: true, force: true });
 });
 
 test("basic cleanup", async (t) => {

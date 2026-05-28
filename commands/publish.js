@@ -96,14 +96,14 @@ export const handler = commandHandler(
 			const artifact = new Artifact(pkgMeta);
 			artifact.versions = [pkgVersionMeta];
 
-			spinner.text = "";
-			spinner.stopAndPersist();
+			spinner.setText("");
+			spinner.stop();
 
 			artifact.format(server);
 			process.stdout.write("\n");
 		} else {
-			spinner.text = "";
-			spinner.stopAndPersist();
+			spinner.setText("");
+			spinner.stop();
 
 			process.stdout.write(
 				`:: ${c.bgYellow(
