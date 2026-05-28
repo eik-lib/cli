@@ -1,3 +1,11 @@
+## [3.1.51](https://github.com/eik-lib/cli/compare/v3.1.50...v3.1.51) (2026-05-28)
+
+
+### Bug Fixes
+
+* replace ora with picospinner ([784e3c5](https://github.com/eik-lib/cli/commit/784e3c51c677fbe9d542622ce9f5375532b244b6))
+* replace rimraf with native Node ([ee58048](https://github.com/eik-lib/cli/commit/ee58048544dffedfc9f9a359f9fdd56a0130d280))
+
 ## [3.1.50](https://github.com/eik-lib/cli/compare/v3.1.49...v3.1.50) (2026-05-25)
 
 
