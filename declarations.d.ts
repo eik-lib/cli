@@ -1,0 +1,8 @@
+declare module "bytes";
+declare module "@eik/common/lib/schemas/assert.js";
+declare module "@eik/common/lib/schemas/validation-error.js";
+declare module "@eik/common/lib/validators/type.js";
+declare module "@eik/common/lib/validators/alias.js";
+declare module "@eik/common/lib/helpers/type-slug.js";
+declare module "@eik/common/lib/classes/eik-config.js";
+declare module "semver/functions/inc.js";

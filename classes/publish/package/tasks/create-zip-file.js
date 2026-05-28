@@ -33,7 +33,12 @@ export default class CreateZipFile extends Task {
 			);
 			filesToZip.push(basename(eikPathDest));
 		} catch (err) {
-			throw new Error(`Failed to zip eik.json file: ${err.message}`);
+			throw new Error(
+				`Failed to zip eik.json file: ${/** @type {any} */ (err).message}`,
+				{
+					cause: err,
+				},
+			);
 		}
 
 		if (files) {
@@ -49,7 +54,12 @@ export default class CreateZipFile extends Task {
 					filesToZip.push(destination.replace(path, "."));
 				}
 			} catch (err) {
-				throw new Error(`Failed to copy files for zipping: ${err.message}`);
+				throw new Error(
+					`Failed to copy files for zipping: ${/** @type {any} */ (err).message}`,
+					{
+						cause: err,
+					},
+				);
 			}
 		}
 
@@ -67,7 +77,12 @@ export default class CreateZipFile extends Task {
 
 			return zipFile;
 		} catch (err) {
-			throw new Error(`Unable to create zip file: ${err.message}`);
+			throw new Error(
+				`Unable to create zip file: ${/** @type {any} */ (err).message}`,
+				{
+					cause: err,
+				},
+			);
 		}
 	}
 }

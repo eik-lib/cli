@@ -24,14 +24,9 @@ export default async (location) => {
 		);
 	}
 	let cwd = process.cwd();
-	let filename = "";
-	if (typeof location === "string") {
-		filename = location;
-	} else {
-		filename = location.filename;
-		if (location.cwd) {
-			cwd = location.cwd;
-		}
+	const filename = typeof location === "string" ? location : location.filename;
+	if (typeof location !== "string" && location.cwd) {
+		cwd = location.cwd;
 	}
 	const path = isAbsolute(filename) ? filename : join(cwd, filename);
 	try {

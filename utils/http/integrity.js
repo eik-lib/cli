@@ -4,10 +4,11 @@ import { join } from "node:path";
  * Fetches package integrity string by name and version from a given Eik asset server.
  *
  * @param {string} server - Eik asset server URL to perform lookup against
+ * @param {string} type - Package type (pkg, npm, map)
  * @param {string} name - Package name to lookup
  * @param {string} version - Semver major version to lock fetch to
  *
- * @returns {Promise<string>} - Package integrity string
+ * @returns {Promise<string|null>} - Package integrity string
  *
  * @throws Error
  */
@@ -30,6 +31,7 @@ export default async (server, type, name, version) => {
 	} catch (err) {
 		throw new Error(
 			"An error occurred while attempting to parse json response from server.",
+			{ cause: err },
 		);
 	}
 };

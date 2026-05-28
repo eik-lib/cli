@@ -227,7 +227,7 @@ test("eik package : package, details provided by package.json values and eik.jso
 
 test("workflow: publish npm, alias npm, publish map, alias map and then publish package using map", async (t) => {
 	const eik = join(__dirname, "..", "..", "index.js");
-	let cmd = "";
+	let cmd;
 
 	// publish npm dep
 	let assets = {

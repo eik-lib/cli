@@ -5,6 +5,7 @@ import { joinUrlPathname } from "../../../../utils/url.js";
 import Task from "./task.js";
 
 export default class UploadFiles extends Task {
+	/** @param {string} zipFile */
 	async process(zipFile) {
 		const { log } = this;
 		const { server, name, version, type, token } = this.config;
@@ -26,32 +27,42 @@ export default class UploadFiles extends Task {
 
 			return message;
 		} catch (err) {
+			const e = /** @type {any} */ (err);
 			log.error("Unable to upload zip file to server");
-			switch (err.statusCode) {
+			switch (e.statusCode) {
 				case 400:
 					throw new Error(
-						`${err.statusCode}: Client attempted to send an invalid URL parameter`,
+						`${e.statusCode}: Client attempted to send an invalid URL parameter`,
+						{ cause: err },
 					);
 				case 401:
-					throw new Error(`${err.statusCode}: Client unauthorized with server`);
+					throw new Error(`${e.statusCode}: Client unauthorized with server`, {
+						cause: err,
+					});
 				case 404:
 					throw new Error(
-						`${err.statusCode}: Client could not find server route`,
+						`${e.statusCode}: Client could not find server route`,
+						{ cause: err },
 					);
 				case 409:
 					throw new Error(
 						`Package with name "${name}" and version "${version}" already exists on server`,
+						{ cause: err },
 					);
 				case 415:
 					throw new Error(
-						`${err.statusCode}: Client attempted to send an unsupported file format to server`,
+						`${e.statusCode}: Client attempted to send an unsupported file format to server`,
+						{ cause: err },
 					);
 				case 502:
 					throw new Error(
-						`${err.statusCode}: Server was unable to write file to storage, ${err.message}`,
+						`${e.statusCode}: Server was unable to write file to storage, ${e.message}`,
+						{ cause: err },
 					);
 				default:
-					throw new Error(`${err.statusCode}: Server failed, ${err.message}`);
+					throw new Error(`${e.statusCode}: Server failed, ${e.message}`, {
+						cause: err,
+					});
 			}
 		}
 	}

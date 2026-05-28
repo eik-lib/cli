@@ -4,9 +4,10 @@ import { join } from "path";
  * Fetches package versions by name from a given Eik asset server.
  *
  * @param {string} server - Eik asset server URL to perform lookup against
+ * @param {string} type - Package type (pkg, npm, map)
  * @param {string} name - Package name to lookup
  *
- * @returns {Promise<Array<Array<number,{version:string,integrity:string}>>>}
+ * @returns {Promise<[number, {version: string, integrity: string}][]|null>}
  *
  * @throws Error
  */
@@ -30,6 +31,7 @@ export default async (server, type, name) => {
 	} catch (err) {
 		throw new Error(
 			"An error occurred while attempting to parse json response from server.",
+			{ cause: err },
 		);
 	}
 

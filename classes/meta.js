@@ -33,7 +33,7 @@ export default class Meta {
 		try {
 			assert.server(this.server);
 		} catch (err) {
-			this.log.error(err.message);
+			this.log.error(/** @type {any} */ (err).message);
 			return false;
 		}
 
@@ -48,7 +48,7 @@ export default class Meta {
 
 			const responses = await Promise.all(typeFetches);
 
-			const data = {};
+			const data = /** @type {Record<string, any>} */ ({});
 
 			for (const res of responses) {
 				if (res.ok) {
@@ -93,7 +93,7 @@ export default class Meta {
 			return data;
 		} catch (err) {
 			this.log.error("Unable to retrieve meta information for package");
-			this.log.warn(err.message);
+			this.log.warn(/** @type {any} */ (err).message);
 			return false;
 		}
 	}

@@ -1,6 +1,6 @@
 import bytes from "bytes";
 import fs from "fs";
-import { gzipSizeSync } from "gzip-size";
+import zlib from "node:zlib";
 import Task from "./task.js";
 
 export default class CheckBundleSizes extends Task {
@@ -12,11 +12,16 @@ export default class CheckBundleSizes extends Task {
 				this.log.debug(
 					`  ==> entrypoint size (${
 						mapping.source.destination
-					} => ${file}): ${bytes(gzipSizeSync(fs.readFileSync(file, "utf8")))}`,
+					} => ${file}): ${bytes(zlib.gzipSync(fs.readFileSync(file)).length)}`,
 				);
 			}
 		} catch (err) {
-			throw new Error(`Failed to check bundle sizes: ${err.message}`);
+			throw new Error(
+				`Failed to check bundle sizes: ${/** @type {any} */ (err).message}`,
+				{
+					cause: err,
+				},
+			);
 		}
 	}
 }

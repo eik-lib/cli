@@ -3,6 +3,7 @@ import write from "../../../../utils/json/write.js";
 import Task from "./task.js";
 
 export default class SaveMetaFile extends Task {
+	/** @param {any} response */
 	async process(response) {
 		const { log, cwd } = this;
 		const { out } = this.config;
@@ -13,7 +14,8 @@ export default class SaveMetaFile extends Task {
 			await write(response, { cwd, filename: filepath });
 		} catch (err) {
 			throw new Error(
-				`Unable to save integrity file [${filepath}]: ${err.message}`,
+				`Unable to save integrity file [${filepath}]: ${/** @type {any} */ (err).message}`,
+				{ cause: err },
 			);
 		}
 	}

@@ -93,25 +93,33 @@ export default class PublishMap {
 			};
 		} catch (err) {
 			const msg = "Unable to complete upload of import map to server";
-			switch (err.statusCode) {
+			switch (/** @type {any} */ (err).statusCode) {
 				case 400:
 					throw new Error(
 						`${msg}: Client attempted to send an invalid URL parameter`,
+						{ cause: err },
 					);
 				case 401:
-					throw new Error(`${msg}: Client unauthorized with server`);
+					throw new Error(`${msg}: Client unauthorized with server`, {
+						cause: err,
+					});
 				case 409:
 					throw new Error(
 						`${msg}: Map with name "${this.name}" and version "${this.version}" already exists on server`,
+						{ cause: err },
 					);
 				case 415:
 					throw new Error(
 						`${msg}: Client attempted to send an unsupported file format to server`,
+						{ cause: err },
 					);
 				case 502:
-					throw new Error(`${msg}: Server was unable to write file to storage`);
+					throw new Error(
+						`${msg}: Server was unable to write file to storage`,
+						{ cause: err },
+					);
 				default:
-					throw new Error(`${msg}: Server failed`);
+					throw new Error(`${msg}: Server failed`, { cause: err });
 			}
 		}
 	}

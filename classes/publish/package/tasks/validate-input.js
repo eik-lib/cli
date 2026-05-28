@@ -2,6 +2,10 @@ import { parse } from "path";
 import Task from "./task.js";
 
 class ValidationError extends Error {
+	/**
+	 * @param {string} message
+	 * @param {any} [err]
+	 */
 	constructor(message, err) {
 		let m = message;
 		if (err && err.message) m += `: ${err.message}`;

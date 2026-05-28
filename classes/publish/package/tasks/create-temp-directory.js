@@ -2,6 +2,10 @@ import { mkdirSync } from "fs";
 import Task from "./task.js";
 
 class IOError extends Error {
+	/**
+	 * @param {string} message
+	 * @param {any} err
+	 */
 	constructor(message, err) {
 		super(`${message}: ${err.message}`);
 		this.name = this.constructor.name;

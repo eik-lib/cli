@@ -16,7 +16,7 @@ import { readFile } from "node:fs/promises";
  *
  * @param {RequestOptions} options
  *
- * @returns {Promise<{ status:number; message: object | string }>} - Promise that resolves to an object with properties status and message
+ * @returns {Promise<{ status:number; message: any }>} - Promise that resolves to an object with properties status and message
  *
  * @throws Error
  */
@@ -64,10 +64,11 @@ async function request(options) {
 		}
 		return { message: await res.text(), status: res.status };
 	} catch (err) {
-		if (!err.statusCode) {
-			err.statusCode = 500;
+		const e = /** @type {any} */ (err);
+		if (!e.statusCode) {
+			e.statusCode = 500;
 		}
-		throw err;
+		throw e;
 	}
 }
 

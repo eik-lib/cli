@@ -32,7 +32,7 @@ export default class Login {
 				throw new ValidationError('"key" must be a string');
 			}
 		} catch (err) {
-			this.log.error(err.message);
+			this.log.error(/** @type {any} */ (err).message);
 			return false;
 		}
 
@@ -48,7 +48,7 @@ export default class Login {
 			this.log.info(`Login successful`);
 			return message.token;
 		} catch (err) {
-			switch (err.statusCode) {
+			switch (/** @type {any} */ (err).statusCode) {
 				case 401:
 					this.log.info("Login unsuccessful. Invalid credentials.");
 					return false;
