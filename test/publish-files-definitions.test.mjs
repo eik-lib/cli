@@ -26,7 +26,7 @@ const config = (files, server, token, cwd) => ({
 
 beforeEach(async (t) => {
 	const memSink = new Sink();
-	const server = fastify({ logger: false });
+	const server = fastify({ logger: false, forceCloseConnections: true });
 	const service = new EikService({ customSink: memSink });
 	server.register(service.api());
 	const address = await server.listen({
@@ -65,9 +65,8 @@ test("when a folder of files is specified as a string", async (t) => {
 		"/eik.json",
 		"eik.json file should be at package root",
 	);
-	t.equal(
-		files[6].pathname,
-		"/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at package root",
 	);
 });
@@ -78,9 +77,8 @@ test("when a folder of files is specified as a string prefixed by ./", async (t)
 	// @ts-expect-error
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at package root",
 	);
 });
@@ -91,9 +89,8 @@ test("when a folder of files is specified as a string postfixed by /", async (t)
 	// @ts-expect-error
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at package root",
 	);
 });
@@ -104,9 +101,8 @@ test("when a folder of files is specified with a nested folder mapping", async (
 	// @ts-expect-error
 	const { files } = await cli.publish(config(patter, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/path/to/folder/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at path/to/folder",
 	);
 });
@@ -117,9 +113,8 @@ test("when a folder of files is specified with a nested folder mapping prefixed 
 	// @ts-expect-error
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/path/to/folder/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at path/to/folder",
 	);
 });
@@ -130,9 +125,8 @@ test("when a folder of files is specified with a nested folder mapping prefixed 
 	// @ts-expect-error
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/path/to/folder/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at path/to/folder",
 	);
 });
@@ -143,9 +137,8 @@ test("when a folder of files is specified with a nested folder mapping post fixe
 	// @ts-expect-error
 	const { files } = await cli.publish(config(patter, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/path/to/folder/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at path/to/folder",
 	);
 });
@@ -161,9 +154,8 @@ test("when a folder of files is specified as an absolute path string", async (t)
 		"/eik.json",
 		"eik.json file should be at package root",
 	);
-	t.equal(
-		files[6].pathname,
-		"/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/checkbox-sprite-nontouch.svg"),
 		"files should be packaged at package root",
 	);
 });
@@ -176,9 +168,8 @@ test("when a folder of files is specified as an object", async (t) => {
 	// @ts-expect-error
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/icons/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/icons/checkbox-sprite-nontouch.svg"),
 		"files should be packaged under /icons",
 	);
 });
@@ -191,9 +182,8 @@ test("when a folder of files is specified as an object with absolute path", asyn
 	// @ts-expect-error
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-	t.equal(
-		files[6].pathname,
-		"/icons/checkbox-sprite-nontouch.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/icons/checkbox-sprite-nontouch.svg"),
 		"files should be packaged under /icons",
 	);
 });
@@ -238,10 +228,12 @@ test("when a recursive glob is specified", async (t) => {
 	// @ts-expect-error
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
-	t.equal(files[4].pathname, "/client.js", "client.js should be packaged at /");
-	t.equal(
-		files[11].pathname,
-		"/icons/checkboxes.svg",
+	t.ok(
+		files.some((f) => f.pathname === "/client.js"),
+		"client.js should be packaged at /",
+	);
+	t.ok(
+		files.some((f) => f.pathname === "/icons/checkboxes.svg"),
 		"svgs should be packaged under /icons",
 	);
 });
@@ -254,7 +246,10 @@ test("when a non recursive glob is specified", async (t) => {
 
 	const nested = files.filter((file) => file.pathname.includes("icons"));
 
-	t.equal(files[4].pathname, "/client.js", "client.js should be packaged at /");
+	t.ok(
+		files.some((f) => f.pathname === "/client.js"),
+		"client.js should be packaged at /",
+	);
 	t.equal(nested.length, 0, "no nested files should be present");
 });
 

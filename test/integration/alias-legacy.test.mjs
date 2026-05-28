@@ -22,21 +22,16 @@ function exec(cmd) {
 }
 
 beforeEach(async (t) => {
-	const server = fastify({ logger: false });
 	const memSink = new Sink();
+	const server = fastify({ logger: false, forceCloseConnections: true });
 	const service = new EikService({ customSink: memSink });
 	server.register(service.api());
-	const address = await server.listen({
-		host: "127.0.0.1",
-		port: 0,
-	});
+	const address = await server.listen({ host: "127.0.0.1", port: 0 });
 	const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+
 	const eik = join(__dirname, "..", "..", "index.js");
 
-	const token = await cli.login({
-		server: address,
-		key: "change_me",
-	});
+	const token = await cli.login({ server: address, key: "change_me" });
 
 	const assets = {
 		name: "scroll-into-view-if-needed",
@@ -141,7 +136,6 @@ test("eik npm-alias <name> <version> <alias> --token --server : no eik.json or .
 	t.match(stdout, "NEW");
 	t.equal(res.ok, true);
 	t.equal(error, null);
-	t.end();
 });
 
 test("eik npm-alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
@@ -174,7 +168,6 @@ test("eik npm-alias <name> <version> <alias> : publish details provided by eik.j
 	t.match(stdout, "NEW");
 	t.equal(res.ok, true);
 	t.equal(error, null);
-	t.end();
 });
 
 test("eik map-alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
@@ -195,7 +188,6 @@ test("eik map-alias <name> <version> <alias> --token --server : no eik.json or .
 	t.match(stdout, "NEW");
 	t.equal(res.ok, true);
 	t.equal(error, null);
-	t.end();
 });
 
 test("eik map-alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
@@ -226,5 +218,4 @@ test("eik map-alias <name> <version> <alias> : publish details provided by eik.j
 	t.match(stdout, "NEW");
 	t.equal(res.ok, true);
 	t.equal(error, null);
-	t.end();
 });

@@ -22,7 +22,7 @@ function exec(cmd) {
 
 beforeEach(async (t) => {
 	const memSink = new Sink();
-	const server = fastify({ logger: false });
+	const server = fastify({ logger: false, forceCloseConnections: true });
 	const service = new EikService({ customSink: memSink });
 	server.register(service.api());
 	const address = await server.listen({
@@ -48,7 +48,6 @@ test("eik login --key --server --cwd : valid key", async (t) => {
 	const { stdout } = await exec(cmd);
 
 	t.match(stdout, "Login successful");
-	t.end();
 });
 
 test("eik login --key --server --cwd : invalid key", async (t) => {
@@ -57,5 +56,4 @@ test("eik login --key --server --cwd : invalid key", async (t) => {
 
 	const { stdout } = await exec(cmd);
 	t.match(stdout, "Login unsuccessful");
-	t.end();
 });

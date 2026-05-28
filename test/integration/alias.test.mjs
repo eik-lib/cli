@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import { promises as fs } from "node:fs";
-import os, { type } from "node:os";
+import os from "node:os";
 import { exec as execCallback } from "child_process";
 import { join, basename } from "node:path";
 import { test, beforeEach, afterEach } from "tap";
@@ -22,21 +22,16 @@ function exec(cmd) {
 }
 
 beforeEach(async (t) => {
-	const server = fastify({ logger: false });
 	const memSink = new Sink();
+	const server = fastify({ logger: false, forceCloseConnections: true });
 	const service = new EikService({ customSink: memSink });
 	server.register(service.api());
-	const address = await server.listen({
-		host: "127.0.0.1",
-		port: 0,
-	});
+	const address = await server.listen({ host: "127.0.0.1", port: 0 });
 	const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+
 	const eik = join(__dirname, "..", "..", "index.js");
 
-	const token = await cli.login({
-		server: address,
-		key: "change_me",
-	});
+	const token = await cli.login({ server: address, key: "change_me" });
 
 	const assets = {
 		name: "scroll-into-view-if-needed",
@@ -139,7 +134,6 @@ test("npm: eik alias <name> <version> <alias> --token --server : no eik.json or 
 	t.match(stdout, "2.2.24");
 	t.match(stdout, "v2");
 	t.match(stdout, "NEW");
-	t.end();
 });
 
 test("npm: eik alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
@@ -173,7 +167,6 @@ test("npm: eik alias <name> <version> <alias> : publish details provided by eik.
 	t.match(stdout, "2.2.24");
 	t.match(stdout, "v2");
 	t.match(stdout, "NEW");
-	t.end();
 });
 
 test("map: eik alias <name> <version> <alias> --token --server : no eik.json or .eikrc", async (t) => {
@@ -189,14 +182,12 @@ test("map: eik alias <name> <version> <alias> --token --server : no eik.json or 
 	const res = await fetch(new URL("/map/test-map/v1", t.context.address));
 
 	t.equal(res.ok, true);
-
 	t.equal(error, null);
 	t.match(stdout, "MAP");
 	t.match(stdout, "test-map");
 	t.match(stdout, "1.0.0");
 	t.match(stdout, "v1");
 	t.match(stdout, "NEW");
-	t.end();
 });
 
 test("map: eik alias <name> <version> <alias> : publish details provided by eik.json file", async (t) => {
@@ -222,12 +213,10 @@ test("map: eik alias <name> <version> <alias> : publish details provided by eik.
 	const res = await fetch(new URL("/map/test-map/v1", t.context.address));
 
 	t.equal(res.ok, true);
-
 	t.equal(error, null);
 	t.match(stdout, "MAP");
 	t.match(stdout, "test-map");
 	t.match(stdout, "1.0.0");
 	t.match(stdout, "v1");
 	t.match(stdout, "NEW");
-	t.end();
 });
