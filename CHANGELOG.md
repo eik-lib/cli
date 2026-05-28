@@ -1,3 +1,45 @@
+## [3.1.50](https://github.com/eik-lib/cli/compare/v3.1.49...v3.1.50) (2026-05-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v4.3.0 ([#706](https://github.com/eik-lib/cli/issues/706)) ([4076b1c](https://github.com/eik-lib/cli/commit/4076b1c4664fed3654f1a0a70b6f83d1d34f39fe))
+
+## [3.1.49](https://github.com/eik-lib/cli/compare/v3.1.48...v3.1.49) (2026-05-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency semver to v7.8.1 ([#705](https://github.com/eik-lib/cli/issues/705)) ([16edf0c](https://github.com/eik-lib/cli/commit/16edf0c498f11d3ff61278f90605babb22923094))
+
+## [3.1.48](https://github.com/eik-lib/cli/compare/v3.1.47...v3.1.48) (2026-05-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency semver to v7.8.0 ([#704](https://github.com/eik-lib/cli/issues/704)) ([7877879](https://github.com/eik-lib/cli/commit/78778795ba393a79742a97260e6db4c5f7f2fa0e))
+
+## [3.1.47](https://github.com/eik-lib/cli/compare/v3.1.46...v3.1.47) (2026-05-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.15 ([#703](https://github.com/eik-lib/cli/issues/703)) ([cb61955](https://github.com/eik-lib/cli/commit/cb61955f085f3c1e0eb4dcbbe011f155f72ac926))
+
+## [3.1.46](https://github.com/eik-lib/cli/compare/v3.1.45...v3.1.46) (2026-04-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ora to v9.4.0 ([#700](https://github.com/eik-lib/cli/issues/700)) ([c228cae](https://github.com/eik-lib/cli/commit/c228cae2b491f204565f011c2d16008970deff2e))
+
+## [3.1.45](https://github.com/eik-lib/cli/compare/v3.1.44...v3.1.45) (2026-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tar to v7.5.13 ([#696](https://github.com/eik-lib/cli/issues/696)) ([0a95ac4](https://github.com/eik-lib/cli/commit/0a95ac4c3ef06b78fa70d1ad0c3c07bfc69469c1))
+
 ## [3.1.44](https://github.com/eik-lib/cli/compare/v3.1.43...v3.1.44) (2026-03-23)
 
 
