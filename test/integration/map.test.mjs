@@ -23,7 +23,7 @@ function exec(cmd) {
 
 beforeEach(async (t) => {
 	const memSink = new Sink();
-	const server = fastify({ logger: false });
+	const server = fastify({ logger: false, forceCloseConnections: true });
 	const service = new EikService({ customSink: memSink });
 	server.register(service.api());
 	const address = await server.listen({
@@ -87,5 +87,4 @@ test("eik map : publish, details provided by eik.json file", async (t) => {
 	t.same(result, map);
 	t.equal(error, null);
 	t.match(stdout, 'Published import map "test-map" at version "1.0.0"');
-	t.end();
 });

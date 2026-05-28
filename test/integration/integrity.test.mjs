@@ -23,7 +23,7 @@ function exec(cmd) {
 
 beforeEach(async (t) => {
 	const memSink = new Sink();
-	const server = fastify({ logger: false });
+	const server = fastify({ logger: false, forceCloseConnections: true });
 	const service = new EikService({ customSink: memSink });
 	server.register(service.api());
 	const address = await server.listen({
@@ -84,7 +84,6 @@ test("eik meta : details provided by eik.json", async (t) => {
 	t.equal(integrity.name, "test-app");
 	t.equal(integrity.version, "1.0.0");
 	t.ok(integrity.integrity);
-	t.end();
 });
 
 test("eik meta : details provided by eik.json - npm namespace", async (t) => {
@@ -127,5 +126,4 @@ test("eik meta : details provided by eik.json - npm namespace", async (t) => {
 	t.equal(integrity.files.length, 3);
 	t.equal(integrity.files[0].pathname, "/eik.json");
 	t.ok(integrity.files[0].integrity);
-	t.end();
 });

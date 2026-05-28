@@ -23,7 +23,7 @@ function exec(cmd) {
 
 beforeEach(async (t) => {
 	const memSink = new Sink();
-	const server = fastify({ logger: false });
+	const server = fastify({ logger: false, forceCloseConnections: true });
 	const service = new EikService({ customSink: memSink });
 	server.register(service.api());
 	const address = await server.listen({
@@ -77,7 +77,6 @@ test("eik package : package, details provided by eik.json file", async (t) => {
 	t.match(stdout, "published");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
-	t.end();
 });
 
 test("eik package : package, details provided by eik.json file - npm namespace", async (t) => {
@@ -111,7 +110,6 @@ test("eik package : package, details provided by eik.json file - npm namespace",
 	t.match(stdout, "NPM");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
-	t.end();
 });
 
 test("eik package : package, details provided by eik.json file - explicit package namespace", async (t) => {
@@ -145,7 +143,6 @@ test("eik package : package, details provided by eik.json file - explicit packag
 	t.match(stdout, "PACKAGE");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
-	t.end();
 });
 
 test("eik package : package, details provided by package.json values", async (t) => {
@@ -180,7 +177,6 @@ test("eik package : package, details provided by package.json values", async (t)
 	t.match(stdout, "published");
 	t.match(stdout, "less than a minute ago");
 	t.match(stdout, "Generic User");
-	t.end();
 });
 
 test("eik package : package, details provided by package.json values and eik.json, throws error", async (t) => {
@@ -222,7 +218,6 @@ test("eik package : package, details provided by package.json values and eik.jso
 	const { error } = await exec(cmd);
 
 	t.ok(error);
-	t.end();
 });
 
 test("workflow: publish npm, alias npm, publish map, alias map and then publish package using map", async (t) => {
@@ -358,5 +353,4 @@ test("workflow: login command, publish with token from environment", async (t) =
 
 	t.equal(res.ok, true);
 	t.match(out.stdout, "published");
-	t.end();
 });
