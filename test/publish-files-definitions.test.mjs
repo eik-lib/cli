@@ -102,7 +102,9 @@ test("when a folder of files is specified with a nested folder mapping", async (
 	const { files } = await cli.publish(config(patter, address, token, cwd));
 
 	t.ok(
-		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
+		files.some(
+			(f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg",
+		),
 		"files should be packaged at path/to/folder",
 	);
 });
@@ -114,7 +116,9 @@ test("when a folder of files is specified with a nested folder mapping prefixed 
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
 	t.ok(
-		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
+		files.some(
+			(f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg",
+		),
 		"files should be packaged at path/to/folder",
 	);
 });
@@ -126,7 +130,9 @@ test("when a folder of files is specified with a nested folder mapping prefixed 
 	const { files } = await cli.publish(config(pattern, address, token, cwd));
 
 	t.ok(
-		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
+		files.some(
+			(f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg",
+		),
 		"files should be packaged at path/to/folder",
 	);
 });
@@ -138,7 +144,9 @@ test("when a folder of files is specified with a nested folder mapping post fixe
 	const { files } = await cli.publish(config(patter, address, token, cwd));
 
 	t.ok(
-		files.some((f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg"),
+		files.some(
+			(f) => f.pathname === "/path/to/folder/checkbox-sprite-nontouch.svg",
+		),
 		"files should be packaged at path/to/folder",
 	);
 });
