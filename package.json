@@ -21,10 +21,10 @@
   ],
   "scripts": {
     "clean": "git clean -fdx",
-    "test": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 180 --jobs=1 --disable-coverage",
-    "test:integration": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 180 --jobs=1 --disable-coverage test/integration/**/*.test.mjs",
-    "test:unit": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 180 --jobs=1 --disable-coverage test/*.test.mjs",
-    "test:tasks": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal tap --timeout 180 --jobs=1 --disable-coverage test/tasks/*.test.mjs",
+    "test": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal node --test 'test/*.test.js' 'test/integration/*.test.js' 'test/tasks/*.test.js'",
+    "test:integration": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal node --test 'test/integration/*.test.js'",
+    "test:unit": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal node --test 'test/*.test.js'",
+    "test:tasks": "cross-env HTTP_PORT=0 LOG_LEVEL=fatal node --test 'test/tasks/*.test.js'",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format:check": "prettier -c .",
@@ -76,7 +76,6 @@
     "prettier": "3.8.3",
     "semantic-release": "25.0.3",
     "semantic-release-slack-bot": "4.0.2",
-    "tap": "21.7.4",
     "typescript": "6.0.3"
   }
 }

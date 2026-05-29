@@ -1,0 +1,303 @@
+import fastify from "fastify";
+import { promises as fs } from "fs";
+import os from "os";
+import { exec as execCallback } from "child_process";
+import { join, basename } from "path";
+import { describe, test, beforeEach, afterEach } from "node:test";
+import assert from "node:assert";
+import EikService from "@eik/service";
+import Sink from "@eik/sink-memory";
+import cli from "../../classes/index.js";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+function exec(cmd) {
+	return new Promise((resolve) => {
+		execCallback(cmd, (error, stdout, stderr) => {
+			resolve({ error, stdout, stderr });
+		});
+	});
+}
+
+describe("integration: package", () => {
+	let server;
+	let address;
+	let folder;
+	let token;
+
+	beforeEach(async () => {
+		const memSink = new Sink();
+		server = fastify({ logger: false, forceCloseConnections: true });
+		const service = new EikService({ customSink: memSink });
+		server.register(service.api());
+		address = await server.listen({
+			host: "127.0.0.1",
+			port: 0,
+		});
+		folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+
+		token = await cli.login({
+			server: address,
+			key: "change_me",
+		});
+	});
+
+	afterEach(async () => {
+		await server.close();
+	});
+
+	test("eik package : package, details provided by eik.json file", async () => {
+		const assets = {
+			name: "test-app",
+			version: "1.0.0",
+			server: address,
+			files: {
+				"index.js": join(__dirname, "..", "fixtures", "client.js"),
+				"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+			},
+		};
+
+		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(assets));
+
+		const eik = join(__dirname, "..", "..", "index.js");
+		const cmd = `node ${eik} package --token ${token} --cwd ${folder}`;
+
+		const { error, stdout } = await exec(cmd);
+
+		const res = await fetch(new URL("/pkg/test-app/1.0.0/index.js", address));
+
+		assert.strictEqual(res.ok, true);
+		assert.strictEqual(error, null);
+		assert.ok(stdout.includes("published"));
+		assert.ok(stdout.includes("less than a minute ago"));
+		assert.ok(stdout.includes("Generic User"));
+	});
+
+	test("eik package : package, details provided by eik.json file - npm namespace", async () => {
+		const assets = {
+			name: "test-app",
+			version: "1.0.0",
+			type: "npm",
+			server: address,
+			files: {
+				"index.js": join(__dirname, "..", "fixtures", "client.js"),
+				"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+			},
+		};
+
+		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(assets));
+
+		const eik = join(__dirname, "..", "..", "index.js");
+		const cmd = `node ${eik} package --token ${token} --cwd ${folder} --npm`;
+
+		const { error, stdout } = await exec(cmd);
+
+		const res = await fetch(new URL("/npm/test-app/1.0.0/index.js", address));
+
+		assert.strictEqual(res.ok, true);
+		assert.strictEqual(error, null);
+		assert.ok(stdout.includes("NPM"));
+		assert.ok(stdout.includes("less than a minute ago"));
+		assert.ok(stdout.includes("Generic User"));
+	});
+
+	test("eik package : package, details provided by eik.json file - explicit package namespace", async () => {
+		const assets = {
+			name: "test-app",
+			version: "1.0.0",
+			type: "package",
+			server: address,
+			files: {
+				"index.js": join(__dirname, "..", "fixtures", "client.js"),
+				"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+			},
+		};
+
+		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(assets));
+
+		const eik = join(__dirname, "..", "..", "index.js");
+		const cmd = `node ${eik} package --token ${token} --cwd ${folder} --npm`;
+
+		const { error, stdout } = await exec(cmd);
+
+		const res = await fetch(new URL("/pkg/test-app/1.0.0/index.js", address));
+
+		assert.strictEqual(res.ok, true);
+		assert.strictEqual(error, null);
+		assert.ok(stdout.includes("PACKAGE"));
+		assert.ok(stdout.includes("less than a minute ago"));
+		assert.ok(stdout.includes("Generic User"));
+	});
+
+	test("eik package : package, details provided by package.json values", async () => {
+		const assets = {
+			name: "test-app",
+			version: "1.0.0",
+			eik: {
+				server: address,
+				files: {
+					"index.js": join(__dirname, "..", "fixtures", "client.js"),
+					"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+				},
+			},
+		};
+
+		await fs.writeFile(join(folder, "package.json"), JSON.stringify(assets));
+
+		const eik = join(__dirname, "..", "..", "index.js");
+		const cmd = `node ${eik} package --token ${token} --cwd ${folder}`;
+
+		const { error, stdout } = await exec(cmd);
+
+		const res = await fetch(new URL("/pkg/test-app/1.0.0/index.js", address));
+
+		assert.strictEqual(res.ok, true);
+		assert.strictEqual(error, null);
+		assert.ok(stdout.includes("published"));
+		assert.ok(stdout.includes("less than a minute ago"));
+		assert.ok(stdout.includes("Generic User"));
+	});
+
+	test("eik package : package, details provided by package.json values and eik.json, throws error", async () => {
+		const pkg = {
+			name: "test-app",
+			version: "1.0.0",
+			eik: {
+				server: address,
+				files: {
+					"index.js": join(__dirname, "..", "fixtures", "client.js"),
+					"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+				},
+			},
+		};
+
+		await fs.writeFile(join(folder, "package.json"), JSON.stringify(pkg));
+
+		const assets = {
+			name: "test-app",
+			version: "1.0.0",
+			server: address,
+			files: {
+				"index.js": join(__dirname, "..", "fixtures", "client.js"),
+				"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+			},
+		};
+
+		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(assets));
+
+		const eik = join(__dirname, "..", "..", "index.js");
+		const cmd = `node ${eik} package --token ${token} --cwd ${folder}`;
+
+		const { error } = await exec(cmd);
+
+		assert.ok(error);
+	});
+
+	test("workflow: publish npm, alias npm, publish map, alias map and then publish package using map", async () => {
+		const eik = join(__dirname, "..", "..", "index.js");
+		let cmd;
+
+		// publish npm dep
+		let assets = {
+			name: "scroll-into-view-if-needed",
+			version: "2.2.24",
+			type: "npm",
+			server: address,
+			files: {
+				"index.js": join(__dirname, "..", "fixtures", "client.js"),
+				"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+			},
+		};
+
+		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(assets));
+
+		cmd = `node ${eik} package --token ${token} --cwd ${folder} --npm`;
+		let out = await exec(cmd);
+		assert.strictEqual(out.error, null);
+
+		// alias npm dependency
+		cmd = `node ${eik} npm-alias scroll-into-view-if-needed 2.2.24 2
+					--cwd ${folder}
+        --token ${token}
+        --server ${address}`;
+		out = await exec(cmd.split("\n").join(" "));
+		assert.strictEqual(out.error, null);
+
+		// create import map file locally
+		const map = {
+			imports: {
+				"scroll-into-view-if-needed": new URL(
+					"/npm/scroll-into-view-if-needed/v2/index.js",
+					address,
+				).href,
+			},
+		};
+		await fs.writeFile(join(folder, "import-map.json"), JSON.stringify(map));
+
+		// upload import map file
+		cmd = `node ${eik} map my-map 1.0.0 ./import-map.json
+        --cwd ${folder}
+        --token ${token}
+        --server ${address}`;
+		out = await exec(cmd.split("\n").join(" "));
+		assert.strictEqual(out.error, null);
+
+		// alias import map
+		cmd = `node ${eik} map-alias my-map 1.0.0 1
+					--cwd ${folder}
+        --token ${token}
+        --server ${address}`;
+		out = await exec(cmd.split("\n").join(" "));
+		assert.strictEqual(out.error, null);
+
+		assets = {
+			name: "test-app",
+			version: "1.0.0",
+			server: address,
+			files: {
+				"index.js": join(
+					__dirname,
+					"..",
+					"fixtures",
+					"client-with-bare-imports.js",
+				),
+				"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+			},
+			"import-map": [new URL("/map/my-map/v1", address).href],
+		};
+		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(assets));
+
+		// TODO: create a bundle that uses import maps
+	});
+
+	test("workflow: login command, publish with token from environment", async () => {
+		// as opposed to passing in --token
+		const eik = join(__dirname, "..", "..", "index.js");
+		const cwd = folder;
+
+		const assets = {
+			name: "test-app",
+			version: "1.0.0",
+			server: address,
+			files: {
+				"index.js": join(__dirname, "..", "fixtures", "client.js"),
+				"index.css": join(__dirname, "..", "fixtures", "styles.css"),
+			},
+		};
+		await fs.writeFile(join(cwd, "eik.json"), JSON.stringify(assets));
+
+		let out = await exec(`node ${eik} login --cwd ${folder} --key change_me`);
+		assert.strictEqual(out.error, null);
+
+		out = await exec(`node ${eik} package --cwd ${cwd}`);
+		assert.strictEqual(out.error, null);
+
+		const res = await fetch(new URL("/pkg/test-app/1.0.0/index.js", address));
+
+		assert.strictEqual(res.ok, true);
+		assert.ok(out.stdout.includes("published"));
+	});
+});
