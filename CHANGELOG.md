@@ -1,3 +1,12 @@
+## [3.1.53](https://github.com/eik-lib/cli/compare/v3.1.52...v3.1.53) (2026-05-29)
+
+
+### Bug Fixes
+
+* Fix types ([68cad40](https://github.com/eik-lib/cli/commit/68cad40152f75e3a8584eed3d583c3f3228b783d))
+* Remove unused module ([734c5fb](https://github.com/eik-lib/cli/commit/734c5fba6d35e5a7a2a4ada21193f8d5351c2a0c))
+* Replace Tap with node.js test runner ([5030bd7](https://github.com/eik-lib/cli/commit/5030bd7b85d374631ca2cf7e21fe995639f0640f))
+
 ## [3.1.52](https://github.com/eik-lib/cli/compare/v3.1.51...v3.1.52) (2026-05-28)
 
 
