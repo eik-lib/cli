@@ -1,4 +1,5 @@
 declare module "bytes";
+declare module "@eik/sink-memory";
 declare module "@eik/common/lib/schemas/assert.js";
 declare module "@eik/common/lib/schemas/validation-error.js";
 declare module "@eik/common/lib/validators/type.js";

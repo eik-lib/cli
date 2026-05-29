@@ -12,13 +12,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 function exec(cmd) {
-	return /** @type {Promise<void>} */ (
-		new Promise((resolve) => {
-			execCallback(cmd, (error, stdout, stderr) => {
-				resolve({ error, stdout, stderr });
-			});
-		})
-	);
+	return new Promise((resolve) => {
+		execCallback(cmd, (error, stdout, stderr) => {
+			resolve({ error, stdout, stderr });
+		});
+	});
 }
 
 test("Initializing a new eik.json file", async () => {

@@ -54,8 +54,9 @@ describe("version", () => {
 				version: "1.0.0",
 			});
 		} catch (err) {
+			const e = /** @type {Error} */ (err);
 			assert.strictEqual(
-				err.message,
+				e.message,
 				"The current version of this package has not yet been published, version change is not needed.",
 			);
 		}
@@ -79,8 +80,9 @@ describe("version", () => {
 		try {
 			await cli.version(config);
 		} catch (err) {
+			const e = /** @type {Error} */ (err);
 			assert.strictEqual(
-				err.message,
+				e.message,
 				"The current version of this package already contains these files, version change is not needed.",
 			);
 		}

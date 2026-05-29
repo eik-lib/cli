@@ -50,7 +50,6 @@ describe("publish package", () => {
 			cwd,
 			server: address,
 			name: "my-app",
-			debug: true,
 			token,
 			version: "1.0.0",
 			files: {
@@ -97,7 +96,6 @@ describe("publish package", () => {
 				"index.css": join(__dirname, "./fixtures/styles.css"),
 			},
 			type: "npm",
-			debug: true,
 			token,
 			version: "1.0.0",
 		});
@@ -135,7 +133,6 @@ describe("publish package", () => {
 			cwd,
 			server: address,
 			name: "my-app",
-			debug: true,
 			type: "image",
 			token,
 			version: "1.0.0",
@@ -181,7 +178,6 @@ describe("publish package", () => {
 			files: {
 				"index.js": join(__dirname, "./fixtures/client.js"),
 			},
-			debug: true,
 			token,
 			version: "1.0.0",
 		});
@@ -222,7 +218,6 @@ describe("publish package", () => {
 			files: {
 				"index.css": join(__dirname, "./fixtures/styles.css"),
 			},
-			debug: true,
 			token,
 			version: "1.0.0",
 		});
@@ -263,7 +258,6 @@ describe("publish package", () => {
 			files: {
 				icons: join(__dirname, "./fixtures/icons/**/*"),
 			},
-			debug: true,
 			token,
 			version: "1.0.0",
 		});
@@ -301,8 +295,7 @@ describe("publish package", () => {
 			cwd,
 			server: address,
 			name: "my-app",
-			files: join(__dirname, "./fixtures/icons/**/*"),
-			debug: true,
+			files: /** @type {any} */ (join(__dirname, "./fixtures/icons/**/*")),
 			token,
 			version: "1.0.0",
 		});

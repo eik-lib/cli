@@ -138,8 +138,9 @@ test("fetch latest version for a given published bundle, non existant bundle on 
 	try {
 		await latestVersion(address, "pkg", "foo");
 	} catch (err) {
+		const e = /** @type {Error} */ (err);
 		assert.strictEqual(
-			err.message,
+			e.message,
 			"Server responded with non 200 status code.",
 			"Error message should indicate a server failure",
 		);
@@ -159,8 +160,9 @@ test("fetch latest version, invalid JSON response from server", async () => {
 	try {
 		await latestVersion(address, "pkg", "foo");
 	} catch (err) {
+		const e = /** @type {Error} */ (err);
 		assert.strictEqual(
-			err.message,
+			e.message,
 			"An error occurred while attempting to parse json response from server.",
 			"Error message should indicate a JSON parsing issue",
 		);
@@ -260,7 +262,7 @@ test("write JSON file - object - file relative to cwd", async () => {
 		{ version: "1.0.0", integrity: [] },
 		{ cwd, filename: ".eikrc" },
 	);
-	const eikrc = await fs.readFile(join(cwd, ".eikrc"));
+	const eikrc = await fs.readFile(join(cwd, ".eikrc"), "utf8");
 	const { version, integrity } = JSON.parse(eikrc);
 
 	assert.strictEqual(version, "1.0.0", "Version should be 1.0.0");
@@ -304,7 +306,9 @@ test("write JSON file - string - file absolute path", async () => {
 test("read JSON file - object - file relative path", async () => {
 	const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 	await fs.writeFile(join(cwd, "test3.json"), JSON.stringify({ key: "val" }));
-	const json = await j.read({ cwd, filename: "./test3.json" });
+	const json = /** @type {any} */ (
+		await j.read({ cwd, filename: "./test3.json" })
+	);
 
 	assert.strictEqual(json.key, "val", "Key should equal val");
 });
@@ -312,7 +316,9 @@ test("read JSON file - object - file relative path", async () => {
 test("read JSON file - object - file absolute path", async () => {
 	const cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 	await fs.writeFile(join(cwd, "test3.json"), JSON.stringify({ key: "val" }));
-	const json = await j.read({ filename: join(cwd, "./test3.json") });
+	const json = /** @type {any} */ (
+		await j.read({ filename: join(cwd, "./test3.json") })
+	);
 
 	assert.strictEqual(json.key, "val", "Key should equal val");
 });
@@ -322,7 +328,7 @@ test("read JSON file - string - file relative path", async () => {
 		join(__dirname, "../test-read-json.json"),
 		JSON.stringify({ key: "val" }),
 	);
-	const json = await j.read("./test-read-json.json");
+	const json = /** @type {any} */ (await j.read("./test-read-json.json"));
 
 	assert.strictEqual(json.key, "val", "Key should equal val");
 });
@@ -333,7 +339,9 @@ test("read JSON file - string - file absolute path", async () => {
 		join(cwd, "./test-read-json-2.json"),
 		JSON.stringify({ key: "val" }),
 	);
-	const json = await j.read(join(cwd, "./test-read-json-2.json"));
+	const json = /** @type {any} */ (
+		await j.read(join(cwd, "./test-read-json-2.json"))
+	);
 
 	assert.strictEqual(json.key, "val", "Key should equal val");
 });

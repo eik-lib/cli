@@ -5,7 +5,7 @@ import { join } from "path";
  *
  * @param {string} server - Eik asset server address
  * @param {string} name - Package name
- * @param {string|number} major - optional - Semver major version number to lock fetch to.
+ * @param {string|number} [major] - Semver major version number to lock fetch to.
  *
  * @returns {Promise<string|null>} - Semver version string or null if no versions exist
  *

@@ -34,7 +34,10 @@ describe("login", () => {
 			logger: l.logger,
 		});
 
-		assert.strictEqual(token.length, 187, "Command should return a token");
+		assert.ok(
+			typeof token === "string" && token.length === 187,
+			"Command should return a token",
+		);
 		assert.strictEqual(
 			l.logs.info,
 			"Login successful",

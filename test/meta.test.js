@@ -58,14 +58,13 @@ describe("meta", () => {
 			},
 		});
 
-		const result = await cli.meta({
-			logger: l.logger,
-			server: address,
-			name: "lit-html",
-			debug: true,
-			token,
-			cwd,
-		});
+		const result = /** @type {any} */ (
+			await cli.meta({
+				logger: l.logger,
+				server: address,
+				name: "lit-html",
+			})
+		);
 
 		assert.ok(result, "Command should return truthy");
 		assert.ok(result.npm, "Command should be npm scoped");

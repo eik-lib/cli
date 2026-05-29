@@ -253,7 +253,7 @@ describe("integration: package", () => {
 		out = await exec(cmd.split("\n").join(" "));
 		assert.strictEqual(out.error, null);
 
-		assets = {
+		const finalAssets = {
 			name: "test-app",
 			version: "1.0.0",
 			server: address,
@@ -268,7 +268,7 @@ describe("integration: package", () => {
 			},
 			"import-map": [new URL("/map/my-map/v1", address).href],
 		};
-		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(assets));
+		await fs.writeFile(join(folder, "eik.json"), JSON.stringify(finalAssets));
 
 		// TODO: create a bundle that uses import maps
 	});

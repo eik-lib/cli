@@ -52,7 +52,6 @@ describe("publish map", () => {
 			name: "my-map",
 			version: "1.0.0",
 			file: join(__dirname, "./fixtures/import-map.json"),
-			debug: true,
 			token,
 		});
 

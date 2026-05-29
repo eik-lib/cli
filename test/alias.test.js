@@ -62,7 +62,6 @@ describe("alias", () => {
 			version: "1.0.0",
 			alias: "1",
 			token,
-			cwd,
 		});
 
 		assert.ok(
@@ -105,7 +104,6 @@ describe("alias", () => {
 			server: address,
 			name: "lit-html",
 			version: "1.1.2",
-			debug: true,
 			token,
 			cwd,
 			type: "npm",
@@ -121,9 +119,7 @@ describe("alias", () => {
 			name: "lit-html",
 			version: "1.1.2",
 			alias: "1",
-			debug: true,
 			token,
-			cwd,
 		});
 
 		assert.ok(
@@ -166,7 +162,6 @@ describe("alias", () => {
 			server: address,
 			name: "lit-html",
 			version: "1.1.2",
-			debug: true,
 			token,
 			cwd,
 			type: "image",
@@ -182,9 +177,7 @@ describe("alias", () => {
 			name: "lit-html",
 			version: "1.1.2",
 			alias: "1",
-			debug: true,
 			token,
-			cwd,
 		});
 
 		assert.ok(
@@ -228,7 +221,6 @@ describe("alias", () => {
 			name: "my-map",
 			version: "1.0.0",
 			file: join(__dirname, "fixtures/import-map.json"),
-			debug: true,
 			token,
 			cwd,
 		});
@@ -240,9 +232,7 @@ describe("alias", () => {
 			name: "my-map",
 			version: "1.0.0",
 			alias: "1",
-			debug: true,
 			token,
-			cwd,
 		});
 
 		assert.ok(

@@ -17,7 +17,7 @@ const __dirname = dirname(__filename);
 /**
  *
  * @param {string} cmd
- * @param {import('child_process').ExecException} opts
+ * @param {import('child_process').ExecOptions} opts
  * @returns
  */
 function exec(cmd, opts = {}) {
@@ -52,11 +52,12 @@ describe("integration: version", () => {
 		cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
 		// Set up our fixtures in the tmp directory
-		let packageJson = await fs.readFile(
-			join(__dirname, "..", "fixtures", "images", "eik.json"),
-			"utf-8",
+		const packageJson = JSON.parse(
+			await fs.readFile(
+				join(__dirname, "..", "fixtures", "images", "eik.json"),
+				"utf-8",
+			),
 		);
-		packageJson = JSON.parse(packageJson);
 		packageJson.server = address;
 		await fs.writeFile(
 			join(cwd, "eik.json"),
@@ -64,11 +65,12 @@ describe("integration: version", () => {
 			"utf-8",
 		);
 
-		let imageJson = await fs.readFile(
-			join(__dirname, "..", "fixtures", "images", "eik-image.json"),
-			"utf-8",
+		const imageJson = JSON.parse(
+			await fs.readFile(
+				join(__dirname, "..", "fixtures", "images", "eik-image.json"),
+				"utf-8",
+			),
 		);
-		imageJson = JSON.parse(imageJson);
 		imageJson.server = address;
 		await fs.writeFile(
 			join(cwd, "eik-image.json"),
