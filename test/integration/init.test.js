@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import os from "os";
-import { test } from "tap";
+import { test } from "node:test";
+import assert from "node:assert";
 import { join, basename } from "path";
 import { readFileSync } from "fs";
 import { exec as execCallback } from "node:child_process";
@@ -11,34 +12,36 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 function exec(cmd) {
-	return /** @type {Promise<void>} */ (
-		new Promise((resolve) => {
-			execCallback(cmd, (error, stdout, stderr) => {
-				resolve({ error, stdout, stderr });
-			});
-		})
-	);
+	return new Promise((resolve) => {
+		execCallback(cmd, (error, stdout, stderr) => {
+			resolve({ error, stdout, stderr });
+		});
+	});
 }
 
-test("Initializing a new eik.json file", async (t) => {
+test("Initializing a new eik.json file", async () => {
 	const eik = join(__dirname, "..", "../index.js");
 	const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 	const publishCmd = `node ${eik} init --cwd ${folder}`;
 
 	let out = await exec(publishCmd);
-	t.equal(out.error, null);
+	assert.strictEqual(out.error, null);
 
 	const eikJson = JSON.parse(
 		readFileSync(join(folder, "eik.json"), { encoding: "utf8" }),
 	);
-	t.ok(eikJson["$schema"], 'eik.json "$schema" field should not be empty');
-	t.equal(eikJson.name, "", 'eik.json "name" field should be empty');
-	t.equal(eikJson.version, "1.0.0");
-	t.equal(eikJson.server, "", 'eik.json "server" field should be empty');
-	t.same(eikJson.files, "./public");
+	assert.ok(eikJson["$schema"], 'eik.json "$schema" field should not be empty');
+	assert.strictEqual(eikJson.name, "", 'eik.json "name" field should be empty');
+	assert.strictEqual(eikJson.version, "1.0.0");
+	assert.strictEqual(
+		eikJson.server,
+		"",
+		'eik.json "server" field should be empty',
+	);
+	assert.deepStrictEqual(eikJson.files, "./public");
 });
 
-test("Initializing a new eik.json file passing custom values", async (t) => {
+test("Initializing a new eik.json file passing custom values", async () => {
 	const eik = join(__dirname, "..", "../index.js");
 	const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 	const publishCmd = `node ${eik} init
@@ -48,19 +51,19 @@ test("Initializing a new eik.json file passing custom values", async (t) => {
         --server http://localhost:4001`;
 
 	let out = await exec(publishCmd.split("\n").join(" "));
-	t.equal(out.error, null);
+	assert.strictEqual(out.error, null);
 
 	const eikJson = JSON.parse(
 		readFileSync(join(folder, "eik.json"), { encoding: "utf8" }),
 	);
 
-	t.equal(eikJson.name, "custom-name");
-	t.equal(eikJson.version, "2.0.0");
-	t.equal(eikJson.server, "http://localhost:4001");
-	t.same(eikJson.files, "./public");
+	assert.strictEqual(eikJson.name, "custom-name");
+	assert.strictEqual(eikJson.version, "2.0.0");
+	assert.strictEqual(eikJson.server, "http://localhost:4001");
+	assert.deepStrictEqual(eikJson.files, "./public");
 });
 
-test("Initializing a new eik.json file in an existing project", async (t) => {
+test("Initializing a new eik.json file in an existing project", async () => {
 	const eik = join(__dirname, "..", "..", "index.js");
 	const folder = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
 
@@ -77,12 +80,12 @@ test("Initializing a new eik.json file in an existing project", async (t) => {
 
 	const publishCmd = `node ${eik} init --cwd ${folder}`;
 	let out = await exec(publishCmd);
-	t.equal(out.error, null);
+	assert.strictEqual(out.error, null);
 
 	const eikJson = JSON.parse(
 		readFileSync(join(folder, "eik.json"), { encoding: "utf8" }),
 	);
 
-	t.equal(eikJson.name, packageJson.name);
-	t.equal(eikJson.version, packageJson.version);
+	assert.strictEqual(eikJson.name, packageJson.name);
+	assert.strictEqual(eikJson.version, packageJson.version);
 });

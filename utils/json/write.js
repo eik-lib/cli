@@ -6,7 +6,7 @@ import { join, isAbsolute, dirname } from "path";
  * Utility function that can be used to write a JavaScript object to a file at a given location.
  *
  * @param {object} meta - JavaScript object to be written as JSON to a file
- * @param {string|{cwd:string,filename:string}} location - Path string or object describing location for where to write JSON to.
+ * @param {string|{cwd?:string,filename:string}} location - Path string or object describing location for where to write JSON to.
  *                                   If location is a string it can be relative or absolute.
  *                                   If location is an object, `pathname` must be given which can be relative or absolute. `cwd` can also be given to define the current working directory.
  * @returns {Promise<undefined>}

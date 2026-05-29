@@ -62,7 +62,7 @@ export function getArgsOrDefaults(argv, opts) {
 					throw new EikCliError(
 						errors.ERR_MISSING_CONFIG,
 						`No eik.json or package.json with eik configuration in ${cwd}, and did not get required fields as options`,
-						error,
+						e,
 					);
 				}
 			}

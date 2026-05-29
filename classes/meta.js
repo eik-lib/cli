@@ -10,7 +10,7 @@ const types = ["pkg", "map", "npm"];
  * @property {import('abslog').AbstractLoggerOptions} [logger]
  * @property {string} server
  * @property {string} name
- * @property {string} version
+ * @property {string} [version]
  */
 
 export default class Meta {
