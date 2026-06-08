@@ -42,7 +42,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@eik/common": "5.1.29",
+    "@eik/common": "5.1.31",
     "abslog": "2.4.4",
     "bytes": "3.1.2",
     "date-fns": "4.3.0",
