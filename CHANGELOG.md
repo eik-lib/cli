@@ -1,3 +1,10 @@
+## [3.1.56](https://github.com/eik-lib/cli/compare/v3.1.55...v3.1.56) (2026-06-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @eik/common to v5.1.33 ([#724](https://github.com/eik-lib/cli/issues/724)) ([a472734](https://github.com/eik-lib/cli/commit/a472734f17799510d805431de801353e2f4ef122))
+
 ## [3.1.55](https://github.com/eik-lib/cli/compare/v3.1.54...v3.1.55) (2026-06-08)
 
 
