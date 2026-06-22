@@ -1,3 +1,10 @@
+## [3.1.60](https://github.com/eik-lib/cli/compare/v3.1.59...v3.1.60) (2026-06-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency semver to v7.8.5 ([#729](https://github.com/eik-lib/cli/issues/729)) ([cd858ac](https://github.com/eik-lib/cli/commit/cd858acf7578095b9bea1a1a4339171e3e2b1f4f))
+
 ## [3.1.59](https://github.com/eik-lib/cli/compare/v3.1.58...v3.1.59) (2026-06-22)
 
 
