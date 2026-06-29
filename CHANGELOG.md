@@ -1,3 +1,10 @@
+## [3.1.62](https://github.com/eik-lib/cli/compare/v3.1.61...v3.1.62) (2026-06-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency date-fns to v4.4.0 ([#734](https://github.com/eik-lib/cli/issues/734)) ([828096d](https://github.com/eik-lib/cli/commit/828096d6f5aef6195db48c1c5334fe9737ba95bd))
+
 ## [3.1.61](https://github.com/eik-lib/cli/compare/v3.1.60...v3.1.61) (2026-06-29)
 
 
