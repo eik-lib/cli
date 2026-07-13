@@ -59,7 +59,7 @@
     }
   },
   "devDependencies": {
-    "@eik/eslint-config": "2.0.7",
+    "@eik/eslint-config": "2.0.9",
     "@eik/prettier-config": "1.0.2",
     "@eik/semantic-release-config": "1.0.17",
     "@eik/service": "5.1.59",
