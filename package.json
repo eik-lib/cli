@@ -63,7 +63,7 @@
     "@eik/prettier-config": "1.0.2",
     "@eik/semantic-release-config": "1.0.18",
     "@eik/service": "5.1.65",
-    "@eik/sink-memory": "2.0.33",
+    "@eik/sink-memory": "2.0.37",
     "@eik/typescript-config": "1.0.2",
     "@types/node": "25.9.1",
     "@types/semver": "7.7.1",
