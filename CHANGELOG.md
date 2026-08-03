@@ -1,3 +1,10 @@
+## [3.1.67](https://github.com/eik-lib/cli/compare/v3.1.66...v3.1.67) (2026-08-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency picospinner to v3.1.2 ([#757](https://github.com/eik-lib/cli/issues/757)) ([cf58c72](https://github.com/eik-lib/cli/commit/cf58c72580cbee76a9c861ce9c6523f9973092a8))
+
 ## [3.1.66](https://github.com/eik-lib/cli/compare/v3.1.65...v3.1.66) (2026-08-03)
 
 
