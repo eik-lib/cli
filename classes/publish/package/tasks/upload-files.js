@@ -51,7 +51,7 @@ export default class UploadFiles extends Task {
 					);
 				case 413:
 					throw new Error(
-						`${e.statusCode}: Package is too large to upload. Reduce the package size or ask a server administrator to increase the upload limit.`,
+						`${e.statusCode}: Package is too large to upload. Reduce the package size.`,
 						{ cause: err },
 					);
 				case 415:
