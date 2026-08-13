@@ -369,7 +369,7 @@ describe("publish package - upload size limit", () => {
 					"index.js": join(__dirname, "./fixtures/client.js"),
 				},
 			}),
-			(err) => {
+			(/** @type {Error} */ err) => {
 				assert.ok(
 					err.message.includes("too large"),
 					`Expected error message to mention the package is too large, got: ${err.message}`,
