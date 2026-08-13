@@ -325,3 +325,57 @@ describe("publish package", () => {
 		assert.ok(l.logs.debug.includes("Cleaning up"));
 	});
 });
+
+describe("publish package - upload size limit", () => {
+	let server;
+	let address;
+	let token;
+	let cwd;
+
+	beforeEach(async () => {
+		const memSink = new Sink();
+		server = fastify({ logger: false, forceCloseConnections: true });
+		const service = new EikService({ customSink: memSink, pkgMaxFileSize: 1 });
+		server.register(service.api());
+		address = await server.listen({
+			host: "127.0.0.1",
+			port: 0,
+		});
+
+		token = await cli.login({
+			server: address,
+			key: "change_me",
+		});
+
+		cwd = await fs.mkdtemp(join(os.tmpdir(), basename(__filename)));
+	});
+
+	afterEach(async () => {
+		await server.close();
+	});
+
+	test("Uploading a package that exceeds the server size limit gives a clear error", async () => {
+		const l = mockLogger();
+
+		await assert.rejects(
+			cli.publish({
+				logger: l.logger,
+				cwd,
+				server: address,
+				name: "my-app",
+				token,
+				version: "1.0.0",
+				files: {
+					"index.js": join(__dirname, "./fixtures/client.js"),
+				},
+			}),
+			(err) => {
+				assert.ok(
+					err.message.includes("too large"),
+					`Expected error message to mention the package is too large, got: ${err.message}`,
+				);
+				return true;
+			},
+		);
+	});
+});
