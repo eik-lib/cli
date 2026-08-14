@@ -49,6 +49,11 @@ export default class UploadFiles extends Task {
 						`Package with name "${name}" and version "${version}" already exists on server`,
 						{ cause: err },
 					);
+				case 413:
+					throw new Error(
+						`${e.statusCode}: Package is too large to upload. Reduce the package size.`,
+						{ cause: err },
+					);
 				case 415:
 					throw new Error(
 						`${e.statusCode}: Client attempted to send an unsupported file format to server`,
