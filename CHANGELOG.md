@@ -1,3 +1,12 @@
+## [3.1.68](https://github.com/eik-lib/cli/compare/v3.1.67...v3.1.68) (2026-08-14)
+
+
+### Bug Fixes
+
+* shorten the 413 error message ([e56b292](https://github.com/eik-lib/cli/commit/e56b29240d5b2c53f96bdf84a543f636f9e44816))
+* surface a clear error message when a package upload exceeds the server size limit ([515cc9b](https://github.com/eik-lib/cli/commit/515cc9bfd843d9cfa931ea03a9d244a7fc39a3e0))
+* type assert.rejects validation callback parameter as Error ([4873c48](https://github.com/eik-lib/cli/commit/4873c48885cdbeeba7a03d36809c16bae06fdd27))
+
 ## [3.1.67](https://github.com/eik-lib/cli/compare/v3.1.66...v3.1.67) (2026-08-03)
 
 
