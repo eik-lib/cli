@@ -10,6 +10,8 @@ import { fetchWithRetry } from "./retry.js";
  * @property {string} [file]
  * @property {string} [map]
  * @property {string} [token]
+ * @property {number} [retries]
+ * @property {number} [retryDelay]
  */
 
 /**
@@ -22,7 +24,17 @@ import { fetchWithRetry } from "./retry.js";
  * @throws Error
  */
 async function request(options) {
-	const { method = "POST", host, pathname, data, file, map, token } = options;
+	const {
+		method = "POST",
+		host,
+		pathname,
+		data,
+		file,
+		map,
+		token,
+		retries,
+		retryDelay,
+	} = options;
 	const body = new FormData();
 	const headers = new Headers();
 
@@ -50,8 +62,9 @@ async function request(options) {
 		const url = new URL(pathname, host);
 		url.search = `?t=${Date.now()}`;
 
-		const res = await fetchWithRetry(() =>
-			fetch(url, { method, body, headers }),
+		const res = await fetchWithRetry(
+			() => fetch(url, { method, body, headers }),
+			{ maxRetries: retries, baseDelayMs: retryDelay },
 		);
 
 		if (!res.ok) {

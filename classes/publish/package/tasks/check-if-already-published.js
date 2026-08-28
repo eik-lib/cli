@@ -15,7 +15,12 @@ export default class CheckIfAlreadyPublished extends Task {
 		log.debug("  ==> Fetching package metadata from server");
 
 		try {
-			if (await integrity(server, typeSlug(type), name, version)) {
+			if (
+				await integrity(server, typeSlug(type), name, version, {
+					retries: this.retries,
+					retryDelay: this.retryDelay,
+				})
+			) {
 				throw new Error(
 					`${name} version ${version} already exists on the Eik server. Publishing is not necessary.`,
 				);

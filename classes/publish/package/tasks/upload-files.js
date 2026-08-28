@@ -23,6 +23,8 @@ export default class UploadFiles extends Task {
 				pathname,
 				file: zipFile,
 				token,
+				retries: this.retries,
+				retryDelay: this.retryDelay,
 			});
 
 			return message;

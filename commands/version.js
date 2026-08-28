@@ -25,6 +25,11 @@ export const builder = (yargs) => {
 				describe: "Log details about the operation and skip upload",
 				type: "boolean",
 			},
+			retries: {
+				describe:
+					"Number of times to retry a request on transient server errors (0 to disable)",
+				type: "number",
+			},
 		})
 		.example("eik version")
 		.example("eik version minor")
@@ -46,6 +51,7 @@ export const handler = commandHandler(
 			type,
 			files,
 			configFile,
+			retries,
 		} = argv;
 
 		const options = {
@@ -60,6 +66,7 @@ export const handler = commandHandler(
 			out,
 			files,
 			configFile,
+			retries,
 		};
 
 		const newVersion = await new VersionPackage(options).run();

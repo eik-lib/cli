@@ -27,6 +27,11 @@ export const builder = (yargs) => {
 				type: "string",
 				alias: "t",
 			},
+			retries: {
+				describe:
+					"Number of times to retry a request on transient server errors (0 to disable)",
+				type: "number",
+			},
 		})
 		.example("eik publish")
 		.example("eik publish --dry-run")
@@ -49,6 +54,7 @@ export const handler = commandHandler(
 			files,
 			type,
 			configFile,
+			retries,
 		} = argv;
 
 		if (type === "map") {
@@ -71,6 +77,7 @@ export const handler = commandHandler(
 			map,
 			out,
 			files,
+			retries,
 		};
 
 		const publish = await new PublishPackage(options).run();

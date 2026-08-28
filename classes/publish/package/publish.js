@@ -25,6 +25,8 @@ import Cleanup from "./tasks/cleanup.js";
  * @property {string[]} [map]
  * @property {string} [out="./.eik"]
  * @property {Record<string, string>} files
+ * @property {number} [retries]
+ * @property {number} [retryDelay]
  */
 
 /**
@@ -59,6 +61,8 @@ export default class Publish {
 		map = [],
 		out = "./.eik",
 		files = {},
+		retries,
+		retryDelay,
 	}) {
 		const config = new EikConfig(
 			{
@@ -106,8 +110,15 @@ export default class Publish {
 			logger: this.log,
 			path: this.path,
 			config,
+			retries,
+			retryDelay,
 		});
-		this.uploadFiles = new UploadFiles({ logger: this.log, config });
+		this.uploadFiles = new UploadFiles({
+			logger: this.log,
+			config,
+			retries,
+			retryDelay,
+		});
 		this.saveMetafile = new SaveMetafile({ logger: this.log, cwd, config });
 		this.cleanup = new Cleanup({
 			logger: this.log,

@@ -23,6 +23,8 @@ import hashCompare from "../utils/hash/compare.js";
  * @property {string} [out="./.eik"]
  * @property {string | Record<string, string>} files
  * @property {string} [configFile="eik.json"]
+ * @property {number} [retries]
+ * @property {number} [retryDelay]
  */
 
 export default class Version {
@@ -41,6 +43,8 @@ export default class Version {
 		out = "./.eik",
 		files,
 		configFile = "eik.json",
+		retries,
+		retryDelay,
 	}) {
 		const config = new EikConfig(
 			{
@@ -61,6 +65,8 @@ export default class Version {
 		this.configFile = configFile;
 		this.path = isAbsolute(config.out) ? config.out : join(cwd, config.out);
 		this.level = level;
+		this.retries = retries;
+		this.retryDelay = retryDelay;
 	}
 
 	/**
@@ -99,7 +105,10 @@ export default class Version {
 
 		let integrityHash;
 		try {
-			integrityHash = await integrity(server, typeSlug(type), name, version);
+			integrityHash = await integrity(server, typeSlug(type), name, version, {
+				retries: this.retries,
+				retryDelay: this.retryDelay,
+			});
 		} catch (err) {
 			throw new Error(
 				`Unable to fetch package metadata from server: ${/** @type {any} */ (err).message}`,

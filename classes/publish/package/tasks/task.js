@@ -7,5 +7,7 @@ export default class Task {
 		this.log = abslog(options.logger);
 		this.path = options.path;
 		this.config = options.config;
+		this.retries = options.retries;
+		this.retryDelay = options.retryDelay;
 	}
 }

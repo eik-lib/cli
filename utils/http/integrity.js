@@ -13,11 +13,27 @@ import { fetchWithRetry } from "./retry.js";
  *
  * @throws Error
  */
-export default async (server, type, name, version) => {
+/**
+ * @param {string} server
+ * @param {string} type
+ * @param {string} name
+ * @param {string} version
+ * @param {{ retries?: number, retryDelay?: number }} [options]
+ */
+export default async (
+	server,
+	type,
+	name,
+	version,
+	{ retries, retryDelay } = {},
+) => {
 	const url = new URL(join(type, name, version), server);
 	url.search = `?t=${Date.now()}`;
 
-	const res = await fetchWithRetry(() => fetch(url));
+	const res = await fetchWithRetry(() => fetch(url), {
+		maxRetries: retries,
+		baseDelayMs: retryDelay,
+	});
 
 	if (!res.ok) {
 		if (res.status === 404) {
