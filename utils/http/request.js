@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { fetchWithRetry } from "./retry.js";
 
 /**
  * @typedef {object} RequestOptions
@@ -9,6 +10,8 @@ import { readFile } from "node:fs/promises";
  * @property {string} [file]
  * @property {string} [map]
  * @property {string} [token]
+ * @property {number} [retries]
+ * @property {number} [retryDelay]
  */
 
 /**
@@ -21,7 +24,17 @@ import { readFile } from "node:fs/promises";
  * @throws Error
  */
 async function request(options) {
-	const { method = "POST", host, pathname, data, file, map, token } = options;
+	const {
+		method = "POST",
+		host,
+		pathname,
+		data,
+		file,
+		map,
+		token,
+		retries,
+		retryDelay,
+	} = options;
 	const body = new FormData();
 	const headers = new Headers();
 
@@ -49,7 +62,13 @@ async function request(options) {
 		const url = new URL(pathname, host);
 		url.search = `?t=${Date.now()}`;
 
-		const res = await fetch(url, { method, body, headers });
+		const res = await fetchWithRetry(
+			() => fetch(url, { method, body, headers }),
+			{
+				maxRetries: retries !== undefined ? retries + 1 : undefined,
+				baseDelayMs: retryDelay,
+			},
+		);
 
 		if (!res.ok) {
 			const err = new Error(

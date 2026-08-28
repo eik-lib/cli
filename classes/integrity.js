@@ -3,6 +3,7 @@ import assert from "@eik/common/lib/schemas/assert.js";
 import ValidationError from "@eik/common/lib/schemas/validation-error.js";
 import typeSlug from "@eik/common/lib/helpers/type-slug.js";
 import { joinUrlPathname } from "../utils/url.js";
+import { fetchWithRetry } from "../utils/http/retry.js";
 
 /**
  * @typedef {object} IntegrityOptions
@@ -13,6 +14,8 @@ import { joinUrlPathname } from "../utils/url.js";
  * @property {string} version
  * @property {string} [cwd]
  * @property {boolean} [debug]
+ * @property {number} [retries=2] - Number of retry attempts on transient 5xx/network errors (0 to disable). Default 2 retries = 3 total attempts
+ * @property {number} [retryDelay=500] - Base delay in ms between retries; doubles each attempt (500 ms, 1000 ms, …)
  */
 
 export default class Integrity {
@@ -28,6 +31,8 @@ export default class Integrity {
 		type,
 		debug = false,
 		cwd = process.cwd(),
+		retries,
+		retryDelay,
 	}) {
 		this.log = abslog(logger);
 		this.server = server;
@@ -36,6 +41,8 @@ export default class Integrity {
 		this.debug = debug;
 		this.cwd = cwd;
 		this.type = type;
+		this.retries = retries;
+		this.retryDelay = retryDelay;
 	}
 
 	async run() {
@@ -80,7 +87,10 @@ export default class Integrity {
 			);
 			this.log.debug(`  ==> url: ${url}`);
 
-			const res = await fetch(url);
+			const res = await fetchWithRetry(() => fetch(url), {
+				maxRetries: this.retries !== undefined ? this.retries + 1 : undefined,
+				baseDelayMs: this.retryDelay,
+			});
 
 			if (res.ok) {
 				this.log.debug(`  ==> ok: true`);

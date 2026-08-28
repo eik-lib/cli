@@ -17,6 +17,11 @@ export const builder = (yargs) => {
 				alias: "s",
 				describe: "Eik server address, if different from configuration file",
 			},
+			retries: {
+				describe:
+					"Number of retry attempts on transient server errors. Each retry waits longer than the last (500 ms, 1000 ms, …). Default: 2 retries (3 total attempts). Set to 0 to disable.",
+				type: "number",
+			},
 		})
 		.example("eik integrity")
 		.example("eik integrity --server https://assets.myserver.com");
@@ -25,7 +30,7 @@ export const builder = (yargs) => {
 export const handler = commandHandler(
 	{ command, options: ["server"] },
 	async (argv, log, spinner) => {
-		const { name, version, server, out, type, cwd, debug } = argv;
+		const { name, version, server, out, type, cwd, debug, retries } = argv;
 
 		const integrity = await new Integrity({
 			logger: log,
@@ -35,6 +40,7 @@ export const handler = commandHandler(
 			debug,
 			cwd,
 			type,
+			retries,
 		}).run();
 
 		if (integrity) {

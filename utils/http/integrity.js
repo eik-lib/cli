@@ -1,4 +1,5 @@
 import { join } from "node:path";
+import { fetchWithRetry } from "./retry.js";
 
 /**
  * Fetches package integrity string by name and version from a given Eik asset server.
@@ -12,11 +13,27 @@ import { join } from "node:path";
  *
  * @throws Error
  */
-export default async (server, type, name, version) => {
+/**
+ * @param {string} server
+ * @param {string} type
+ * @param {string} name
+ * @param {string} version
+ * @param {{ retries?: number, retryDelay?: number }} [options]
+ */
+export default async (
+	server,
+	type,
+	name,
+	version,
+	{ retries, retryDelay } = {},
+) => {
 	const url = new URL(join(type, name, version), server);
 	url.search = `?t=${Date.now()}`;
 
-	const res = await fetch(url);
+	const res = await fetchWithRetry(() => fetch(url), {
+		maxRetries: retries !== undefined ? retries + 1 : undefined,
+		baseDelayMs: retryDelay,
+	});
 
 	if (!res.ok) {
 		if (res.status === 404) {

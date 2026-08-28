@@ -1,4 +1,5 @@
 import { join } from "path";
+import { fetchWithRetry } from "./retry.js";
 
 /**
  * Fetches the latest version from an Eik server of a package by name, optionally restricting the lookup to a specified semver major version
@@ -11,9 +12,21 @@ import { join } from "path";
  *
  * @throws Error
  */
-export default async (server, type, name, major) => {
+export default async (
+	server,
+	type,
+	name,
+	major,
+	/** @type {{ retries?: number, retryDelay?: number }} */ {
+		retries,
+		retryDelay,
+	} = {},
+) => {
 	const url = new URL(`${join(type, name)}?t=${Date.now()}`, server);
-	const res = await fetch(url);
+	const res = await fetchWithRetry(() => fetch(url), {
+		maxRetries: retries !== undefined ? retries + 1 : undefined,
+		baseDelayMs: retryDelay,
+	});
 	if (!res.ok) {
 		if (res.status === 404) {
 			return null;

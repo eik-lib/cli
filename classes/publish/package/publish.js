@@ -25,6 +25,8 @@ import Cleanup from "./tasks/cleanup.js";
  * @property {string[]} [map]
  * @property {string} [out="./.eik"]
  * @property {Record<string, string>} files
+ * @property {number} [retries=2] - Number of retry attempts on transient 5xx/network errors (0 to disable). Default 2 retries = 3 total attempts
+ * @property {number} [retryDelay=500] - Base delay in ms between retries; doubles each attempt (500 ms, 1000 ms, …)
  */
 
 /**
@@ -59,6 +61,8 @@ export default class Publish {
 		map = [],
 		out = "./.eik",
 		files = {},
+		retries,
+		retryDelay,
 	}) {
 		const config = new EikConfig(
 			{
@@ -106,8 +110,15 @@ export default class Publish {
 			logger: this.log,
 			path: this.path,
 			config,
+			retries,
+			retryDelay,
 		});
-		this.uploadFiles = new UploadFiles({ logger: this.log, config });
+		this.uploadFiles = new UploadFiles({
+			logger: this.log,
+			config,
+			retries,
+			retryDelay,
+		});
 		this.saveMetafile = new SaveMetafile({ logger: this.log, cwd, config });
 		this.cleanup = new Cleanup({
 			logger: this.log,
