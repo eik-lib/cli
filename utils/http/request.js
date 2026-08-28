@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { fetchWithRetry } from "./retry.js";
 
 /**
  * @typedef {object} RequestOptions
@@ -49,7 +50,9 @@ async function request(options) {
 		const url = new URL(pathname, host);
 		url.search = `?t=${Date.now()}`;
 
-		const res = await fetch(url, { method, body, headers });
+		const res = await fetchWithRetry(() =>
+			fetch(url, { method, body, headers }),
+		);
 
 		if (!res.ok) {
 			const err = new Error(

@@ -1,4 +1,5 @@
 import { join } from "node:path";
+import { fetchWithRetry } from "./retry.js";
 
 /**
  * Fetches package integrity string by name and version from a given Eik asset server.
@@ -16,7 +17,7 @@ export default async (server, type, name, version) => {
 	const url = new URL(join(type, name, version), server);
 	url.search = `?t=${Date.now()}`;
 
-	const res = await fetch(url);
+	const res = await fetchWithRetry(() => fetch(url));
 
 	if (!res.ok) {
 		if (res.status === 404) {
