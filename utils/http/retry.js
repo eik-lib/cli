@@ -5,8 +5,8 @@
  *
  * @param {() => Promise<Response>} fn - Function that performs the fetch call
  * @param {object} [options]
- * @param {number} [options.maxRetries=3] - Maximum number of attempts
- * @param {number} [options.baseDelayMs=500] - Base delay between retries in ms; doubles each attempt
+ * @param {number} [options.maxRetries=3] - Total number of attempts (default 3 = 1 initial + 2 retries). Pass 1 to make exactly one attempt with no retry.
+ * @param {number} [options.baseDelayMs=500] - Base delay in ms between retries; doubles each attempt (500 ms, 1000 ms, …)
  * @returns {Promise<Response>}
  */
 export async function fetchWithRetry(

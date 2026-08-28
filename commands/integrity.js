@@ -19,7 +19,7 @@ export const builder = (yargs) => {
 			},
 			retries: {
 				describe:
-					"Number of times to retry a request on transient server errors (0 to disable)",
+					"Number of retry attempts on transient server errors. Each retry waits longer than the last (500 ms, 1000 ms, …). Default: 2 retries (3 total attempts). Set to 0 to disable.",
 				type: "number",
 			},
 		})

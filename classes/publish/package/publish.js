@@ -25,8 +25,8 @@ import Cleanup from "./tasks/cleanup.js";
  * @property {string[]} [map]
  * @property {string} [out="./.eik"]
  * @property {Record<string, string>} files
- * @property {number} [retries]
- * @property {number} [retryDelay]
+ * @property {number} [retries=2] - Number of retry attempts on transient 5xx/network errors (0 to disable). Default 2 retries = 3 total attempts
+ * @property {number} [retryDelay=500] - Base delay in ms between retries; doubles each attempt (500 ms, 1000 ms, …)
  */
 
 /**

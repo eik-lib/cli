@@ -14,8 +14,8 @@ import { fetchWithRetry } from "../utils/http/retry.js";
  * @property {string} version
  * @property {string} [cwd]
  * @property {boolean} [debug]
- * @property {number} [retries]
- * @property {number} [retryDelay]
+ * @property {number} [retries=2] - Number of retry attempts on transient 5xx/network errors (0 to disable). Default 2 retries = 3 total attempts
+ * @property {number} [retryDelay=500] - Base delay in ms between retries; doubles each attempt (500 ms, 1000 ms, …)
  */
 
 export default class Integrity {
@@ -88,7 +88,7 @@ export default class Integrity {
 			this.log.debug(`  ==> url: ${url}`);
 
 			const res = await fetchWithRetry(() => fetch(url), {
-				maxRetries: this.retries,
+				maxRetries: this.retries !== undefined ? this.retries + 1 : undefined,
 				baseDelayMs: this.retryDelay,
 			});
 

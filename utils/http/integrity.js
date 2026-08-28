@@ -31,7 +31,7 @@ export default async (
 	url.search = `?t=${Date.now()}`;
 
 	const res = await fetchWithRetry(() => fetch(url), {
-		maxRetries: retries,
+		maxRetries: retries !== undefined ? retries + 1 : undefined,
 		baseDelayMs: retryDelay,
 	});
 

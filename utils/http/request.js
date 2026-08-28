@@ -64,7 +64,10 @@ async function request(options) {
 
 		const res = await fetchWithRetry(
 			() => fetch(url, { method, body, headers }),
-			{ maxRetries: retries, baseDelayMs: retryDelay },
+			{
+				maxRetries: retries !== undefined ? retries + 1 : undefined,
+				baseDelayMs: retryDelay,
+			},
 		);
 
 		if (!res.ok) {

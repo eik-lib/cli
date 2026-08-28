@@ -24,7 +24,7 @@ export default async (
 ) => {
 	const url = new URL(`${join(type, name)}?t=${Date.now()}`, server);
 	const res = await fetchWithRetry(() => fetch(url), {
-		maxRetries: retries,
+		maxRetries: retries !== undefined ? retries + 1 : undefined,
 		baseDelayMs: retryDelay,
 	});
 	if (!res.ok) {
