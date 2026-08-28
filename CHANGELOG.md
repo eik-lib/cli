@@ -1,3 +1,16 @@
+# [3.2.0](https://github.com/eik-lib/cli/compare/v3.1.69...v3.2.0) (2026-08-28)
+
+
+### Bug Fixes
+
+* add retry to latest-version HTTP utility ([45b3115](https://github.com/eik-lib/cli/commit/45b31152e6b620df0831e9ba6ef054085ba82f98))
+* retry HTTP requests on transient 5xx responses ([f7fa656](https://github.com/eik-lib/cli/commit/f7fa656a7001bacd98b2baf21903b935bbb4b535))
+
+
+### Features
+
+* make retry count and delay configurable through API and CLI ([b909b81](https://github.com/eik-lib/cli/commit/b909b81f46f59597ad52a80df3bea815e53f8eb7))
+
 ## [3.1.69](https://github.com/eik-lib/cli/compare/v3.1.68...v3.1.69) (2026-08-24)
 
 
