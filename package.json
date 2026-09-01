@@ -62,7 +62,7 @@
     "@eik/eslint-config": "2.0.15",
     "@eik/prettier-config": "1.0.2",
     "@eik/semantic-release-config": "1.0.19",
-    "@eik/service": "5.1.69",
+    "@eik/service": "5.6.1",
     "@eik/sink-memory": "2.4.0",
     "@eik/typescript-config": "1.0.2",
     "@types/node": "26.2.0",
