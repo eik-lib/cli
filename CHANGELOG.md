@@ -1,3 +1,10 @@
+## [3.2.2](https://github.com/eik-lib/cli/compare/v3.2.1...v3.2.2) (2026-10-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tinyrainbow to v3.2.0 ([#769](https://github.com/eik-lib/cli/issues/769)) ([8b361ad](https://github.com/eik-lib/cli/commit/8b361ad31db2d55534480c137bd466b676bb3835))
+
 ## [3.2.1](https://github.com/eik-lib/cli/compare/v3.2.0...v3.2.1) (2026-09-21)
 
 
