@@ -65,7 +65,7 @@
     "@eik/service": "5.1.69",
     "@eik/sink-memory": "2.4.0",
     "@eik/typescript-config": "1.0.2",
-    "@types/node": "26.2.0",
+    "@types/node": "26.6.6",
     "@types/semver": "7.8.0",
     "@types/yargs": "17.0.35",
     "cross-env": "10.1.0",
