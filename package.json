@@ -71,7 +71,7 @@
     "cross-env": "10.1.0",
     "eslint": "10.8.1",
     "fastify": "5.11.3",
-    "npm-run-all2": "9.0.3",
+    "npm-run-all2": "9.0.4",
     "prettier": "3.9.6",
     "semantic-release": "25.0.9",
     "semantic-release-slack-bot": "4.0.2",
