@@ -72,7 +72,7 @@
     "eslint": "10.8.1",
     "fastify": "5.11.3",
     "npm-run-all2": "9.0.3",
-    "prettier": "3.9.6",
+    "prettier": "3.9.10",
     "semantic-release": "25.0.9",
     "semantic-release-slack-bot": "4.0.2",
     "typescript": "7.0.2"
